@@ -1,9 +1,3 @@
-import dramrit from '/advisors/Amrit.jpg'
-import drsubash from '/advisors/Subash.jpg'
-import drgrihamani from '/advisors/Grihamani.jpg'
-import drkamal from '/advisors/Kamal.jpg'
-import about from '/about.jpg'
-
 const About = () => {
   
 
@@ -167,22 +161,22 @@ const About = () => {
                 {
                   name: 'Dr. Subash Rimal',
                   role: 'Founder President, Asst. Prof. Paklihawa Campus',
-                  image: drsubash,
+                  image: '/advisors/Subash.jpg',
                 },
                 {
                   name: 'Dr. Grihamani Nepal',
                   role: 'Asst. Prof. Paklihawa Campus',
-                  image: drgrihamani,
+                  image: '/advisors/Grihamani.jpg',
                 },
                 {
                   name: 'Dr. Amrit Shrestha',
                   role: 'Former President',
-                  image: dramrit,
+                  image: '/advisors/Amrit.jpg',
                 },
                 {
                   name: 'Mr. Kamal Acharya',
                   role: 'Former President',
-                  image: drkamal,
+                  image: '/advisors/Kamal.jpg',
                 },
               ].map((member) => (
                 <div key={member.name} className="bg-white rounded-lg shadow-lg overflow-hidden">
