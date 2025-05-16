@@ -171,7 +171,7 @@ const About = () => {
                 {
                   name: 'Dr. Amrit Shrestha',
                   role: 'Former President',
-                  image: '/advisors/Amrit.jpg',
+                  image: '/advisors/dramrit.jpg',
                 },
                 {
                   name: 'Mr. Kamal Acharya',
