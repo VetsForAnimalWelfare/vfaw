@@ -301,6 +301,31 @@ const Gallery = () => {
 
     // Rabies Vaccination
     {
+      src: '/rabies/IMG_2008.JPG',
+      category: 'Rabies Vaccination',
+      description: 'Latest vaccination drive'
+    },
+    {
+      src: '/rabies/IMG_1978.JPG',
+      category: 'Rabies Vaccination',
+      description: 'Community vaccination program'
+    },
+    {
+      src: '/rabies/IMG_2002.JPG',
+      category: 'Rabies Vaccination',
+      description: 'Vaccination activities'
+    },
+    {
+      src: '/rabies/IMG_2009.JPG',
+      category: 'Rabies Vaccination',
+      description: 'Animal vaccination services'
+    },
+    {
+      src: '/rabies/IMG_2010.JPG',
+      category: 'Rabies Vaccination',
+      description: 'Vaccination program implementation'
+    },
+    {
       src: '/rabies/3.jpg',
       category: 'Rabies Vaccination',
       description: 'Community vaccination drive'
@@ -360,19 +385,29 @@ const Gallery = () => {
       description: 'Latest research and data collection'
     },
     {
-      src: '/survey/IMG_2135.JPG',
+      src: '/survey/IMG_1981.JPG',
       category: 'Farm Animal Survey',
       description: 'Recent field survey'
     },
     {
-      src: '/survey/IMG_1981.JPG',
+      src: '/survey/IMG_1980.JPG',
       category: 'Farm Animal Survey',
       description: 'Health assessment program'
     },
     {
-      src: '/survey/IMG_1980.JPG',
+      src: '/survey/IMG_2135.JPG',
       category: 'Farm Animal Survey',
       description: 'Animal welfare survey'
+    },
+    {
+      src: '/survey/4.JPG',
+      category: 'Farm Animal Survey',
+      description: 'Survey activities'
+    },
+    {
+      src: '/survey/3.JPG',
+      category: 'Farm Animal Survey',
+      description: 'Health assessment'
     },
     {
       src: '/survey/1.jpg',
@@ -384,22 +419,62 @@ const Gallery = () => {
       category: 'Farm Animal Survey',
       description: 'Field surveys'
     },
-    {
-      src: '/survey/3.JPG',
-      category: 'Farm Animal Survey',
-      description: 'Health assessment'
-    },
-    {
-      src: '/survey/4.JPG',
-      category: 'Farm Animal Survey',
-      description: 'Survey activities'
-    },
 
     // Training and Awareness
     {
-      src: '/awareness/7.jpg',
+      src: '/awareness/IMG_2024.JPG',
       category: 'Training and Awareness',
       description: 'Latest educational workshop'
+    },
+    {
+      src: '/awareness/IMG_2016.JPG',
+      category: 'Training and Awareness',
+      description: 'Community training session'
+    },
+    {
+      src: '/awareness/IMG_2023.JPG',
+      category: 'Training and Awareness',
+      description: 'Staff development program'
+    },
+    {
+      src: '/awareness/IMG_2020.JPG',
+      category: 'Training and Awareness',
+      description: 'Training workshop'
+    },
+    {
+      src: '/awareness/IMG_2019.JPG',
+      category: 'Training and Awareness',
+      description: 'Educational program'
+    },
+    {
+      src: '/awareness/IMG_1993.JPG',
+      category: 'Training and Awareness',
+      description: 'Awareness campaign'
+    },
+    {
+      src: '/awareness/IMG_2022.JPG',
+      category: 'Training and Awareness',
+      description: 'Training session'
+    },
+    {
+      src: '/awareness/IMG_2017.JPG',
+      category: 'Training and Awareness',
+      description: 'Community workshop'
+    },
+    {
+      src: '/awareness/IMG_2121.JPG',
+      category: 'Training and Awareness',
+      description: 'Educational initiative'
+    },
+    {
+      src: '/awareness/IMG_2025.JPG',
+      category: 'Training and Awareness',
+      description: 'Training program'
+    },
+    {
+      src: '/awareness/IMG_2018.JPG',
+      category: 'Training and Awareness',
+      description: 'Awareness session'
     },
     {
       src: '/awareness/1.jpg',
@@ -432,49 +507,54 @@ const Gallery = () => {
       description: 'Community awareness'
     },
     {
-      src: '/awareness/8.jpg',
+      src: '/awareness/7.jpg',
       category: 'Training and Awareness',
       description: 'Training sessions'
     },
     {
-      src: '/awareness/9.jpg',
+      src: '/awareness/8.jpg',
       category: 'Training and Awareness',
       description: 'Educational programs'
     },
     {
-      src: '/awareness/10.jpg',
+      src: '/awareness/9.jpg',
       category: 'Training and Awareness',
       description: 'Awareness activities'
     },
     {
-      src: '/awareness/11.jpg',
+      src: '/awareness/10.jpg',
       category: 'Training and Awareness',
       description: 'Training workshops'
     },
     {
-      src: '/awareness/12.jpg',
+      src: '/awareness/11.jpg',
       category: 'Training and Awareness',
       description: 'Educational sessions'
     },
     {
-      src: '/awareness/13.jpg',
+      src: '/awareness/12.jpg',
       category: 'Training and Awareness',
       description: 'Community programs'
     },
     {
-      src: '/awareness/14.jpg',
+      src: '/awareness/13.jpg',
       category: 'Training and Awareness',
       description: 'Training initiatives'
     },
     {
-      src: '/awareness/15.jpg',
+      src: '/awareness/14.jpg',
       category: 'Training and Awareness',
       description: 'Educational activities'
     },
     {
-      src: '/awareness/16.jpg',
+      src: '/awareness/15.jpg',
       category: 'Training and Awareness',
       description: 'Awareness programs'
+    },
+    {
+      src: '/awareness/16.jpg',
+      category: 'Training and Awareness',
+      description: 'Training activities'
     },
 
     // Virtual Sessions
@@ -484,12 +564,12 @@ const Gallery = () => {
       description: 'Latest online training program'
     },
     {
-      src: '/virtual/IMG_2114.JPG',
+      src: '/virtual/IMG_1994.JPG',
       category: 'Virtual Sessions',
       description: 'Recent digital workshop'
     },
     {
-      src: '/virtual/IMG_1994.JPG',
+      src: '/virtual/IMG_2114.JPG',
       category: 'Virtual Sessions',
       description: 'Online learning session'
     },
@@ -519,12 +599,12 @@ const Gallery = () => {
       description: 'Digital training'
     },
     {
-      src: '/virtual/3.jpg',
+      src: '/virtual/7.png',
       category: 'Virtual Sessions',
-      description: 'Online education'
+      description: 'Virtual education'
     },
     {
-      src: '/virtual/4.jpg',
+      src: '/virtual/6.jpg',
       category: 'Virtual Sessions',
       description: 'Online training programs'
     },
@@ -534,72 +614,17 @@ const Gallery = () => {
       description: 'Digital workshops'
     },
     {
-      src: '/virtual/6.jpg',
+      src: '/virtual/4.jpg',
       category: 'Virtual Sessions',
       description: 'Web-based learning'
     },
     {
-      src: '/virtual/7.png',
+      src: '/virtual/3.jpg',
       category: 'Virtual Sessions',
       description: 'Virtual education'
     },
 
     // In-house Capacity Building
-    {
-      src: '/capacity/IMG_2121.JPG',
-      category: 'In-house Capacity Building',
-      description: 'Latest staff training'
-    },
-    {
-      src: '/capacity/IMG_2024.JPG',
-      category: 'In-house Capacity Building',
-      description: 'Recent volunteer development'
-    },
-    {
-      src: '/capacity/IMG_2016.JPG',
-      category: 'In-house Capacity Building',
-      description: 'Team building activities'
-    },
-    {
-      src: '/capacity/IMG_2023.JPG',
-      category: 'In-house Capacity Building',
-      description: 'Staff development'
-    },
-    {
-      src: '/capacity/IMG_2020.JPG',
-      category: 'In-house Capacity Building',
-      description: 'Training programs'
-    },
-    {
-      src: '/capacity/IMG_2019.JPG',
-      category: 'In-house Capacity Building',
-      description: 'Capacity building'
-    },
-    {
-      src: '/capacity/IMG_1993.JPG',
-      category: 'In-house Capacity Building',
-      description: 'Team training'
-    },
-    {
-      src: '/capacity/IMG_2022.JPG',
-      category: 'In-house Capacity Building',
-      description: 'Staff workshops'
-    },
-    {
-      src: '/capacity/IMG_2017.JPG',
-      category: 'In-house Capacity Building',
-      description: 'Development programs'
-    },
-    {
-      src: '/capacity/IMG_2025.JPG',
-      category: 'In-house Capacity Building',
-      description: 'Training initiatives'
-    },
-    {
-      src: '/capacity/IMG_2018.JPG',
-      category: 'In-house Capacity Building',
-      description: 'Team development'
-    },
     {
       src: '/capacity/1.JPG',
       category: 'In-house Capacity Building',
