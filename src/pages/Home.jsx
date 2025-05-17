@@ -20,19 +20,19 @@ const Home = () => {
     {
       title: 'Animal Welfare',
       description: 'Providing medical care and treatment for street animals, including before and after treatment cases.',
-      image: '/welfare/1.jpg',
+      image: '/welfare/IMG_2131.JPG',
       color: 'bg-indigo-50'
     },
     {
       title: 'Animal Birth Control and Vaccination',
       description: 'Implementing birth control programs and vaccination drives for street animals.',
-      image: '/control/1.png',
+      image: '/control/IMG_20240216_000413_Original.JPG',
       color: 'bg-purple-50'
     },
     {
       title: 'Street Dog Feeding Program',
       description: 'Regular feeding programs to ensure the well-being of street dogs.',
-      image: '/feeding/1.JPG',
+      image: '/feeding/IMG_2119.JPG',
       color: 'bg-pink-50'
     }
   ];
@@ -178,7 +178,7 @@ const Home = () => {
             <Link to="/gallery" className="group block rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300">
               <div className="relative h-48 overflow-hidden">
                 <img
-                  src="/awareness/1.jpg"
+                  src="/awareness/7.jpg"
                   alt="Awareness Program"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
@@ -192,7 +192,7 @@ const Home = () => {
             <Link to="/gallery" className="group block rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300">
               <div className="relative h-48 overflow-hidden">
                 <img
-                  src="/vaccination/1.jpg"
+                  src="/vaccination/7.jpg"
                   alt="Vaccination Program"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
@@ -206,7 +206,7 @@ const Home = () => {
             <Link to="/gallery" className="group block rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300">
               <div className="relative h-48 overflow-hidden">
                 <img
-                  src="/feeding/1.JPG"
+                  src="/feeding/IMG_2117.JPG"
                   alt="Feeding Program"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
@@ -220,7 +220,7 @@ const Home = () => {
             <Link to="/gallery" className="group block rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300">
               <div className="relative h-48 overflow-hidden">
                 <img
-                  src="/capacity/1.JPG"
+                  src="/capacity/IMG_2121.JPG"
                   alt="Capacity Building"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
@@ -261,7 +261,7 @@ const Home = () => {
             </p>
           </div>
           <div className="mt-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
-            {[1, 2, 3, 4, 6, 7].map((num) => (
+            {[2, 3, 4, 6, 7, 1].map((num) => (
               <div key={num} className="group relative">
                 <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg bg-gray-200">
                   <img

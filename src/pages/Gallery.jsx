@@ -20,6 +20,31 @@ const Gallery = () => {
   const images = [
     // Animal Welfare
     {
+      src: '/welfare/IMG_2131.JPG',
+      category: 'Animal Welfare',
+      description: 'Latest medical care and treatment for street animals'
+    },
+    {
+      src: '/welfare/IMG_2124.JPG',
+      category: 'Animal Welfare',
+      description: 'Recent animal care and treatment'
+    },
+    {
+      src: '/welfare/IMG_2127.JPG',
+      category: 'Animal Welfare',
+      description: 'Animal welfare activities'
+    },
+    {
+      src: '/welfare/IMG_2123.JPG',
+      category: 'Animal Welfare',
+      description: 'Medical interventions'
+    },
+    {
+      src: '/welfare/IMG_2126.JPG',
+      category: 'Animal Welfare',
+      description: 'Animal care services'
+    },
+    {
       src: '/welfare/1.jpg',
       category: 'Animal Welfare',
       description: 'Medical care and treatment for street animals'
@@ -112,6 +137,66 @@ const Gallery = () => {
 
     // Animal Birth Control
     {
+      src: '/control/IMG_20240216_000413_Original.JPG',
+      category: 'Animal Birth Control',
+      description: 'Latest birth control program implementation'
+    },
+    {
+      src: '/control/IMG-20240215-WA0021_Original.JPG',
+      category: 'Animal Birth Control',
+      description: 'Recent vaccination drive'
+    },
+    {
+      src: '/control/IMG_1974.JPG',
+      category: 'Animal Birth Control',
+      description: 'Birth control activities'
+    },
+    {
+      src: '/control/IMG_1973.JPG',
+      category: 'Animal Birth Control',
+      description: 'Vaccination program'
+    },
+    {
+      src: '/control/IMG_2007.JPG',
+      category: 'Animal Birth Control',
+      description: 'Community outreach'
+    },
+    {
+      src: '/control/IMG_1975.JPG',
+      category: 'Animal Birth Control',
+      description: 'Animal care services'
+    },
+    {
+      src: '/control/IMG_1996.JPG',
+      category: 'Animal Birth Control',
+      description: 'Medical interventions'
+    },
+    {
+      src: '/control/IMG_1976.JPG',
+      category: 'Animal Birth Control',
+      description: 'Veterinary care'
+    },
+    {
+      src: '/control/IMG_2003.JPG',
+      category: 'Animal Birth Control',
+      description: 'Animal welfare'
+    },
+    {
+      src: '/control/IMG_1972.JPG',
+      category: 'Animal Birth Control',
+      description: 'Community programs'
+    },
+    {
+      src: '/control/IMG_1977.JPG',
+      category: 'Animal Birth Control',
+      description: 'Medical services'
+    },
+    {
+      src: '/control/IMG_2004.JPG',
+      category: 'Animal Birth Control',
+      description: 'Animal care'
+    },
+    {
       src: '/control/1.png',
       category: 'Animal Birth Control',
       description: 'Birth control program implementation'
@@ -129,6 +214,66 @@ const Gallery = () => {
 
     // Street Dog Feeding
     {
+      src: '/feeding/IMG_2119.JPG',
+      category: 'Street Dog Feeding',
+      description: 'Latest feeding program'
+    },
+    {
+      src: '/feeding/IMG_1988.JPG',
+      category: 'Street Dog Feeding',
+      description: 'Recent feeding initiative'
+    },
+    {
+      src: '/feeding/IMG_1987.JPG',
+      category: 'Street Dog Feeding',
+      description: 'Community feeding program'
+    },
+    {
+      src: '/feeding/IMG_1989.JPG',
+      category: 'Street Dog Feeding',
+      description: 'Regular feeding activities'
+    },
+    {
+      src: '/feeding/IMG_1985.JPG',
+      category: 'Street Dog Feeding',
+      description: 'Animal care through feeding'
+    },
+    {
+      src: '/feeding/IMG_1995.JPG',
+      category: 'Street Dog Feeding',
+      description: 'Feeding program implementation'
+    },
+    {
+      src: '/feeding/IMG_2111.JPG',
+      category: 'Street Dog Feeding',
+      description: 'Community outreach'
+    },
+    {
+      src: '/feeding/IMG_2117.JPG',
+      category: 'Street Dog Feeding',
+      description: 'Regular feeding services'
+    },
+    {
+      src: '/feeding/IMG_1990.JPG',
+      category: 'Street Dog Feeding',
+      description: 'Animal welfare through feeding'
+    },
+    {
+      src: '/feeding/IMG_2116.JPG',
+      category: 'Street Dog Feeding',
+      description: 'Feeding initiatives'
+    },
+    {
+      src: '/feeding/IMG_1983.JPG',
+      category: 'Street Dog Feeding',
+      description: 'Community feeding'
+    },
+    {
+      src: '/feeding/IMG_2126.JPG',
+      category: 'Street Dog Feeding',
+      description: 'Regular feeding program'
+    },
+    {
       src: '/feeding/1.JPG',
       category: 'Street Dog Feeding',
       description: 'Regular feeding programs'
@@ -143,8 +288,23 @@ const Gallery = () => {
       category: 'Street Dog Feeding',
       description: 'Volunteer feeding activities'
     },
+    {
+      src: '/feeding/4.jpg',
+      category: 'Street Dog Feeding',
+      description: 'Feeding program activities'
+    },
+    {
+      src: '/feeding/5.JPG',
+      category: 'Street Dog Feeding',
+      description: 'Community feeding services'
+    },
 
     // Rabies Vaccination
+    {
+      src: '/rabies/3.jpg',
+      category: 'Rabies Vaccination',
+      description: 'Community vaccination drive'
+    },
     {
       src: '/rabies/1.jpg',
       category: 'Rabies Vaccination',
@@ -155,13 +315,13 @@ const Gallery = () => {
       category: 'Rabies Vaccination',
       description: 'Feline vaccination initiative'
     },
-    {
-      src: '/rabies/3.jpg',
-      category: 'Rabies Vaccination',
-      description: 'Community vaccination drive'
-    },
 
     // Farm Animal Vaccination
+    {
+      src: '/vaccination/7.jpg',
+      category: 'Farm Animal Vaccination',
+      description: 'Latest vaccination program'
+    },
     {
       src: '/vaccination/1.jpg',
       category: 'Farm Animal Vaccination',
@@ -177,8 +337,43 @@ const Gallery = () => {
       category: 'Farm Animal Vaccination',
       description: 'Animal health check-ups'
     },
+    {
+      src: '/vaccination/4.jpg',
+      category: 'Farm Animal Vaccination',
+      description: 'Veterinary services'
+    },
+    {
+      src: '/vaccination/5.jpg',
+      category: 'Farm Animal Vaccination',
+      description: 'Medical care'
+    },
+    {
+      src: '/vaccination/6.jpg',
+      category: 'Farm Animal Vaccination',
+      description: 'Animal welfare'
+    },
 
     // Farm Animal Survey
+    {
+      src: '/survey/IMG_2134.JPG',
+      category: 'Farm Animal Survey',
+      description: 'Latest research and data collection'
+    },
+    {
+      src: '/survey/IMG_2135.JPG',
+      category: 'Farm Animal Survey',
+      description: 'Recent field survey'
+    },
+    {
+      src: '/survey/IMG_1981.JPG',
+      category: 'Farm Animal Survey',
+      description: 'Health assessment program'
+    },
+    {
+      src: '/survey/IMG_1980.JPG',
+      category: 'Farm Animal Survey',
+      description: 'Animal welfare survey'
+    },
     {
       src: '/survey/1.jpg',
       category: 'Farm Animal Survey',
@@ -194,8 +389,18 @@ const Gallery = () => {
       category: 'Farm Animal Survey',
       description: 'Health assessment'
     },
+    {
+      src: '/survey/4.JPG',
+      category: 'Farm Animal Survey',
+      description: 'Survey activities'
+    },
 
     // Training and Awareness
+    {
+      src: '/awareness/7.jpg',
+      category: 'Training and Awareness',
+      description: 'Latest educational workshop'
+    },
     {
       src: '/awareness/1.jpg',
       category: 'Training and Awareness',
@@ -211,8 +416,113 @@ const Gallery = () => {
       category: 'Training and Awareness',
       description: 'Awareness campaigns'
     },
+    {
+      src: '/awareness/4.JPG',
+      category: 'Training and Awareness',
+      description: 'Training programs'
+    },
+    {
+      src: '/awareness/5.jpg',
+      category: 'Training and Awareness',
+      description: 'Educational initiatives'
+    },
+    {
+      src: '/awareness/6.jpg',
+      category: 'Training and Awareness',
+      description: 'Community awareness'
+    },
+    {
+      src: '/awareness/8.jpg',
+      category: 'Training and Awareness',
+      description: 'Training sessions'
+    },
+    {
+      src: '/awareness/9.jpg',
+      category: 'Training and Awareness',
+      description: 'Educational programs'
+    },
+    {
+      src: '/awareness/10.jpg',
+      category: 'Training and Awareness',
+      description: 'Awareness activities'
+    },
+    {
+      src: '/awareness/11.jpg',
+      category: 'Training and Awareness',
+      description: 'Training workshops'
+    },
+    {
+      src: '/awareness/12.jpg',
+      category: 'Training and Awareness',
+      description: 'Educational sessions'
+    },
+    {
+      src: '/awareness/13.jpg',
+      category: 'Training and Awareness',
+      description: 'Community programs'
+    },
+    {
+      src: '/awareness/14.jpg',
+      category: 'Training and Awareness',
+      description: 'Training initiatives'
+    },
+    {
+      src: '/awareness/15.jpg',
+      category: 'Training and Awareness',
+      description: 'Educational activities'
+    },
+    {
+      src: '/awareness/16.jpg',
+      category: 'Training and Awareness',
+      description: 'Awareness programs'
+    },
 
     // Virtual Sessions
+    {
+      src: '/virtual/IMG_2120.JPG',
+      category: 'Virtual Sessions',
+      description: 'Latest online training program'
+    },
+    {
+      src: '/virtual/IMG_2114.JPG',
+      category: 'Virtual Sessions',
+      description: 'Recent digital workshop'
+    },
+    {
+      src: '/virtual/IMG_1994.JPG',
+      category: 'Virtual Sessions',
+      description: 'Online learning session'
+    },
+    {
+      src: '/virtual/IMG_1997.JPG',
+      category: 'Virtual Sessions',
+      description: 'Virtual training program'
+    },
+    {
+      src: '/virtual/IMG_2129.JPG',
+      category: 'Virtual Sessions',
+      description: 'Digital education'
+    },
+    {
+      src: '/virtual/IMG_1998.JPG',
+      category: 'Virtual Sessions',
+      description: 'Online workshop'
+    },
+    {
+      src: '/virtual/IMG_2013.JPG',
+      category: 'Virtual Sessions',
+      description: 'Virtual learning'
+    },
+    {
+      src: '/virtual/IMG_1166.JPG',
+      category: 'Virtual Sessions',
+      description: 'Digital training'
+    },
+    {
+      src: '/virtual/3.jpg',
+      category: 'Virtual Sessions',
+      description: 'Online education'
+    },
     {
       src: '/virtual/4.jpg',
       category: 'Virtual Sessions',
@@ -228,22 +538,92 @@ const Gallery = () => {
       category: 'Virtual Sessions',
       description: 'Web-based learning'
     },
+    {
+      src: '/virtual/7.png',
+      category: 'Virtual Sessions',
+      description: 'Virtual education'
+    },
 
     // In-house Capacity Building
     {
-      src: '/capacity/3.jpg',
+      src: '/capacity/IMG_2121.JPG',
+      category: 'In-house Capacity Building',
+      description: 'Latest staff training'
+    },
+    {
+      src: '/capacity/IMG_2024.JPG',
+      category: 'In-house Capacity Building',
+      description: 'Recent volunteer development'
+    },
+    {
+      src: '/capacity/IMG_2016.JPG',
+      category: 'In-house Capacity Building',
+      description: 'Team building activities'
+    },
+    {
+      src: '/capacity/IMG_2023.JPG',
+      category: 'In-house Capacity Building',
+      description: 'Staff development'
+    },
+    {
+      src: '/capacity/IMG_2020.JPG',
+      category: 'In-house Capacity Building',
+      description: 'Training programs'
+    },
+    {
+      src: '/capacity/IMG_2019.JPG',
+      category: 'In-house Capacity Building',
+      description: 'Capacity building'
+    },
+    {
+      src: '/capacity/IMG_1993.JPG',
+      category: 'In-house Capacity Building',
+      description: 'Team training'
+    },
+    {
+      src: '/capacity/IMG_2022.JPG',
+      category: 'In-house Capacity Building',
+      description: 'Staff workshops'
+    },
+    {
+      src: '/capacity/IMG_2017.JPG',
+      category: 'In-house Capacity Building',
+      description: 'Development programs'
+    },
+    {
+      src: '/capacity/IMG_2025.JPG',
+      category: 'In-house Capacity Building',
+      description: 'Training initiatives'
+    },
+    {
+      src: '/capacity/IMG_2018.JPG',
+      category: 'In-house Capacity Building',
+      description: 'Team development'
+    },
+    {
+      src: '/capacity/1.JPG',
       category: 'In-house Capacity Building',
       description: 'Staff training'
     },
     {
-      src: '/capacity/4.jpg',
+      src: '/capacity/2.JPG',
       category: 'In-house Capacity Building',
       description: 'Volunteer development'
     },
     {
-      src: '/capacity/5.jpg',
+      src: '/capacity/3.jpg',
       category: 'In-house Capacity Building',
       description: 'Team building activities'
+    },
+    {
+      src: '/capacity/4.jpg',
+      category: 'In-house Capacity Building',
+      description: 'Training sessions'
+    },
+    {
+      src: '/capacity/5.jpg',
+      category: 'In-house Capacity Building',
+      description: 'Development activities'
     }
   ];
 

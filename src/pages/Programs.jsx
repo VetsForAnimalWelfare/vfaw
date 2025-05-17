@@ -11,6 +11,11 @@ const Programs = () => {
       title: 'Animal Welfare',
       description: 'Providing medical care and treatment for street animals, including before and after treatment cases.',
       images: [
+        '/welfare/IMG_2131.JPG',
+        '/welfare/IMG_2124.JPG',
+        '/welfare/IMG_2127.JPG',
+        '/welfare/IMG_2123.JPG',
+        '/welfare/IMG_2126.JPG',
         '/welfare/1.jpg',
         '/welfare/2.JPG',
         '/welfare/3.JPG',
@@ -28,13 +33,25 @@ const Programs = () => {
         '/welfare/15.jpg',
         '/welfare/16.jpg',
         '/welfare/17.jpg',
-        '/welfare/18.jpg',
+        '/welfare/18.jpg'
       ]
     },
     {
       title: 'Animal Birth Control and Vaccination',
       description: 'Implementing birth control programs and vaccination drives for street animals.',
       images: [
+        '/control/IMG_20240216_000413_Original.JPG',
+        '/control/IMG-20240215-WA0021_Original.JPG',
+        '/control/IMG_1974.JPG',
+        '/control/IMG_1973.JPG',
+        '/control/IMG_2007.JPG',
+        '/control/IMG_1975.JPG',
+        '/control/IMG_1996.JPG',
+        '/control/IMG_1976.JPG',
+        '/control/IMG_2003.JPG',
+        '/control/IMG_1972.JPG',
+        '/control/IMG_1977.JPG',
+        '/control/IMG_2004.JPG',
         '/control/1.png',
         '/control/2.jpg',
         '/control/3.jpg',
@@ -44,64 +61,78 @@ const Programs = () => {
         '/control/7.jpg',
         '/control/8.jpg',
         '/control/9.jpg'
-        
-        
       ]
     },
     {
       title: 'Street Dog Feeding Program',
       description: 'Regular feeding programs to ensure the well-being of street dogs.',
-      images: ['/feeding/1.JPG',
-    '/feeding/2.JPG',
-    '/feeding/3.jpg',
-    '/feeding/4.jpg',
-    '/feeding/5.JPG']
+      images: [
+        '/feeding/IMG_2119.JPG',
+        '/feeding/IMG_1988.JPG',
+        '/feeding/IMG_1987.JPG',
+        '/feeding/IMG_1989.JPG',
+        '/feeding/IMG_1985.JPG',
+        '/feeding/IMG_1995.JPG',
+        '/feeding/IMG_2111.JPG',
+        '/feeding/IMG_2117.JPG',
+        '/feeding/IMG_1990.JPG',
+        '/feeding/IMG_2116.JPG',
+        '/feeding/IMG_1983.JPG',
+        '/feeding/IMG_2126.JPG',
+        '/feeding/1.JPG',
+        '/feeding/2.JPG',
+        '/feeding/3.jpg',
+        '/feeding/4.jpg',
+        '/feeding/5.JPG'
+      ]
     },
     {
       title: 'Rabies Vaccination',
       description: 'Vaccination programs for both canine and feline populations to prevent rabies.',
       images: [
+        '/rabies/3.jpg',
         '/rabies/1.jpg',
-        '/rabies/2.jpg',
-        '/rabies/3.jpg'
-        
+        '/rabies/2.jpg'
       ]
     },
     {
       title: 'Farm Animal Vaccination',
       description: 'Vaccination and healthcare programs for farm animals.',
       images: [
+        '/vaccination/7.jpg',
         '/vaccination/1.jpg',
         '/vaccination/2.jpg',
         '/vaccination/3.jpg',
         '/vaccination/4.jpg',
         '/vaccination/5.jpg',
-        '/vaccination/6.jpg',
-        '/vaccination/7.jpg'
-        
+        '/vaccination/6.jpg'
       ]
     },
     {
       title: 'Farm Animal Survey',
       description: 'Conducting surveys and research on farm animal health and welfare.',
       images: [
+        '/survey/IMG_2134.JPG',
+        '/survey/IMG_2135.JPG',
+        '/survey/IMG_1981.JPG',
+        '/survey/IMG_1980.JPG',
         '/survey/1.jpg',
         '/survey/2.jpg',
         '/survey/3.JPG',
         '/survey/4.JPG'
-        
       ]
     },
     {
       title: 'Training and Awareness Programs',
       description: 'Educational programs to raise awareness about animal welfare.',
       images: [
+        '/awareness/7.jpg',
         '/awareness/1.jpg',
         '/awareness/2.jpg',
         '/awareness/3.jpg',
+        '/awareness/4.JPG',
         '/awareness/5.jpg',
         '/awareness/6.jpg',
-        '/awareness/7.jpg',
         '/awareness/8.jpg',
         '/awareness/9.jpg',
         '/awareness/10.jpg',
@@ -110,29 +141,48 @@ const Programs = () => {
         '/awareness/13.jpg',
         '/awareness/14.jpg',
         '/awareness/15.jpg',
-        '/awareness/16.jpg',
-
+        '/awareness/16.jpg'
       ]
     },
     {
       title: 'Virtual Sessions',
       description: 'Online training and educational sessions.',
       images: [
+        '/virtual/IMG_2120.JPG',
+        '/virtual/IMG_2114.JPG',
+        '/virtual/IMG_1994.JPG',
+        '/virtual/IMG_1997.JPG',
+        '/virtual/IMG_2129.JPG',
+        '/virtual/IMG_1998.JPG',
+        '/virtual/IMG_2013.JPG',
+        '/virtual/IMG_1166.JPG',
+        '/virtual/3.jpg',
         '/virtual/4.jpg',
         '/virtual/5.jpg',
         '/virtual/6.jpg',
-        '/virtual/7.png',
-        
+        '/virtual/7.png'
       ]
     },
     {
       title: 'In-house Capacity Building',
       description: 'Internal training programs for staff and volunteers.',
       images: [
+        '/capacity/IMG_2121.JPG',
+        '/capacity/IMG_2024.JPG',
+        '/capacity/IMG_2016.JPG',
+        '/capacity/IMG_2023.JPG',
+        '/capacity/IMG_2020.JPG',
+        '/capacity/IMG_2019.JPG',
+        '/capacity/IMG_1993.JPG',
+        '/capacity/IMG_2022.JPG',
+        '/capacity/IMG_2017.JPG',
+        '/capacity/IMG_2025.JPG',
+        '/capacity/IMG_2018.JPG',
+        '/capacity/1.JPG',
+        '/capacity/2.JPG',
         '/capacity/3.jpg',
         '/capacity/4.jpg',
         '/capacity/5.jpg'
-        
       ]
     }
   ];
