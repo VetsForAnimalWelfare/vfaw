@@ -19,11 +19,7 @@ const Gallery = () => {
 
   const images = [
     // Animal Welfare
-    {
-      src: '/welfare/IMG_2131.JPG',
-      category: 'Animal Welfare',
-      description: 'Latest medical care and treatment for street animals'
-    },
+  
     {
       src: '/welfare/IMG_2124.JPG',
       category: 'Animal Welfare',
@@ -43,11 +39,6 @@ const Gallery = () => {
       src: '/welfare/IMG_2126.JPG',
       category: 'Animal Welfare',
       description: 'Animal care services'
-    },
-    {
-      src: '/welfare/1.jpg',
-      category: 'Animal Welfare',
-      description: 'Medical care and treatment for street animals'
     },
     {
       src: '/welfare/2.JPG',

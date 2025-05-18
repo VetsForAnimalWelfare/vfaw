@@ -220,7 +220,7 @@ const Home = () => {
             <Link to="/gallery" className="group block rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300">
               <div className="relative h-48 overflow-hidden">
                 <img
-                  src="/capacity/IMG_2121.JPG"
+                  src="/capacity/1.JPG"
                   alt="Capacity Building"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
