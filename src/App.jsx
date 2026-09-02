@@ -22,6 +22,7 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/programs" element={<Programs />} />
             <Route path="/library" element={<Library />} />
+<Route path="/library/blog/:blogId" element={<Library />} />
             <Route path="/apply" element={<Apply />} />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/get-involved" element={<GetInvolved />} />
