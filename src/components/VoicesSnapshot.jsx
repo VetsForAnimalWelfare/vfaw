@@ -15,13 +15,13 @@ const voices = [
   },
   {
     name: 'Eliza Gautam',
-    role: 'Semester: 5th',
+    role: 'Semester: 7th',
     image: '/voice/Eliza Gautam.png',
     text: 'Feeding street dogs during World Veterinary Day made me feel so connected to them. It showed me how simple acts of kindness can bring happiness and hope to these innocent lives.'
   },
   {
     name: 'Bibek Kumar Chaudhary',
-    role: 'Semester: 5th',
+    role: 'Semester: 7th',
     image: '/voice/Bibek Kumar Chaudhary.png',
     text: 'Volunteering in the anti-rabies vaccination program made me proud. It gave me a deeper understanding of how important prevention is to protect both animals and our community.'
   }
