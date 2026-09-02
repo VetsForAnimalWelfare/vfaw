@@ -17,7 +17,7 @@ const Programs = () => {
     'public/welfare/farm-animal-4.jpg',
     'public/welfare/farm-animal-5.jpg'
   ]
-}
+},
     {
       title: 'Animal Welfare',
       description: 'Providing medical care and treatment for street animals, including before and after treatment cases.',
