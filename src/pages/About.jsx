@@ -249,7 +249,7 @@ const About = () => {
                 {
                   name: 'Jasmine Gharti Magar',
                   role: 'Extension Coordinator',
-                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Asmita_Sharma.jpg',
+                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Jasmine Gharti Magar.jpg',
                 },
       {
                   name: 'Sujal Ghimire',
@@ -284,11 +284,7 @@ const About = () => {
             </div>
             <div className="mt-8 grid gap-8 md:grid-cols-4">
               {[
-                {
-                  name: 'Prakash Chaudhary',
-                  role: 'Board Member',
-                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/prakash chaudhary.jpg',
-                },
+                
                 {
                   name: 'Jageshwor Yadav',
                   role: 'Board Member',
