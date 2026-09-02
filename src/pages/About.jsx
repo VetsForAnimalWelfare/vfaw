@@ -251,6 +251,11 @@ const About = () => {
                   role: 'Extension Coordinator',
                   image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Asmita_Sharma.jpg',
                 },
+      {
+                  name: 'Sujal Ghimire',
+                  role: 'Extension Coordinator',
+                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Sujal Ghimire.jpg',
+                },
                 {
                   name: 'Bibek Sunrait',
                   role: 'Vice-Secretary',
@@ -259,7 +264,7 @@ const About = () => {
                 {
                   name: 'Mohan Karki',
                   role: 'Treasurer',
-                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Sujata Gautam.jpg',
+                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Mohan Karki.jpg',
                 },
               ].map((member) => (
                 <div key={member.name} className="bg-white rounded-lg shadow-lg overflow-hidden">
@@ -287,12 +292,17 @@ const About = () => {
                 {
                   name: 'Jageshwor Yadav',
                   role: 'Board Member',
-                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Anisha Ranabhat.jpg',
+                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Jageshwor Yadav.jpg',
                 },
                 {
                   name: 'Janak Raj Joshi',
                   role: 'Jr.Board Member',
                   image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Janak Raj Joshi.jpg',
+                },
+       {
+                  name: 'Bipin Dahal',
+                  role: 'Jr.Board Member',
+                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Bipin Dahal.jpg',
                 },
                 {
                   name: 'Bal Krishna Acharya',
@@ -323,22 +333,37 @@ const About = () => {
                   image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Bibash Lamichhane.jpg',
                 },
                 {
-                  name: 'Rizan Bartaula',
+                  name: 'Samip Acharya',
                   role: 'Content Creator',
-                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Rizan Bartaula.jpg',
+                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Samip Acharya.jpg',
+                },
+      {
+                  name: 'Nishant Karki',
+                  role: 'Content Creator',
+                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Nishant Karki.jpg',
                 },
                 {
-                  name: 'Bibek Sunrait',
+                  name: 'Resham Neupane',
                   role: 'Extension Wing',
-                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Bibek Sunrait.jpg',
+                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Resham Neupane.jpg',
+                },
+      {
+                  name: 'Surakshya Ghimire',
+                  role: 'Extension Wing',
+                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Surakshya Ghimire.jpg',
                 },
                 {
-                  name: 'Balkrishna Acharya',
+                  name: 'Dipendra Joshi',
                   role: 'Animal Welfare Wing',
-                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Bal Krishna Acharya.jpg',
+                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Dipendra Joshi.jpg',
+                },
+      {
+                  name: 'Arpita Thapa',
+                  role: 'Animal Welfare Wing',
+                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Arpita Thapa.jpg',
                 },
                 {
-                  name: 'Janak Raj Joshi',
+                  name: 'Diwakar Chapai',
                   role: 'Animal Welfare Wing',
                   image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Janak Raj Joshi.jpg',
                 },
