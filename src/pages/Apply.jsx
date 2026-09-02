@@ -6,10 +6,10 @@ const Apply = () => {
   const programs = [
     {
       id: 1,
-      title: "Animal Welfare Training Program",
+      title: "Clinical Report Writing Competition",
       description:
-        "Training program focused on animal welfare and community development.",
-      date: "Coming Soon",
+        "Training program focused on development of Student Skill and Knowledge.",
+      date: "2083/05/20",
       formLink:
         "https://docs.google.com/forms/d/e/1FAIpQLSeh4etkOFN3AlsO-oNBUTR3khVb2I2jvMdw_hlzxYP5IH_vqQ/viewform?usp=header",
     },
