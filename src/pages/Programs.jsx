@@ -11,10 +11,10 @@ const Programs = () => {
   title: 'Farmed Animal Welfare',
   description: 'Dedicated to the protection, rehabilitation, and compassionate care of farm animals.',
   images: [
-    '/welfare/IMG_2131.JPG',
-    '/welfare/IMG_2127.JPG',
-    'public/welfare/farm-animal-3.jpg',
-    'public/welfare/farm-animal-4.jpg',
+    '/welfare/farmed_1.jpg',
+    '/welfare/farmed_2.jpg',
+    'public/welfare/farmed_3.jpg.jpg',
+    'public/welfare/farmed_4.jpg',
     'public/welfare/farm-animal-5.jpg'
   ]
 },
