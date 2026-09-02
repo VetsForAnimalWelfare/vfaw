@@ -9,9 +9,9 @@ const voices = [
   },
   {
     name: 'Sandesh Bhusal',
-    role: 'Semester: 5th',
+    role: 'Semester: 4th',
     image: '/voice/Sandesh.jpg',
-    text: 'While working on the ABC program, I realized how important it is to control stray animal populations humanely. It taught me that small efforts bring big changes in both animal and human lives.'
+    text: 'While working on the ABC (Animal Birth Control) program, I realized how important humane population management is for improving the lives of both stray animals and people. The experience helped me understand that controlling stray animal populations is not simply about reducing numbers—it is about promoting animal welfare, preventing unnecessary suffering, and creating a safer and healthier relationship between animals and communities. Through the program, I learned that humane approaches such as sterilization, vaccination, and proper care can create long-term positive changes. These efforts help prevent the uncontrolled growth of stray animal populations while also reducing the risks of disease transmission, injuries, and conflicts between humans and animals.'
   },
   {
     name: 'Eliza Gautam',
