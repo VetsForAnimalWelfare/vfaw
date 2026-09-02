@@ -15,19 +15,39 @@ const blogs = [
       "https://images.unsplash.com/photo-1558788353-f76d92427f16?auto=format&fit=crop&w=1600&q=80",
     content: (
       <>
-        <p>
-          Animal welfare is an important part of building a compassionate and
-          responsible society. It involves ensuring that animals are treated
-          with care, respect, and kindness throughout their lives.
+        <p className="lead">
+          Animal welfare is an essential part of building a compassionate,
+          responsible, and sustainable society. Animals are sentient beings
+          capable of experiencing pain, fear, stress, comfort, and positive
+          states of well-being. Humane animal welfare means ensuring that
+          animals receive appropriate care, protection, and respect throughout
+          their lives.
         </p>
 
-        <h2>What is Animal Welfare?</h2>
+        <p>
+          Animal welfare extends beyond simply preventing cruelty. It involves
+          providing animals with adequate nutrition, clean water, suitable
+          shelter, appropriate healthcare, protection from unnecessary
+          suffering, and opportunities to express normal behaviours.
+        </p>
+
+        <h2>What Is Animal Welfare?</h2>
 
         <p>
-          Animal welfare refers to the physical and mental well-being of
-          animals. It includes providing appropriate nutrition, shelter,
-          healthcare, protection from unnecessary suffering, and opportunities
-          for animals to express normal behaviour.
+          Animal welfare refers to the physical and mental well-being of an
+          animal in relation to the conditions in which it lives and dies.
+          Good welfare means that an animal is healthy, comfortable, safe, and
+          able to experience positive states while being protected from
+          unnecessary pain, fear, and distress.
+        </p>
+
+        <p>
+          Humane animal welfare applies to companion animals, livestock,
+          working animals, wildlife, and animals under human care. The
+          responsibilities may differ between species, but the fundamental
+          principle remains the same: animals should be treated with care,
+          respect, and consideration for their biological and behavioural
+          needs.
         </p>
 
         <blockquote>
@@ -36,42 +56,205 @@ const blogs = [
           fulfilling lives."
         </blockquote>
 
+        <h2>The Five Freedoms</h2>
+
+        <p>
+          One widely recognized framework for understanding animal welfare is
+          the Five Freedoms. These principles provide a practical foundation
+          for evaluating and improving the conditions in which animals are
+          kept.
+        </p>
+
+        <ul>
+          <li>
+            <strong>Freedom from hunger and thirst:</strong> Access to fresh
+            water and an appropriate diet that maintains health and vigour.
+          </li>
+
+          <li>
+            <strong>Freedom from discomfort:</strong> Suitable shelter,
+            resting areas, and a comfortable living environment.
+          </li>
+
+          <li>
+            <strong>Freedom from pain, injury, and disease:</strong> Prevention,
+            rapid diagnosis, and appropriate veterinary treatment.
+          </li>
+
+          <li>
+            <strong>Freedom to express normal behaviour:</strong> Adequate
+            space, appropriate facilities, and opportunities for natural
+            behaviours.
+          </li>
+
+          <li>
+            <strong>Freedom from fear and distress:</strong> Conditions and
+            handling that minimize unnecessary psychological suffering.
+          </li>
+        </ul>
+
         <h2>Why Does Animal Welfare Matter?</h2>
 
+        <h3>1. Ethical Responsibility</h3>
+
         <p>
-          Responsible animal care benefits both animals and people. Healthy
-          animals contribute to healthier communities, while humane treatment
-          promotes compassion and responsible ownership.
+          Humans have a significant responsibility toward animals because many
+          animals depend directly on people for food, shelter, healthcare,
+          protection, and survival. Treating animals humanely reflects
+          compassion, responsibility, and respect for living beings.
         </p>
 
         <p>
-          Communities can contribute through responsible pet ownership,
-          vaccination, sterilization, adoption, proper nutrition, and
-          appropriate veterinary care.
+          Preventing unnecessary pain, neglect, abandonment, and cruelty is a
+          fundamental component of responsible animal care. Ethical animal
+          welfare encourages people to consider not only what animals provide
+          to humans but also the quality of life experienced by the animals
+          themselves.
         </p>
 
-        <h2>The Role of the Community</h2>
+        <h3>2. Better Animal Health</h3>
 
         <p>
-          Animal welfare cannot be achieved by organizations alone.
-          Communities, students, veterinary professionals, local authorities,
-          and animal owners all have an important role to play.
+          Animal welfare and animal health are closely connected. Proper
+          nutrition, clean water, suitable housing, disease prevention,
+          veterinary care, and appropriate handling can significantly improve
+          an animal's health and quality of life.
+        </p>
+
+        <p>
+          Poor living conditions and prolonged stress can negatively affect
+          animals and may increase their vulnerability to disease. Improving
+          welfare therefore supports healthier animals and can contribute to
+          better outcomes in both companion animal care and livestock
+          production.
+        </p>
+
+        <h3>3. Public Health and Community Well-Being</h3>
+
+        <p>
+          Animal welfare is also closely connected with human health.
+          Responsible animal management can help reduce risks associated with
+          zoonotic diseases and improve hygiene within communities.
+        </p>
+
+        <p>
+          Vaccination, responsible ownership, humane population management,
+          appropriate sanitation, and timely veterinary care all contribute to
+          healthier relationships between people and animals.
+        </p>
+
+        <h3>4. Responsible Livestock Production</h3>
+
+        <p>
+          Animal welfare is particularly important in livestock farming.
+          Cattle, buffalo, goats, sheep, poultry, and other farm animals make
+          important contributions to food security and rural livelihoods.
+        </p>
+
+        <p>
+          Providing adequate nutrition, comfortable housing, disease
+          prevention, humane transportation, appropriate handling, and proper
+          veterinary care supports both animal well-being and sustainable
+          production.
+        </p>
+
+        <h3>5. Reducing Cruelty and Neglect</h3>
+
+        <p>
+          Animal cruelty may occur through intentional abuse, neglect,
+          abandonment, inappropriate handling, or inadequate living
+          conditions. Education and awareness can help communities identify
+          these problems and encourage responsible behaviour.
+        </p>
+
+        <h2>The Role of Veterinary Professionals</h2>
+
+        <p>
+          Veterinary professionals have a central role in protecting and
+          promoting animal welfare. Their responsibilities extend beyond
+          diagnosing and treating diseases. Veterinarians also contribute to
+          preventive healthcare, pain management, humane handling, nutrition,
+          responsible breeding, disease control, and ethical decision-making.
+        </p>
+
+        <p>
+          Veterinary students and professionals can also educate animal
+          owners, farmers, communities, and policymakers about responsible
+          animal care. Their scientific knowledge allows welfare principles to
+          be translated into practical actions.
+        </p>
+
+        <h2>The Importance of Community Participation</h2>
+
+        <p>
+          Animal welfare cannot be achieved by veterinarians and animal welfare
+          organizations alone. Communities play an equally important role in
+          creating lasting change.
         </p>
 
         <ul>
           <li>Promoting responsible animal ownership</li>
           <li>Supporting humane population management</li>
           <li>Providing appropriate veterinary care</li>
-          <li>Encouraging adoption and responsible breeding</li>
-          <li>Creating awareness about animal welfare</li>
+          <li>Encouraging responsible adoption and breeding</li>
+          <li>Providing proper nutrition and shelter</li>
+          <li>Reporting cases of cruelty and neglect</li>
+          <li>Creating awareness about responsible animal care</li>
         </ul>
+
+        <h2>Education and Awareness</h2>
+
+        <p>
+          Education is one of the most effective tools for improving animal
+          welfare. Teaching children and young people to respect animals can
+          help establish compassionate attitudes from an early age.
+        </p>
+
+        <p>
+          Schools, veterinary institutions, animal welfare organizations,
+          community groups, and digital platforms can all contribute to
+          spreading accurate information about animal care and responsible
+          ownership.
+        </p>
+
+        <h2>Building a Humane Future</h2>
+
+        <p>
+          Improving animal welfare requires cooperation between individuals,
+          veterinary professionals, farmers, communities, organizations, and
+          governments. Effective welfare programs should combine education,
+          preventive healthcare, responsible ownership, humane population
+          management, and evidence-based practices.
+        </p>
+
+        <p>
+          Even small actions can make a meaningful difference. Providing clean
+          water, helping an injured animal receive veterinary care, adopting
+          responsibly, preventing unwanted reproduction, or educating another
+          person about animal welfare can contribute to broader positive
+          change.
+        </p>
 
         <h2>Conclusion</h2>
 
         <p>
-          Humane animal welfare requires continuous effort, education, and
-          cooperation. Even small actions can contribute to a safer and more
-          compassionate environment for animals and people.
+          Humane animal welfare is not simply about protecting animals from
+          cruelty. It is about creating conditions in which animals can live
+          healthier, safer, and more dignified lives. It reflects the values of
+          compassion, responsibility, science, and respect for life.
+        </p>
+
+        <p>
+          A humane society is built through everyday choices. By promoting
+          responsible ownership, providing appropriate veterinary care,
+          preventing unnecessary suffering, and educating communities, we can
+          create a better environment for both animals and people.
+        </p>
+
+        <p className="final-statement">
+          Ultimately, promoting humane animal welfare is not only an act of
+          kindness—it is a shared responsibility toward a healthier, more
+          compassionate, and sustainable society.
         </p>
       </>
     ),
@@ -90,47 +273,49 @@ const blogs = [
       "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=1600&q=80",
     content: (
       <>
-        <p>
+        <p className="lead">
           Managing animal populations is an important component of animal
-          welfare and public health. Effective programs should focus on humane,
-          sustainable, and evidence-based approaches.
+          welfare, public health, and responsible community development.
+          Effective population management should focus on humane, sustainable,
+          and evidence-based approaches.
         </p>
 
         <h2>Understanding the Problem</h2>
 
         <p>
-          Uncontrolled reproduction can contribute to increasing numbers of
-          stray animals. This can create challenges for animals, communities,
-          and local authorities.
+          Uncontrolled reproduction can contribute to increasing populations of
+          stray and free-roaming animals. This can create challenges for
+          animals, communities, animal welfare organizations, and local
+          authorities.
         </p>
 
         <h2>Humane Solutions</h2>
 
         <p>
-          Population management programs can include sterilization,
-          vaccination, responsible ownership, adoption, identification, and
-          public education.
+          Humane population management can include sterilization, vaccination,
+          responsible ownership, adoption, identification, disease prevention,
+          and public education.
         </p>
 
         <blockquote>
           Humane population management should prioritize animal welfare while
-          addressing community concerns.
+          addressing legitimate community concerns.
         </blockquote>
 
         <h2>Community Participation</h2>
 
         <p>
           Long-term success depends on community participation. Educating
-          animal owners and encouraging responsible care can help prevent the
-          problem from recurring.
+          animal owners and encouraging responsible care can help prevent
+          unwanted reproduction and reduce abandonment.
         </p>
 
         <h2>Conclusion</h2>
 
         <p>
           Sustainable animal population management requires cooperation among
-          veterinary professionals, communities, organizations, and
-          authorities.
+          veterinary professionals, communities, organizations, animal owners,
+          and local authorities.
         </p>
       </>
     ),
@@ -149,7 +334,7 @@ const blogs = [
       "https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?auto=format&fit=crop&w=1600&q=80",
     content: (
       <>
-        <p>
+        <p className="lead">
           Veterinary students are future professionals who can play an
           important role in improving animal welfare. Their education provides
           them with knowledge of animal health, behaviour, disease prevention,
@@ -167,8 +352,8 @@ const blogs = [
 
         <p>
           Participation in animal welfare programs provides students with
-          practical experience while allowing them to contribute to the
-          community.
+          practical experience while allowing them to contribute meaningfully
+          to their communities.
         </p>
 
         <h2>Building a Better Future</h2>
@@ -222,7 +407,7 @@ const Library = () => {
         className={`min-h-screen transition-colors duration-500 ${
           darkMode
             ? "bg-gray-950 text-gray-200"
-            : "bg-[#fafaf9] text-gray-800"
+            : "bg-[#f5f5f3] text-gray-800"
         }`}
       >
         {/* Reading Progress */}
@@ -265,104 +450,138 @@ const Library = () => {
         </header>
 
         {/* Article */}
-        <article className="max-w-4xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
-          {/* Category */}
-          <div className="text-center">
-            <span className="inline-block px-4 py-2 rounded-full bg-emerald-100 text-emerald-700 text-sm font-bold uppercase tracking-wider">
-              {selectedBlog.category}
-            </span>
-          </div>
+        <main className="px-4 sm:px-6">
+          <article className="max-w-4xl mx-auto py-14 sm:py-20">
+            {/* Category */}
+            <div className="text-center">
+              <span
+                className={`inline-block px-4 py-2 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider ${
+                  darkMode
+                    ? "bg-emerald-950 text-emerald-400"
+                    : "bg-emerald-100 text-emerald-700"
+                }`}
+              >
+                {selectedBlog.category}
+              </span>
+            </div>
 
-          {/* Title */}
-          <h1
-            className={`mt-8 text-4xl sm:text-5xl md:text-6xl font-black leading-tight text-center ${
-              darkMode ? "text-white" : "text-gray-950"
-            }`}
-          >
-            {selectedBlog.title}
-          </h1>
-
-          {/* Meta */}
-          <div
-            className={`mt-7 flex flex-wrap justify-center items-center gap-3 text-sm ${
-              darkMode ? "text-gray-400" : "text-gray-500"
-            }`}
-          >
-            <span>{selectedBlog.author}</span>
-            <span>•</span>
-            <span>{selectedBlog.date}</span>
-            <span>•</span>
-            <span>{selectedBlog.readTime}</span>
-          </div>
-
-          {/* Hero Image */}
-          <div className="mt-12 rounded-3xl overflow-hidden shadow-2xl">
-            <img
-              src={selectedBlog.image}
-              alt={selectedBlog.title}
-              className="w-full h-[280px] sm:h-[450px] object-cover"
-            />
-          </div>
-
-          {/* Article Content */}
-          <div
-            className={`
-              mt-14
-              prose
-              prose-lg
-              sm:prose-xl
-              max-w-none
-
-              prose-headings:font-extrabold
-              prose-headings:tracking-tight
-              prose-p:leading-8
-              prose-p:mb-7
-
-              prose-li:leading-8
-
-              prose-blockquote:border-l-4
-              prose-blockquote:border-emerald-500
-              prose-blockquote:pl-6
-              prose-blockquote:italic
-
-              ${
-                darkMode
-                  ? "prose-invert"
-                  : "prose-gray"
-              }
-            `}
-          >
-            {selectedBlog.content}
-          </div>
-
-          {/* End Article */}
-          <div className="mt-16 pt-10 border-t border-gray-300/30 text-center">
-            <div className="text-3xl mb-4">✦</div>
-
-            <h3
-              className={`text-2xl font-extrabold ${
-                darkMode ? "text-white" : "text-gray-900"
+            {/* Title */}
+            <h1
+              className={`mt-7 text-4xl sm:text-5xl md:text-6xl font-black leading-[1.1] text-center tracking-tight ${
+                darkMode ? "text-white" : "text-gray-950"
               }`}
             >
-              End of Article
-            </h3>
+              {selectedBlog.title}
+            </h1>
 
-            <p
-              className={`mt-2 ${
+            {/* Meta */}
+            <div
+              className={`mt-7 flex flex-wrap justify-center items-center gap-x-3 gap-y-2 text-sm ${
                 darkMode ? "text-gray-400" : "text-gray-500"
               }`}
             >
-              Thank you for reading.
-            </p>
+              <span className="font-semibold">{selectedBlog.author}</span>
+              <span>•</span>
+              <span>{selectedBlog.date}</span>
+              <span>•</span>
+              <span>{selectedBlog.readTime}</span>
+            </div>
 
-            <button
-              onClick={() => navigate("/library")}
-              className="mt-6 px-7 py-3 rounded-full bg-emerald-600 text-white font-bold hover:bg-emerald-700 hover:-translate-y-1 transition-all shadow-lg"
+            {/* Hero Image */}
+            <div className="mt-12 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl">
+              <img
+                src={selectedBlog.image}
+                alt={selectedBlog.title}
+                className="w-full h-[260px] sm:h-[420px] object-cover"
+              />
+            </div>
+
+            {/* Article Paper */}
+            <div
+              className={`mt-10 sm:mt-14 rounded-2xl sm:rounded-3xl p-6 sm:p-10 md:p-14 shadow-sm border ${
+                darkMode
+                  ? "bg-gray-900 border-gray-800"
+                  : "bg-white border-gray-200"
+              }`}
             >
-              ← Explore More Articles
-            </button>
-          </div>
-        </article>
+              {/* Article Content */}
+              <div
+                className={`
+                  prose
+                  prose-lg
+                  sm:prose-xl
+                  max-w-none
+
+                  prose-headings:font-extrabold
+                  prose-headings:tracking-tight
+
+                  prose-h2:text-2xl
+                  sm:prose-h2:text-3xl
+                  prose-h2:mt-14
+                  prose-h2:mb-5
+
+                  prose-h3:text-xl
+                  sm:prose-h3:text-2xl
+                  prose-h3:mt-10
+                  prose-h3:mb-4
+
+                  prose-p:leading-[1.9]
+                  prose-p:mb-7
+
+                  prose-li:leading-[1.8]
+                  prose-li:mb-2
+
+                  prose-blockquote:border-l-4
+                  prose-blockquote:border-emerald-500
+                  prose-blockquote:pl-6
+                  prose-blockquote:py-2
+                  prose-blockquote:italic
+
+                  prose-blockquote:text-gray-600
+                  prose-blockquote:my-10
+
+                  prose-strong:font-bold
+
+                  ${darkMode ? "prose-invert" : "prose-gray"}
+                `}
+              >
+                {selectedBlog.content}
+              </div>
+            </div>
+
+            {/* End Article */}
+            <div
+              className={`mt-14 pt-10 border-t text-center ${
+                darkMode ? "border-gray-800" : "border-gray-300"
+              }`}
+            >
+              <div className="text-3xl mb-4 text-emerald-600">✦</div>
+
+              <h3
+                className={`text-2xl font-extrabold ${
+                  darkMode ? "text-white" : "text-gray-900"
+                }`}
+              >
+                End of Article
+              </h3>
+
+              <p
+                className={`mt-2 ${
+                  darkMode ? "text-gray-400" : "text-gray-500"
+                }`}
+              >
+                Thank you for reading.
+              </p>
+
+              <button
+                onClick={() => navigate("/library")}
+                className="mt-6 px-7 py-3 rounded-full bg-emerald-600 text-white font-bold hover:bg-emerald-700 hover:-translate-y-1 transition-all shadow-lg"
+              >
+                ← Explore More Articles
+              </button>
+            </div>
+          </article>
+        </main>
       </div>
     );
   }
