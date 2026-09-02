@@ -11,11 +11,11 @@ const Programs = () => {
       title: 'WELFARE FIRST: Farmed Animal Welfare in Rupandehi, Nepal',
       description: 'A field program by VFAW (Vets for Animal Welfare)',
       images: [
-        '/welfare/farm-animal-1.JPG',
-        '/welfare/farm-animal-2.JPG',
-        '/welfare/farm-animal-3.JPG',
-        '/welfare/farm-animal-4.JPG',
-        '/welfare/18.jpg'
+       '/welfare/IMG_2131.JPG',
+        '/welfare/IMG_2124.JPG',
+        '/welfare/IMG_2127.JPG',
+        '/welfare/IMG_2123.JPG',
+        '/welfare/IMG_2126.JPG'
       ]
     },
     {
