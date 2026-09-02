@@ -199,7 +199,7 @@ const About = () => {
           {/* Executive Committee */}
           <div className="mb-12">
             <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl text-center">
-              Executive Committee 2024/2025
+              Executive Committee 2025/2026
             </h2>
             <div className="mt-8 grid gap-8 md:grid-cols-4">
               {[
@@ -365,7 +365,7 @@ const About = () => {
                 {
                   name: 'Diwakar Chapai',
                   role: 'Animal Welfare Wing',
-                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Janak Raj Joshi.jpg',
+                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Diwakar Chapai.jpg',
                 },
               ].map((member) => (
                 <div key={member.name} className="bg-white rounded-lg shadow-lg overflow-hidden">
