@@ -15,7 +15,7 @@ const Programs = () => {
         '/welfare/farm-animal-2.JPG',
         '/welfare/farm-animal-3.JPG',
         '/welfare/farm-animal-4.JPG',
-        '/welfare/farm-animal-5.JPG'
+        '/welfare/18.jpg'
       ]
     },
     {
