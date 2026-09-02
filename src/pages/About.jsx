@@ -68,12 +68,12 @@ const About = () => {
               <div className="w-48 h-48 rounded-full overflow-hidden shadow-lg">
                 <img 
                   src="/president.JPG" 
-                  alt="Urmila Chhetri" 
+                  alt="Sankhar Rimal" 
                   className="w-full h-full object-cover"
                 />
               </div>
               <div className="text-center">
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Urmila Chhetri</h3>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">Sankhar Rimal</h3>
                 <p className="text-indigo-600 font-semibold mb-6">President, VFAW</p>
                 <blockquote className="text-lg text-gray-700 italic relative">
                   <svg className="absolute -top-4 -left-4 w-8 h-8 text-indigo-200" fill="currentColor" viewBox="0 0 24 24">
@@ -204,7 +204,7 @@ const About = () => {
             <div className="mt-8 grid gap-8 md:grid-cols-4">
               {[
                 {
-                  name: 'Urmila Chhetri',
+                  name: 'Sankhar Rimal',
                   role: 'President',
                   image: '/president.JPG',
                 },
