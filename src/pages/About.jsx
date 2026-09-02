@@ -204,24 +204,24 @@ const About = () => {
             <div className="mt-8 grid gap-8 md:grid-cols-4">
               {[
                 {
-                  name: 'Sankhar Rimal',
+                  name: 'Shankhar Rimal',
                   role: 'President',
                   image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/shankar rimal.jpg',
                 },
                 {
-                  name: 'Anish Pandey',
+                  name: 'Kavya Ghimire',
                   role: 'Vice-President',
-                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Anish Pandey.jpg',
+                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Kavya Ghimire.jpg',
                 },
                 {
-                  name: 'Menuka Adhikari',
+                  name: 'Anisha Ranabhat',
                   role: 'Vice-President',
-                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Menuka Adhikari.jpg',
+                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Anisha Ranabhat.jpg',
                 },
                 {
-                  name: 'Minu Gupta',
+                  name: 'Bibas Tharu',
                   role: 'Secretary',
-                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Minu Gupta.jpg',
+                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Bibas Tharu.jpg',
                 },
               ].map((member) => (
                 <div key={member.name} className="bg-white rounded-lg shadow-lg overflow-hidden">
@@ -242,17 +242,17 @@ const About = () => {
             <div className="mt-8 grid gap-8 md:grid-cols-4">
               {[
                 {
-                  name: 'Bibas Tharu',
+                  name: 'Madan Krishna Neupane',
                   role: 'Social Media Coordinator',
                   image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Bibas Tharu.jpg',
                 },
                 {
-                  name: 'Asmita Sharma',
+                  name: 'Jasmine Gharti Magar',
                   role: 'Extension Coordinator',
                   image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Asmita_Sharma.jpg',
                 },
                 {
-                  name: 'Shankar Rimal',
+                  name: 'Bibek Sunrait',
                   role: 'Vice-Secretary',
                   image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/shankar rimal.jpg',
                 },
@@ -318,7 +318,7 @@ const About = () => {
             <div className="mt-8 grid gap-8 md:grid-cols-5">
               {[
                 {
-                  name: 'Madan Krishna Neupane',
+                  name: 'Bibash Lamichhane',
                   role: 'Social Media Wing',
                   image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Madan Krishna Neupane.jpg',
                 },
