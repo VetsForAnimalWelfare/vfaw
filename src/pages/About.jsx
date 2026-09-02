@@ -297,7 +297,7 @@ const About = () => {
                 {
                   name: 'Bal Krishna Acharya',
                   role: 'Jr.Board Member',
-                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Bal Krishna Acharya.jpeg',
+                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Bal Krishna Acharya.jpg',
                 },
               ].map((member) => (
                 <div key={member.name} className="bg-white rounded-lg shadow-lg overflow-hidden">
@@ -320,7 +320,7 @@ const About = () => {
                 {
                   name: 'Bibash Lamichhane',
                   role: 'Social Media Wing',
-                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Madan Krishna Neupane.jpg',
+                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Bibash Lamichhane.jpg',
                 },
                 {
                   name: 'Rizan Bartaula',
