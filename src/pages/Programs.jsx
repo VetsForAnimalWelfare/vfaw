@@ -9,8 +9,7 @@ const Programs = () => {
   const programs = [
     {
       title: 'WELFARE FIRST: Farmed Animal Welfare in Rupandehi, Nepal',
-      description: 'A field program by VFAW (Vets for Animal Welfare)
-Animal welfare isn't just theory it's something we can measure, improve, and see change in real time.',
+      description: 'A field program by VFAW (Vets for Animal Welfare)',
       images: [
         '/farm-animal-1.JPG',
         '/farm-animal-2.JPG',
