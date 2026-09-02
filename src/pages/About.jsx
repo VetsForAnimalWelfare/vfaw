@@ -244,7 +244,7 @@ const About = () => {
                 {
                   name: 'Madan Krishna Neupane',
                   role: 'Social Media Coordinator',
-                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Bibas Tharu.jpg',
+                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Madan Krishna Neupane.jpg',
                 },
                 {
                   name: 'Jasmine Gharti Magar',
@@ -254,10 +254,10 @@ const About = () => {
                 {
                   name: 'Bibek Sunrait',
                   role: 'Vice-Secretary',
-                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/shankar rimal.jpg',
+                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Bibek Sunrait.jpg',
                 },
                 {
-                  name: 'Sujata Gautam',
+                  name: 'Mohan Karki',
                   role: 'Treasurer',
                   image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Sujata Gautam.jpg',
                 },
@@ -285,19 +285,19 @@ const About = () => {
                   image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/prakash chaudhary.jpg',
                 },
                 {
-                  name: 'Anisha Ranabhat',
+                  name: 'Jageshwor Yadav',
                   role: 'Board Member',
                   image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Anisha Ranabhat.jpg',
                 },
                 {
-                  name: 'Kavya Ghimire',
-                  role: 'Board Member',
-                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Kavya Ghimire.jpg',
+                  name: 'Janak Raj Joshi',
+                  role: 'Jr.Board Member',
+                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Janak Raj Joshi.jpg',
                 },
                 {
-                  name: 'Malati Chhetri',
-                  role: 'Board Member',
-                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Malati Chhetri.jpeg',
+                  name: 'Bal Krishna Acharya',
+                  role: 'Jr.Board Member',
+                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Bal Krishna Acharya.jpeg',
                 },
               ].map((member) => (
                 <div key={member.name} className="bg-white rounded-lg shadow-lg overflow-hidden">
