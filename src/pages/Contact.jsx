@@ -9,7 +9,7 @@ const Contact = () => {
     },
     {
       title: 'Call Us',
-      value: '+977 9748771731',
+      value: '+977 9844898004',
       description: 'Available during business hours for immediate assistance',
     },
     {
