@@ -8,9 +8,9 @@ const voices = [
     text: 'Vets for Animal Welfare (Vfaw) embodies the true spirit of veterinary compassion and responsibility. Through their tireless efforts — from treating and feeding street animals to conducting welfare programs, vaccination drives, animal birth control initiatives, and educational sessions — they are making a lasting difference both within and beyond our campus. By empowering veterinary students with practical experience and a profound sense of empathy, Vfaw is shaping the future of animal welfare. We are proud to support and stand alongside such a dedicated and impactful organization.'
   },
   {
-    name: 'Bashudev Acharya',
+    name: 'Sandesh Bhusal',
     role: 'Semester: 5th',
-    image: '/voice/Basudev Acharya.png',
+    image: '/voice/Sandesh.jpg',
     text: 'While working on the ABC program, I realized how important it is to control stray animal populations humanely. It taught me that small efforts bring big changes in both animal and human lives.'
   },
   {
