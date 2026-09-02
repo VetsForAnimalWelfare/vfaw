@@ -293,7 +293,7 @@ const About = () => {
                 {
                   name: 'Janak Raj Joshi',
                   role: 'Jr.Board Member',
-                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Joshi Janak.jpg',
+                  image: '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/Jageshwor Yadav.jpg',
                 },
        {
                   name: 'Bipin Dahal',
