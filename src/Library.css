@@ -1,575 +1,72 @@
 /* =========================================================
-   VFAW LIBRARY CSS
-   PROFESSIONAL • MODERN • RESPONSIVE
+   BLOGGER ARTICLE EMBED
 ========================================================= */
 
-@layer reset, base, components, utilities;
+.blogger-reader-section {
+  width: 100%;
+  margin: 40px auto 0;
+}
+
+.blogger-reader {
+  width: 100%;
+  max-width: 950px;
+  margin: 0 auto;
+
+  background: #ffffff;
+
+  border: 1px solid var(--vfaw-border);
+  border-radius: 20px;
+
+  overflow: hidden;
+
+  box-shadow: var(--vfaw-shadow);
+}
+
+.blogger-reader iframe {
+  display: block;
+
+  width: 100%;
+  min-height: 1400px;
+
+  height: 85vh;
+
+  border: none;
+
+  background: #ffffff;
+}
+
 
 /* =========================================================
-   1. RESET & BASE STYLES
+   BLOGGER MOBILE
 ========================================================= */
 
-@layer reset {
-  .library-page *,
-  .article-page *,
-  .library-page *::before,
-  .library-page *::after,
-  .article-page *::before,
-  .article-page *::after {
-    box-sizing: border-box;
-    margin: 0;
+@media (max-width: 768px) {
+  .blogger-reader-section {
+    margin-top: 28px;
+  }
+
+  .blogger-reader {
+    border-radius: 16px;
+  }
+
+  .blogger-reader iframe {
+    min-height: 1600px;
+    height: 90vh;
   }
 }
 
-@layer base {
-  :root {
-    /* Brand Color System */
-    --vfaw-hue: 161;
-    --vfaw-green: hsl(var(--vfaw-hue) 90% 30%);
-    --vfaw-green-dark: hsl(var(--vfaw-hue) 90% 22%);
-    --vfaw-green-light: hsl(var(--vfaw-hue) 80% 96%);
 
-    --vfaw-heading: #0f172a;
-    --vfaw-text: #334155;
-    --vfaw-muted: #64748b;
-
-    --vfaw-bg: #f8fafc;
-    --vfaw-surface: #ffffff;
-    --vfaw-border: #e2e8f0;
-
-    /* Elevation & Shadows */
-    --vfaw-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    --vfaw-shadow-md: 0 4px 20px -2px rgba(15, 23, 42, 0.06);
-    --vfaw-shadow-lg: 0 22px 50px -10px rgba(15, 23, 42, 0.12);
-
-    /* Typography */
-    --vfaw-font: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Inter, sans-serif;
-    
-    /* Layout Radii */
-    --radius-sm: 8px;
-    --radius-md: 14px;
-    --radius-lg: 20px;
-    --radius-full: 9999px;
+@media (max-width: 480px) {
+  .blogger-reader-section {
+    margin-top: 22px;
   }
 
-  /* Automatic Dark Mode Support */
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --vfaw-heading: #f8fafc;
-      --vfaw-text: #cbd5e1;
-      --vfaw-muted: #94a3b8;
-      --vfaw-bg: #0f172a;
-      --vfaw-surface: #1e293b;
-      --vfaw-border: #334155;
-      --vfaw-green-light: rgba(5, 150, 105, 0.15);
-      --vfaw-shadow-md: 0 4px 20px -2px rgba(0, 0, 0, 0.3);
-      --vfaw-shadow-lg: 0 20px 45px -10px rgba(0, 0, 0, 0.5);
-    }
+  .blogger-reader {
+    border-radius: 12px;
   }
 
-  .library-page,
-  .article-page {
-    font-family: var(--vfaw-font);
-    color: var(--vfaw-text);
-    background-color: var(--vfaw-bg);
-    line-height: 1.6;
-    accent-color: var(--vfaw-green);
-    -webkit-font-smoothing: antialiased;
-  }
-
-  .library-page a,
-  .article-page a {
-    font-family: inherit;
-  }
-}
-
-@layer components {
-  /* =========================================================
-     2. LIBRARY PAGE WRAPPER & BACKGROUND
-  ========================================================= */
-
-  .library-page {
-    position: relative;
-    inline-size: 100%;
-    min-block-size: 100vh;
-    padding-block: clamp(80px, 10vh, 125px) 90px;
-    padding-inline: 1.5rem;
-    overflow: hidden;
-    background: 
-      radial-gradient(circle at 5% 5%, color-mix(in srgb, var(--vfaw-green) 12%, transparent), transparent 30%),
-      radial-gradient(circle at 95% 25%, color-mix(in srgb, var(--vfaw-green) 8%, transparent), transparent 30%),
-      var(--vfaw-bg);
-  }
-
-  /* Decorative Ambient Lights */
-  .library-page::before,
-  .library-page::after {
-    content: "";
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(90px);
-    pointer-events: none;
-  }
-
-  .library-page::before {
-    inline-size: min(420px, 80vw);
-    block-size: min(420px, 80vw);
-    top: 20%;
-    left: -150px;
-    background: color-mix(in srgb, var(--vfaw-green) 10%, transparent);
-  }
-
-  .library-page::after {
-    inline-size: min(400px, 80vw);
-    block-size: min(400px, 80vw);
-    right: -150px;
-    bottom: 10%;
-    background: color-mix(in srgb, var(--vfaw-green) 8%, transparent);
-  }
-
-  .library-container {
-    position: relative;
-    z-index: 2;
-    inline-size: 100%;
-    max-inline-size: 1200px;
-    margin-inline: auto;
-  }
-
-  /* =========================================================
-     3. HERO & SEARCH
-  ========================================================= */
-
-  .library-hero {
-    inline-size: 100%;
-    max-inline-size: 820px;
-    margin: 0 auto 4rem;
-    text-align: center;
-    animation: libraryFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-
-  .library-hero::before {
-    content: "VFAW • KNOWLEDGE LIBRARY";
-    display: inline-flex;
-    align-items: center;
-    margin-block-end: 1.25rem;
-    padding: 0.4rem 1rem;
-    border: 1px solid color-mix(in srgb, var(--vfaw-green) 20%, transparent);
-    border-radius: var(--radius-full);
-    background: color-mix(in srgb, var(--vfaw-surface) 80%, transparent);
-    backdrop-filter: blur(8px);
-    color: var(--vfaw-green-dark);
-    font-size: 0.75rem;
-    font-weight: 800;
-    letter-spacing: 0.12em;
-  }
-
-  .library-hero h1 {
-    color: var(--vfaw-heading);
-    font-size: clamp(2.5rem, 6vw, 4.25rem);
-    font-weight: 850;
-    line-height: 1.05;
-    letter-spacing: -0.04em;
-    margin-block-end: 1.25rem;
-  }
-
-  .library-hero h1 span {
-    color: var(--vfaw-green);
-  }
-
-  .library-hero p {
-    max-inline-size: 680px;
-    margin-inline: auto;
-    color: var(--vfaw-muted);
-    font-size: clamp(1rem, 2vw, 1.125rem);
-    line-height: 1.7;
-  }
-
-  /* Search Bar */
-  .library-search {
-    position: relative;
-    inline-size: 100%;
-    max-inline-size: 640px;
-    margin-block-start: 2rem;
-    margin-inline: auto;
-  }
-
-  .library-search input {
-    inline-size: 100%;
-    block-size: 3.5rem;
-    padding-inline: 1.5rem;
-    border: 1px solid var(--vfaw-border);
-    border-radius: var(--radius-md);
-    outline: none;
-    background: color-mix(in srgb, var(--vfaw-surface) 90%, transparent);
-    backdrop-filter: blur(12px);
-    color: var(--vfaw-heading);
-    font-size: 0.95rem;
-    box-shadow: var(--vfaw-shadow-sm);
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .library-search input::placeholder {
-    color: var(--vfaw-muted);
-  }
-
-  .library-search input:focus {
-    border-color: var(--vfaw-green);
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--vfaw-green) 15%, transparent), var(--vfaw-shadow-md);
-    transform: translateY(-1px);
-  }
-
-  /* =========================================================
-     4. BLOG SECTION HEADER (LATEST ARTICLES • BLOGS • COUNTER)
-  ========================================================= */
-
-  .blog-section-header {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-block-end: 2.5rem;
-    padding-block-end: 1rem;
-    border-block-end: 1px solid var(--vfaw-border);
-  }
-
-  .blog-section-title-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-  }
-
-  .blog-section-subtitle {
-    display: inline-flex;
-    align-items: center;
-    color: var(--vfaw-green);
-    font-size: 0.75rem;
-    font-weight: 800;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-
-  .blog-section-title {
-    color: var(--vfaw-heading);
-    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
-    font-weight: 850;
-    line-height: 1.1;
-    letter-spacing: -0.03em;
-  }
-
-  .blog-count-badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.35rem 0.85rem;
-    border: 1px solid color-mix(in srgb, var(--vfaw-green) 25%, transparent);
-    border-radius: var(--radius-full);
-    background: var(--vfaw-green-light);
-    color: var(--vfaw-green-dark);
-    font-size: 0.8rem;
-    font-weight: 700;
-  }
-
-  /* =========================================================
-     5. BLOG GRID & ALIGNED CARDS
-  ========================================================= */
-
-  .blog-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
-    gap: 2rem;
-    align-items: stretch; /* Keeps all cards in a row at equal heights */
-    container-type: inline-size;
-  }
-
-  .blog-card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    overflow: hidden;
-    border: 1px solid var(--vfaw-border);
-    border-radius: var(--radius-lg);
-    background: var(--vfaw-surface);
-    box-shadow: var(--vfaw-shadow-md);
-    text-decoration: none;
-    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
-    animation: libraryFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-
-  .blog-card:hover {
-    transform: translateY(-6px);
-    border-color: color-mix(in srgb, var(--vfaw-green) 30%, transparent);
-    box-shadow: var(--vfaw-shadow-lg);
-  }
-
-  /* Strict Image Framing Fix */
-  .blog-card-image {
-    position: relative;
-    inline-size: 100%;
-    aspect-ratio: 16 / 9;
-    max-block-size: 220px;
-    overflow: hidden;
-    background-color: var(--vfaw-border);
-  }
-
-  .blog-card-image img {
-    inline-size: 100%;
-    block-size: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease, filter 0.5s ease;
-  }
-
-  .blog-card:hover .blog-card-image img {
-    transform: scale(1.05);
-  }
-
-  /* Card Inner Content Alignment */
-  .blog-card-content {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    padding: 1.5rem;
-  }
-
-  .blog-category {
-    align-self: flex-start;
-    margin-block-end: 0.85rem;
-    padding: 0.3rem 0.75rem;
-    border-radius: var(--radius-full);
-    background: var(--vfaw-green-light);
-    color: var(--vfaw-green-dark);
-    font-size: 0.7rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .blog-card h2 {
-    color: var(--vfaw-heading);
-    font-size: 1.25rem;
-    font-weight: 750;
-    line-height: 1.35;
-    margin-block-end: 0.75rem;
-    transition: color 0.2s ease;
-  }
-
-  .blog-card:hover h2 {
-    color: var(--vfaw-green);
-  }
-
-  .blog-card p {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    color: var(--vfaw-muted);
-    font-size: 0.9rem;
-    line-height: 1.6;
-    margin-block-end: 1.5rem;
-  }
-
-  .blog-read-more {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-block-start: auto; /* Alignment Fix: Pushes Read More to card bottom */
-    color: var(--vfaw-green);
-    font-size: 0.85rem;
-    font-weight: 700;
-  }
-
-  .blog-read-more::after {
-    content: "→";
-    transition: transform 0.2s ease;
-  }
-
-  .blog-card:hover .blog-read-more::after {
-    transform: translateX(4px);
-  }
-
-  /* =========================================================
-     6. ARTICLE DETAIL PAGE
-  ========================================================= */
-
-  .article-page {
-    padding-block: clamp(60px, 8vh, 100px);
-    padding-inline: 1rem;
-  }
-
-  .article-document {
-    inline-size: 100%;
-    max-inline-size: 880px;
-    margin-inline: auto;
-    padding: clamp(1.5rem, 5vw, 4rem);
-    border: 1px solid var(--vfaw-border);
-    border-radius: var(--radius-lg);
-    background: var(--vfaw-surface);
-    box-shadow: var(--vfaw-shadow-lg);
-  }
-
-  .article-back-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-block-end: 2rem;
-    padding: 0.5rem 1rem;
-    border: 1px solid var(--vfaw-border);
-    border-radius: var(--radius-sm);
-    background: var(--vfaw-surface);
-    color: var(--vfaw-text);
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .article-back-button:hover {
-    transform: translateX(-3px);
-    border-color: var(--vfaw-green);
-    background: var(--vfaw-green-light);
-    color: var(--vfaw-green-dark);
-  }
-
-  .article-title {
-    color: var(--vfaw-heading);
-    font-size: clamp(2.25rem, 5vw, 3.5rem);
-    font-weight: 850;
-    line-height: 1.1;
-    letter-spacing: -0.03em;
-    margin-block-end: 1rem;
-  }
-
-  .article-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    color: var(--vfaw-muted);
-    font-size: 0.85rem;
-    margin-block-end: 2rem;
-  }
-
-  .article-hero-image {
-    inline-size: 100%;
-    margin-block-end: 2.5rem;
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    box-shadow: var(--vfaw-shadow-md);
-  }
-
-  .article-hero-image img {
-    inline-size: 100%;
-    max-block-size: 500px;
-    object-fit: cover;
-  }
-
-  .article-content {
-    max-inline-size: 720px;
-    margin-inline: auto;
-    font-size: 1.05rem;
-    line-height: 1.8;
-  }
-
-  .article-content p {
-    margin-block-end: 1.5rem;
-  }
-
-  .article-content .lead {
-    font-size: 1.2rem;
-    color: var(--vfaw-heading);
-    margin-block-end: 2rem;
-  }
-
-  .article-content h2 {
-    position: relative;
-    color: var(--vfaw-heading);
-    font-size: 1.75rem;
-    font-weight: 800;
-    margin-block: 3rem 1.25rem;
-    padding-inline-start: 1rem;
-  }
-
-  .article-content h2::before {
-    content: "";
-    position: absolute;
-    inset-block: 0.2rem;
-    inset-inline-start: 0;
-    inline-size: 4px;
-    border-radius: var(--radius-full);
-    background: var(--vfaw-green);
-  }
-
-  .article-content blockquote {
-    margin-block: 2rem;
-    padding: 1.25rem 1.5rem;
-    border-inline-start: 4px solid var(--vfaw-green);
-    border-radius: 0 var(--radius-md) var(--radius-md) 0;
-    background: var(--vfaw-green-light);
-    color: var(--vfaw-text);
-    font-style: italic;
-  }
-
-  /* Table Wrapper & Table */
-  .article-table-wrapper {
-    inline-size: 100%;
-    margin-block: 2rem;
-    overflow-x: auto;
-    border: 1px solid var(--vfaw-border);
-    border-radius: var(--radius-md);
-  }
-
-  .article-content table {
-    inline-size: 100%;
-    border-collapse: collapse;
-    font-size: 0.9rem;
-  }
-
-  .article-content th,
-  .article-content td {
-    padding: 0.85rem 1rem;
-    text-align: start;
-    border-block-end: 1px solid var(--vfaw-border);
-  }
-
-  .article-content th {
-    background: var(--vfaw-bg);
-    color: var(--vfaw-heading);
-    font-weight: 750;
-  }
-
-  .article-content tbody tr:hover {
-    background: color-mix(in srgb, var(--vfaw-green-light) 40%, transparent);
-  }
-}
-
-/* =========================================================
-   7. UTILITIES & ANIMATIONS
-========================================================= */
-
-@layer utilities {
-  @keyframes libraryFadeUp {
-    from {
-      opacity: 0;
-      transform: translateY(16px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  :focus-visible {
-    outline: 2px solid var(--vfaw-green);
-    outline-offset: 3px;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-      scroll-behavior: auto !important;
-    }
+  .blogger-reader iframe {
+    min-height: 1800px;
+    height: 95vh;
   }
 }
