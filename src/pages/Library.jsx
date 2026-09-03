@@ -2,191 +2,196 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "../Library.css";
 
-/* =========================================================
-   BLOG DATA
-========================================================= */
+const BLOGGER_FEED =
+  "https://vfaw.blogspot.com/feeds/posts/default?alt=json&max-results=100";
 
-const blogs = [
-  {
-    id: "milk-fever",
-    category: "Veterinary Medicine",
-    title: "Milk Fever in Dairy Cows",
-    excerpt:
-      "A comprehensive guide to parturient paresis, hypocalcaemia, calcium homeostasis, risk factors, and prevention in dairy cows.",
-    author: "VFAW",
-    date: "September 2, 2026",
-    readTime: "15 min read",
-    image: "/images/milk-fever.jpg",
-
-    /*
-      Blogger article is displayed INSIDE the Library.
-      No redirect is required.
-    */
-    bloggerUrl: "https://vfaw.blogspot.com/2026/09/milk-fever.html",
-  },
-
-  {
-    id: "humane-animal-welfare",
-    category: "Animal Welfare",
-    title: "The Importance of Humane Animal Welfare",
-    excerpt:
-      "Understanding why compassionate and ethical animal welfare practices are essential for healthier animals and communities.",
-    author: "VFAW",
-    date: "August 2026",
-    readTime: "6 min read",
-    image: "/images/animal-welfare.jpg",
-
-    content: (
-      <>
-        <p>
-          Animal welfare is an important part of creating a healthy and
-          compassionate society. It focuses on ensuring that animals are
-          treated with respect, provided with proper care, and protected from
-          unnecessary pain and suffering.
-        </p>
-
-        <h2>Why Animal Welfare Matters</h2>
-
-        <p>
-          Animals depend on humans in many different situations. Companion
-          animals, livestock, working animals, and wildlife can all be affected
-          by human decisions and activities.
-        </p>
-
-        <p>
-          Humane treatment improves animal health and also contributes to
-          public health, environmental sustainability, and responsible
-          communities.
-        </p>
-
-        <h2>Our Responsibility</h2>
-
-        <p>
-          Promoting animal welfare requires cooperation between veterinarians,
-          animal owners, communities, governments, and animal welfare
-          organizations.
-        </p>
-
-        <p>
-          Small actions such as providing adequate food, clean water, shelter,
-          medical care, and protection from unnecessary suffering can create a
-          significant difference in animal lives.
-        </p>
-      </>
-    ),
-  },
-
-  {
-    id: "animal-population-management",
-    category: "Animal Welfare",
-    title: "Humane Animal Population Management",
-    excerpt:
-      "Exploring responsible and humane approaches to managing stray animal populations while protecting animal welfare.",
-    author: "VFAW",
-    date: "August 2026",
-    readTime: "7 min read",
-    image: "/images/animal-population.jpg",
-
-    content: (
-      <>
-        <p>
-          Humane animal population management is an important component of
-          responsible animal welfare. Uncontrolled animal populations can
-          create challenges for both animals and communities.
-        </p>
-
-        <h2>Humane Population Control</h2>
-
-        <p>
-          Modern animal welfare programs emphasize humane methods such as
-          sterilization, vaccination, responsible ownership, adoption, and
-          community education.
-        </p>
-
-        <h2>Importance of Sterilization</h2>
-
-        <p>
-          Sterilization can help reduce unwanted births and gradually stabilize
-          animal populations. It can also contribute to better population
-          health when combined with vaccination and appropriate veterinary
-          care.
-        </p>
-
-        <h2>Community Participation</h2>
-
-        <p>
-          Sustainable animal population management requires cooperation among
-          animal owners, veterinary professionals, local authorities, and the
-          wider community.
-        </p>
-      </>
-    ),
-  },
-
-  {
-    id: "veterinary-students-animal-welfare",
-    category: "Education",
-    title: "The Role of Veterinary Students in Animal Welfare",
-    excerpt:
-      "How veterinary students can contribute to animal welfare through education, clinical practice, advocacy, and community programs.",
-    author: "VFAW",
-    date: "August 2026",
-    readTime: "5 min read",
-    image: "/images/veterinary-students.jpg",
-
-    content: (
-      <>
-        <p>
-          Veterinary students have an important role in promoting animal
-          welfare. Their education provides them with knowledge about animal
-          health, behavior, disease prevention, and humane treatment.
-        </p>
-
-        <h2>Education and Awareness</h2>
-
-        <p>
-          Veterinary students can educate animal owners and communities about
-          responsible animal care, vaccination, nutrition, disease prevention,
-          and humane handling.
-        </p>
-
-        <h2>Community Service</h2>
-
-        <p>
-          Participation in vaccination campaigns, sterilization programs,
-          awareness activities, and animal rescue initiatives can provide
-          meaningful benefits to communities.
-        </p>
-
-        <h2>Future Veterinary Professionals</h2>
-
-        <p>
-          By developing strong ethical values during their education,
-          veterinary students can become effective advocates for animal
-          welfare throughout their professional careers.
-        </p>
-      </>
-    ),
-  },
-];
-
-/* =========================================================
-   LIBRARY COMPONENT
-========================================================= */
+const BLOGGER_BASE_URL = "https://vfaw.blogspot.com";
 
 const Library = () => {
   const { blogId } = useParams();
   const navigate = useNavigate();
 
-  const [darkMode, setDarkMode] = useState(false);
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [search, setSearch] = useState("");
+  const [darkMode, setDarkMode] = useState(false);
   const [readingProgress, setReadingProgress] = useState(0);
 
-  const selectedBlog = blogs.find((blog) => blog.id === blogId);
+  /*
+   * ---------------------------------------------------------
+   * FETCH BLOGGER POSTS
+   * ---------------------------------------------------------
+   */
 
-  /* =======================================================
-     READING PROGRESS
-  ======================================================= */
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const response = await fetch(BLOGGER_FEED);
+
+        if (!response.ok) {
+          throw new Error("Unable to load Blogger articles.");
+        }
+
+        const data = await response.json();
+
+        const entries = data?.feed?.entry || [];
+
+        const formattedBlogs = entries.map((entry, index) => {
+          /*
+           * Get Blogger post URL
+           */
+          const alternateLink =
+            entry.link?.find(
+              (link) => link.rel === "alternate"
+            )?.href || BLOGGER_BASE_URL;
+
+          /*
+           * Get Blogger post ID
+           */
+          const bloggerId =
+            entry.id?.$t?.split(".post-")[1] ||
+            `blog-${index}`;
+
+          /*
+           * Convert Blogger URL into a safe React route ID
+           */
+          const slug =
+            alternateLink
+              .replace(BLOGGER_BASE_URL, "")
+              .replace(/^\/+/, "")
+              .replace(/\/+$/, "")
+              .replace(/\//g, "-")
+              .replace(/[^a-zA-Z0-9-]/g, "")
+              .toLowerCase() ||
+            bloggerId;
+
+          /*
+           * Title
+           */
+          const title =
+            entry.title?.$t || "Untitled Article";
+
+          /*
+           * Author
+           */
+          const author =
+            entry.author?.[0]?.name?.$t || "VFAW";
+
+          /*
+           * Date
+           */
+          const publishedDate = entry.published?.$t
+            ? new Date(entry.published.$t)
+            : null;
+
+          const date = publishedDate
+            ? publishedDate.toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })
+            : "";
+
+          /*
+           * Blogger content
+           */
+          const content = entry.content?.$t || "";
+
+          /*
+           * Get plain text from HTML
+           */
+          const tempDiv = document.createElement("div");
+          tempDiv.innerHTML = content;
+
+          const plainText =
+            tempDiv.textContent ||
+            tempDiv.innerText ||
+            "";
+
+          /*
+           * Excerpt
+           */
+          const excerpt =
+            plainText.trim().length > 220
+              ? `${plainText.trim().substring(0, 220)}...`
+              : plainText.trim();
+
+          /*
+           * Category / label
+           */
+          const category =
+            entry.category?.[0]?.term ||
+            "Animal Welfare";
+
+          /*
+           * Find first image inside Blogger article
+           */
+          const firstImage =
+            tempDiv.querySelector("img")?.src || null;
+
+          /*
+           * Estimate reading time
+           */
+          const wordCount =
+            plainText
+              .trim()
+              .split(/\s+/)
+              .filter(Boolean).length;
+
+          const readingMinutes = Math.max(
+            1,
+            Math.ceil(wordCount / 200)
+          );
+
+          return {
+            id: slug,
+            bloggerId,
+            title,
+            author,
+            date,
+            category,
+            excerpt,
+            image: firstImage,
+            bloggerUrl: alternateLink,
+            content,
+            wordCount,
+            readTime: `${readingMinutes} min read`,
+          };
+        });
+
+        setBlogs(formattedBlogs);
+      } catch (err) {
+        console.error("Blogger error:", err);
+        setError(
+          "We couldn't load the articles right now. Please try again."
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
+
+  /*
+   * ---------------------------------------------------------
+   * FIND SELECTED ARTICLE
+   * ---------------------------------------------------------
+   */
+
+  const selectedBlog = blogs.find(
+    (blog) => blog.id === blogId
+  );
+
+  /*
+   * ---------------------------------------------------------
+   * READING PROGRESS
+   * ---------------------------------------------------------
+   */
 
   useEffect(() => {
     if (!selectedBlog) {
@@ -198,16 +203,20 @@ const Library = () => {
       const scrollTop = window.scrollY;
 
       const documentHeight =
-        document.documentElement.scrollHeight - window.innerHeight;
+        document.documentElement.scrollHeight -
+        window.innerHeight;
 
       if (documentHeight <= 0) {
         setReadingProgress(0);
         return;
       }
 
-      const progress = (scrollTop / documentHeight) * 100;
+      const progress =
+        (scrollTop / documentHeight) * 100;
 
-      setReadingProgress(Math.min(100, Math.max(0, progress)));
+      setReadingProgress(
+        Math.min(100, Math.max(0, progress))
+      );
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -215,13 +224,18 @@ const Library = () => {
     handleScroll();
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener(
+        "scroll",
+        handleScroll
+      );
     };
   }, [selectedBlog]);
 
-  /* =======================================================
-     RESET SCROLL WHEN OPENING ARTICLE
-  ======================================================= */
+  /*
+   * ---------------------------------------------------------
+   * SCROLL TO TOP WHEN ARTICLE OPENS
+   * ---------------------------------------------------------
+   */
 
   useEffect(() => {
     if (selectedBlog) {
@@ -232,9 +246,11 @@ const Library = () => {
     }
   }, [selectedBlog]);
 
-  /* =======================================================
-     FILTER BLOGS
-  ======================================================= */
+  /*
+   * ---------------------------------------------------------
+   * SEARCH
+   * ---------------------------------------------------------
+   */
 
   const filteredBlogs = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -245,17 +261,27 @@ const Library = () => {
 
     return blogs.filter((blog) => {
       return (
-        blog.title.toLowerCase().includes(query) ||
-        blog.category.toLowerCase().includes(query) ||
-        blog.excerpt.toLowerCase().includes(query) ||
-        blog.author.toLowerCase().includes(query)
+        blog.title
+          .toLowerCase()
+          .includes(query) ||
+        blog.category
+          .toLowerCase()
+          .includes(query) ||
+        blog.excerpt
+          .toLowerCase()
+          .includes(query) ||
+        blog.author
+          .toLowerCase()
+          .includes(query)
       );
     });
-  }, [search]);
+  }, [blogs, search]);
 
-  /* =======================================================
-     ARTICLE READING MODE
-  ======================================================= */
+  /*
+   * ---------------------------------------------------------
+   * ARTICLE READING PAGE
+   * ---------------------------------------------------------
+   */
 
   if (selectedBlog) {
     return (
@@ -272,7 +298,7 @@ const Library = () => {
           }}
         />
 
-        {/* Article Header */}
+        {/* Header */}
         <header className="article-header">
           <div className="article-header-inner">
             <button
@@ -286,7 +312,9 @@ const Library = () => {
             <button
               type="button"
               className="article-theme-button"
-              onClick={() => setDarkMode((previous) => !previous)}
+              onClick={() =>
+                setDarkMode((previous) => !previous)
+              }
               aria-label="Toggle dark mode"
             >
               {darkMode ? "☀️" : "🌙"}
@@ -294,8 +322,8 @@ const Library = () => {
           </div>
         </header>
 
-        {/* Article */}
         <main className="article-document">
+          {/* Article heading */}
           <div className="article-heading">
             <span className="article-category">
               {selectedBlog.category}
@@ -306,15 +334,25 @@ const Library = () => {
             </h1>
 
             <div className="article-meta">
-              <span>By {selectedBlog.author}</span>
+              <span>
+                By {selectedBlog.author}
+              </span>
+
               <span>•</span>
-              <span>{selectedBlog.date}</span>
+
+              <span>
+                {selectedBlog.date}
+              </span>
+
               <span>•</span>
-              <span>{selectedBlog.readTime}</span>
+
+              <span>
+                {selectedBlog.readTime}
+              </span>
             </div>
           </div>
 
-          {/* Hero Image */}
+          {/* Hero image */}
           {selectedBlog.image && (
             <figure className="article-hero">
               <img
@@ -322,38 +360,26 @@ const Library = () => {
                 alt={selectedBlog.title}
                 className="article-hero-image"
                 onError={(event) => {
-                  event.currentTarget.style.display = "none";
+                  event.currentTarget.style.display =
+                    "none";
                 }}
               />
             </figure>
           )}
 
-          {/* =================================================
-              BLOGGER EMBED
-          ================================================== */}
+          {/* Blogger article */}
+          <section className="blogger-reader-section">
+            <div className="blogger-reader">
+              <iframe
+                src={selectedBlog.bloggerUrl}
+                title={selectedBlog.title}
+                loading="lazy"
+                allow="fullscreen"
+              />
+            </div>
+          </section>
 
-          {selectedBlog.bloggerUrl ? (
-            <section className="blogger-reader-section">
-              <div className="blogger-reader">
-                <iframe
-                  src={selectedBlog.bloggerUrl}
-                  title={selectedBlog.title}
-                  loading="lazy"
-                  allow="fullscreen"
-                />
-              </div>
-            </section>
-          ) : (
-            /* =================================================
-               NORMAL REACT ARTICLE
-            ================================================== */
-
-            <article className="article-content">
-              {selectedBlog.content}
-            </article>
-          )}
-
-          {/* End of article */}
+          {/* Article end */}
           <div className="article-end">
             <div className="article-end-line" />
 
@@ -364,7 +390,9 @@ const Library = () => {
             <button
               type="button"
               className="article-back-to-library"
-              onClick={() => navigate("/library")}
+              onClick={() =>
+                navigate("/library")
+              }
             >
               ← Explore More Articles
             </button>
@@ -374,16 +402,15 @@ const Library = () => {
     );
   }
 
-  /* =========================================================
-     LIBRARY HOME
-  ========================================================= */
+  /*
+   * ---------------------------------------------------------
+   * LIBRARY PAGE
+   * ---------------------------------------------------------
+   */
 
   return (
     <div className="library-page">
-      {/* =====================================================
-          HERO
-      ====================================================== */}
-
+      {/* HERO */}
       <section className="library-hero">
         <div className="library-container">
           <div className="library-hero-content">
@@ -396,15 +423,17 @@ const Library = () => {
             </h1>
 
             <p className="library-description">
-              Explore practical knowledge, veterinary insights,
-              animal welfare resources, and educational articles
-              created to promote healthier animals and stronger
-              communities.
+              Explore veterinary knowledge, animal
+              welfare resources, educational articles,
+              and practical information from VFAW.
             </p>
 
-            {/* Search */}
+            {/* SEARCH */}
             <div className="library-search">
-              <span className="library-search-icon">
+              <span
+                className="library-search-icon"
+                aria-hidden="true"
+              >
                 🔍
               </span>
 
@@ -414,7 +443,7 @@ const Library = () => {
                 onChange={(event) =>
                   setSearch(event.target.value)
                 }
-                placeholder="Search articles..."
+                placeholder="Search articles, topics, or authors..."
                 aria-label="Search articles"
               />
 
@@ -433,138 +462,195 @@ const Library = () => {
         </div>
       </section>
 
-      {/* =====================================================
-          BLOG LIST
-      ====================================================== */}
-
+      {/* MAIN */}
       <main className="library-container library-main">
-        {/* Result information */}
+        {/* RESULTS HEADER */}
         <div className="library-results-header">
           <div>
-            <h2>Latest Articles</h2>
+            <h2>
+              Latest Articles
+            </h2>
 
             <p>
-              {filteredBlogs.length}{" "}
-              {filteredBlogs.length === 1
-                ? "article"
-                : "articles"}{" "}
-              available
+              {loading
+                ? "Loading articles..."
+                : `${filteredBlogs.length} ${
+                    filteredBlogs.length === 1
+                      ? "article"
+                      : "articles"
+                  } available`}
             </p>
           </div>
         </div>
 
-        {/* ===================================================
-            BLOG GRID
-        ==================================================== */}
+        {/* LOADING */}
+        {loading && (
+          <div className="library-loading">
+            <div className="library-loader" />
 
-        {filteredBlogs.length > 0 ? (
-          <div className="blog-grid">
-            {filteredBlogs.map((blog) => (
-              <article
-                key={blog.id}
-                className="blog-card"
-              >
-                {/* Image */}
-                <Link
-                  to={`/library/blog/${blog.id}`}
-                  className="blog-card-image-link"
-                  aria-label={`Read ${blog.title}`}
-                >
-                  <div className="blog-card-image">
-                    {blog.image ? (
-                      <img
-                        src={blog.image}
-                        alt={blog.title}
-                        loading="lazy"
-                        onError={(event) => {
-                          event.currentTarget.style.display =
-                            "none";
-
-                          event.currentTarget.parentElement.classList.add(
-                            "blog-image-fallback"
-                          );
-                        }}
-                      />
-                    ) : (
-                      <div className="blog-image-placeholder">
-                        VFAW
-                      </div>
-                    )}
-
-                    {/* Category badge */}
-                    <span className="blog-card-category">
-                      {blog.category}
-                    </span>
-                  </div>
-                </Link>
-
-                {/* Content */}
-                <div className="blog-card-content">
-                  <div className="blog-card-meta">
-                    <span>{blog.date}</span>
-
-                    <span>•</span>
-
-                    <span>{blog.readTime}</span>
-                  </div>
-
-                  <h3 className="blog-card-title">
-                    <Link
-                      to={`/library/blog/${blog.id}`}
-                    >
-                      {blog.title}
-                    </Link>
-                  </h3>
-
-                  <p className="blog-card-excerpt">
-                    {blog.excerpt}
-                  </p>
-
-                  <div className="blog-card-footer">
-                    <span className="blog-card-author">
-                      By {blog.author}
-                    </span>
-
-                    <Link
-                      to={`/library/blog/${blog.id}`}
-                      className="blog-read-more"
-                    >
-                      Read Article
-                      <span aria-hidden="true">
-                        →
-                      </span>
-                    </Link>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        ) : (
-          /* =================================================
-             NO SEARCH RESULTS
-          ================================================== */
-
-          <div className="library-empty">
-            <div className="library-empty-icon">
-              🔎
-            </div>
-
-            <h3>No articles found</h3>
+            <h3>
+              Loading articles
+            </h3>
 
             <p>
-              We couldn't find an article matching
-              "{search}".
+              Fetching the latest articles from VFAW.
+            </p>
+          </div>
+        )}
+
+        {/* ERROR */}
+        {!loading && error && (
+          <div className="library-empty">
+            <div className="library-empty-icon">
+              ⚠️
+            </div>
+
+            <h3>
+              Unable to load articles
+            </h3>
+
+            <p>
+              {error}
             </p>
 
             <button
               type="button"
-              onClick={() => setSearch("")}
               className="library-empty-button"
+              onClick={() =>
+                window.location.reload()
+              }
             >
-              Clear Search
+              Try Again
             </button>
           </div>
         )}
+
+        {/* BLOG GRID */}
+        {!loading &&
+          !error &&
+          filteredBlogs.length > 0 && (
+            <div className="blog-grid">
+              {filteredBlogs.map((blog) => (
+                <article
+                  key={blog.id}
+                  className="blog-card"
+                >
+                  {/* IMAGE */}
+                  <Link
+                    to={`/library/blog/${blog.id}`}
+                    className="blog-card-image-link"
+                    aria-label={`Read ${blog.title}`}
+                  >
+                    <div className="blog-card-image">
+                      {blog.image ? (
+                        <img
+                          src={blog.image}
+                          alt={blog.title}
+                          loading="lazy"
+                          onError={(event) => {
+                            event.currentTarget.style.display =
+                              "none";
+
+                            event.currentTarget.parentElement.classList.add(
+                              "blog-image-fallback"
+                            );
+                          }}
+                        />
+                      ) : (
+                        <div className="blog-image-placeholder">
+                          VFAW
+                        </div>
+                      )}
+
+                      <span className="blog-card-category">
+                        {blog.category}
+                      </span>
+                    </div>
+                  </Link>
+
+                  {/* CONTENT */}
+                  <div className="blog-card-content">
+                    {/* META */}
+                    <div className="blog-card-meta">
+                      <span>
+                        {blog.date}
+                      </span>
+
+                      <span>
+                        •
+                      </span>
+
+                      <span>
+                        {blog.readTime}
+                      </span>
+                    </div>
+
+                    {/* TITLE */}
+                    <h3 className="blog-card-title">
+                      <Link
+                        to={`/library/blog/${blog.id}`}
+                      >
+                        {blog.title}
+                      </Link>
+                    </h3>
+
+                    {/* EXCERPT */}
+                    <p className="blog-card-excerpt">
+                      {blog.excerpt}
+                    </p>
+
+                    {/* FOOTER */}
+                    <div className="blog-card-footer">
+                      <span className="blog-card-author">
+                        By {blog.author}
+                      </span>
+
+                      <Link
+                        to={`/library/blog/${blog.id}`}
+                        className="blog-read-more"
+                      >
+                        Read Article
+
+                        <span aria-hidden="true">
+                          →
+                        </span>
+                      </Link>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+
+        {/* NO RESULTS */}
+        {!loading &&
+          !error &&
+          filteredBlogs.length === 0 && (
+            <div className="library-empty">
+              <div className="library-empty-icon">
+                🔎
+              </div>
+
+              <h3>
+                No articles found
+              </h3>
+
+              <p>
+                We couldn't find an article matching "
+                {search}".
+              </p>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setSearch("")
+                }
+                className="library-empty-button"
+              >
+                Clear Search
+              </button>
+            </div>
+          )}
       </main>
     </div>
   );
