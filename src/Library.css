@@ -1,1356 +1,650 @@
-/* ========================================
-   VFAW LIBRARY
-   Professional Library & Reading Mode
-======================================== */
+/* =========================================
+   VFAW LIBRARY - MS WORD / DOCUMENT STYLE
+========================================= */
 
 
-/* ========================================
-   LIBRARY PAGE
-======================================== */
+/* MAIN LIBRARY PAGE */
 
 .library-page {
   min-height: 100vh;
-  padding-top: 110px;
-  padding-bottom: 90px;
-  background:
-    radial-gradient(circle at top left, rgba(16, 185, 129, 0.12), transparent 35%),
-    radial-gradient(circle at bottom right, rgba(20, 184, 166, 0.12), transparent 35%),
-    #f8faf9;
+  background: #f1f1f1;
+  padding: 120px 20px 60px;
 }
 
 
-/* ========================================
-   HERO
-======================================== */
+/* =========================================
+   BLOG LIST PAGE
+========================================= */
+
+.library-container {
+  max-width: 1200px;
+  margin: auto;
+}
+
+
+/* HERO */
 
 .library-hero {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 70px 24px 60px;
   text-align: center;
-}
-
-.library-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 9px 18px;
-
-  border-radius: 999px;
-
-  background: rgba(209, 250, 229, 0.9);
-  border: 1px solid rgba(16, 185, 129, 0.15);
-
-  color: #047857;
-
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-
-  margin-bottom: 24px;
+  margin-bottom: 50px;
 }
 
 .library-hero h1 {
-  margin: 0;
-
-  font-size: clamp(42px, 7vw, 76px);
-  line-height: 1.05;
-
-  font-weight: 900;
-
-  letter-spacing: -0.045em;
-
-  color: #111827;
-}
-
-.library-hero h1 span {
-  display: block;
-
-  color: #059669;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 48px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 15px;
 }
 
 .library-hero p {
-  max-width: 720px;
-
-  margin: 26px auto 0;
-
+  max-width: 700px;
+  margin: auto;
   font-size: 18px;
-  line-height: 1.8;
-
-  color: #64748b;
+  line-height: 1.7;
+  color: #555;
 }
 
 
-/* ========================================
-   SEARCH BAR
-======================================== */
+/* SEARCH */
 
 .library-search {
-  position: relative;
-
-  display: flex;
-  align-items: center;
-
-  max-width: 650px;
-
-  margin: 40px auto 0;
+  max-width: 600px;
+  margin: 35px auto;
 }
 
 .library-search input {
   width: 100%;
-
-  padding: 18px 52px 18px 55px;
-
-  border-radius: 18px;
-
-  border: 1px solid #e2e8f0;
-
-  background: rgba(255, 255, 255, 0.95);
-
+  padding: 16px 20px;
   font-size: 16px;
-
+  border: 1px solid #ccc;
   outline: none;
-
-  box-shadow:
-    0 10px 30px rgba(15, 23, 42, 0.06);
-
-  transition:
-    border 0.3s ease,
-    box-shadow 0.3s ease,
-    transform 0.3s ease;
+  background: white;
 }
 
 .library-search input:focus {
-  border-color: #10b981;
-
-  box-shadow:
-    0 15px 40px rgba(16, 185, 129, 0.15);
-
-  transform: translateY(-2px);
-}
-
-.search-icon {
-  position: absolute;
-
-  left: 20px;
-
-  font-size: 25px;
-
-  color: #059669;
-
-  z-index: 2;
-}
-
-.clear-search {
-  position: absolute;
-
-  right: 14px;
-
-  width: 34px;
-  height: 34px;
-
-  border: none;
-
-  border-radius: 50%;
-
-  background: #f1f5f9;
-
-  color: #64748b;
-
-  font-size: 22px;
-
-  cursor: pointer;
-
-  transition:
-    background 0.25s ease,
-    color 0.25s ease,
-    transform 0.25s ease;
-}
-
-.clear-search:hover {
-  background: #e5e7eb;
-
-  color: #111827;
-
-  transform: rotate(90deg);
+  border-color: #059669;
 }
 
 
-/* ========================================
-   ARTICLE SECTION
-======================================== */
-
-.library-section {
-  max-width: 1280px;
-
-  margin: 0 auto;
-
-  padding: 30px 24px;
-}
-
-.library-section-header {
-  display: flex;
-
-  justify-content: space-between;
-
-  align-items: flex-end;
-
-  gap: 30px;
-
-  margin-bottom: 35px;
-}
-
-.section-label {
-  display: block;
-
-  font-size: 12px;
-
-  font-weight: 800;
-
-  letter-spacing: 0.14em;
-
-  color: #059669;
-}
-
-.library-section-header h2 {
-  margin: 8px 0 0;
-
-  font-size: clamp(32px, 5vw, 48px);
-
-  line-height: 1.1;
-
-  font-weight: 900;
-
-  letter-spacing: -0.035em;
-
-  color: #111827;
-}
-
-.article-count {
-  padding: 9px 15px;
-
-  border-radius: 999px;
-
-  background: #ecfdf5;
-
-  color: #047857;
-
-  font-size: 13px;
-
-  font-weight: 700;
-
-  white-space: nowrap;
-}
-
-
-/* ========================================
+/* =========================================
    BLOG GRID
-======================================== */
+========================================= */
 
 .blog-grid {
   display: grid;
-
-  grid-template-columns:
-    repeat(3, minmax(0, 1fr));
-
-  gap: 30px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
 }
 
 
-/* ========================================
-   BLOG CARD
-======================================== */
+/* BLOG CARD */
 
 .blog-card {
-  position: relative;
-
-  display: flex;
-  flex-direction: column;
-
-  height: 100%;
-
+  background: white;
+  border: 1px solid #ddd;
   overflow: hidden;
-
-  border-radius: 26px;
-
-  background: #ffffff;
-
-  border: 1px solid rgba(226, 232, 240, 0.9);
-
-  box-shadow:
-    0 15px 35px rgba(15, 23, 42, 0.08);
-
-  transition:
-    transform 0.45s cubic-bezier(.2,.8,.2,1),
-    box-shadow 0.45s ease,
-    border 0.45s ease;
+  transition: 0.3s ease;
 }
 
 .blog-card:hover {
-  transform:
-    translateY(-14px)
-    perspective(1000px)
-    rotateX(2deg);
-
-  border-color: rgba(16, 185, 129, 0.35);
-
-  box-shadow:
-    0 35px 65px rgba(15, 23, 42, 0.16);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
 }
 
 
-/* ========================================
-   BLOG IMAGE
-======================================== */
+/* IMAGE */
 
-.blog-image-wrapper {
-  position: relative;
-
-  height: 245px;
-
+.blog-card-image {
+  width: 100%;
+  height: 220px;
   overflow: hidden;
 }
 
-.blog-image {
+.blog-card-image img {
   width: 100%;
   height: 100%;
-
   object-fit: cover;
-
-  transition:
-    transform 0.8s cubic-bezier(.2,.8,.2,1);
 }
 
-.blog-card:hover .blog-image {
-  transform: scale(1.12);
-}
 
-.blog-image-overlay {
-  position: absolute;
+/* BLOG CONTENT */
 
-  inset: 0;
-
-  background:
-    linear-gradient(
-      to top,
-      rgba(0, 0, 0, 0.55),
-      rgba(0, 0, 0, 0.05),
-      transparent
-    );
+.blog-card-content {
+  padding: 24px;
 }
 
 .blog-category {
-  position: absolute;
-
-  top: 18px;
-  left: 18px;
-
-  padding: 8px 13px;
-
-  border-radius: 999px;
-
-  background:
-    rgba(255, 255, 255, 0.92);
-
-  backdrop-filter: blur(10px);
-
-  color: #047857;
-
-  font-size: 11px;
-
-  font-weight: 800;
-
-  letter-spacing: 0.04em;
-
-  box-shadow:
-    0 5px 18px rgba(0, 0, 0, 0.08);
-}
-
-
-/* ========================================
-   BLOG CONTENT
-======================================== */
-
-.blog-card-content {
-  display: flex;
-  flex-direction: column;
-
-  flex: 1;
-
-  padding: 28px;
-}
-
-.blog-card-meta {
-  display: flex;
-
-  align-items: center;
-
-  gap: 8px;
-
-  margin-bottom: 16px;
-
+  display: inline-block;
   font-size: 12px;
-
-  font-weight: 600;
-
-  color: #94a3b8;
-}
-
-.blog-card h3 {
-  margin: 0;
-
-  font-size: 25px;
-
-  line-height: 1.25;
-
-  font-weight: 850;
-
-  letter-spacing: -0.025em;
-
-  color: #0f172a;
-
-  transition:
-    color 0.3s ease;
-}
-
-.blog-card:hover h3 {
+  font-weight: 700;
   color: #047857;
+  text-transform: uppercase;
+  margin-bottom: 12px;
 }
 
-.blog-card-content p {
-  margin: 17px 0 28px;
-
-  color: #64748b;
-
-  font-size: 15px;
-
-  line-height: 1.75;
+.blog-card h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 24px;
+  line-height: 1.3;
+  color: #111;
+  margin-bottom: 15px;
 }
 
-
-/* ========================================
-   READ ARTICLE BUTTON
-======================================== */
-
-.read-article-btn {
-  display: inline-flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  gap: 20px;
-
-  width: 100%;
-
-  margin-top: auto;
-
-  padding: 14px 16px 14px 20px;
-
-  border: none;
-
-  border-radius: 15px;
-
-  background: #ecfdf5;
-
-  color: #047857;
-
-  font-size: 14px;
-
-  font-weight: 800;
-
-  cursor: pointer;
-
-  transition:
-    background 0.3s ease,
-    color 0.3s ease,
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
-}
-
-.read-article-btn:hover {
-  background: #059669;
-
-  color: white;
-
-  transform: translateY(-2px);
-
-  box-shadow:
-    0 10px 25px rgba(5, 150, 105, 0.25);
-}
-
-.read-arrow {
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  width: 32px;
-  height: 32px;
-
-  border-radius: 50%;
-
-  background: white;
-
-  color: #059669;
-
-  font-size: 18px;
-
-  transition:
-    transform 0.3s ease;
-}
-
-.read-article-btn:hover .read-arrow {
-  transform: translateX(4px);
-}
-
-
-/* ========================================
-   NO RESULTS
-======================================== */
-
-.no-results {
-  text-align: center;
-
-  padding: 90px 20px;
-}
-
-.no-results-icon {
-  font-size: 60px;
-
+.blog-card p {
+  color: #555;
+  line-height: 1.7;
   margin-bottom: 20px;
 }
 
-.no-results h3 {
-  margin: 0;
-
-  font-size: 28px;
-
-  color: #0f172a;
-}
-
-.no-results p {
-  margin-top: 10px;
-
-  color: #64748b;
-}
-
-.reset-search-btn {
-  margin-top: 25px;
-
-  padding: 13px 24px;
-
-  border: none;
-
-  border-radius: 999px;
-
-  background: #059669;
-
-  color: white;
-
+.blog-read-more {
   font-weight: 700;
-
-  cursor: pointer;
-
-  transition:
-    transform 0.3s ease,
-    background 0.3s ease;
-}
-
-.reset-search-btn:hover {
-  background: #047857;
-
-  transform: translateY(-3px);
+  color: #047857;
+  text-decoration: none;
 }
 
 
-/* ========================================
-   READING MODE
-======================================== */
+/* =========================================
+   ARTICLE PAGE
+========================================= */
 
-.reading-mode {
+.article-page {
   min-height: 100vh;
-
-  padding-top: 80px;
-
-  transition:
-    background 0.4s ease,
-    color 0.4s ease;
-}
-
-.reading-light {
-  background:
-    radial-gradient(
-      circle at top,
-      rgba(16, 185, 129, 0.07),
-      transparent 35%
-    ),
-    #f7f7f5;
-
-  color: #1f2937;
-}
-
-.reading-dark {
-  background: #090b0f;
-
-  color: #e5e7eb;
+  background: #e5e5e5;
+  padding: 110px 20px 60px;
 }
 
 
-/* ========================================
-   READING PROGRESS
-======================================== */
+/* WORD DOCUMENT */
 
-.reading-progress-container {
-  position: fixed;
+.article-document {
+  max-width: 900px;
+  margin: auto;
+  background: white;
 
-  top: 0;
-  left: 0;
+  padding: 70px 80px;
 
-  width: 100%;
-  height: 4px;
+  box-shadow:
+    0 0 10px rgba(0, 0, 0, 0.15);
 
-  z-index: 999;
-
-  background:
-    rgba(148, 163, 184, 0.15);
-}
-
-.reading-progress-bar {
-  height: 100%;
-
-  background:
-    linear-gradient(
-      90deg,
-      #059669,
-      #10b981,
-      #2dd4bf
-    );
-
-  transition:
-    width 0.15s linear;
+  min-height: 100vh;
 }
 
 
-/* ========================================
-   READING HEADER
-======================================== */
-
-.reading-header {
-  position: fixed;
-
-  top: 0;
-  left: 0;
-
-  width: 100%;
-
-  z-index: 100;
-
-  border-bottom:
-    1px solid rgba(148, 163, 184, 0.15);
-
-  backdrop-filter:
-    blur(18px);
-}
-
-.reading-light .reading-header {
-  background:
-    rgba(255, 255, 255, 0.78);
-}
-
-.reading-dark .reading-header {
-  background:
-    rgba(9, 11, 15, 0.82);
-}
-
-.reading-header-content {
-  max-width: 1200px;
-
-  min-height: 76px;
-
-  margin: 0 auto;
-
-  padding: 0 24px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  gap: 20px;
-}
-
-
-/* ========================================
-   HEADER BUTTONS
-======================================== */
-
-.back-library-btn,
-.theme-btn {
-  border: none;
-
-  cursor: pointer;
-
-  font-family: inherit;
-
-  transition:
-    transform 0.25s ease,
-    background 0.25s ease,
-    color 0.25s ease;
-}
-
-.back-library-btn {
-  display: inline-flex;
-
-  align-items: center;
-
-  gap: 9px;
-
-  padding: 10px 14px;
-
-  border-radius: 12px;
-
-  background: transparent;
-
-  font-weight: 750;
-
-  font-size: 14px;
-
-  color: inherit;
-}
-
-.back-library-btn:hover {
-  transform: translateX(-4px);
-
-  color: #059669;
-
-  background:
-    rgba(16, 185, 129, 0.08);
-}
-
-.theme-btn {
-  padding: 10px 16px;
-
-  border-radius: 999px;
-
-  font-size: 13px;
-
-  font-weight: 750;
-}
-
-.reading-light .theme-btn {
-  background: #f1f5f9;
-
-  color: #334155;
-}
-
-.reading-dark .theme-btn {
-  background: #1e293b;
-
-  color: #e2e8f0;
-}
-
-.theme-btn:hover {
-  transform: translateY(-2px);
-}
-
-.reading-progress-text {
-  font-size: 12px;
-
-  font-weight: 700;
-
-  color: #64748b;
-}
-
-.reading-dark .reading-progress-text {
-  color: #94a3b8;
-}
-
-
-/* ========================================
-   ARTICLE
-======================================== */
-
-.reading-main {
-  padding:
-    40px 20px
-    90px;
-}
-
-.reading-article {
-  max-width: 960px;
-
-  margin: 0 auto;
-}
-
-
-/* ========================================
-   ARTICLE CATEGORY
-======================================== */
+/* =========================================
+   ARTICLE HEADER
+========================================= */
 
 .article-category {
-  display: table;
-
-  margin:
-    30px auto
-    25px;
-
-  padding:
-    9px 17px;
-
-  border-radius: 999px;
-
-  background:
-    rgba(16, 185, 129, 0.1);
-
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  font-weight: bold;
   color: #047857;
-
-  font-size: 12px;
-
-  font-weight: 850;
-
   text-transform: uppercase;
-
-  letter-spacing: 0.12em;
+  margin-bottom: 20px;
 }
 
-.reading-dark .article-category {
-  background:
-    rgba(16, 185, 129, 0.15);
-
-  color: #6ee7b7;
-}
-
-
-/* ========================================
-   ARTICLE TITLE
-======================================== */
 
 .article-title {
-  max-width: 900px;
+  font-family: "Times New Roman", Times, serif;
 
-  margin: 0 auto;
+  font-size: 42px;
+
+  font-weight: bold;
+
+  line-height: 1.2;
 
   text-align: center;
 
-  font-size:
-    clamp(42px, 7vw, 76px);
+  color: #000;
 
-  line-height: 1.05;
-
-  letter-spacing: -0.05em;
-
-  font-weight: 900;
+  margin-bottom: 25px;
 }
 
-.reading-light .article-title {
-  color: #111827;
-}
-
-.reading-dark .article-title {
-  color: #f8fafc;
-}
-
-
-/* ========================================
-   ARTICLE META
-======================================== */
 
 .article-meta {
-  display: flex;
+  text-align: center;
 
-  flex-wrap: wrap;
-
-  justify-content: center;
-
-  align-items: center;
-
-  gap: 10px;
-
-  margin-top: 28px;
-
-  color: #64748b;
+  font-family: Arial, sans-serif;
 
   font-size: 14px;
-}
 
-.reading-dark .article-meta {
-  color: #94a3b8;
-}
-
-.article-author {
-  font-weight: 750;
-
-  color: #059669;
-}
-
-
-/* ========================================
-   ARTICLE HERO IMAGE
-======================================== */
-
-.article-image-wrapper {
-  margin-top: 55px;
-
-  border-radius: 30px;
-
-  overflow: hidden;
-
-  box-shadow:
-    0 35px 70px rgba(15, 23, 42, 0.22);
-}
-
-.article-image {
-  display: block;
-
-  width: 100%;
-
-  height:
-    clamp(300px, 50vw, 550px);
-
-  object-fit: cover;
-
-  transition:
-    transform 0.8s ease;
-}
-
-.article-image-wrapper:hover .article-image {
-  transform: scale(1.03);
-}
-
-
-/* ========================================
-   ARTICLE PAPER
-======================================== */
-
-.article-paper {
-  margin-top: 55px;
-
-  padding:
-    clamp(28px, 6vw, 75px);
-
-  border-radius: 30px;
-
-  border:
-    1px solid rgba(226, 232, 240, 0.8);
-
-  background: white;
-
-  box-shadow:
-    0 20px 50px rgba(15, 23, 42, 0.06);
-}
-
-.reading-dark .article-paper {
-  background: #111827;
-
-  border-color: #1f2937;
-
-  box-shadow:
-    0 20px 50px rgba(0, 0, 0, 0.3);
-}
-
-
-/* ========================================
-   ARTICLE TYPOGRAPHY
-======================================== */
-
-.article-content {
-  max-width: 760px;
-
-  margin: 0 auto;
-
-  font-size:
-    clamp(17px, 2vw, 20px);
-
-  line-height: 1.9;
-
-  color: #475569;
-}
-
-.reading-dark .article-content {
-  color: #cbd5e1;
-}
-
-
-/* Lead Paragraph */
-
-.article-content .lead {
-  font-size:
-    clamp(21px, 3vw, 26px);
-
-  line-height: 1.7;
-
-  font-weight: 500;
-
-  color: #334155;
-
-  margin-top: 0;
+  color: #666;
 
   margin-bottom: 40px;
 }
 
-.reading-dark .article-content .lead {
-  color: #e2e8f0;
+
+/* HERO IMAGE */
+
+.article-hero-image {
+  width: 100%;
+
+  margin-bottom: 40px;
+}
+
+.article-hero-image img {
+  width: 100%;
+
+  max-height: 500px;
+
+  object-fit: cover;
+
+  display: block;
 }
 
 
-/* Paragraph */
+/* =========================================
+   ARTICLE TEXT - MS WORD STYLE
+========================================= */
+
+.article-content {
+
+  font-family:
+    "Times New Roman",
+    Times,
+    serif;
+
+  font-size: 18px;
+
+  line-height: 1.8;
+
+  color: #000;
+
+  text-align: justify;
+}
+
+
+/* PARAGRAPH */
 
 .article-content p {
-  margin:
-    0 0 28px;
+
+  margin-top: 0;
+
+  margin-bottom: 18px;
+
+  text-indent: 0;
 }
 
 
-/* H2 */
+/* LEAD PARAGRAPH */
 
-.article-content h2 {
-  margin:
-    70px 0 25px;
+.article-content .lead {
 
-  font-size:
-    clamp(30px, 4vw, 42px);
+  font-size: 19px;
 
-  line-height: 1.2;
+  line-height: 1.8;
 
-  letter-spacing: -0.03em;
-
-  font-weight: 850;
-
-  color: #0f172a;
-}
-
-.reading-dark .article-content h2 {
-  color: #f8fafc;
+  font-weight: normal;
 }
 
 
-/* H3 */
+/* =========================================
+   HEADINGS
+========================================= */
 
-.article-content h3 {
-  margin:
-    45px 0 18px;
+.article-content h1 {
 
-  font-size:
-    clamp(23px, 3vw, 30px);
+  font-size: 32px;
 
-  line-height: 1.3;
+  font-weight: bold;
 
-  font-weight: 800;
-
-  color: #047857;
-}
-
-.reading-dark .article-content h3 {
-  color: #6ee7b7;
-}
-
-
-/* Lists */
-
-.article-content ul {
-  margin:
-    25px 0 35px;
-
-  padding-left: 25px;
-}
-
-.article-content li {
-  margin-bottom: 13px;
-
-  padding-left: 7px;
-}
-
-.article-content li::marker {
-  color: #059669;
-}
-
-
-/* Strong */
-
-.article-content strong {
-  font-weight: 800;
-
-  color: #0f172a;
-}
-
-.reading-dark .article-content strong {
-  color: #f8fafc;
-}
-
-
-/* Blockquote */
-
-.article-content blockquote {
-  margin:
-    45px 0;
-
-  padding:
-    28px 30px;
-
-  border-left:
-    5px solid #10b981;
-
-  border-radius:
-    0 18px 18px 0;
-
-  background:
-    #ecfdf5;
-
-  color:
-    #065f46;
-
-  font-size:
-    clamp(19px, 3vw, 24px);
-
-  font-style: italic;
-
-  line-height: 1.6;
-
-  font-weight: 600;
-}
-
-.reading-dark .article-content blockquote {
-  background:
-    rgba(16, 185, 129, 0.1);
-
-  color:
-    #a7f3d0;
-}
-
-
-/* Final Statement */
-
-.article-content .final-statement {
   margin-top: 45px;
 
-  padding-top: 35px;
+  margin-bottom: 20px;
 
-  border-top:
-    1px solid #e2e8f0;
-
-  font-size:
-    clamp(20px, 3vw, 25px);
-
-  font-weight: 650;
-
-  line-height: 1.7;
-
-  color: #047857;
-}
-
-.reading-dark .article-content .final-statement {
-  border-color: #334155;
-
-  color: #6ee7b7;
+  color: #000;
 }
 
 
-/* ========================================
-   ARTICLE ENDING
-======================================== */
-
-.article-ending {
-  margin-top: 75px;
-
-  text-align: center;
-
-  padding-bottom: 40px;
-}
-
-.ending-symbol {
-  font-size: 36px;
-
-  color: #059669;
-
-  margin-bottom: 16px;
-}
-
-.article-ending h3 {
-  margin: 0;
+.article-content h2 {
 
   font-size: 28px;
 
-  font-weight: 850;
+  font-weight: bold;
+
+  margin-top: 45px;
+
+  margin-bottom: 18px;
+
+  color: #000;
+
+  text-align: left;
 }
 
-.article-ending p {
+
+.article-content h3 {
+
+  font-size: 22px;
+
+  font-weight: bold;
+
+  margin-top: 30px;
+
+  margin-bottom: 14px;
+
+  color: #000;
+}
+
+
+/* =========================================
+   BOLD TEXT
+========================================= */
+
+.article-content strong {
+
+  font-weight: bold;
+
+  color: #000;
+}
+
+
+/* =========================================
+   LISTS
+========================================= */
+
+.article-content ul {
+
   margin-top: 10px;
 
-  color: #64748b;
+  margin-bottom: 25px;
+
+  padding-left: 35px;
 }
 
-.reading-dark .article-ending p {
-  color: #94a3b8;
+
+.article-content ol {
+
+  margin-top: 10px;
+
+  margin-bottom: 25px;
+
+  padding-left: 35px;
 }
 
-.explore-btn {
-  margin-top: 28px;
 
-  padding:
-    15px 28px;
+.article-content li {
 
-  border: none;
+  margin-bottom: 8px;
 
-  border-radius: 999px;
+  line-height: 1.7;
+}
 
-  background:
-    #059669;
 
-  color: white;
+/* =========================================
+   BLOCKQUOTE
+========================================= */
+
+.article-content blockquote {
+
+  margin: 30px 0;
+
+  padding: 15px 25px;
+
+  border-left: 4px solid #047857;
+
+  background: #f6f6f6;
+
+  font-style: italic;
+
+  line-height: 1.7;
+}
+
+
+/* =========================================
+   TABLES - WORD STYLE
+========================================= */
+
+.article-content table {
+
+  width: 100%;
+
+  border-collapse: collapse;
+
+  margin-top: 25px;
+
+  margin-bottom: 30px;
+
+  font-family:
+    "Times New Roman",
+    Times,
+    serif;
+
+  font-size: 17px;
+}
+
+
+.article-content table th {
+
+  border: 1px solid #000;
+
+  padding: 10px;
+
+  text-align: center;
+
+  font-weight: bold;
+
+  background: #f0f0f0;
+}
+
+
+.article-content table td {
+
+  border: 1px solid #000;
+
+  padding: 10px;
+
+  text-align: center;
+}
+
+
+/* =========================================
+   IMAGES INSIDE ARTICLE
+========================================= */
+
+.article-content img {
+
+  width: 100%;
+
+  height: auto;
+
+  margin: 25px 0;
+
+  display: block;
+}
+
+
+/* IMAGE CAPTION */
+
+.article-content figcaption {
+
+  text-align: center;
+
+  font-family:
+    "Times New Roman",
+    Times,
+    serif;
 
   font-size: 15px;
 
-  font-weight: 800;
+  color: #555;
+
+  margin-top: -15px;
+
+  margin-bottom: 25px;
+
+  font-style: italic;
+}
+
+
+/* =========================================
+   FINAL STATEMENT
+========================================= */
+
+.article-content .final-statement {
+
+  margin-top: 35px;
+
+  font-weight: bold;
+
+  text-align: justify;
+
+  font-size: 19px;
+}
+
+
+/* =========================================
+   BACK BUTTON
+========================================= */
+
+.article-back-button {
+
+  display: inline-block;
+
+  margin-bottom: 30px;
+
+  padding: 10px 18px;
+
+  border: 1px solid #333;
+
+  background: white;
+
+  color: #000;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 14px;
 
   cursor: pointer;
 
-  box-shadow:
-    0 12px 25px rgba(5, 150, 105, 0.22);
-
-  transition:
-    transform 0.3s ease,
-    background 0.3s ease,
-    box-shadow 0.3s ease;
-}
-
-.explore-btn:hover {
-  background:
-    #047857;
-
-  transform:
-    translateY(-4px);
-
-  box-shadow:
-    0 20px 35px rgba(5, 150, 105, 0.3);
+  transition: 0.2s;
 }
 
 
-/* ========================================
-   RESPONSIVE DESIGN
-======================================== */
+.article-back-button:hover {
 
-@media (max-width: 1024px) {
+  background: #000;
+
+  color: white;
+}
+
+
+/* =========================================
+   END OF ARTICLE
+========================================= */
+
+.article-end {
+
+  margin-top: 60px;
+
+  padding-top: 30px;
+
+  border-top: 1px solid #aaa;
+
+  text-align: center;
+
+  font-family:
+    "Times New Roman",
+    Times,
+    serif;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 900px) {
 
   .blog-grid {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+
+    grid-template-columns: repeat(2, 1fr);
+
+  }
+
+  .article-document {
+
+    padding: 50px 45px;
+
   }
 
 }
 
 
-@media (max-width: 768px) {
+@media (max-width: 640px) {
 
   .library-page {
-    padding-top: 85px;
+
+    padding: 100px 15px 40px;
+
   }
 
-  .library-hero {
-    padding:
-      55px 20px
-      45px;
-  }
+  .library-hero h1 {
 
-  .library-section {
-    padding:
-      25px 18px;
-  }
+    font-size: 36px;
 
-  .library-section-header {
-    align-items: flex-start;
-
-    flex-direction: column;
   }
 
   .blog-grid {
-    grid-template-columns:
-      1fr;
+
+    grid-template-columns: 1fr;
+
   }
 
-  .blog-card:hover {
-    transform:
-      translateY(-8px);
+  .article-page {
+
+    padding: 90px 0 0;
+
   }
 
-  .blog-image-wrapper {
-    height: 230px;
-  }
+  .article-document {
 
-  .reading-header-content {
-    min-height: 68px;
+    padding: 35px 22px;
 
-    padding:
-      0 15px;
-  }
+    box-shadow: none;
 
-  .reading-progress-text {
-    display: none;
-  }
-
-  .back-text {
-    display: none;
-  }
-
-  .back-library-btn {
-    padding:
-      10px;
-  }
-
-  .reading-main {
-    padding:
-      25px 14px
-      70px;
-  }
-
-  .article-image-wrapper {
-    margin-top: 38px;
-
-    border-radius: 20px;
-  }
-
-  .article-paper {
-    margin-top: 35px;
-
-    border-radius: 20px;
-  }
-
-}
-
-
-@media (max-width: 480px) {
-
-  .library-hero h1 {
-    font-size: 42px;
-  }
-
-  .library-hero p {
-    font-size: 16px;
-  }
-
-  .library-search input {
-    padding:
-      16px 45px
-      16px 50px;
-  }
-
-  .blog-card-content {
-    padding: 23px;
   }
 
   .article-title {
-    font-size: 39px;
+
+    font-size: 30px;
+
   }
 
-  .article-meta {
-    font-size: 12px;
+  .article-content {
+
+    font-size: 17px;
+
+    line-height: 1.75;
+
+    text-align: left;
+
   }
 
-  .article-content blockquote {
-    padding:
-      22px 20px;
+  .article-content h2 {
+
+    font-size: 24px;
+
+  }
+
+  .article-content h3 {
+
+    font-size: 20px;
+
+  }
+
+  .article-content table {
+
+    font-size: 14px;
+
+  }
+
+  .article-content table th,
+
+  .article-content table td {
+
+    padding: 7px;
+
   }
 
 }
