@@ -1,24 +1,32 @@
-/* =========================================
-   VFAW LIBRARY - MS WORD / DOCUMENT STYLE
-========================================= */
+/* =========================================================
+   VFAW LIBRARY — MODERN READING DESIGN
+   Clean • Minimal • Easy to Read • Mobile Friendly
+========================================================= */
 
-
-/* MAIN LIBRARY PAGE */
-
-.library-page {
-  min-height: 100vh;
-  background: #f1f1f1;
-  padding: 120px 20px 60px;
+:root {
+  --library-green: #059669;
+  --library-green-dark: #047857;
+  --library-text: #1f2937;
+  --library-muted: #6b7280;
+  --library-border: #e5e7eb;
+  --library-bg: #f8fafc;
 }
 
 
-/* =========================================
-   BLOG LIST PAGE
-========================================= */
+/* =========================================================
+   LIBRARY LIST PAGE
+========================================================= */
+
+.library-page {
+  min-height: 100vh;
+  background: var(--library-bg);
+  padding: 110px 20px 70px;
+}
 
 .library-container {
-  max-width: 1200px;
-  margin: auto;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
 }
 
 
@@ -26,54 +34,111 @@
 
 .library-hero {
   text-align: center;
-  margin-bottom: 50px;
+  max-width: 800px;
+  margin: 0 auto 60px;
 }
 
 .library-hero h1 {
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 48px;
-  font-weight: 700;
-  color: #111;
-  margin-bottom: 15px;
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  font-size: clamp(36px, 5vw, 58px);
+
+  font-weight: 800;
+
+  letter-spacing: -0.04em;
+
+  line-height: 1.08;
+
+  color: #111827;
+
+  margin-bottom: 20px;
 }
 
 .library-hero p {
-  max-width: 700px;
-  margin: auto;
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+
   font-size: 18px;
+
   line-height: 1.7;
-  color: #555;
+
+  color: #64748b;
+
+  max-width: 680px;
+
+  margin: auto;
 }
 
 
 /* SEARCH */
 
 .library-search {
-  max-width: 600px;
-  margin: 35px auto;
+  max-width: 620px;
+
+  margin: 35px auto 0;
+
+  position: relative;
 }
 
 .library-search input {
   width: 100%;
-  padding: 16px 20px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  outline: none;
+
+  height: 58px;
+
+  padding: 0 20px;
+
   background: white;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 14px;
+
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+
+  font-size: 16px;
+
+  color: #111827;
+
+  outline: none;
+
+  box-shadow:
+    0 4px 15px rgba(0, 0, 0, 0.04);
+
+  transition: 0.25s ease;
 }
 
 .library-search input:focus {
-  border-color: #059669;
+  border-color: #10b981;
+
+  box-shadow:
+    0 0 0 4px rgba(16, 185, 129, 0.12);
 }
 
 
-/* =========================================
+/* =========================================================
    BLOG GRID
-========================================= */
+========================================================= */
 
 .blog-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
   gap: 28px;
 }
 
@@ -82,14 +147,25 @@
 
 .blog-card {
   background: white;
-  border: 1px solid #ddd;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 20px;
+
   overflow: hidden;
-  transition: 0.3s ease;
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+
+  cursor: pointer;
 }
 
 .blog-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  transform: translateY(-6px);
+
+  box-shadow:
+    0 18px 45px rgba(0, 0, 0, 0.10);
 }
 
 
@@ -97,475 +173,595 @@
 
 .blog-card-image {
   width: 100%;
-  height: 220px;
+
+  height: 230px;
+
   overflow: hidden;
+
+  background: #e5e7eb;
 }
 
 .blog-card-image img {
   width: 100%;
+
   height: 100%;
+
   object-fit: cover;
+
+  transition: transform 0.5s ease;
+}
+
+.blog-card:hover .blog-card-image img {
+  transform: scale(1.05);
 }
 
 
-/* BLOG CONTENT */
+/* CARD CONTENT */
 
 .blog-card-content {
-  padding: 24px;
+  padding: 26px;
 }
 
 .blog-category {
   display: inline-block;
-  font-size: 12px;
-  font-weight: 700;
-  color: #047857;
-  text-transform: uppercase;
-  margin-bottom: 12px;
-}
 
-.blog-card h2 {
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 24px;
-  line-height: 1.3;
-  color: #111;
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  color: var(--library-green-dark);
+
+  background: #ecfdf5;
+
+  padding: 6px 10px;
+
+  border-radius: 7px;
+
   margin-bottom: 15px;
 }
 
+.blog-card h2 {
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+
+  font-size: 23px;
+
+  font-weight: 750;
+
+  line-height: 1.3;
+
+  letter-spacing: -0.02em;
+
+  color: #111827;
+
+  margin-bottom: 13px;
+}
+
 .blog-card p {
-  color: #555;
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+
+  font-size: 15.5px;
+
   line-height: 1.7;
-  margin-bottom: 20px;
+
+  color: #64748b;
+
+  margin-bottom: 22px;
 }
 
 .blog-read-more {
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+
+  color: var(--library-green-dark);
+
+  font-size: 15px;
+
   font-weight: 700;
-  color: #047857;
+
   text-decoration: none;
 }
 
 
-/* =========================================
-   ARTICLE PAGE
-========================================= */
+/* =========================================================
+   MODERN ARTICLE READING PAGE
+========================================================= */
 
 .article-page {
   min-height: 100vh;
-  background: #e5e5e5;
-  padding: 110px 20px 60px;
+
+  background: #f8fafc;
+
+  padding: 100px 20px 80px;
 }
 
 
-/* WORD DOCUMENT */
+/* READING DOCUMENT */
 
 .article-document {
-  max-width: 900px;
-  margin: auto;
+  width: 100%;
+
+  max-width: 850px;
+
+  margin: 0 auto;
+
   background: white;
 
-  padding: 70px 80px;
+  border: 1px solid #e5e7eb;
+
+  border-radius: 20px;
+
+  padding: 55px 70px;
 
   box-shadow:
-    0 0 10px rgba(0, 0, 0, 0.15);
-
-  min-height: 100vh;
+    0 10px 35px rgba(15, 23, 42, 0.05);
 }
 
 
-/* =========================================
-   ARTICLE HEADER
-========================================= */
+/* =========================================================
+   BACK BUTTON
+========================================================= */
 
-.article-category {
-  font-family: Arial, sans-serif;
-  font-size: 13px;
-  font-weight: bold;
-  color: #047857;
-  text-transform: uppercase;
-  margin-bottom: 20px;
-}
+.article-back-button {
+  display: inline-flex;
 
+  align-items: center;
 
-.article-title {
-  font-family: "Times New Roman", Times, serif;
+  gap: 8px;
 
-  font-size: 42px;
+  margin-bottom: 40px;
 
-  font-weight: bold;
+  padding: 9px 15px;
 
-  line-height: 1.2;
+  border: 1px solid #e2e8f0;
 
-  text-align: center;
+  border-radius: 9px;
 
-  color: #000;
+  background: white;
 
-  margin-bottom: 25px;
-}
+  color: #475569;
 
-
-.article-meta {
-  text-align: center;
-
-  font-family: Arial, sans-serif;
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
 
   font-size: 14px;
 
-  color: #666;
+  font-weight: 600;
 
-  margin-bottom: 40px;
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.article-back-button:hover {
+  color: var(--library-green-dark);
+
+  border-color: #a7f3d0;
+
+  background: #f0fdf4;
 }
 
 
-/* HERO IMAGE */
+/* =========================================================
+   ARTICLE HEADER
+========================================================= */
+
+.article-category {
+  display: inline-block;
+
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+
+  font-size: 12px;
+
+  font-weight: 750;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.08em;
+
+  color: var(--library-green-dark);
+
+  background: #ecfdf5;
+
+  padding: 7px 11px;
+
+  border-radius: 7px;
+
+  margin-bottom: 18px;
+}
+
+
+/* TITLE */
+
+.article-title {
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  font-size: clamp(34px, 5vw, 52px);
+
+  font-weight: 800;
+
+  letter-spacing: -0.045em;
+
+  line-height: 1.08;
+
+  color: #111827;
+
+  margin: 0 0 20px;
+}
+
+
+/* META */
+
+.article-meta {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  align-items: center;
+
+  gap: 8px;
+
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+
+  font-size: 14px;
+
+  color: #64748b;
+
+  margin-bottom: 38px;
+}
+
+
+/* =========================================================
+   ARTICLE HERO IMAGE
+========================================================= */
 
 .article-hero-image {
   width: 100%;
 
-  margin-bottom: 40px;
+  margin-bottom: 45px;
+
+  overflow: hidden;
+
+  border-radius: 16px;
 }
 
 .article-hero-image img {
+  display: block;
+
   width: 100%;
 
-  max-height: 500px;
+  max-height: 480px;
 
   object-fit: cover;
-
-  display: block;
 }
 
 
-/* =========================================
-   ARTICLE TEXT - MS WORD STYLE
-========================================= */
+/* =========================================================
+   ARTICLE CONTENT
+========================================================= */
 
 .article-content {
 
   font-family:
-    "Times New Roman",
-    Times,
-    serif;
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
 
-  font-size: 18px;
+  font-size: 17px;
 
-  line-height: 1.8;
+  line-height: 1.85;
 
-  color: #000;
+  color: #374151;
 
-  text-align: justify;
+  letter-spacing: 0;
+
+  max-width: 720px;
+
+  margin: 0 auto;
 }
 
 
-/* PARAGRAPH */
+/* PARAGRAPHS */
 
 .article-content p {
-
-  margin-top: 0;
-
-  margin-bottom: 18px;
-
-  text-indent: 0;
+  margin: 0 0 24px;
 }
 
 
-/* LEAD PARAGRAPH */
+/* FIRST / LEAD PARAGRAPH */
 
 .article-content .lead {
-
   font-size: 19px;
 
   line-height: 1.8;
 
-  font-weight: normal;
+  color: #374151;
+
+  margin-bottom: 30px;
 }
 
 
-/* =========================================
-   HEADINGS
-========================================= */
-
-.article-content h1 {
-
-  font-size: 32px;
-
-  font-weight: bold;
-
-  margin-top: 45px;
-
-  margin-bottom: 20px;
-
-  color: #000;
-}
-
+/* =========================================================
+   ARTICLE HEADINGS
+========================================================= */
 
 .article-content h2 {
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
 
   font-size: 28px;
 
-  font-weight: bold;
+  font-weight: 750;
 
-  margin-top: 45px;
+  letter-spacing: -0.025em;
+
+  line-height: 1.25;
+
+  color: #111827;
+
+  margin-top: 52px;
 
   margin-bottom: 18px;
 
-  color: #000;
-
-  text-align: left;
+  padding-top: 5px;
 }
 
 
 .article-content h3 {
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
 
-  font-size: 22px;
+  font-size: 21px;
 
-  font-weight: bold;
+  font-weight: 700;
 
-  margin-top: 30px;
+  letter-spacing: -0.015em;
+
+  line-height: 1.35;
+
+  color: #1f2937;
+
+  margin-top: 36px;
 
   margin-bottom: 14px;
-
-  color: #000;
 }
 
 
-/* =========================================
-   BOLD TEXT
-========================================= */
-
-.article-content strong {
-
-  font-weight: bold;
-
-  color: #000;
-}
-
-
-/* =========================================
+/* =========================================================
    LISTS
-========================================= */
+========================================================= */
 
-.article-content ul {
-
-  margin-top: 10px;
-
-  margin-bottom: 25px;
-
-  padding-left: 35px;
-}
-
-
+.article-content ul,
 .article-content ol {
-
   margin-top: 10px;
 
-  margin-bottom: 25px;
+  margin-bottom: 28px;
 
-  padding-left: 35px;
+  padding-left: 28px;
 }
-
 
 .article-content li {
+  padding-left: 5px;
 
-  margin-bottom: 8px;
+  margin-bottom: 9px;
 
-  line-height: 1.7;
+  line-height: 1.75;
+}
+
+.article-content li::marker {
+  color: var(--library-green);
 }
 
 
-/* =========================================
-   BLOCKQUOTE
-========================================= */
+/* =========================================================
+   BOLD TEXT
+========================================================= */
+
+.article-content strong {
+  font-weight: 700;
+
+  color: #111827;
+}
+
+
+/* =========================================================
+   QUOTES
+========================================================= */
 
 .article-content blockquote {
+  margin: 35px 0;
 
-  margin: 30px 0;
+  padding: 20px 24px;
 
-  padding: 15px 25px;
+  border-left: 4px solid #10b981;
 
-  border-left: 4px solid #047857;
+  background: #f0fdf4;
 
-  background: #f6f6f6;
+  border-radius: 0 10px 10px 0;
+
+  color: #374151;
+
+  font-size: 17px;
+
+  line-height: 1.75;
 
   font-style: italic;
-
-  line-height: 1.7;
 }
 
 
-/* =========================================
-   TABLES - WORD STYLE
-========================================= */
+/* =========================================================
+   TABLES
+========================================================= */
 
 .article-content table {
-
   width: 100%;
 
   border-collapse: collapse;
 
-  margin-top: 25px;
+  margin: 30px 0;
 
-  margin-bottom: 30px;
+  font-size: 15px;
 
-  font-family:
-    "Times New Roman",
-    Times,
-    serif;
+  line-height: 1.5;
 
-  font-size: 17px;
+  overflow: hidden;
+
+  border: 1px solid #e5e7eb;
+}
+
+.article-content th {
+  background: #f8fafc;
+
+  color: #111827;
+
+  font-weight: 700;
+
+  text-align: left;
+
+  padding: 13px 15px;
+
+  border: 1px solid #e5e7eb;
+}
+
+.article-content td {
+  padding: 12px 15px;
+
+  border: 1px solid #e5e7eb;
+
+  color: #475569;
 }
 
 
-.article-content table th {
-
-  border: 1px solid #000;
-
-  padding: 10px;
-
-  text-align: center;
-
-  font-weight: bold;
-
-  background: #f0f0f0;
-}
-
-
-.article-content table td {
-
-  border: 1px solid #000;
-
-  padding: 10px;
-
-  text-align: center;
-}
-
-
-/* =========================================
-   IMAGES INSIDE ARTICLE
-========================================= */
+/* =========================================================
+   ARTICLE IMAGES
+========================================================= */
 
 .article-content img {
+  display: block;
 
   width: 100%;
 
   height: auto;
 
-  margin: 25px 0;
+  margin: 35px 0;
 
-  display: block;
+  border-radius: 12px;
 }
 
 
-/* IMAGE CAPTION */
+/* =========================================================
+   IMAGE CAPTION
+========================================================= */
 
 .article-content figcaption {
-
   text-align: center;
 
-  font-family:
-    "Times New Roman",
-    Times,
-    serif;
+  font-size: 13px;
 
-  font-size: 15px;
+  color: #64748b;
 
-  color: #555;
-
-  margin-top: -15px;
-
-  margin-bottom: 25px;
-
-  font-style: italic;
-}
-
-
-/* =========================================
-   FINAL STATEMENT
-========================================= */
-
-.article-content .final-statement {
-
-  margin-top: 35px;
-
-  font-weight: bold;
-
-  text-align: justify;
-
-  font-size: 19px;
-}
-
-
-/* =========================================
-   BACK BUTTON
-========================================= */
-
-.article-back-button {
-
-  display: inline-block;
+  margin-top: -22px;
 
   margin-bottom: 30px;
-
-  padding: 10px 18px;
-
-  border: 1px solid #333;
-
-  background: white;
-
-  color: #000;
-
-  font-family: Arial, sans-serif;
-
-  font-size: 14px;
-
-  cursor: pointer;
-
-  transition: 0.2s;
 }
 
 
-.article-back-button:hover {
+/* =========================================================
+   FINAL STATEMENT
+========================================================= */
 
-  background: #000;
+.article-content .final-statement {
+  margin-top: 35px;
 
-  color: white;
+  padding: 20px 22px;
+
+  background: #f0fdf4;
+
+  border-left: 4px solid #10b981;
+
+  border-radius: 0 10px 10px 0;
+
+  font-weight: 650;
+
+  color: #064e3b;
 }
 
 
-/* =========================================
-   END OF ARTICLE
-========================================= */
+/* =========================================================
+   ARTICLE END
+========================================================= */
 
 .article-end {
+  max-width: 720px;
 
-  margin-top: 60px;
+  margin: 60px auto 0;
 
   padding-top: 30px;
 
-  border-top: 1px solid #aaa;
+  border-top: 1px solid #e5e7eb;
 
   text-align: center;
 
-  font-family:
-    "Times New Roman",
-    Times,
-    serif;
+  color: #64748b;
 }
 
 
-/* =========================================
+/* =========================================================
    MOBILE
-========================================= */
+========================================================= */
 
 @media (max-width: 900px) {
 
   .blog-grid {
-
     grid-template-columns: repeat(2, 1fr);
-
   }
 
   .article-document {
-
-    padding: 50px 45px;
-
+    padding: 45px 40px;
   }
 
 }
@@ -574,77 +770,107 @@
 @media (max-width: 640px) {
 
   .library-page {
+    padding: 90px 15px 50px;
+  }
 
-    padding: 100px 15px 40px;
-
+  .library-hero {
+    margin-bottom: 40px;
   }
 
   .library-hero h1 {
-
     font-size: 36px;
+  }
 
+  .library-hero p {
+    font-size: 16px;
   }
 
   .blog-grid {
-
     grid-template-columns: 1fr;
-
   }
 
+  .blog-card-image {
+    height: 210px;
+  }
+
+
+  /* ARTICLE */
+
   .article-page {
-
-    padding: 90px 0 0;
-
+    padding: 80px 0 40px;
   }
 
   .article-document {
+    border-radius: 0;
 
-    padding: 35px 22px;
+    border-left: none;
+
+    border-right: none;
 
     box-shadow: none;
 
+    padding: 30px 22px;
+  }
+
+  .article-back-button {
+    margin-bottom: 30px;
   }
 
   .article-title {
+    font-size: 34px;
 
-    font-size: 30px;
+    line-height: 1.12;
+  }
 
+  .article-meta {
+    font-size: 13px;
+
+    margin-bottom: 30px;
+  }
+
+  .article-hero-image {
+    border-radius: 12px;
+
+    margin-bottom: 35px;
   }
 
   .article-content {
-
     font-size: 17px;
 
+    line-height: 1.8;
+  }
+
+  .article-content .lead {
+    font-size: 18px;
+
     line-height: 1.75;
-
-    text-align: left;
-
   }
 
   .article-content h2 {
+    font-size: 25px;
 
-    font-size: 24px;
-
+    margin-top: 42px;
   }
 
   .article-content h3 {
-
     font-size: 20px;
 
+    margin-top: 30px;
   }
 
   .article-content table {
+    font-size: 13px;
 
-    font-size: 14px;
+    display: block;
 
+    overflow-x: auto;
+
+    white-space: normal;
   }
 
-  .article-content table th,
-
-  .article-content table td {
-
-    padding: 7px;
-
+  .article-content th,
+  .article-content td {
+    padding: 10px;
   }
 
 }
