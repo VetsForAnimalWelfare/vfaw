@@ -1,9 +1,13 @@
 /* =========================================================
-   VFAW LIBRARY
-   MODERN • HIGH-PERFORMANCE • RESPONSIVE
+   VFAW LIBRARY CSS
+   PROFESSIONAL • MODERN • RESPONSIVE
 ========================================================= */
 
 @layer reset, base, components, utilities;
+
+/* =========================================================
+   1. RESET & BASE STYLES
+========================================================= */
 
 @layer reset {
   .library-page *,
@@ -19,10 +23,10 @@
 
 @layer base {
   :root {
-    /* Color System */
+    /* Brand Color System */
     --vfaw-hue: 161;
-    --vfaw-green: hsl(var(--vfaw-hue) 935% 30%);
-    --vfaw-green-dark: hsl(var(--vfaw-hue) 90% 25%);
+    --vfaw-green: hsl(var(--vfaw-hue) 90% 30%);
+    --vfaw-green-dark: hsl(var(--vfaw-hue) 90% 22%);
     --vfaw-green-light: hsl(var(--vfaw-hue) 80% 96%);
 
     --vfaw-heading: #0f172a;
@@ -35,13 +39,13 @@
 
     /* Elevation & Shadows */
     --vfaw-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    --vfaw-shadow-md: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
-    --vfaw-shadow-lg: 0 20px 45px -10px rgba(15, 23, 42, 0.1);
+    --vfaw-shadow-md: 0 4px 20px -2px rgba(15, 23, 42, 0.06);
+    --vfaw-shadow-lg: 0 22px 50px -10px rgba(15, 23, 42, 0.12);
 
     /* Typography */
-    --vfaw-font: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    --vfaw-font: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Inter, sans-serif;
     
-    /* Layout */
+    /* Layout Radii */
     --radius-sm: 8px;
     --radius-md: 14px;
     --radius-lg: 20px;
@@ -72,11 +76,16 @@
     accent-color: var(--vfaw-green);
     -webkit-font-smoothing: antialiased;
   }
+
+  .library-page a,
+  .article-page a {
+    font-family: inherit;
+  }
 }
 
 @layer components {
   /* =========================================================
-     LIBRARY PAGE
+     2. LIBRARY PAGE WRAPPER & BACKGROUND
   ========================================================= */
 
   .library-page {
@@ -92,7 +101,7 @@
       var(--vfaw-bg);
   }
 
-  /* Decorative Ambient Lights using Modern Gradients */
+  /* Decorative Ambient Lights */
   .library-page::before,
   .library-page::after {
     content: "";
@@ -127,7 +136,7 @@
   }
 
   /* =========================================================
-     HERO & SEARCH
+     3. HERO & SEARCH
   ========================================================= */
 
   .library-hero {
@@ -175,7 +184,7 @@
     line-height: 1.7;
   }
 
-  /* Search Component */
+  /* Search Bar */
   .library-search {
     position: relative;
     inline-size: 100%;
@@ -210,13 +219,65 @@
   }
 
   /* =========================================================
-     CARD GRID (Container Queries)
+     4. BLOG SECTION HEADER (LATEST ARTICLES • BLOGS • COUNTER)
+  ========================================================= */
+
+  .blog-section-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-block-end: 2.5rem;
+    padding-block-end: 1rem;
+    border-block-end: 1px solid var(--vfaw-border);
+  }
+
+  .blog-section-title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .blog-section-subtitle {
+    display: inline-flex;
+    align-items: center;
+    color: var(--vfaw-green);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .blog-section-title {
+    color: var(--vfaw-heading);
+    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+    font-weight: 850;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+  }
+
+  .blog-count-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.85rem;
+    border: 1px solid color-mix(in srgb, var(--vfaw-green) 25%, transparent);
+    border-radius: var(--radius-full);
+    background: var(--vfaw-green-light);
+    color: var(--vfaw-green-dark);
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  /* =========================================================
+     5. BLOG GRID & ALIGNED CARDS
   ========================================================= */
 
   .blog-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
-    gap: 1.75rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+    gap: 2rem;
+    align-items: stretch; /* Keeps all cards in a row at equal heights */
     container-type: inline-size;
   }
 
@@ -224,6 +285,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    height: 100%;
     overflow: hidden;
     border: 1px solid var(--vfaw-border);
     border-radius: var(--radius-lg);
@@ -234,21 +296,18 @@
     animation: libraryFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 
-  /* Stagger Animations Modern Syntax */
-  .blog-card:nth-child(n) {
-    animation-delay: calc(0.05s * var(--i, 1));
-  }
-
   .blog-card:hover {
     transform: translateY(-6px);
     border-color: color-mix(in srgb, var(--vfaw-green) 30%, transparent);
     box-shadow: var(--vfaw-shadow-lg);
   }
 
+  /* Strict Image Framing Fix */
   .blog-card-image {
     position: relative;
-    aspect-ratio: 16 / 9;
     inline-size: 100%;
+    aspect-ratio: 16 / 9;
+    max-block-size: 220px;
     overflow: hidden;
     background-color: var(--vfaw-border);
   }
@@ -264,6 +323,7 @@
     transform: scale(1.05);
   }
 
+  /* Card Inner Content Alignment */
   .blog-card-content {
     display: flex;
     flex-direction: column;
@@ -312,7 +372,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    margin-block-start: auto;
+    margin-block-start: auto; /* Alignment Fix: Pushes Read More to card bottom */
     color: var(--vfaw-green);
     font-size: 0.85rem;
     font-weight: 700;
@@ -328,7 +388,7 @@
   }
 
   /* =========================================================
-     ARTICLE PAGE & DOCUMENT
+     6. ARTICLE DETAIL PAGE
   ========================================================= */
 
   .article-page {
@@ -481,8 +541,11 @@
   }
 }
 
+/* =========================================================
+   7. UTILITIES & ANIMATIONS
+========================================================= */
+
 @layer utilities {
-  /* Keyframes */
   @keyframes libraryFadeUp {
     from {
       opacity: 0;
@@ -494,13 +557,11 @@
     }
   }
 
-  /* Focus Styles with :focus-visible */
   :focus-visible {
     outline: 2px solid var(--vfaw-green);
     outline-offset: 3px;
   }
 
-  /* Accessible Reduced Motion Settings */
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
