@@ -199,8 +199,7 @@ const articles = [
       Google Slides EMBED URL
     */
 
-    pptxUrl:
-      "https://docs.google.com/presentation/d/1C9YANQ-xYPAqrC8ePiNfeSZIE4UVTzHR/embed?start=true&loop=false&delayms=3000",
+    pptxUrl: "https://docs.google.com/presentation/d/1C9YANQ-xYPAqrC8ePiNfeSZIE4UVTzHR/embed?start=false&loop=false&delayms=0",
   },
 ];
 
