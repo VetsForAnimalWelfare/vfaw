@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import "./Library.css";
+import "../Library.css";
 
 const articles = [
   {
