@@ -7,6 +7,21 @@ import "../Library.css";
 
 const resources = [
   {
+  id: 7,
+  type: "pptx",
+  category: "Presentations",
+  title: "Basics of Hematological Tools and  Techniques in Veterinary Practice",
+  excerpt:
+    "Educational presentation By BalKrishna Acharya.",
+  author: "Vets For Animal Welfare",
+  date: "September 2026",
+  readTime: "2 Hours",
+
+  pptxUrl:
+    "https://docs.google.com/presentation/d/13NtC7DuyPTB6Syjx_xUCJLi5c6lykr0G/embed?start=false&loop=false&delayms=0",
+},
+   
+   {
     id: 1,
     type: "blogger",
     category: "Veterinary Medicine",
