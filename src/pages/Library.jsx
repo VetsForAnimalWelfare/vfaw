@@ -1,10 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import "../Library.css";
 
-/* =========================================================
-   LIBRARY RESOURCES
-========================================================= */
-
 const articles = [
   {
     id: 1,
@@ -12,22 +8,23 @@ const articles = [
     category: "Veterinary Medicine",
     title: "Milk Fever",
     excerpt:
-      "Learn about milk fever, its causes, clinical signs, diagnosis, treatment, and prevention in animals.",
+      "Learn about milk fever, including its causes, clinical signs, diagnosis, treatment and prevention.",
     author: "Vets For Animal Welfare",
     date: "September 2026",
-    readTime: "Article",
+    meta: "Article",
     url: "https://vfaw.blogspot.com/2026/09/milk-fever.html",
   },
+
   {
     id: 2,
     type: "article",
     category: "Animal Welfare",
     title: "The Importance of Animal Welfare",
     excerpt:
-      "Understanding why animal welfare is an essential responsibility for veterinarians, animal owners, and society.",
+      "Understanding why animal welfare is an essential responsibility for veterinarians, animal owners and society.",
     author: "Vets For Animal Welfare",
     date: "September 2026",
-    readTime: "5 min read",
+    meta: "5 min read",
     content: `
       <h2>Introduction</h2>
       <p>
@@ -39,26 +36,27 @@ const articles = [
       <h2>Why Animal Welfare Matters</h2>
       <p>
         Animals play important roles in agriculture, food production,
-        companionship, research, ecosystems, and society. Ensuring good welfare
-        improves the quality of life of animals and supports sustainable animal
-        production systems.
+        companionship, research, ecosystems and society. Ensuring good welfare
+        improves the quality of life of animals and supports sustainable
+        animal production systems.
       </p>
 
       <h2>The Role of Veterinarians</h2>
       <p>
         Veterinarians diagnose and treat disease while also promoting humane
-        treatment, preventive healthcare, responsible ownership, and ethical
+        treatment, preventive healthcare, responsible ownership and ethical
         animal management.
       </p>
 
       <h2>Conclusion</h2>
       <p>
         Animal welfare is not only about preventing cruelty. It is also about
-        creating conditions that allow animals to live healthy, safe, and
+        creating conditions that allow animals to live healthy, safe and
         comfortable lives.
       </p>
     `,
   },
+
   {
     id: 3,
     type: "article",
@@ -68,7 +66,7 @@ const articles = [
       "A simple guide to understanding important blood components and the fractions obtained from blood.",
     author: "VFAW Education",
     date: "September 2026",
-    readTime: "7 min read",
+    meta: "7 min read",
     content: `
       <h2>Whole Blood</h2>
       <p>
@@ -87,7 +85,7 @@ const articles = [
       <h2>Plasma</h2>
       <p>
         Plasma is the liquid component of anticoagulated blood. It contains
-        water, proteins, electrolytes, nutrients, hormones, and clotting factors.
+        water, proteins, electrolytes, nutrients, hormones and clotting factors.
       </p>
 
       <h2>Serum</h2>
@@ -103,6 +101,7 @@ const articles = [
       </p>
     `,
   },
+
   {
     id: 4,
     type: "pdf",
@@ -112,9 +111,10 @@ const articles = [
       "Study material covering important concepts and basic techniques used in veterinary hematology.",
     author: "VFAW Education",
     date: "2026",
-    readTime: "PDF",
+    meta: "PDF",
     pdfUrl: "/pdfs/veterinary-hematology.pdf",
   },
+
   {
     id: 5,
     type: "article",
@@ -124,7 +124,7 @@ const articles = [
       "A basic introduction to blood examination and its importance in veterinary diagnosis.",
     author: "VFAW Education",
     date: "September 2026",
-    readTime: "6 min read",
+    meta: "6 min read",
     content: `
       <h2>What is Hematology?</h2>
       <p>
@@ -144,7 +144,7 @@ const articles = [
       <h2>Importance in Veterinary Practice</h2>
       <p>
         Hematological examination helps veterinarians identify anemia,
-        infection, inflammation, blood loss, and other pathological conditions.
+        infection, inflammation, blood loss and other pathological conditions.
       </p>
 
       <h2>Conclusion</h2>
@@ -154,163 +154,165 @@ const articles = [
       </p>
     `,
   },
+
   {
     id: 6,
     type: "pptx",
     category: "Presentations",
-    title:
-      "Basics of Hematological Tools and Techniques in Veterinary Practice",
+    title: "Basics of Hematological Tools and Techniques in Veterinary Practice",
     excerpt:
       "A professional educational presentation covering the basics of hematological tools and techniques used in veterinary practice.",
     author: "Vets For Animal Welfare",
     date: "September 2026",
-    readTime: "Presentation",
+    meta: "Presentation",
     pptxUrl:
       "https://docs.google.com/presentation/d/1C9YANQ-xYPAqrC8ePiNfeSZIE4UVTzHR/embed?start=false&loop=false&delayms=0",
   },
 ];
 
-/* =========================================================
-   LIBRARY COMPONENT
-========================================================= */
-
 function Library() {
-  const [selectedArticle, setSelectedArticle] = useState(null);
+  const [selectedResource, setSelectedResource] = useState(null);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
 
-  /* Dynamic Categories */
   const categories = useMemo(() => {
-    return ["All", ...new Set(articles.map((article) => article.category))];
+    const uniqueCategories = [];
+
+    articles.forEach((article) => {
+      if (!uniqueCategories.includes(article.category)) {
+        uniqueCategories.push(article.category);
+      }
+    });
+
+    return ["All", ...uniqueCategories];
   }, []);
 
-  /* Filter Articles */
-  const filteredArticles = useMemo(() => {
-    return articles.filter((article) => {
-      const matchesSearch =
-        article.title.toLowerCase().includes(search.toLowerCase()) ||
-        article.excerpt.toLowerCase().includes(search.toLowerCase()) ||
-        article.category.toLowerCase().includes(search.toLowerCase()) ||
-        article.author.toLowerCase().includes(search.toLowerCase());
+  const filteredResources = useMemo(() => {
+    const query = search.toLowerCase().trim();
 
-      const matchesCategory =
+    return articles.filter((article) => {
+      const searchableText = [
+        article.title,
+        article.excerpt,
+        article.category,
+        article.author,
+      ]
+        .join(" ")
+        .toLowerCase();
+
+      const searchMatch = searchableText.includes(query);
+
+      const categoryMatch =
         category === "All" || article.category === category;
 
-      return matchesSearch && matchesCategory;
+      return searchMatch && categoryMatch;
     });
   }, [search, category]);
 
-  const closeReader = () => {
-    setSelectedArticle(null);
-  };
-
-  /* Prevent Background Scroll When Reader is Open */
   useEffect(() => {
-    if (selectedArticle) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
+    document.body.style.overflow = selectedResource ? "hidden" : "";
 
     return () => {
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = "";
     };
-  }, [selectedArticle]);
+  }, [selectedResource]);
 
-  /* Keyboard Listener for Escape Key */
   useEffect(() => {
-    const handleEscape = (event) => {
+    const handleKeyDown = (event) => {
       if (event.key === "Escape") {
-        setSelectedArticle(null);
+        setSelectedResource(null);
       }
     };
 
-    window.addEventListener("keydown", handleEscape);
+    window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      window.removeEventListener("keydown", handleEscape);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
 
-  /* Presentation Fullscreen Trigger */
-  const enterPresentationFullscreen = async () => {
-    const container = document.querySelector(".presentation-container");
-    if (!container) return;
+  const getTypeLabel = (type) => {
+    if (type === "blogger") return "BLOG";
+    if (type === "pdf") return "PDF";
+    if (type === "pptx") return "PRESENTATION";
+    return "ARTICLE";
+  };
 
-    try {
-      if (container.requestFullscreen) {
-        await container.requestFullscreen();
-      } else if (container.webkitRequestFullscreen) {
-        container.webkitRequestFullscreen();
-      }
-    } catch (error) {
-      console.error("Unable to enter presentation fullscreen:", error);
-    }
+  const getButtonText = (type) => {
+    if (type === "blogger") return "Read Article";
+    if (type === "pdf") return "View PDF";
+    if (type === "pptx") return "Start Presentation";
+    return "Start Reading";
   };
 
   return (
     <div className="library-page">
-      {/* HERO SECTION */}
-      <section className="library-hero">
-        <div className="library-hero-background">
-          <div className="hero-orb hero-orb-one"></div>
-          <div className="hero-orb hero-orb-two"></div>
-        </div>
 
-        <div className="library-badge">
-          <span className="badge-dot"></span>
-          VFAW KNOWLEDGE LIBRARY
-        </div>
+      {/* HERO */}
+      <section className="library-hero">
+        <div className="hero-grid"></div>
+
+        <div className="hero-circle hero-circle-one"></div>
+        <div className="hero-circle hero-circle-two"></div>
 
         <div className="library-hero-content">
+          <div className="library-label">
+            <span></span>
+            VFAW KNOWLEDGE LIBRARY
+          </div>
+
           <h1>
             Explore Knowledge.
             <br />
-            <span>Expand Your Impact.</span>
+            <strong>Expand Your Impact.</strong>
           </h1>
 
           <p>
-            Discover veterinary articles, educational resources, professional
-            publications, presentations, study materials, and animal welfare
-            knowledge.
+            Discover veterinary knowledge, educational articles,
+            presentations, study materials and animal welfare resources.
           </p>
         </div>
       </section>
 
-      {/* MAIN CONTAINER */}
+      {/* MAIN */}
       <main className="library-container">
-        {/* HEADER & COUNTER */}
-        <div className="library-header">
-          <div className="library-heading">
-            <span className="section-small-title">
+
+        <section className="library-introduction">
+          <div>
+            <span className="library-overline">
               KNOWLEDGE RESOURCE CENTER
             </span>
+
             <h2>Explore Our Library</h2>
+
             <p>
-              Carefully selected articles, veterinary resources, educational
-              materials, and professional presentations.
+              Access carefully prepared resources designed for
+              veterinary students, professionals and animal welfare
+              enthusiasts.
             </p>
           </div>
 
-          <div className="library-count">
+          <div className="resource-total">
             <strong>{articles.length}</strong>
             <span>Resources</span>
           </div>
-        </div>
+        </section>
 
-        {/* SEARCH BAR */}
-        <div className="library-controls">
-          <div className="library-search">
-            <span className="search-icon">🔍</span>
+        {/* SEARCH */}
+        <section className="library-tools">
+          <div className="search-box">
+            <span className="search-symbol">⌕</span>
+
             <input
               type="text"
-              placeholder="Search articles, presentations and resources..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search the library..."
+              onChange={(event) => setSearch(event.target.value)}
             />
+
             {search && (
               <button
-                className="clear-search"
+                className="search-clear"
                 onClick={() => setSearch("")}
                 aria-label="Clear search"
               >
@@ -318,14 +320,14 @@ function Library() {
               </button>
             )}
           </div>
-        </div>
+        </section>
 
-        {/* CATEGORY FILTERS */}
-        <div className="category-filter">
+        {/* FILTER */}
+        <div className="library-filters">
           {categories.map((item) => (
             <button
               key={item}
-              className={category === item ? "active" : ""}
+              className={category === item ? "selected" : ""}
               onClick={() => setCategory(item)}
             >
               {item}
@@ -333,77 +335,61 @@ function Library() {
           ))}
         </div>
 
-        {/* RESULTS COUNT */}
-        <div className="library-results">
-          Showing <strong>{filteredArticles.length}</strong>{" "}
-          {filteredArticles.length === 1 ? "resource" : "resources"}
+        <div className="library-result-count">
+          Showing <strong>{filteredResources.length}</strong>{" "}
+          {filteredResources.length === 1 ? "resource" : "resources"}
         </div>
 
-        {/* RESOURCE CARDS GRID */}
-        {filteredArticles.length > 0 ? (
-          <div className="library-grid">
-            {filteredArticles.map((article) => (
-              <article className="library-card" key={article.id}>
-                <div className="card-glow"></div>
+        {/* RESOURCE CARDS */}
+        {filteredResources.length > 0 ? (
+          <section className="resource-grid">
+            {filteredResources.map((resource) => (
+              <article className="resource-card" key={resource.id}>
 
-                <div className="card-top">
-                  <span className="article-category">{article.category}</span>
-                  <span className="article-type">
-                    {article.type === "pdf"
-                      ? "PDF"
-                      : article.type === "blogger"
-                      ? "BLOG"
-                      : article.type === "pptx"
-                      ? "PRESENTATION"
-                      : "ARTICLE"}
+                <div className="card-background-effect"></div>
+
+                <div className="resource-top">
+                  <span className="resource-category">
+                    {resource.category}
+                  </span>
+
+                  <span className="resource-type">
+                    {getTypeLabel(resource.type)}
                   </span>
                 </div>
 
-                <div className="card-icon">
-                  {article.type === "pdf"
-                    ? "📄"
-                    : article.type === "pptx"
-                    ? "📊"
-                    : article.type === "blogger"
-                    ? "🌐"
-                    : "📝"}
-                </div>
+                <div className="resource-content">
+                  <h3>{resource.title}</h3>
 
-                <div className="card-content">
-                  <h3>{article.title}</h3>
-                  <p>{article.excerpt}</p>
+                  <p>{resource.excerpt}</p>
 
-                  <div className="article-meta">
-                    <span>{article.author}</span>
-                    <span>•</span>
-                    <span>{article.date}</span>
+                  <div className="resource-meta">
+                    <span>{resource.author}</span>
+                    <i></i>
+                    <span>{resource.date}</span>
                   </div>
                 </div>
 
                 <button
-                  className="read-button"
-                  onClick={() => setSelectedArticle(article)}
+                  className="resource-button"
+                  onClick={() => setSelectedResource(resource)}
                 >
-                  <span>
-                    {article.type === "pdf"
-                      ? "View PDF"
-                      : article.type === "pptx"
-                      ? "Start Presentation"
-                      : article.type === "blogger"
-                      ? "Read Article"
-                      : "Start Reading"}
-                  </span>
-                  <span className="button-arrow">→</span>
+                  <span>{getButtonText(resource.type)}</span>
+                  <b>→</b>
                 </button>
               </article>
             ))}
-          </div>
+          </section>
         ) : (
-          /* NO RESULTS STATE */
-          <div className="no-results">
-            <div className="no-results-icon">🔎</div>
+          <div className="empty-library">
+            <div className="empty-symbol">⌕</div>
+
             <h3>No resources found</h3>
-            <p>Try searching with another keyword or resetting filters.</p>
+
+            <p>
+              Try another search term or select a different category.
+            </p>
+
             <button
               onClick={() => {
                 setSearch("");
@@ -416,124 +402,120 @@ function Library() {
         )}
       </main>
 
-      {/* FULLSCREEN READER OVERLAY */}
-      {selectedArticle && (
-        <div className="reader-overlay">
-          <header className="reader-header">
+      {/* READING / VIEWER */}
+      {selectedResource && (
+        <div className="library-reader">
+
+          <header className="reader-topbar">
+
             <div className="reader-brand">
-              <span className="reader-logo">VFAW</span>
-              <span className="reader-divider"></span>
-              <span className="reader-section">KNOWLEDGE READER</span>
+              <strong>VFAW</strong>
+              <span></span>
+              <small>LIBRARY</small>
             </div>
 
-            <div className="reader-actions">
-              {selectedArticle.type === "pdf" && (
-                <a
-                  href={selectedArticle.pdfUrl}
-                  download
-                  className="download-button"
-                >
-                  Download PDF
-                </a>
-              )}
-
-              <button
-                className="reader-close"
-                onClick={closeReader}
-                aria-label="Close reader"
-              >
-                ×
-              </button>
-            </div>
+            <button
+              className="reader-close"
+              onClick={() => setSelectedResource(null)}
+              aria-label="Close"
+            >
+              ×
+            </button>
           </header>
 
-          {/* WRITTEN ARTICLE CONTENT */}
-          {selectedArticle.type === "article" && (
-            <main className="fullscreen-article">
-              <div className="reading-container">
-                <div className="reading-category">
-                  {selectedArticle.category}
+          {/* NORMAL ARTICLE */}
+          {selectedResource.type === "article" && (
+            <div className="article-reader">
+              <article className="article-reading-area">
+
+                <span className="article-reading-category">
+                  {selectedResource.category}
+                </span>
+
+                <h1>{selectedResource.title}</h1>
+
+                <p className="article-lead">
+                  {selectedResource.excerpt}
+                </p>
+
+                <div className="article-information">
+                  <span>{selectedResource.author}</span>
+                  <i></i>
+                  <span>{selectedResource.date}</span>
+                  <i></i>
+                  <span>{selectedResource.meta}</span>
                 </div>
 
-                <h1>{selectedArticle.title}</h1>
+                <div className="article-rule"></div>
 
-                <p className="reading-excerpt">{selectedArticle.excerpt}</p>
-
-                <div className="reading-meta">
-                  <span>{selectedArticle.author}</span>
-                  <span>•</span>
-                  <span>{selectedArticle.date}</span>
-                  <span>•</span>
-                  <span>{selectedArticle.readTime}</span>
-                </div>
-
-                <div className="reading-line"></div>
-
-                <article
-                  className="article-body"
+                <div
+                  className="article-text"
                   dangerouslySetInnerHTML={{
-                    __html: selectedArticle.content,
+                    __html: selectedResource.content,
                   }}
                 />
-              </div>
-            </main>
+              </article>
+            </div>
           )}
 
-          {/* BLOGGER EXTERNAL EMBED */}
-          {selectedArticle.type === "blogger" && (
-            <main className="fullscreen-blog">
+          {/* BLOGGER ARTICLE */}
+          {selectedResource.type === "blogger" && (
+            <div className="blog-reader">
               <iframe
-                src={selectedArticle.url}
-                title={selectedArticle.title}
-                className="fullscreen-blog-frame"
-                loading="lazy"
-              />
-            </main>
+                src={selectedResource.url}
+                title={selectedResource.title}
+                className="blog-frame"
+              ></iframe>
+            </div>
           )}
 
-          {/* PDF EMBED */}
-          {selectedArticle.type === "pdf" && (
-            <main className="fullscreen-pdf">
-              <div className="reader-title-area">
-                <span>{selectedArticle.category}</span>
-                <h1>{selectedArticle.title}</h1>
-              </div>
+          {/* PDF */}
+          {selectedResource.type === "pdf" && (
+            <div className="pdf-reader">
 
-              <iframe
-                src={selectedArticle.pdfUrl}
-                title={selectedArticle.title}
-                className="fullscreen-pdf-frame"
-              />
-            </main>
-          )}
-
-          {/* PPTX PRESENTATION EMBED */}
-          {selectedArticle.type === "pptx" && (
-            <main className="fullscreen-presentation">
-              <div className="presentation-toolbar">
-                <div className="presentation-info">
-                  <span>{selectedArticle.category}</span>
-                  <strong>{selectedArticle.title}</strong>
+              <div className="pdf-toolbar">
+                <div>
+                  <span>{selectedResource.category}</span>
+                  <strong>{selectedResource.title}</strong>
                 </div>
 
-                <button
-                  className="presentation-fullscreen-button"
-                  onClick={enterPresentationFullscreen}
+                <a
+                  href={selectedResource.pdfUrl}
+                  download
+                  className="pdf-download"
                 >
-                  ⛶ Full Screen
-                </button>
+                  ↓ Download PDF
+                </a>
               </div>
 
-              <div className="presentation-container">
-                <iframe
-                  src={selectedArticle.pptxUrl}
-                  title={selectedArticle.title}
-                  className="presentation-frame"
-                  allow="autoplay; fullscreen"
-                  allowFullScreen
-                />
+              <iframe
+                src={selectedResource.pdfUrl}
+                title={selectedResource.title}
+                className="pdf-frame"
+              ></iframe>
+            </div>
+          )}
+
+          {/* GOOGLE SLIDES */}
+          {selectedResource.type === "pptx" && (
+            <div className="presentation-reader">
+
+              <div className="presentation-header">
+                <div>
+                  <span>{selectedResource.category}</span>
+                  <strong>{selectedResource.title}</strong>
+                </div>
               </div>
-            </main>
+
+              <div className="presentation-stage">
+                <iframe
+                  src={selectedResource.pptxUrl}
+                  title={selectedResource.title}
+                  className="presentation-frame"
+                  allowFullScreen
+                ></iframe>
+              </div>
+            </div>
           )}
         </div>
       )}
