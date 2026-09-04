@@ -1,5 +1,9 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import "../Library.css";
+
+/* =========================================================
+   LIBRARY RESOURCES
+========================================================= */
 
 const articles = [
   {
@@ -12,6 +16,7 @@ const articles = [
     author: "Vets For Animal Welfare",
     date: "September 2026",
     readTime: "Article",
+
     url: "https://vfaw.blogspot.com/2026/09/milk-fever.html",
   },
 
@@ -21,10 +26,11 @@ const articles = [
     category: "Animal Welfare",
     title: "The Importance of Animal Welfare",
     excerpt:
-      "Understanding why animal welfare is an essential responsibility for veterinarians, owners, and society.",
+      "Understanding why animal welfare is an essential responsibility for veterinarians, animal owners, and society.",
     author: "Vets For Animal Welfare",
     date: "September 2026",
     readTime: "5 min read",
+
     content: `
       <h2>Introduction</h2>
 
@@ -71,6 +77,7 @@ const articles = [
     author: "VFAW Education",
     date: "September 2026",
     readTime: "7 min read",
+
     content: `
       <h2>Whole Blood</h2>
 
@@ -79,7 +86,7 @@ const articles = [
         known as plasma.
       </p>
 
-      <h2>Major Components</h2>
+      <h2>Major Components of Whole Blood</h2>
 
       <ul>
         <li>Red Blood Cells</li>
@@ -101,6 +108,13 @@ const articles = [
         Serum is obtained after blood has clotted. Unlike plasma, it does not
         contain fibrinogen because fibrinogen participates in clot formation.
       </p>
+
+      <h2>Plasma vs Serum</h2>
+
+      <p>
+        Plasma is obtained from anticoagulated blood, while serum is obtained
+        after the blood has been allowed to clot.
+      </p>
     `,
   },
 
@@ -114,6 +128,13 @@ const articles = [
     author: "VFAW Education",
     date: "2026",
     readTime: "PDF",
+
+    /*
+      Put your PDF inside:
+
+      public/pdfs/veterinary-hematology.pdf
+    */
+
     pdfUrl: "/pdfs/veterinary-hematology.pdf",
   },
 
@@ -127,6 +148,7 @@ const articles = [
     author: "VFAW Education",
     date: "September 2026",
     readTime: "6 min read",
+
     content: `
       <h2>What is Hematology?</h2>
 
@@ -151,21 +173,80 @@ const articles = [
         Hematological examination helps veterinarians identify anemia,
         infection, inflammation, blood loss, and other pathological conditions.
       </p>
+
+      <h2>Conclusion</h2>
+
+      <p>
+        Hematological examination is one of the most useful basic diagnostic
+        tools available in veterinary practice.
+      </p>
     `,
+  },
+
+  /* =========================================================
+     GOOGLE SLIDES / PPTX PRESENTATION
+  ========================================================= */
+
+  {
+    id: 6,
+    type: "pptx",
+    category: "Presentations",
+    title:
+      "Basics of Hematological Tools and Techniques in Veterinary Practice",
+    excerpt:
+      "A professional educational presentation covering the basics of hematological tools and techniques used in veterinary practice.",
+    author: "Vets For Animal Welfare",
+    date: "September 2026",
+    readTime: "Presentation",
+
+    /*
+      Google Slides EMBED URL
+
+      Original:
+      https://docs.google.com/presentation/d/1C9YANQ-xYPAqrC8ePiNfeSZIE4UVTzHR/edit
+
+      Embedded:
+      /embed
+    */
+
+    pptxUrl:
+      "https://docs.google.com/presentation/d/1C9YANQ-xYPAqrC8ePiNfeSZIE4UVTzHR/embed?start=false&loop=false&delayms=3000",
   },
 ];
 
+
+/* =========================================================
+   LIBRARY COMPONENT
+========================================================= */
+
 function Library() {
   const [selectedArticle, setSelectedArticle] = useState(null);
+
   const [search, setSearch] = useState("");
+
   const [category, setCategory] = useState("All");
 
+
+  /* =========================================================
+     CATEGORIES
+  ========================================================= */
+
   const categories = useMemo(() => {
-    return ["All", ...new Set(articles.map((article) => article.category))];
+    return [
+      "All",
+      ...new Set(
+        articles.map((article) => article.category)
+      ),
+    ];
   }, []);
 
+
+  /* =========================================================
+     FILTER ARTICLES
+  ========================================================= */
+
   const filteredArticles = useMemo(() => {
-    const searchText = search.toLowerCase();
+    const searchText = search.toLowerCase().trim();
 
     return articles.filter((article) => {
       const matchesSearch =
@@ -174,17 +255,27 @@ function Library() {
         article.category.toLowerCase().includes(searchText);
 
       const matchesCategory =
-        category === "All" || article.category === category;
+        category === "All" ||
+        article.category === category;
 
       return matchesSearch && matchesCategory;
     });
   }, [search, category]);
 
+
+  /* =========================================================
+     CLOSE READER
+  ========================================================= */
+
   const closeReader = () => {
     setSelectedArticle(null);
   };
 
-  /* Lock background scrolling when reading */
+
+  /* =========================================================
+     LOCK BACKGROUND SCROLLING
+  ========================================================= */
+
   useEffect(() => {
     if (selectedArticle) {
       document.body.style.overflow = "hidden";
@@ -197,12 +288,36 @@ function Library() {
     };
   }, [selectedArticle]);
 
+
+  /* =========================================================
+     ESC KEY TO CLOSE READER
+  ========================================================= */
+
+  useEffect(() => {
+    const handleEscape = (event) => {
+      if (event.key === "Escape") {
+        setSelectedArticle(null);
+      }
+    };
+
+    window.addEventListener("keydown", handleEscape);
+
+    return () => {
+      window.removeEventListener("keydown", handleEscape);
+    };
+  }, []);
+
+
   return (
     <div className="library-page">
 
-      {/* HERO */}
+
+      {/* =====================================================
+          HERO
+      ===================================================== */}
 
       <section className="library-hero">
+
         <div className="library-hero-content">
 
           <div className="library-badge">
@@ -217,93 +332,140 @@ function Library() {
 
           <p>
             Discover veterinary articles, educational resources,
-            professional publications, study materials and
-            animal welfare knowledge.
+            professional publications, presentations, study materials
+            and animal welfare knowledge.
           </p>
 
         </div>
+
       </section>
 
 
-      {/* LIBRARY */}
+      {/* =====================================================
+          MAIN LIBRARY
+      ===================================================== */}
 
       <main className="library-container">
+
+
+        {/* HEADER */}
 
         <div className="library-header">
 
           <div>
+
             <span className="section-small-title">
               KNOWLEDGE RESOURCE CENTER
             </span>
 
-            <h2>Explore Our Library</h2>
+            <h2>
+              Explore Our Library
+            </h2>
 
             <p>
               Carefully selected articles, veterinary resources,
-              educational materials and professional publications.
+              educational materials and professional presentations.
             </p>
+
           </div>
 
+
           <div className="library-count">
+
             {articles.length}
-            <span> Resources</span>
+
+            <span>
+              Resources
+            </span>
+
           </div>
 
         </div>
 
 
-        {/* SEARCH */}
+        {/* ===================================================
+            SEARCH
+        =================================================== */}
 
         <div className="library-controls">
 
           <div className="library-search">
-            <span className="search-icon">⌕</span>
+
+            <span className="search-icon">
+              ⌕
+            </span>
 
             <input
               type="text"
-              placeholder="Search articles and resources..."
+              placeholder="Search articles, presentations and resources..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(event) =>
+                setSearch(event.target.value)
+              }
             />
 
             {search && (
+
               <button
                 className="clear-search"
                 onClick={() => setSearch("")}
+                aria-label="Clear search"
               >
                 ×
               </button>
+
             )}
+
           </div>
 
         </div>
 
 
-        {/* CATEGORY FILTER */}
+        {/* ===================================================
+            CATEGORY FILTER
+        =================================================== */}
 
         <div className="category-filter">
 
           {categories.map((item) => (
+
             <button
               key={item}
-              className={category === item ? "active" : ""}
-              onClick={() => setCategory(item)}
+              className={
+                category === item
+                  ? "active"
+                  : ""
+              }
+              onClick={() =>
+                setCategory(item)
+              }
             >
               {item}
             </button>
+
           ))}
 
         </div>
 
 
-        {/* RESULTS */}
+        {/* RESULT COUNT */}
 
         <div className="library-results">
-          Showing {filteredArticles.length} resources
+
+          Showing{" "}
+          <strong>
+            {filteredArticles.length}
+          </strong>{" "}
+          {filteredArticles.length === 1
+            ? "resource"
+            : "resources"}
+
         </div>
 
 
-        {/* ARTICLE CARDS */}
+        {/* ===================================================
+            ARTICLE / RESOURCE GRID
+        =================================================== */}
 
         {filteredArticles.length > 0 ? (
 
@@ -318,6 +480,9 @@ function Library() {
 
                 <div className="card-glow"></div>
 
+
+                {/* CARD TOP */}
+
                 <div className="card-top">
 
                   <span className="article-category">
@@ -325,46 +490,73 @@ function Library() {
                   </span>
 
                   <span className="article-type">
+
                     {article.type === "pdf"
                       ? "PDF"
                       : article.type === "blogger"
                       ? "BLOG"
+                      : article.type === "pptx"
+                      ? "PRESENTATION"
                       : "ARTICLE"}
+
                   </span>
 
                 </div>
 
 
+                {/* CARD CONTENT */}
+
                 <div className="card-content">
 
-                  <h3>{article.title}</h3>
+                  <h3>
+                    {article.title}
+                  </h3>
 
-                  <p>{article.excerpt}</p>
+                  <p>
+                    {article.excerpt}
+                  </p>
+
 
                   <div className="article-meta">
 
-                    <span>{article.author}</span>
+                    <span>
+                      {article.author}
+                    </span>
 
                     <span>•</span>
 
-                    <span>{article.date}</span>
+                    <span>
+                      {article.date}
+                    </span>
 
                   </div>
 
                 </div>
 
 
+                {/* CARD BUTTON */}
+
                 <button
                   className="read-button"
-                  onClick={() => setSelectedArticle(article)}
+                  onClick={() =>
+                    setSelectedArticle(article)
+                  }
                 >
+
                   <span>
+
                     {article.type === "pdf"
                       ? "View PDF"
+                      : article.type === "pptx"
+                      ? "Start Presentation"
                       : "Start Reading"}
+
                   </span>
 
-                  <span className="button-arrow">→</span>
+                  <span className="button-arrow">
+                    →
+                  </span>
+
                 </button>
 
               </article>
@@ -375,14 +567,23 @@ function Library() {
 
         ) : (
 
+          /* =================================================
+             NO RESULTS
+          ================================================= */
+
           <div className="no-results">
 
-            <div className="no-results-icon">⌕</div>
+            <div className="no-results-icon">
+              ⌕
+            </div>
 
-            <h3>No resources found</h3>
+            <h3>
+              No resources found
+            </h3>
 
             <p>
-              Try searching with another keyword or category.
+              Try searching with another keyword
+              or category.
             </p>
 
             <button
@@ -401,15 +602,18 @@ function Library() {
       </main>
 
 
-      {/* =================================================
-          FULL SCREEN READING MODE
-      ================================================= */}
+      {/* =====================================================
+          FULL-SCREEN READER
+      ===================================================== */}
 
       {selectedArticle && (
 
         <div className="reader-overlay">
 
-          {/* READER TOP BAR */}
+
+          {/* =================================================
+              READER HEADER
+          ================================================= */}
 
           <header className="reader-header">
 
@@ -430,6 +634,7 @@ function Library() {
 
             <div className="reader-actions">
 
+
               {/* DOWNLOAD PDF */}
 
               {selectedArticle.type === "pdf" && (
@@ -440,22 +645,6 @@ function Library() {
                   className="download-button"
                 >
                   ↓ Download PDF
-                </a>
-
-              )}
-
-
-              {/* OPEN ORIGINAL BLOG */}
-
-              {selectedArticle.type === "blogger" && (
-
-                <a
-                  href={selectedArticle.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="original-button"
-                >
-                  Open Original ↗
                 </a>
 
               )}
@@ -477,72 +666,7 @@ function Library() {
 
 
           {/* =================================================
-              PDF READING MODE
-          ================================================= */}
-
-          {selectedArticle.type === "pdf" && (
-
-            <main className="fullscreen-pdf">
-
-              <div className="reader-title-area">
-
-                <span>{selectedArticle.category}</span>
-
-                <h1>
-                  {selectedArticle.title}
-                </h1>
-
-              </div>
-
-              <iframe
-                src={selectedArticle.pdfUrl}
-                title={selectedArticle.title}
-                className="fullscreen-pdf-frame"
-              />
-
-            </main>
-
-          )}
-
-
-          {/* =================================================
-              BLOGGER READING MODE
-          ================================================= */}
-
-          {selectedArticle.type === "blogger" && (
-
-            <main className="fullscreen-blog">
-
-              <iframe
-                src={selectedArticle.url}
-                title={selectedArticle.title}
-                className="fullscreen-blog-frame"
-              />
-
-              <div className="blog-fallback">
-
-                <p>
-                  If embedding is restricted by the publisher,
-                  open the original article.
-                </p>
-
-                <a
-                  href={selectedArticle.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Open Original Article
-                </a>
-
-              </div>
-
-            </main>
-
-          )}
-
-
-          {/* =================================================
-              WRITTEN ARTICLE READING MODE
+              WRITTEN ARTICLE
           ================================================= */}
 
           {selectedArticle.type === "article" && (
@@ -551,13 +675,16 @@ function Library() {
 
               <div className="reading-container">
 
+
                 <div className="reading-category">
                   {selectedArticle.category}
                 </div>
 
+
                 <h1>
                   {selectedArticle.title}
                 </h1>
+
 
                 <p className="reading-excerpt">
                   {selectedArticle.excerpt}
@@ -591,8 +718,85 @@ function Library() {
                 <article
                   className="article-body"
                   dangerouslySetInnerHTML={{
-                    __html: selectedArticle.content,
+                    __html:
+                      selectedArticle.content,
                   }}
+                />
+
+              </div>
+
+            </main>
+
+          )}
+
+
+          {/* =================================================
+              BLOGGER ARTICLE
+          ================================================= */}
+
+          {selectedArticle.type === "blogger" && (
+
+            <main className="fullscreen-blog">
+
+              <iframe
+                src={selectedArticle.url}
+                title={selectedArticle.title}
+                className="fullscreen-blog-frame"
+              />
+
+            </main>
+
+          )}
+
+
+          {/* =================================================
+              PDF VIEWER
+          ================================================= */}
+
+          {selectedArticle.type === "pdf" && (
+
+            <main className="fullscreen-pdf">
+
+
+              <div className="reader-title-area">
+
+                <span>
+                  {selectedArticle.category}
+                </span>
+
+                <h1>
+                  {selectedArticle.title}
+                </h1>
+
+              </div>
+
+
+              <iframe
+                src={selectedArticle.pdfUrl}
+                title={selectedArticle.title}
+                className="fullscreen-pdf-frame"
+              />
+
+            </main>
+
+          )}
+
+
+          {/* =================================================
+              GOOGLE SLIDES / PPTX PRESENTATION
+          ================================================= */}
+
+          {selectedArticle.type === "pptx" && (
+
+            <main className="fullscreen-presentation">
+
+              <div className="presentation-container">
+
+                <iframe
+                  src={selectedArticle.pptxUrl}
+                  title={selectedArticle.title}
+                  className="presentation-frame"
+                  allowFullScreen
                 />
 
               </div>
