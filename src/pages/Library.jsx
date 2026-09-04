@@ -199,7 +199,7 @@ const resources = [
     date: "September 2026",
     meta: "Presentation",
     pptxUrl:
-      "https://docs.google.com/presentation/d/1C9YANQ-xYPAqrC8ePiNfeSZIE4UVTzHR/embed?start=false&loop=false&delayms=0",
+      "https://docs.google.com/presentation/d/13NtC7DuyPTB6Syjx_xUCJLi5c6lykr0G/embed?start=false&loop=false&delayms=0",
   },
 ];
 
