@@ -1,486 +1,447 @@
-import { useMemo, useState, useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import "../Library.css";
-
-/* =========================================================
-   MANUALLY ADD YOUR BLOGGER ARTICLES HERE
-   ========================================================= */
+import React, { useMemo, useState } from "react";
+import "./Library.css";
 
 const articles = [
   {
-    id: "milk-fever",
-    title: "MILK FEVER",
-    category: "Veterinary Medicine",
-    author: "VFAW",
-    date: "September 02, 2026",
-    readTime: "10 min read",
-    image: "",
-    url: "https://vfaw.blogspot.com/2026/09/milk-fever.html",
+    id: 1,
+    type: "article",
+    category: "Animal Welfare",
+    title: "The Importance of Humane Animal Welfare",
     excerpt:
-      "A detailed overview of milk fever in dairy cows, including hypocalcaemia, calcium homeostasis, risk factors, mineral management, DCAD, prevention, and transition cow management.",
+      "Understanding the importance of compassion, ethical treatment, responsible ownership, and welfare-centered veterinary practice.",
+    author: "Vets For Animal Welfare",
+    date: "September 4, 2026",
+    readTime: "5 min read",
+    content: `
+      <h2>Introduction</h2>
+
+      <p>
+        Animal welfare is an essential part of responsible veterinary practice.
+        It focuses on the physical health, mental well-being, and quality of life
+        of animals.
+      </p>
+
+      <p>
+        Veterinary professionals play an important role in protecting animals
+        from unnecessary pain, suffering, neglect, and poor management.
+      </p>
+
+      <h2>Why Animal Welfare Matters</h2>
+
+      <p>
+        Good animal welfare allows animals to live healthy and productive lives
+        while ensuring that their physical and behavioural needs are respected.
+      </p>
+
+      <h2>The Role of Veterinary Professionals</h2>
+
+      <p>
+        Veterinarians are not only responsible for diagnosing and treating
+        diseases. They also have an important responsibility to promote humane
+        handling, pain management, preventive healthcare, responsible ownership,
+        and ethical decision-making.
+      </p>
+
+      <h2>Conclusion</h2>
+
+      <p>
+        Animal welfare should be integrated into every aspect of veterinary
+        practice. Compassionate care, scientific knowledge, and ethical
+        responsibility together form the foundation of better animal welfare.
+      </p>
+    `,
   },
 
-  /*
-   * ADD MORE ARTICLES LIKE THIS:
-   *
-   * {
-   *   id: "another-article",
-   *   title: "Another Article",
-   *   category: "Animal Welfare",
-   *   author: "VFAW",
-   *   date: "September 10, 2026",
-   *   readTime: "5 min read",
-   *   image: "",
-   *   url: "https://vfaw.blogspot.com/2026/09/another-article.html",
-   *   excerpt:
-   *     "Short description of the article.",
-   * },
-   */
+  {
+    id: 2,
+    type: "blogger",
+    category: "VFAW Articles",
+    title: "Milk Fever",
+    excerpt:
+      "An educational article about milk fever and its importance in veterinary practice.",
+    author: "Vets For Animal Welfare",
+    date: "September 2026",
+    readTime: "Article",
+    url: "https://vfaw.blogspot.com/2026/09/milk-fever.html",
+  },
+
+  {
+    id: 3,
+    type: "pdf",
+    category: "Veterinary Notes",
+    title: "Veterinary Hematology Notes",
+    excerpt:
+      "Reference material covering basic hematological tools, blood components, and common laboratory techniques.",
+    author: "Vets For Animal Welfare",
+    date: "2026",
+    readTime: "PDF",
+    pdfUrl: "/pdfs/veterinary-hematology.pdf",
+  },
+
+  {
+    id: 4,
+    type: "article",
+    category: "Veterinary Medicine",
+    title: "Understanding Blood Components",
+    excerpt:
+      "A simple introduction to whole blood, plasma, serum, red blood cells, white blood cells, and platelets.",
+    author: "VFAW Education",
+    date: "September 2026",
+    readTime: "7 min read",
+    content: `
+      <h2>Introduction</h2>
+
+      <p>
+        Blood is a specialized connective tissue that performs several
+        essential functions in the body. It transports oxygen and nutrients,
+        removes metabolic waste, participates in immunity, and helps maintain
+        homeostasis.
+      </p>
+
+      <h2>Whole Blood</h2>
+
+      <p>
+        Whole blood contains all major cellular and liquid components of blood.
+        These include red blood cells, white blood cells, platelets, and plasma.
+      </p>
+
+      <h2>Plasma</h2>
+
+      <p>
+        Plasma is the liquid portion of anticoagulated blood. It contains water,
+        proteins, electrolytes, nutrients, hormones, and other dissolved
+        substances.
+      </p>
+
+      <h2>Serum</h2>
+
+      <p>
+        Serum is the liquid portion obtained after blood has clotted. Unlike
+        plasma, serum does not contain fibrinogen and most clotting factors that
+        have been consumed during coagulation.
+      </p>
+
+      <h2>Major Cellular Components</h2>
+
+      <ul>
+        <li><strong>Red blood cells:</strong> Primarily responsible for oxygen transport.</li>
+        <li><strong>White blood cells:</strong> Important components of the immune system.</li>
+        <li><strong>Platelets:</strong> Participate in primary hemostasis and blood clot formation.</li>
+      </ul>
+
+      <h2>Conclusion</h2>
+
+      <p>
+        Understanding the basic components of blood is essential before
+        performing hematological investigations and interpreting laboratory
+        results.
+      </p>
+    `,
+  },
+
+  {
+    id: 5,
+    type: "blogger",
+    category: "VFAW Articles",
+    title: "VFAW Educational Articles",
+    excerpt:
+      "Explore educational articles published by Vets For Animal Welfare.",
+    author: "Vets For Animal Welfare",
+    date: "2026",
+    readTime: "External Article",
+    url: "https://vfaw.blogspot.com/",
+  },
 ];
 
-const Library = () => {
-  const { blogId } = useParams();
-  const navigate = useNavigate();
-
+function Library() {
+  const [selectedArticle, setSelectedArticle] = useState(null);
   const [search, setSearch] = useState("");
-  const [darkMode, setDarkMode] = useState(false);
-  const [readingProgress, setReadingProgress] = useState(0);
+  const [category, setCategory] = useState("All");
 
-  /* =========================================================
-     SELECT ARTICLE
-     ========================================================= */
-
-  const selectedArticle = articles.find(
-    (article) => article.id === blogId
-  );
-
-  /* =========================================================
-     READING PROGRESS
-     ========================================================= */
-
-  useEffect(() => {
-    if (!selectedArticle) {
-      setReadingProgress(0);
-      return;
-    }
-
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-
-      const documentHeight =
-        document.documentElement.scrollHeight -
-        window.innerHeight;
-
-      if (documentHeight <= 0) {
-        setReadingProgress(0);
-        return;
-      }
-
-      const progress =
-        (scrollTop / documentHeight) * 100;
-
-      setReadingProgress(
-        Math.min(100, Math.max(0, progress))
-      );
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    handleScroll();
-
-    return () => {
-      window.removeEventListener(
-        "scroll",
-        handleScroll
-      );
-    };
-  }, [selectedArticle]);
-
-  /* =========================================================
-     SCROLL TO TOP
-     ========================================================= */
-
-  useEffect(() => {
-    if (selectedArticle) {
-      window.scrollTo({
-        top: 0,
-        behavior: "instant",
-      });
-    }
-  }, [selectedArticle]);
-
-  /* =========================================================
-     SEARCH
-     ========================================================= */
+  const categories = useMemo(() => {
+    return ["All", ...new Set(articles.map((article) => article.category))];
+  }, []);
 
   const filteredArticles = useMemo(() => {
-    const query = search.trim().toLowerCase();
-
-    if (!query) {
-      return articles;
-    }
-
     return articles.filter((article) => {
-      return (
-        article.title.toLowerCase().includes(query) ||
-        article.category.toLowerCase().includes(query) ||
-        article.author.toLowerCase().includes(query) ||
-        article.excerpt.toLowerCase().includes(query)
-      );
+      const matchesSearch =
+        article.title.toLowerCase().includes(search.toLowerCase()) ||
+        article.excerpt.toLowerCase().includes(search.toLowerCase()) ||
+        article.category.toLowerCase().includes(search.toLowerCase());
+
+      const matchesCategory =
+        category === "All" || article.category === category;
+
+      return matchesSearch && matchesCategory;
     });
-  }, [search]);
+  }, [search, category]);
 
-  /* =========================================================
-     ARTICLE READING PAGE
-     ========================================================= */
-
-  if (selectedArticle) {
-    return (
-      <div
-        className={`article-page ${
-          darkMode ? "article-dark-mode" : ""
-        }`}
-      >
-        {/* Reading progress */}
-        <div
-          className="reading-progress"
-          style={{
-            width: `${readingProgress}%`,
-          }}
-        />
-
-        {/* Header */}
-        <header className="article-header">
-          <div className="article-header-inner">
-            <button
-              type="button"
-              className="article-back-button"
-              onClick={() => navigate("/library")}
-            >
-              ← Back to Library
-            </button>
-
-            <button
-              type="button"
-              className="article-theme-button"
-              onClick={() =>
-                setDarkMode((previous) => !previous)
-              }
-              aria-label="Toggle dark mode"
-            >
-              {darkMode ? "☀️" : "🌙"}
-            </button>
-          </div>
-        </header>
-
-        {/* Article */}
-        <main className="article-document">
-
-          {/* Heading */}
-          <div className="article-heading">
-
-            <span className="article-category">
-              {selectedArticle.category}
-            </span>
-
-            <h1 className="article-title">
-              {selectedArticle.title}
-            </h1>
-
-            <div className="article-meta">
-
-              <span>
-                By {selectedArticle.author}
-              </span>
-
-              <span>•</span>
-
-              <span>
-                {selectedArticle.date}
-              </span>
-
-              <span>•</span>
-
-              <span>
-                {selectedArticle.readTime}
-              </span>
-
-            </div>
-          </div>
-
-          {/* Hero Image */}
-          {selectedArticle.image && (
-            <figure className="article-hero">
-              <img
-                src={selectedArticle.image}
-                alt={selectedArticle.title}
-                className="article-hero-image"
-              />
-            </figure>
-          )}
-
-          {/* Blogger article */}
-          <section className="blogger-reader-section">
-
-            <div className="blogger-reader">
-
-              <iframe
-                src={selectedArticle.url}
-                title={selectedArticle.title}
-                loading="lazy"
-                allowFullScreen
-              />
-
-            </div>
-
-          </section>
-
-          {/* Article footer */}
-          <div className="article-end">
-
-            <div className="article-end-line" />
-
-            <p>
-              You have reached the end of this article.
-            </p>
-
-            <button
-              type="button"
-              className="article-back-to-library"
-              onClick={() => navigate("/library")}
-            >
-              ← Explore More Articles
-            </button>
-
-          </div>
-
-        </main>
-      </div>
-    );
-  }
-
-  /* =========================================================
-     LIBRARY PAGE
-     ========================================================= */
+  const closeReader = () => {
+    setSelectedArticle(null);
+  };
 
   return (
     <div className="library-page">
-
       {/* HERO */}
       <section className="library-hero">
+        <div className="library-hero-content">
+          <span className="library-label">VFAW KNOWLEDGE LIBRARY</span>
 
-        <div className="library-container">
+          <h1>
+            Learn. Explore.
+            <br />
+            <span>Make a Difference.</span>
+          </h1>
 
-          <div className="library-hero-content">
-
-            <span className="library-eyebrow">
-              VFAW KNOWLEDGE CENTER
-            </span>
-
-            <h1 className="library-title">
-              Articles & Resources
-            </h1>
-
-            <p className="library-description">
-              Explore veterinary knowledge, animal welfare
-              resources, educational articles, and practical
-              information from VFAW.
-            </p>
-
-            {/* SEARCH */}
-            <div className="library-search">
-
-              <span
-                className="library-search-icon"
-                aria-hidden="true"
-              >
-                🔍
-              </span>
-
-              <input
-                type="search"
-                value={search}
-                onChange={(event) =>
-                  setSearch(event.target.value)
-                }
-                placeholder="Search articles, topics, or authors..."
-                aria-label="Search articles"
-              />
-
-              {search && (
-                <button
-                  type="button"
-                  className="library-search-clear"
-                  onClick={() => setSearch("")}
-                  aria-label="Clear search"
-                >
-                  ×
-                </button>
-              )}
-
-            </div>
-
-          </div>
-
+          <p>
+            Explore veterinary articles, educational resources, research
+            materials, and animal welfare publications.
+          </p>
         </div>
-
       </section>
 
-      {/* MAIN */}
-      <main className="library-container library-main">
-
-        {/* RESULTS HEADER */}
-        <div className="library-results-header">
-
+      {/* LIBRARY CONTENT */}
+      <main className="library-container">
+        <div className="library-header">
           <div>
+            <span className="section-small-title">RESOURCE CENTER</span>
 
-            <h2>
-              Latest Articles
-            </h2>
+            <h2>Articles & Resources</h2>
 
             <p>
-              {filteredArticles.length}{" "}
-              {filteredArticles.length === 1
-                ? "article"
-                : "articles"}{" "}
-              available
+              Knowledge and educational resources for veterinary students,
+              professionals, animal lovers, and welfare advocates.
             </p>
-
           </div>
-
         </div>
 
-        {/* BLOG GRID */}
-        {filteredArticles.length > 0 ? (
+        {/* SEARCH + FILTER */}
+        <div className="library-controls">
+          <div className="library-search">
+            <svg
+              viewBox="0 0 24 24"
+              width="20"
+              height="20"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <circle cx="11" cy="11" r="7" />
+              <path d="m20 20-4-4" />
+            </svg>
 
-          <div className="blog-grid">
+            <input
+              type="text"
+              placeholder="Search articles, topics or resources..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
 
-            {filteredArticles.map((article) => (
-
-              <article
-                key={article.id}
-                className="blog-card"
+            {search && (
+              <button
+                className="clear-search"
+                onClick={() => setSearch("")}
+                aria-label="Clear search"
               >
-
-                {/* IMAGE */}
-                <Link
-                  to={`/library/blog/${article.id}`}
-                  className="blog-card-image-link"
-                >
-
-                  <div className="blog-card-image">
-
-                    {article.image ? (
-                      <img
-                        src={article.image}
-                        alt={article.title}
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div className="blog-image-placeholder">
-                        <span>VFAW</span>
-                      </div>
-                    )}
-
-                    <span className="blog-card-category">
-                      {article.category}
-                    </span>
-
-                  </div>
-
-                </Link>
-
-                {/* CONTENT */}
-                <div className="blog-card-content">
-
-                  <div className="blog-card-meta">
-
-                    <span>
-                      {article.date}
-                    </span>
-
-                    <span>•</span>
-
-                    <span>
-                      {article.readTime}
-                    </span>
-
-                  </div>
-
-                  <h3 className="blog-card-title">
-
-                    <Link
-                      to={`/library/blog/${article.id}`}
-                    >
-                      {article.title}
-                    </Link>
-
-                  </h3>
-
-                  <p className="blog-card-excerpt">
-                    {article.excerpt}
-                  </p>
-
-                  <div className="blog-card-footer">
-
-                    <span className="blog-card-author">
-                      By {article.author}
-                    </span>
-
-                    <Link
-                      to={`/library/blog/${article.id}`}
-                      className="blog-read-more"
-                    >
-                      Read Article
-                      <span aria-hidden="true">
-                        →
-                      </span>
-                    </Link>
-
-                  </div>
-
-                </div>
-
-              </article>
-
-            ))}
-
+                ×
+              </button>
+            )}
           </div>
 
+          <div className="category-filter">
+            {categories.map((item) => (
+              <button
+                key={item}
+                className={category === item ? "active" : ""}
+                onClick={() => setCategory(item)}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* RESULTS */}
+        <div className="library-results">
+          <span>
+            {filteredArticles.length}{" "}
+            {filteredArticles.length === 1 ? "resource" : "resources"}
+          </span>
+        </div>
+
+        {/* ARTICLE GRID */}
+        {filteredArticles.length > 0 ? (
+          <div className="library-grid">
+            {filteredArticles.map((article) => (
+              <article className="library-card" key={article.id}>
+                <div className="card-top">
+                  <span className="article-category">
+                    {article.category}
+                  </span>
+
+                  <span className="article-type">
+                    {article.type === "pdf"
+                      ? "PDF"
+                      : article.type === "blogger"
+                      ? "BLOG"
+                      : "ARTICLE"}
+                  </span>
+                </div>
+
+                <div className="card-content">
+                  <h3>{article.title}</h3>
+
+                  <p>{article.excerpt}</p>
+
+                  <div className="article-meta">
+                    <span>{article.author}</span>
+                    <span>•</span>
+                    <span>{article.date}</span>
+                  </div>
+                </div>
+
+                <button
+                  className="read-button"
+                  onClick={() => setSelectedArticle(article)}
+                >
+                  {article.type === "pdf"
+                    ? "Read PDF"
+                    : article.type === "blogger"
+                    ? "Read Article"
+                    : "Read Article"}
+
+                  <span>→</span>
+                </button>
+              </article>
+            ))}
+          </div>
         ) : (
+          <div className="no-results">
+            <div className="no-results-icon">⌕</div>
 
-          /* NO RESULTS */
-          <div className="library-empty">
-
-            <div className="library-empty-icon">
-              🔎
-            </div>
-
-            <h3>
-              No articles found
-            </h3>
+            <h3>No resources found</h3>
 
             <p>
-              We couldn't find an article matching "
-              {search}".
+              Try searching with another keyword or select a different
+              category.
             </p>
 
             <button
-              type="button"
-              onClick={() => setSearch("")}
-              className="library-empty-button"
+              onClick={() => {
+                setSearch("");
+                setCategory("All");
+              }}
             >
-              Clear Search
+              Clear Filters
             </button>
-
           </div>
-
         )}
-
       </main>
 
+      {/* READING MODAL */}
+      {selectedArticle && (
+        <div className="reader-overlay" onClick={closeReader}>
+          <div
+            className={`reader-modal ${
+              selectedArticle.type === "pdf" ? "pdf-reader" : ""
+            }`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* READER HEADER */}
+            <div className="reader-header">
+              <div>
+                <span className="reader-category">
+                  {selectedArticle.category}
+                </span>
+
+                <h2>{selectedArticle.title}</h2>
+              </div>
+
+              <button
+                className="reader-close"
+                onClick={closeReader}
+                aria-label="Close reader"
+              >
+                ×
+              </button>
+            </div>
+
+            {/* PDF */}
+            {selectedArticle.type === "pdf" && (
+              <div className="pdf-container">
+                <iframe
+                  src={selectedArticle.pdfUrl}
+                  title={selectedArticle.title}
+                  className="pdf-frame"
+                />
+
+                <div className="pdf-fallback">
+                  <p>
+                    If the PDF does not appear, open it directly in a new tab.
+                  </p>
+
+                  <a
+                    href={selectedArticle.pdfUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Open PDF
+                  </a>
+                </div>
+              </div>
+            )}
+
+            {/* BLOGGER */}
+            {selectedArticle.type === "blogger" && (
+              <div className="blogger-container">
+                <iframe
+                  src={selectedArticle.url}
+                  title={selectedArticle.title}
+                  className="blogger-frame"
+                  loading="lazy"
+                />
+
+                <div className="external-article">
+                  <p>
+                    If the article cannot be displayed inside the reader,
+                    open it directly.
+                  </p>
+
+                  <a
+                    href={selectedArticle.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Open Original Article →
+                  </a>
+                </div>
+              </div>
+            )}
+
+            {/* WRITTEN ARTICLE */}
+            {selectedArticle.type === "article" && (
+              <div className="article-reader">
+                <div className="article-information">
+                  <span>{selectedArticle.author}</span>
+                  <span>•</span>
+                  <span>{selectedArticle.date}</span>
+                  <span>•</span>
+                  <span>{selectedArticle.readTime}</span>
+                </div>
+
+                <div
+                  className="article-body"
+                  dangerouslySetInnerHTML={{
+                    __html: selectedArticle.content,
+                  }}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
-};
+}
 
 export default Library;
