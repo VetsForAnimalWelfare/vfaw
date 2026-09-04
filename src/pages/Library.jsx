@@ -1,15 +1,5 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import "../Library.css";
-
-/* =====================================================
-   LIBRARY ARTICLES
-
-   TYPES AVAILABLE:
-
-   1. article  = Write the complete article inside content
-   2. pdf      = Add a PDF link
-   3. blogger  = Add a Blogger/article website link
-===================================================== */
 
 const articles = [
   {
@@ -35,7 +25,6 @@ const articles = [
     author: "Vets For Animal Welfare",
     date: "September 2026",
     readTime: "5 min read",
-
     content: `
       <h2>Introduction</h2>
 
@@ -48,26 +37,26 @@ const articles = [
       <h2>Why Animal Welfare Matters</h2>
 
       <p>
-        Animals play an important role in agriculture, food production,
+        Animals play important roles in agriculture, food production,
         companionship, research, ecosystems, and society. Ensuring good welfare
-        improves both the quality of life of animals and the sustainability of
-        animal production systems.
+        improves the quality of life of animals and supports sustainable animal
+        production systems.
       </p>
 
       <h2>The Role of Veterinarians</h2>
 
       <p>
-        Veterinarians have an important responsibility to diagnose and treat
-        disease while also promoting humane treatment, preventive healthcare,
-        responsible ownership, and ethical animal management.
+        Veterinarians diagnose and treat disease while also promoting humane
+        treatment, preventive healthcare, responsible ownership, and ethical
+        animal management.
       </p>
 
       <h2>Conclusion</h2>
 
       <p>
-        Animal welfare is not only about preventing cruelty. It is about
-        creating conditions that allow animals to live healthy and comfortable
-        lives.
+        Animal welfare is not only about preventing cruelty. It is also about
+        creating conditions that allow animals to live healthy, safe, and
+        comfortable lives.
       </p>
     `,
   },
@@ -78,17 +67,16 @@ const articles = [
     category: "Veterinary Education",
     title: "Understanding Whole Blood, Plasma and Serum",
     excerpt:
-      "A simple guide to understanding the important components and fractions obtained from blood.",
+      "A simple guide to understanding important blood components and the fractions obtained from blood.",
     author: "VFAW Education",
     date: "September 2026",
     readTime: "7 min read",
-
     content: `
       <h2>Whole Blood</h2>
 
       <p>
-        Whole blood is blood collected from the body that contains both cellular
-        components and the liquid component called plasma.
+        Whole blood contains both cellular components and the liquid component
+        known as plasma.
       </p>
 
       <h2>Major Components</h2>
@@ -103,42 +91,18 @@ const articles = [
       <h2>Plasma</h2>
 
       <p>
-        Plasma is the liquid part of anticoagulated blood. It contains water,
-        proteins, electrolytes, nutrients, hormones, and clotting factors.
+        Plasma is the liquid component of anticoagulated blood. It contains
+        water, proteins, electrolytes, nutrients, hormones, and clotting factors.
       </p>
 
       <h2>Serum</h2>
 
       <p>
-        Serum is obtained after blood has clotted. It does not contain
-        fibrinogen because fibrinogen is consumed during the clotting process.
-      </p>
-
-      <h2>Why is this Important?</h2>
-
-      <p>
-        Understanding these differences is important when collecting blood
-        samples and interpreting laboratory tests in veterinary practice.
+        Serum is obtained after blood has clotted. Unlike plasma, it does not
+        contain fibrinogen because fibrinogen participates in clot formation.
       </p>
     `,
   },
-
-  /*
-  =====================================================
-  PDF EXAMPLE
-
-  To use this article:
-
-  1. Put your PDF inside:
-     public/pdfs/
-
-  Example:
-     public/pdfs/hematology.pdf
-
-  Then use:
-     pdfUrl: "/pdfs/hematology.pdf"
-  =====================================================
-  */
 
   {
     id: 4,
@@ -159,11 +123,10 @@ const articles = [
     category: "Veterinary Education",
     title: "Introduction to Hematological Examination",
     excerpt:
-      "A basic introduction to the examination of blood and its importance in veterinary diagnosis.",
+      "A basic introduction to blood examination and its importance in veterinary diagnosis.",
     author: "VFAW Education",
     date: "September 2026",
     readTime: "6 min read",
-
     content: `
       <h2>What is Hematology?</h2>
 
@@ -172,7 +135,7 @@ const articles = [
         important role in the diagnosis and monitoring of many diseases.
       </p>
 
-      <h2>Important Hematological Components</h2>
+      <h2>Important Components</h2>
 
       <ul>
         <li>Red Blood Cells</li>
@@ -185,45 +148,26 @@ const articles = [
       <h2>Importance in Veterinary Practice</h2>
 
       <p>
-        Hematological examination can help veterinarians identify anemia,
-        infection, inflammation, blood loss, and many other pathological
-        conditions.
-      </p>
-
-      <h2>Conclusion</h2>
-
-      <p>
-        Basic knowledge of hematology is essential for interpreting laboratory
-        findings and making informed clinical decisions.
+        Hematological examination helps veterinarians identify anemia,
+        infection, inflammation, blood loss, and other pathological conditions.
       </p>
     `,
   },
 ];
-
-
-/* =====================================================
-   LIBRARY COMPONENT
-===================================================== */
 
 function Library() {
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
 
-
-  /* Get all categories automatically */
-
   const categories = useMemo(() => {
     return ["All", ...new Set(articles.map((article) => article.category))];
   }, []);
 
-
-  /* Search and category filtering */
-
   const filteredArticles = useMemo(() => {
-    return articles.filter((article) => {
-      const searchText = search.toLowerCase();
+    const searchText = search.toLowerCase();
 
+    return articles.filter((article) => {
       const matchesSearch =
         article.title.toLowerCase().includes(searchText) ||
         article.excerpt.toLowerCase().includes(searchText) ||
@@ -236,76 +180,88 @@ function Library() {
     });
   }, [search, category]);
 
-
-  /* Close article reader */
-
   const closeReader = () => {
     setSelectedArticle(null);
   };
 
+  /* Lock background scrolling when reading */
+  useEffect(() => {
+    if (selectedArticle) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [selectedArticle]);
 
   return (
     <div className="library-page">
 
-      {/* ================= HERO ================= */}
+      {/* HERO */}
 
       <section className="library-hero">
         <div className="library-hero-content">
 
-          <span className="library-label">
+          <div className="library-badge">
             VFAW KNOWLEDGE LIBRARY
-          </span>
+          </div>
 
           <h1>
-            Learn. Explore.
+            Explore Knowledge.
             <br />
-            <span>Make a Difference.</span>
+            <span>Expand Your Impact.</span>
           </h1>
 
           <p>
-            Explore veterinary articles, educational resources,
-            study materials, animal welfare publications, and
-            professional learning resources.
+            Discover veterinary articles, educational resources,
+            professional publications, study materials and
+            animal welfare knowledge.
           </p>
 
         </div>
       </section>
 
 
-      {/* ================= MAIN CONTENT ================= */}
+      {/* LIBRARY */}
 
       <main className="library-container">
 
         <div className="library-header">
 
-          <span className="section-small-title">
-            RESOURCE CENTER
-          </span>
+          <div>
+            <span className="section-small-title">
+              KNOWLEDGE RESOURCE CENTER
+            </span>
 
-          <h2>
-            Articles & Resources
-          </h2>
+            <h2>Explore Our Library</h2>
 
-          <p>
-            Explore educational articles, veterinary resources,
-            study materials, PDFs, and publications from
-            Vets For Animal Welfare.
-          </p>
+            <p>
+              Carefully selected articles, veterinary resources,
+              educational materials and professional publications.
+            </p>
+          </div>
+
+          <div className="library-count">
+            {articles.length}
+            <span> Resources</span>
+          </div>
 
         </div>
 
 
-        {/* ================= SEARCH ================= */}
+        {/* SEARCH */}
 
         <div className="library-controls">
 
           <div className="library-search">
-
-            <span>⌕</span>
+            <span className="search-icon">⌕</span>
 
             <input
               type="text"
-              placeholder="Search articles, topics or resources..."
+              placeholder="Search articles and resources..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -314,52 +270,40 @@ function Library() {
               <button
                 className="clear-search"
                 onClick={() => setSearch("")}
-                aria-label="Clear search"
               >
                 ×
               </button>
             )}
-
-          </div>
-
-
-          {/* ================= CATEGORY FILTER ================= */}
-
-          <div className="category-filter">
-
-            {categories.map((item) => (
-
-              <button
-                key={item}
-                className={
-                  category === item ? "active" : ""
-                }
-                onClick={() => setCategory(item)}
-              >
-                {item}
-              </button>
-
-            ))}
-
           </div>
 
         </div>
 
 
-        {/* ================= RESULTS COUNT ================= */}
+        {/* CATEGORY FILTER */}
+
+        <div className="category-filter">
+
+          {categories.map((item) => (
+            <button
+              key={item}
+              className={category === item ? "active" : ""}
+              onClick={() => setCategory(item)}
+            >
+              {item}
+            </button>
+          ))}
+
+        </div>
+
+
+        {/* RESULTS */}
 
         <div className="library-results">
-
-          {filteredArticles.length}{" "}
-
-          {filteredArticles.length === 1
-            ? "resource found"
-            : "resources found"}
-
+          Showing {filteredArticles.length} resources
         </div>
 
 
-        {/* ================= ARTICLE GRID ================= */}
+        {/* ARTICLE CARDS */}
 
         {filteredArticles.length > 0 ? (
 
@@ -372,6 +316,8 @@ function Library() {
                 key={article.id}
               >
 
+                <div className="card-glow"></div>
+
                 <div className="card-top">
 
                   <span className="article-category">
@@ -379,13 +325,11 @@ function Library() {
                   </span>
 
                   <span className="article-type">
-
                     {article.type === "pdf"
                       ? "PDF"
                       : article.type === "blogger"
                       ? "BLOG"
                       : "ARTICLE"}
-
                   </span>
 
                 </div>
@@ -393,32 +337,17 @@ function Library() {
 
                 <div className="card-content">
 
-                  <h3>
-                    {article.title}
-                  </h3>
+                  <h3>{article.title}</h3>
 
-                  <p>
-                    {article.excerpt}
-                  </p>
-
+                  <p>{article.excerpt}</p>
 
                   <div className="article-meta">
 
-                    <span>
-                      {article.author}
-                    </span>
+                    <span>{article.author}</span>
 
                     <span>•</span>
 
-                    <span>
-                      {article.date}
-                    </span>
-
-                    <span>•</span>
-
-                    <span>
-                      {article.readTime}
-                    </span>
+                    <span>{article.date}</span>
 
                   </div>
 
@@ -429,17 +358,13 @@ function Library() {
                   className="read-button"
                   onClick={() => setSelectedArticle(article)}
                 >
-
                   <span>
                     {article.type === "pdf"
-                      ? "Read PDF"
-                      : "Read Article"}
+                      ? "View PDF"
+                      : "Start Reading"}
                   </span>
 
-                  <span>
-                    →
-                  </span>
-
+                  <span className="button-arrow">→</span>
                 </button>
 
               </article>
@@ -452,16 +377,12 @@ function Library() {
 
           <div className="no-results">
 
-            <div className="no-results-icon">
-              ⌕
-            </div>
+            <div className="no-results-icon">⌕</div>
 
-            <h3>
-              No resources found
-            </h3>
+            <h3>No resources found</h3>
 
             <p>
-              Try another search term or category.
+              Try searching with another keyword or category.
             </p>
 
             <button
@@ -470,7 +391,7 @@ function Library() {
                 setCategory("All");
               }}
             >
-              Clear Filters
+              Reset Library
             </button>
 
           </div>
@@ -480,133 +401,170 @@ function Library() {
       </main>
 
 
-      {/* =====================================================
-          ARTICLE / PDF / BLOG READER
-      ===================================================== */}
+      {/* =================================================
+          FULL SCREEN READING MODE
+      ================================================= */}
 
       {selectedArticle && (
 
-        <div
-          className="reader-overlay"
-          onClick={closeReader}
-        >
+        <div className="reader-overlay">
 
-          <div
-            className={
-              `reader-modal ${
-                selectedArticle.type === "pdf"
-                  ? "pdf-reader"
-                  : ""
-              }`
-            }
-            onClick={(e) => e.stopPropagation()}
-          >
+          {/* READER TOP BAR */}
+
+          <header className="reader-header">
+
+            <div className="reader-brand">
+
+              <span className="reader-logo">
+                VFAW
+              </span>
+
+              <span className="reader-divider"></span>
+
+              <span className="reader-section">
+                LIBRARY
+              </span>
+
+            </div>
 
 
-            {/* ================= READER HEADER ================= */}
+            <div className="reader-actions">
 
-            <div className="reader-header">
+              {/* DOWNLOAD PDF */}
 
-              <div>
+              {selectedArticle.type === "pdf" && (
 
-                <span className="reader-category">
-                  {selectedArticle.category}
-                </span>
+                <a
+                  href={selectedArticle.pdfUrl}
+                  download
+                  className="download-button"
+                >
+                  ↓ Download PDF
+                </a>
 
-                <h2>
-                  {selectedArticle.title}
-                </h2>
+              )}
 
-              </div>
 
+              {/* OPEN ORIGINAL BLOG */}
+
+              {selectedArticle.type === "blogger" && (
+
+                <a
+                  href={selectedArticle.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="original-button"
+                >
+                  Open Original ↗
+                </a>
+
+              )}
+
+
+              {/* CLOSE */}
 
               <button
                 className="reader-close"
                 onClick={closeReader}
-                aria-label="Close article"
+                aria-label="Close reader"
               >
                 ×
               </button>
 
             </div>
 
+          </header>
 
-            {/* ================= PDF ================= */}
 
-            {selectedArticle.type === "pdf" && (
+          {/* =================================================
+              PDF READING MODE
+          ================================================= */}
 
-              <div className="pdf-container">
+          {selectedArticle.type === "pdf" && (
 
-                <iframe
-                  src={selectedArticle.pdfUrl}
-                  title={selectedArticle.title}
-                  className="pdf-frame"
-                />
+            <main className="fullscreen-pdf">
 
-                <div className="pdf-fallback">
+              <div className="reader-title-area">
 
-                  <p>
-                    If the PDF does not load,
-                    open it directly.
-                  </p>
+                <span>{selectedArticle.category}</span>
 
-                  <a
-                    href={selectedArticle.pdfUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Open PDF
-                  </a>
-
-                </div>
+                <h1>
+                  {selectedArticle.title}
+                </h1>
 
               </div>
 
-            )}
+              <iframe
+                src={selectedArticle.pdfUrl}
+                title={selectedArticle.title}
+                className="fullscreen-pdf-frame"
+              />
+
+            </main>
+
+          )}
 
 
-            {/* ================= BLOGGER / WEBSITE ARTICLE ================= */}
+          {/* =================================================
+              BLOGGER READING MODE
+          ================================================= */}
 
-            {selectedArticle.type === "blogger" && (
+          {selectedArticle.type === "blogger" && (
 
-              <div className="blogger-container">
+            <main className="fullscreen-blog">
 
-                <iframe
-                  src={selectedArticle.url}
-                  title={selectedArticle.title}
-                  className="blogger-frame"
-                  loading="lazy"
-                />
+              <iframe
+                src={selectedArticle.url}
+                title={selectedArticle.title}
+                className="fullscreen-blog-frame"
+              />
 
-                <div className="external-article">
+              <div className="blog-fallback">
 
-                  <p>
-                    If the article does not display here,
-                    open the original article.
-                  </p>
+                <p>
+                  If embedding is restricted by the publisher,
+                  open the original article.
+                </p>
 
-                  <a
-                    href={selectedArticle.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Open Original Article →
-                  </a>
-
-                </div>
+                <a
+                  href={selectedArticle.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Open Original Article
+                </a>
 
               </div>
 
-            )}
+            </main>
+
+          )}
 
 
-            {/* ================= WRITTEN ARTICLE ================= */}
+          {/* =================================================
+              WRITTEN ARTICLE READING MODE
+          ================================================= */}
 
-            {selectedArticle.type === "article" && (
+          {selectedArticle.type === "article" && (
 
-              <div className="article-reader">
+            <main className="fullscreen-article">
 
-                <div className="article-information">
+              <div className="reading-container">
+
+                <div className="reading-category">
+                  {selectedArticle.category}
+                </div>
+
+                <h1>
+                  {selectedArticle.title}
+                </h1>
+
+                <p className="reading-excerpt">
+                  {selectedArticle.excerpt}
+                </p>
+
+
+                <div className="reading-meta">
 
                   <span>
                     {selectedArticle.author}
@@ -627,7 +585,10 @@ function Library() {
                 </div>
 
 
-                <div
+                <div className="reading-line"></div>
+
+
+                <article
                   className="article-body"
                   dangerouslySetInnerHTML={{
                     __html: selectedArticle.content,
@@ -636,9 +597,9 @@ function Library() {
 
               </div>
 
-            )}
+            </main>
 
-          </div>
+          )}
 
         </div>
 
@@ -647,6 +608,5 @@ function Library() {
     </div>
   );
 }
-
 
 export default Library;
