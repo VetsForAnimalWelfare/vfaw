@@ -1,64 +1,24 @@
 import React, { useMemo, useState } from "react";
 import "../Library.css";
 
+/* =====================================================
+   LIBRARY ARTICLES
+
+   TYPES AVAILABLE:
+
+   1. article  = Write the complete article inside content
+   2. pdf      = Add a PDF link
+   3. blogger  = Add a Blogger/article website link
+===================================================== */
+
 const articles = [
   {
     id: 1,
-    type: "article",
-    category: "Animal Welfare",
-    title: "The Importance of Humane Animal Welfare",
-    excerpt:
-      "Understanding the importance of compassion, ethical treatment, responsible ownership, and welfare-centered veterinary practice.",
-    author: "Vets For Animal Welfare",
-    date: "September 4, 2026",
-    readTime: "5 min read",
-    content: `
-      <h2>Introduction</h2>
-
-      <p>
-        Animal welfare is an essential part of responsible veterinary practice.
-        It focuses on the physical health, mental well-being, and quality of life
-        of animals.
-      </p>
-
-      <p>
-        Veterinary professionals play an important role in protecting animals
-        from unnecessary pain, suffering, neglect, and poor management.
-      </p>
-
-      <h2>Why Animal Welfare Matters</h2>
-
-      <p>
-        Good animal welfare allows animals to live healthy and productive lives
-        while ensuring that their physical and behavioural needs are respected.
-      </p>
-
-      <h2>The Role of Veterinary Professionals</h2>
-
-      <p>
-        Veterinarians are not only responsible for diagnosing and treating
-        diseases. They also have an important responsibility to promote humane
-        handling, pain management, preventive healthcare, responsible ownership,
-        and ethical decision-making.
-      </p>
-
-      <h2>Conclusion</h2>
-
-      <p>
-        Animal welfare should be integrated into every aspect of veterinary
-        practice. Compassionate care, scientific knowledge, and ethical
-        responsibility together form the foundation of better animal welfare.
-      </p>
-    `,
-  },
-
-  {
-    id: 2,
     type: "blogger",
-    category: "VFAW Articles",
+    category: "Veterinary Medicine",
     title: "Milk Fever",
     excerpt:
-      "An educational article about milk fever and its importance in veterinary practice.",
+      "Learn about milk fever, its causes, clinical signs, diagnosis, treatment, and prevention in animals.",
     author: "Vets For Animal Welfare",
     date: "September 2026",
     readTime: "Article",
@@ -66,108 +26,208 @@ const articles = [
   },
 
   {
-    id: 3,
-    type: "pdf",
-    category: "Veterinary Notes",
-    title: "Veterinary Hematology Notes",
+    id: 2,
+    type: "article",
+    category: "Animal Welfare",
+    title: "The Importance of Animal Welfare",
     excerpt:
-      "Reference material covering basic hematological tools, blood components, and common laboratory techniques.",
+      "Understanding why animal welfare is an essential responsibility for veterinarians, owners, and society.",
     author: "Vets For Animal Welfare",
+    date: "September 2026",
+    readTime: "5 min read",
+
+    content: `
+      <h2>Introduction</h2>
+
+      <p>
+        Animal welfare refers to the physical and mental well-being of animals.
+        It includes proper nutrition, suitable housing, disease prevention,
+        humane handling, and protection from unnecessary pain and suffering.
+      </p>
+
+      <h2>Why Animal Welfare Matters</h2>
+
+      <p>
+        Animals play an important role in agriculture, food production,
+        companionship, research, ecosystems, and society. Ensuring good welfare
+        improves both the quality of life of animals and the sustainability of
+        animal production systems.
+      </p>
+
+      <h2>The Role of Veterinarians</h2>
+
+      <p>
+        Veterinarians have an important responsibility to diagnose and treat
+        disease while also promoting humane treatment, preventive healthcare,
+        responsible ownership, and ethical animal management.
+      </p>
+
+      <h2>Conclusion</h2>
+
+      <p>
+        Animal welfare is not only about preventing cruelty. It is about
+        creating conditions that allow animals to live healthy and comfortable
+        lives.
+      </p>
+    `,
+  },
+
+  {
+    id: 3,
+    type: "article",
+    category: "Veterinary Education",
+    title: "Understanding Whole Blood, Plasma and Serum",
+    excerpt:
+      "A simple guide to understanding the important components and fractions obtained from blood.",
+    author: "VFAW Education",
+    date: "September 2026",
+    readTime: "7 min read",
+
+    content: `
+      <h2>Whole Blood</h2>
+
+      <p>
+        Whole blood is blood collected from the body that contains both cellular
+        components and the liquid component called plasma.
+      </p>
+
+      <h2>Major Components</h2>
+
+      <ul>
+        <li>Red Blood Cells</li>
+        <li>White Blood Cells</li>
+        <li>Platelets</li>
+        <li>Plasma</li>
+      </ul>
+
+      <h2>Plasma</h2>
+
+      <p>
+        Plasma is the liquid part of anticoagulated blood. It contains water,
+        proteins, electrolytes, nutrients, hormones, and clotting factors.
+      </p>
+
+      <h2>Serum</h2>
+
+      <p>
+        Serum is obtained after blood has clotted. It does not contain
+        fibrinogen because fibrinogen is consumed during the clotting process.
+      </p>
+
+      <h2>Why is this Important?</h2>
+
+      <p>
+        Understanding these differences is important when collecting blood
+        samples and interpreting laboratory tests in veterinary practice.
+      </p>
+    `,
+  },
+
+  /*
+  =====================================================
+  PDF EXAMPLE
+
+  To use this article:
+
+  1. Put your PDF inside:
+     public/pdfs/
+
+  Example:
+     public/pdfs/hematology.pdf
+
+  Then use:
+     pdfUrl: "/pdfs/hematology.pdf"
+  =====================================================
+  */
+
+  {
+    id: 4,
+    type: "pdf",
+    category: "Study Materials",
+    title: "Basics of Veterinary Hematology",
+    excerpt:
+      "Study material covering important concepts and basic techniques used in veterinary hematology.",
+    author: "VFAW Education",
     date: "2026",
     readTime: "PDF",
     pdfUrl: "/pdfs/veterinary-hematology.pdf",
   },
 
   {
-    id: 4,
+    id: 5,
     type: "article",
-    category: "Veterinary Medicine",
-    title: "Understanding Blood Components",
+    category: "Veterinary Education",
+    title: "Introduction to Hematological Examination",
     excerpt:
-      "A simple introduction to whole blood, plasma, serum, red blood cells, white blood cells, and platelets.",
+      "A basic introduction to the examination of blood and its importance in veterinary diagnosis.",
     author: "VFAW Education",
     date: "September 2026",
-    readTime: "7 min read",
+    readTime: "6 min read",
+
     content: `
-      <h2>Introduction</h2>
+      <h2>What is Hematology?</h2>
 
       <p>
-        Blood is a specialized connective tissue that performs several
-        essential functions in the body. It transports oxygen and nutrients,
-        removes metabolic waste, participates in immunity, and helps maintain
-        homeostasis.
+        Hematology is the study of blood and blood-forming organs. It plays an
+        important role in the diagnosis and monitoring of many diseases.
       </p>
 
-      <h2>Whole Blood</h2>
-
-      <p>
-        Whole blood contains all major cellular and liquid components of blood.
-        These include red blood cells, white blood cells, platelets, and plasma.
-      </p>
-
-      <h2>Plasma</h2>
-
-      <p>
-        Plasma is the liquid portion of anticoagulated blood. It contains water,
-        proteins, electrolytes, nutrients, hormones, and other dissolved
-        substances.
-      </p>
-
-      <h2>Serum</h2>
-
-      <p>
-        Serum is the liquid portion obtained after blood has clotted. Unlike
-        plasma, serum does not contain fibrinogen and most clotting factors that
-        have been consumed during coagulation.
-      </p>
-
-      <h2>Major Cellular Components</h2>
+      <h2>Important Hematological Components</h2>
 
       <ul>
-        <li><strong>Red blood cells:</strong> Primarily responsible for oxygen transport.</li>
-        <li><strong>White blood cells:</strong> Important components of the immune system.</li>
-        <li><strong>Platelets:</strong> Participate in primary hemostasis and blood clot formation.</li>
+        <li>Red Blood Cells</li>
+        <li>White Blood Cells</li>
+        <li>Platelets</li>
+        <li>Hemoglobin</li>
+        <li>Hematocrit</li>
       </ul>
+
+      <h2>Importance in Veterinary Practice</h2>
+
+      <p>
+        Hematological examination can help veterinarians identify anemia,
+        infection, inflammation, blood loss, and many other pathological
+        conditions.
+      </p>
 
       <h2>Conclusion</h2>
 
       <p>
-        Understanding the basic components of blood is essential before
-        performing hematological investigations and interpreting laboratory
-        results.
+        Basic knowledge of hematology is essential for interpreting laboratory
+        findings and making informed clinical decisions.
       </p>
     `,
   },
-
-  {
-    id: 5,
-    type: "blogger",
-    category: "VFAW Articles",
-    title: "VFAW Educational Articles",
-    excerpt:
-      "Explore educational articles published by Vets For Animal Welfare.",
-    author: "Vets For Animal Welfare",
-    date: "2026",
-    readTime: "External Article",
-    url: "https://vfaw.blogspot.com/",
-  },
 ];
+
+
+/* =====================================================
+   LIBRARY COMPONENT
+===================================================== */
 
 function Library() {
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
 
+
+  /* Get all categories automatically */
+
   const categories = useMemo(() => {
     return ["All", ...new Set(articles.map((article) => article.category))];
   }, []);
 
+
+  /* Search and category filtering */
+
   const filteredArticles = useMemo(() => {
     return articles.filter((article) => {
+      const searchText = search.toLowerCase();
+
       const matchesSearch =
-        article.title.toLowerCase().includes(search.toLowerCase()) ||
-        article.excerpt.toLowerCase().includes(search.toLowerCase()) ||
-        article.category.toLowerCase().includes(search.toLowerCase());
+        article.title.toLowerCase().includes(searchText) ||
+        article.excerpt.toLowerCase().includes(searchText) ||
+        article.category.toLowerCase().includes(searchText);
 
       const matchesCategory =
         category === "All" || article.category === category;
@@ -176,16 +236,25 @@ function Library() {
     });
   }, [search, category]);
 
+
+  /* Close article reader */
+
   const closeReader = () => {
     setSelectedArticle(null);
   };
 
+
   return (
     <div className="library-page">
-      {/* HERO */}
+
+      {/* ================= HERO ================= */}
+
       <section className="library-hero">
         <div className="library-hero-content">
-          <span className="library-label">VFAW KNOWLEDGE LIBRARY</span>
+
+          <span className="library-label">
+            VFAW KNOWLEDGE LIBRARY
+          </span>
 
           <h1>
             Learn. Explore.
@@ -194,41 +263,45 @@ function Library() {
           </h1>
 
           <p>
-            Explore veterinary articles, educational resources, research
-            materials, and animal welfare publications.
+            Explore veterinary articles, educational resources,
+            study materials, animal welfare publications, and
+            professional learning resources.
           </p>
+
         </div>
       </section>
 
-      {/* LIBRARY CONTENT */}
+
+      {/* ================= MAIN CONTENT ================= */}
+
       <main className="library-container">
+
         <div className="library-header">
-          <div>
-            <span className="section-small-title">RESOURCE CENTER</span>
 
-            <h2>Articles & Resources</h2>
+          <span className="section-small-title">
+            RESOURCE CENTER
+          </span>
 
-            <p>
-              Knowledge and educational resources for veterinary students,
-              professionals, animal lovers, and welfare advocates.
-            </p>
-          </div>
+          <h2>
+            Articles & Resources
+          </h2>
+
+          <p>
+            Explore educational articles, veterinary resources,
+            study materials, PDFs, and publications from
+            Vets For Animal Welfare.
+          </p>
+
         </div>
 
-        {/* SEARCH + FILTER */}
+
+        {/* ================= SEARCH ================= */}
+
         <div className="library-controls">
+
           <div className="library-search">
-            <svg
-              viewBox="0 0 24 24"
-              width="20"
-              height="20"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <circle cx="11" cy="11" r="7" />
-              <path d="m20 20-4-4" />
-            </svg>
+
+            <span>⌕</span>
 
             <input
               type="text"
@@ -246,84 +319,149 @@ function Library() {
                 ×
               </button>
             )}
+
           </div>
 
+
+          {/* ================= CATEGORY FILTER ================= */}
+
           <div className="category-filter">
+
             {categories.map((item) => (
+
               <button
                 key={item}
-                className={category === item ? "active" : ""}
+                className={
+                  category === item ? "active" : ""
+                }
                 onClick={() => setCategory(item)}
               >
                 {item}
               </button>
+
             ))}
+
           </div>
+
         </div>
 
-        {/* RESULTS */}
+
+        {/* ================= RESULTS COUNT ================= */}
+
         <div className="library-results">
-          <span>
-            {filteredArticles.length}{" "}
-            {filteredArticles.length === 1 ? "resource" : "resources"}
-          </span>
+
+          {filteredArticles.length}{" "}
+
+          {filteredArticles.length === 1
+            ? "resource found"
+            : "resources found"}
+
         </div>
 
-        {/* ARTICLE GRID */}
+
+        {/* ================= ARTICLE GRID ================= */}
+
         {filteredArticles.length > 0 ? (
+
           <div className="library-grid">
+
             {filteredArticles.map((article) => (
-              <article className="library-card" key={article.id}>
+
+              <article
+                className="library-card"
+                key={article.id}
+              >
+
                 <div className="card-top">
+
                   <span className="article-category">
                     {article.category}
                   </span>
 
                   <span className="article-type">
+
                     {article.type === "pdf"
                       ? "PDF"
                       : article.type === "blogger"
                       ? "BLOG"
                       : "ARTICLE"}
+
                   </span>
+
                 </div>
+
 
                 <div className="card-content">
-                  <h3>{article.title}</h3>
 
-                  <p>{article.excerpt}</p>
+                  <h3>
+                    {article.title}
+                  </h3>
+
+                  <p>
+                    {article.excerpt}
+                  </p>
+
 
                   <div className="article-meta">
-                    <span>{article.author}</span>
+
+                    <span>
+                      {article.author}
+                    </span>
+
                     <span>•</span>
-                    <span>{article.date}</span>
+
+                    <span>
+                      {article.date}
+                    </span>
+
+                    <span>•</span>
+
+                    <span>
+                      {article.readTime}
+                    </span>
+
                   </div>
+
                 </div>
+
 
                 <button
                   className="read-button"
                   onClick={() => setSelectedArticle(article)}
                 >
-                  {article.type === "pdf"
-                    ? "Read PDF"
-                    : article.type === "blogger"
-                    ? "Read Article"
-                    : "Read Article"}
 
-                  <span>→</span>
+                  <span>
+                    {article.type === "pdf"
+                      ? "Read PDF"
+                      : "Read Article"}
+                  </span>
+
+                  <span>
+                    →
+                  </span>
+
                 </button>
-              </article>
-            ))}
-          </div>
-        ) : (
-          <div className="no-results">
-            <div className="no-results-icon">⌕</div>
 
-            <h3>No resources found</h3>
+              </article>
+
+            ))}
+
+          </div>
+
+        ) : (
+
+          <div className="no-results">
+
+            <div className="no-results-icon">
+              ⌕
+            </div>
+
+            <h3>
+              No resources found
+            </h3>
 
             <p>
-              Try searching with another keyword or select a different
-              category.
+              Try another search term or category.
             </p>
 
             <button
@@ -334,41 +472,71 @@ function Library() {
             >
               Clear Filters
             </button>
+
           </div>
+
         )}
+
       </main>
 
-      {/* READING MODAL */}
+
+      {/* =====================================================
+          ARTICLE / PDF / BLOG READER
+      ===================================================== */}
+
       {selectedArticle && (
-        <div className="reader-overlay" onClick={closeReader}>
+
+        <div
+          className="reader-overlay"
+          onClick={closeReader}
+        >
+
           <div
-            className={`reader-modal ${
-              selectedArticle.type === "pdf" ? "pdf-reader" : ""
-            }`}
+            className={
+              `reader-modal ${
+                selectedArticle.type === "pdf"
+                  ? "pdf-reader"
+                  : ""
+              }`
+            }
             onClick={(e) => e.stopPropagation()}
           >
-            {/* READER HEADER */}
+
+
+            {/* ================= READER HEADER ================= */}
+
             <div className="reader-header">
+
               <div>
+
                 <span className="reader-category">
                   {selectedArticle.category}
                 </span>
 
-                <h2>{selectedArticle.title}</h2>
+                <h2>
+                  {selectedArticle.title}
+                </h2>
+
               </div>
+
 
               <button
                 className="reader-close"
                 onClick={closeReader}
-                aria-label="Close reader"
+                aria-label="Close article"
               >
                 ×
               </button>
+
             </div>
 
-            {/* PDF */}
+
+            {/* ================= PDF ================= */}
+
             {selectedArticle.type === "pdf" && (
+
               <div className="pdf-container">
+
                 <iframe
                   src={selectedArticle.pdfUrl}
                   title={selectedArticle.title}
@@ -376,8 +544,10 @@ function Library() {
                 />
 
                 <div className="pdf-fallback">
+
                   <p>
-                    If the PDF does not appear, open it directly in a new tab.
+                    If the PDF does not load,
+                    open it directly.
                   </p>
 
                   <a
@@ -387,13 +557,20 @@ function Library() {
                   >
                     Open PDF
                   </a>
+
                 </div>
+
               </div>
+
             )}
 
-            {/* BLOGGER */}
+
+            {/* ================= BLOGGER / WEBSITE ARTICLE ================= */}
+
             {selectedArticle.type === "blogger" && (
+
               <div className="blogger-container">
+
                 <iframe
                   src={selectedArticle.url}
                   title={selectedArticle.title}
@@ -402,9 +579,10 @@ function Library() {
                 />
 
                 <div className="external-article">
+
                   <p>
-                    If the article cannot be displayed inside the reader,
-                    open it directly.
+                    If the article does not display here,
+                    open the original article.
                   </p>
 
                   <a
@@ -414,20 +592,40 @@ function Library() {
                   >
                     Open Original Article →
                   </a>
+
                 </div>
+
               </div>
+
             )}
 
-            {/* WRITTEN ARTICLE */}
+
+            {/* ================= WRITTEN ARTICLE ================= */}
+
             {selectedArticle.type === "article" && (
+
               <div className="article-reader">
+
                 <div className="article-information">
-                  <span>{selectedArticle.author}</span>
+
+                  <span>
+                    {selectedArticle.author}
+                  </span>
+
                   <span>•</span>
-                  <span>{selectedArticle.date}</span>
+
+                  <span>
+                    {selectedArticle.date}
+                  </span>
+
                   <span>•</span>
-                  <span>{selectedArticle.readTime}</span>
+
+                  <span>
+                    {selectedArticle.readTime}
+                  </span>
+
                 </div>
+
 
                 <div
                   className="article-body"
@@ -435,13 +633,20 @@ function Library() {
                     __html: selectedArticle.content,
                   }}
                 />
+
               </div>
+
             )}
+
           </div>
+
         </div>
+
       )}
+
     </div>
   );
 }
+
 
 export default Library;
