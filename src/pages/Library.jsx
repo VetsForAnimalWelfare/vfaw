@@ -35,6 +35,7 @@ const articles = [
         It includes proper nutrition, suitable housing, disease prevention,
         humane handling, and protection from unnecessary pain and suffering.
       </p>
+
       <h2>Why Animal Welfare Matters</h2>
       <p>
         Animals play important roles in agriculture, food production,
@@ -42,12 +43,14 @@ const articles = [
         improves the quality of life of animals and supports sustainable animal
         production systems.
       </p>
+
       <h2>The Role of Veterinarians</h2>
       <p>
         Veterinarians diagnose and treat disease while also promoting humane
         treatment, preventive healthcare, responsible ownership, and ethical
         animal management.
       </p>
+
       <h2>Conclusion</h2>
       <p>
         Animal welfare is not only about preventing cruelty. It is also about
@@ -72,6 +75,7 @@ const articles = [
         Whole blood contains both cellular components and the liquid component
         known as plasma.
       </p>
+
       <h2>Major Components of Whole Blood</h2>
       <ul>
         <li>Red Blood Cells</li>
@@ -79,16 +83,19 @@ const articles = [
         <li>Platelets</li>
         <li>Plasma</li>
       </ul>
+
       <h2>Plasma</h2>
       <p>
         Plasma is the liquid component of anticoagulated blood. It contains
         water, proteins, electrolytes, nutrients, hormones, and clotting factors.
       </p>
+
       <h2>Serum</h2>
       <p>
         Serum is obtained after blood has clotted. Unlike plasma, it does not
         contain fibrinogen because fibrinogen participates in clot formation.
       </p>
+
       <h2>Plasma vs Serum</h2>
       <p>
         Plasma is obtained from anticoagulated blood, while serum is obtained
@@ -124,6 +131,7 @@ const articles = [
         Hematology is the study of blood and blood-forming organs. It plays an
         important role in the diagnosis and monitoring of many diseases.
       </p>
+
       <h2>Important Components</h2>
       <ul>
         <li>Red Blood Cells</li>
@@ -132,11 +140,13 @@ const articles = [
         <li>Hemoglobin</li>
         <li>Hematocrit</li>
       </ul>
+
       <h2>Importance in Veterinary Practice</h2>
       <p>
         Hematological examination helps veterinarians identify anemia,
         infection, inflammation, blood loss, and other pathological conditions.
       </p>
+
       <h2>Conclusion</h2>
       <p>
         Hematological examination is one of the most useful basic diagnostic
@@ -168,70 +178,61 @@ function Library() {
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
-  const [resourceType, setResourceType] = useState("All");
-  const [theme, setTheme] = useState("dark"); // "dark" | "light"
 
-  /* Dynamic Theme Class on Page */
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
-  };
-
-  /* Categories */
+  /* Dynamic Categories */
   const categories = useMemo(() => {
     return ["All", ...new Set(articles.map((article) => article.category))];
   }, []);
 
-  /* Filter Resources */
+  /* Filter Articles */
   const filteredArticles = useMemo(() => {
-    const searchText = search.toLowerCase().trim();
-
     return articles.filter((article) => {
       const matchesSearch =
-        article.title.toLowerCase().includes(searchText) ||
-        article.excerpt.toLowerCase().includes(searchText) ||
-        article.category.toLowerCase().includes(searchText) ||
-        article.author.toLowerCase().includes(searchText);
+        article.title.toLowerCase().includes(search.toLowerCase()) ||
+        article.excerpt.toLowerCase().includes(search.toLowerCase()) ||
+        article.category.toLowerCase().includes(search.toLowerCase()) ||
+        article.author.toLowerCase().includes(search.toLowerCase());
 
       const matchesCategory =
         category === "All" || article.category === category;
 
-      const matchesType =
-        resourceType === "All" || article.type === resourceType;
-
-      return matchesSearch && matchesCategory && matchesType;
+      return matchesSearch && matchesCategory;
     });
-  }, [search, category, resourceType]);
+  }, [search, category]);
 
   const closeReader = () => {
     setSelectedArticle(null);
   };
 
-  /* Prevent Background Scroll */
+  /* Prevent Background Scroll When Reader is Open */
   useEffect(() => {
     if (selectedArticle) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "auto";
     }
+
     return () => {
       document.body.style.overflow = "auto";
     };
   }, [selectedArticle]);
 
-  /* Keyboard Escape listener */
+  /* Keyboard Listener for Escape Key */
   useEffect(() => {
     const handleEscape = (event) => {
       if (event.key === "Escape") {
         setSelectedArticle(null);
       }
     };
+
     window.addEventListener("keydown", handleEscape);
+
     return () => {
       window.removeEventListener("keydown", handleEscape);
     };
   }, []);
 
-  /* Fullscreen helper */
+  /* Presentation Fullscreen Trigger */
   const enterPresentationFullscreen = async () => {
     const container = document.querySelector(".presentation-container");
     if (!container) return;
@@ -243,12 +244,12 @@ function Library() {
         container.webkitRequestFullscreen();
       }
     } catch (error) {
-      console.error("Unable to enter fullscreen:", error);
+      console.error("Unable to enter presentation fullscreen:", error);
     }
   };
 
   return (
-    <div className={`library-page theme-${theme}`}>
+    <div className="library-page">
       {/* HERO SECTION */}
       <section className="library-hero">
         <div className="library-hero-background">
@@ -256,20 +257,9 @@ function Library() {
           <div className="hero-orb hero-orb-two"></div>
         </div>
 
-        <div className="library-top-bar">
-          <div className="library-badge">
-            <span className="badge-dot"></span>
-            VFAW KNOWLEDGE LIBRARY
-          </div>
-
-          {/* DUAL MODE TOGGLE BUTTON */}
-          <button
-            className="theme-toggle-btn"
-            onClick={toggleTheme}
-            aria-label="Toggle Theme"
-          >
-            {theme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode"}
-          </button>
+        <div className="library-badge">
+          <span className="badge-dot"></span>
+          VFAW KNOWLEDGE LIBRARY
         </div>
 
         <div className="library-hero-content">
@@ -308,7 +298,7 @@ function Library() {
           </div>
         </div>
 
-        {/* SEARCH BAR (3D GLOW EFFECT) */}
+        {/* SEARCH BAR */}
         <div className="library-controls">
           <div className="library-search">
             <span className="search-icon">🔍</span>
@@ -317,7 +307,6 @@ function Library() {
               placeholder="Search articles, presentations and resources..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              aria-label="Search library"
             />
             {search && (
               <button
@@ -331,26 +320,7 @@ function Library() {
           </div>
         </div>
 
-        {/* RESOURCE TYPE FILTERS */}
-        <div className="type-filter-tabs">
-          {[
-            { label: "All Resources", val: "All" },
-            { label: "Articles", val: "article" },
-            { label: "PDF Documents", val: "pdf" },
-            { label: "Presentations", val: "pptx" },
-            { label: "Blog Posts", val: "blogger" },
-          ].map((tab) => (
-            <button
-              key={tab.val}
-              className={`type-tab ${resourceType === tab.val ? "active" : ""}`}
-              onClick={() => setResourceType(tab.val)}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-
-        {/* CATEGORY CHIPS */}
+        {/* CATEGORY FILTERS */}
         <div className="category-filter">
           {categories.map((item) => (
             <button
@@ -438,7 +408,6 @@ function Library() {
               onClick={() => {
                 setSearch("");
                 setCategory("All");
-                setResourceType("All");
               }}
             >
               Reset Library
@@ -464,9 +433,10 @@ function Library() {
                   download
                   className="download-button"
                 >
-                  ↓ Download PDF
+                  Download PDF
                 </a>
               )}
+
               <button
                 className="reader-close"
                 onClick={closeReader}
@@ -477,14 +447,16 @@ function Library() {
             </div>
           </header>
 
-          {/* WRITTEN ARTICLE */}
+          {/* WRITTEN ARTICLE CONTENT */}
           {selectedArticle.type === "article" && (
             <main className="fullscreen-article">
               <div className="reading-container">
                 <div className="reading-category">
                   {selectedArticle.category}
                 </div>
+
                 <h1>{selectedArticle.title}</h1>
+
                 <p className="reading-excerpt">{selectedArticle.excerpt}</p>
 
                 <div className="reading-meta">
@@ -507,7 +479,7 @@ function Library() {
             </main>
           )}
 
-          {/* BLOGGER EMBED */}
+          {/* BLOGGER EXTERNAL EMBED */}
           {selectedArticle.type === "blogger" && (
             <main className="fullscreen-blog">
               <iframe
@@ -526,6 +498,7 @@ function Library() {
                 <span>{selectedArticle.category}</span>
                 <h1>{selectedArticle.title}</h1>
               </div>
+
               <iframe
                 src={selectedArticle.pdfUrl}
                 title={selectedArticle.title}
@@ -534,7 +507,7 @@ function Library() {
             </main>
           )}
 
-          {/* PRESENTATION EMBED */}
+          {/* PPTX PRESENTATION EMBED */}
           {selectedArticle.type === "pptx" && (
             <main className="fullscreen-presentation">
               <div className="presentation-toolbar">
