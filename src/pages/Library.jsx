@@ -130,7 +130,7 @@ const articles = [
     readTime: "PDF",
 
     /*
-      Put your PDF inside:
+      Put your PDF here:
 
       public/pdfs/veterinary-hematology.pdf
     */
@@ -183,10 +183,6 @@ const articles = [
     `,
   },
 
-  /* =========================================================
-     GOOGLE SLIDES / PPTX PRESENTATION
-  ========================================================= */
-
   {
     id: 6,
     type: "pptx",
@@ -201,19 +197,12 @@ const articles = [
 
     /*
       Google Slides EMBED URL
-
-      Original:
-      https://docs.google.com/presentation/d/1C9YANQ-xYPAqrC8ePiNfeSZIE4UVTzHR/edit
-
-      Embedded:
-      /embed
     */
 
     pptxUrl:
-      "https://docs.google.com/presentation/d/1C9YANQ-xYPAqrC8ePiNfeSZIE4UVTzHR/embed?start=false&loop=false&delayms=3000",
+      "https://docs.google.com/presentation/d/1C9YANQ-xYPAqrC8ePiNfeSZIE4UVTzHR/embed?start=true&loop=false&delayms=3000",
   },
 ];
-
 
 /* =========================================================
    LIBRARY COMPONENT
@@ -221,29 +210,23 @@ const articles = [
 
 function Library() {
   const [selectedArticle, setSelectedArticle] = useState(null);
-
   const [search, setSearch] = useState("");
-
   const [category, setCategory] = useState("All");
 
-
-  /* =========================================================
+  /* =======================================================
      CATEGORIES
-  ========================================================= */
+  ======================================================= */
 
   const categories = useMemo(() => {
     return [
       "All",
-      ...new Set(
-        articles.map((article) => article.category)
-      ),
+      ...new Set(articles.map((article) => article.category)),
     ];
   }, []);
 
-
-  /* =========================================================
-     FILTER ARTICLES
-  ========================================================= */
+  /* =======================================================
+     FILTER RESOURCES
+  ======================================================= */
 
   const filteredArticles = useMemo(() => {
     const searchText = search.toLowerCase().trim();
@@ -252,7 +235,8 @@ function Library() {
       const matchesSearch =
         article.title.toLowerCase().includes(searchText) ||
         article.excerpt.toLowerCase().includes(searchText) ||
-        article.category.toLowerCase().includes(searchText);
+        article.category.toLowerCase().includes(searchText) ||
+        article.author.toLowerCase().includes(searchText);
 
       const matchesCategory =
         category === "All" ||
@@ -262,19 +246,17 @@ function Library() {
     });
   }, [search, category]);
 
-
-  /* =========================================================
+  /* =======================================================
      CLOSE READER
-  ========================================================= */
+  ======================================================= */
 
   const closeReader = () => {
     setSelectedArticle(null);
   };
 
-
-  /* =========================================================
-     LOCK BACKGROUND SCROLLING
-  ========================================================= */
+  /* =======================================================
+     PREVENT BACKGROUND SCROLL
+  ======================================================= */
 
   useEffect(() => {
     if (selectedArticle) {
@@ -288,10 +270,9 @@ function Library() {
     };
   }, [selectedArticle]);
 
-
-  /* =========================================================
-     ESC KEY TO CLOSE READER
-  ========================================================= */
+  /* =======================================================
+     ESCAPE KEY
+  ======================================================= */
 
   useEffect(() => {
     const handleEscape = (event) => {
@@ -307,10 +288,37 @@ function Library() {
     };
   }, []);
 
+  /* =======================================================
+     GOOGLE SLIDES FULLSCREEN
+  ======================================================= */
+
+  const enterPresentationFullscreen = async () => {
+    const container = document.querySelector(
+      ".presentation-container"
+    );
+
+    if (!container) return;
+
+    try {
+      if (container.requestFullscreen) {
+        await container.requestFullscreen();
+      } else if (container.webkitRequestFullscreen) {
+        container.webkitRequestFullscreen();
+      }
+    } catch (error) {
+      console.error(
+        "Unable to enter fullscreen:",
+        error
+      );
+    }
+  };
+
+  /* =======================================================
+     RENDER
+  ======================================================= */
 
   return (
     <div className="library-page">
-
 
       {/* =====================================================
           HERO
@@ -318,28 +326,35 @@ function Library() {
 
       <section className="library-hero">
 
+        <div className="library-hero-background">
+          <div className="hero-orb hero-orb-one"></div>
+          <div className="hero-orb hero-orb-two"></div>
+        </div>
+
         <div className="library-hero-content">
 
           <div className="library-badge">
+            <span className="badge-dot"></span>
             VFAW KNOWLEDGE LIBRARY
           </div>
 
           <h1>
             Explore Knowledge.
             <br />
-            <span>Expand Your Impact.</span>
+
+            <span>
+              Expand Your Impact.
+            </span>
           </h1>
 
           <p>
             Discover veterinary articles, educational resources,
-            professional publications, presentations, study materials
+            professional publications, presentations, study materials,
             and animal welfare knowledge.
           </p>
 
         </div>
-
       </section>
-
 
       {/* =====================================================
           MAIN LIBRARY
@@ -347,12 +362,11 @@ function Library() {
 
       <main className="library-container">
 
-
         {/* HEADER */}
 
         <div className="library-header">
 
-          <div>
+          <div className="library-heading">
 
             <span className="section-small-title">
               KNOWLEDGE RESOURCE CENTER
@@ -364,24 +378,22 @@ function Library() {
 
             <p>
               Carefully selected articles, veterinary resources,
-              educational materials and professional presentations.
+              educational materials, and professional presentations.
             </p>
 
           </div>
 
-
           <div className="library-count">
-
-            {articles.length}
+            <strong>
+              {articles.length}
+            </strong>
 
             <span>
               Resources
             </span>
-
           </div>
 
         </div>
-
 
         {/* ===================================================
             SEARCH
@@ -402,10 +414,10 @@ function Library() {
               onChange={(event) =>
                 setSearch(event.target.value)
               }
+              aria-label="Search library"
             />
 
             {search && (
-
               <button
                 className="clear-search"
                 onClick={() => setSearch("")}
@@ -413,13 +425,11 @@ function Library() {
               >
                 ×
               </button>
-
             )}
 
           </div>
 
         </div>
-
 
         {/* ===================================================
             CATEGORY FILTER
@@ -428,7 +438,6 @@ function Library() {
         <div className="category-filter">
 
           {categories.map((item) => (
-
             <button
               key={item}
               className={
@@ -442,29 +451,28 @@ function Library() {
             >
               {item}
             </button>
-
           ))}
 
         </div>
 
-
-        {/* RESULT COUNT */}
+        {/* RESULTS */}
 
         <div className="library-results">
 
           Showing{" "}
+
           <strong>
             {filteredArticles.length}
           </strong>{" "}
+
           {filteredArticles.length === 1
             ? "resource"
             : "resources"}
 
         </div>
 
-
         {/* ===================================================
-            ARTICLE / RESOURCE GRID
+            RESOURCE GRID
         =================================================== */}
 
         {filteredArticles.length > 0 ? (
@@ -479,9 +487,6 @@ function Library() {
               >
 
                 <div className="card-glow"></div>
-
-
-                {/* CARD TOP */}
 
                 <div className="card-top">
 
@@ -503,8 +508,17 @@ function Library() {
 
                 </div>
 
+                <div className="card-icon">
 
-                {/* CARD CONTENT */}
+                  {article.type === "pdf"
+                    ? "▣"
+                    : article.type === "pptx"
+                    ? "▤"
+                    : article.type === "blogger"
+                    ? "◉"
+                    : "Aa"}
+
+                </div>
 
                 <div className="card-content">
 
@@ -516,14 +530,15 @@ function Library() {
                     {article.excerpt}
                   </p>
 
-
                   <div className="article-meta">
 
                     <span>
                       {article.author}
                     </span>
 
-                    <span>•</span>
+                    <span>
+                      •
+                    </span>
 
                     <span>
                       {article.date}
@@ -533,8 +548,7 @@ function Library() {
 
                 </div>
 
-
-                {/* CARD BUTTON */}
+                {/* OPEN BUTTON */}
 
                 <button
                   className="read-button"
@@ -549,6 +563,8 @@ function Library() {
                       ? "View PDF"
                       : article.type === "pptx"
                       ? "Start Presentation"
+                      : article.type === "blogger"
+                      ? "Read Article"
                       : "Start Reading"}
 
                   </span>
@@ -601,15 +617,13 @@ function Library() {
 
       </main>
 
-
       {/* =====================================================
-          FULL-SCREEN READER
+          READER OVERLAY
       ===================================================== */}
 
       {selectedArticle && (
 
         <div className="reader-overlay">
-
 
           {/* =================================================
               READER HEADER
@@ -631,11 +645,9 @@ function Library() {
 
             </div>
 
-
             <div className="reader-actions">
 
-
-              {/* DOWNLOAD PDF */}
+              {/* PDF DOWNLOAD */}
 
               {selectedArticle.type === "pdf" && (
 
@@ -648,7 +660,6 @@ function Library() {
                 </a>
 
               )}
-
 
               {/* CLOSE */}
 
@@ -664,7 +675,6 @@ function Library() {
 
           </header>
 
-
           {/* =================================================
               WRITTEN ARTICLE
           ================================================= */}
@@ -675,21 +685,17 @@ function Library() {
 
               <div className="reading-container">
 
-
                 <div className="reading-category">
                   {selectedArticle.category}
                 </div>
-
 
                 <h1>
                   {selectedArticle.title}
                 </h1>
 
-
                 <p className="reading-excerpt">
                   {selectedArticle.excerpt}
                 </p>
-
 
                 <div className="reading-meta">
 
@@ -697,13 +703,17 @@ function Library() {
                     {selectedArticle.author}
                   </span>
 
-                  <span>•</span>
+                  <span>
+                    •
+                  </span>
 
                   <span>
                     {selectedArticle.date}
                   </span>
 
-                  <span>•</span>
+                  <span>
+                    •
+                  </span>
 
                   <span>
                     {selectedArticle.readTime}
@@ -711,9 +721,7 @@ function Library() {
 
                 </div>
 
-
                 <div className="reading-line"></div>
-
 
                 <article
                   className="article-body"
@@ -729,7 +737,6 @@ function Library() {
 
           )}
 
-
           {/* =================================================
               BLOGGER ARTICLE
           ================================================= */}
@@ -742,21 +749,20 @@ function Library() {
                 src={selectedArticle.url}
                 title={selectedArticle.title}
                 className="fullscreen-blog-frame"
+                loading="lazy"
               />
 
             </main>
 
           )}
 
-
           {/* =================================================
-              PDF VIEWER
+              PDF
           ================================================= */}
 
           {selectedArticle.type === "pdf" && (
 
             <main className="fullscreen-pdf">
-
 
               <div className="reader-title-area">
 
@@ -770,7 +776,6 @@ function Library() {
 
               </div>
 
-
               <iframe
                 src={selectedArticle.pdfUrl}
                 title={selectedArticle.title}
@@ -781,14 +786,45 @@ function Library() {
 
           )}
 
-
           {/* =================================================
-              GOOGLE SLIDES / PPTX PRESENTATION
+              PRESENTATION
           ================================================= */}
 
           {selectedArticle.type === "pptx" && (
 
             <main className="fullscreen-presentation">
+
+              {/* PRESENTATION TOP BAR */}
+
+              <div className="presentation-toolbar">
+
+                <div className="presentation-info">
+
+                  <span>
+                    {selectedArticle.category}
+                  </span>
+
+                  <strong>
+                    {selectedArticle.title}
+                  </strong>
+
+                </div>
+
+                <button
+                  className="presentation-fullscreen-button"
+                  onClick={
+                    enterPresentationFullscreen
+                  }
+                >
+                  ⛶
+                  <span>
+                    Full Screen
+                  </span>
+                </button>
+
+              </div>
+
+              {/* PRESENTATION STAGE */}
 
               <div className="presentation-container">
 
@@ -796,6 +832,7 @@ function Library() {
                   src={selectedArticle.pptxUrl}
                   title={selectedArticle.title}
                   className="presentation-frame"
+                  allow="autoplay; fullscreen"
                   allowFullScreen
                 />
 
