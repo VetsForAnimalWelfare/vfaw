@@ -2,9 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "../Library.css";
 
-const BLOGGER_FEED =
-  "https://vfaw.blogspot.com/feeds/posts/default?alt=json&max-results=100";
-
 const BLOGGER_BASE_URL = "https://vfaw.blogspot.com";
 
 const Library = () => {
@@ -30,15 +27,33 @@ const Library = () => {
         setLoading(true);
         setError("");
 
-        const response = await fetch(BLOGGER_FEED);
+        /*
+         * JSONP-style Blogger feed via direct JSON endpoint
+         */
+        const response = await fetch(
+          `${BLOGGER_BASE_URL}/feeds/posts/default?alt=json&max-results=100`,
+          {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+            },
+          }
+        );
 
         if (!response.ok) {
-          throw new Error("Unable to load Blogger articles.");
+          throw new Error(
+            `Unable to load Blogger articles. Status: ${response.status}`
+          );
         }
 
         const data = await response.json();
 
         const entries = data?.feed?.entry || [];
+
+        if (!entries.length) {
+          setBlogs([]);
+          return;
+        }
 
         const formattedBlogs = entries.map((entry, index) => {
           /*
@@ -57,17 +72,17 @@ const Library = () => {
             `blog-${index}`;
 
           /*
-           * Convert Blogger URL into a safe React route ID
+           * Create safe React route ID
            */
           const slug =
+            bloggerId ||
             alternateLink
               .replace(BLOGGER_BASE_URL, "")
               .replace(/^\/+/, "")
               .replace(/\/+$/, "")
               .replace(/\//g, "-")
               .replace(/[^a-zA-Z0-9-]/g, "")
-              .toLowerCase() ||
-            bloggerId;
+              .toLowerCase();
 
           /*
            * Title
@@ -82,7 +97,7 @@ const Library = () => {
             entry.author?.[0]?.name?.$t || "VFAW";
 
           /*
-           * Date
+           * Published date
            */
           const publishedDate = entry.published?.$t
             ? new Date(entry.published.$t)
@@ -99,12 +114,16 @@ const Library = () => {
           /*
            * Blogger content
            */
-          const content = entry.content?.$t || "";
+          const content =
+            entry.content?.$t ||
+            entry.summary?.$t ||
+            "";
 
           /*
-           * Get plain text from HTML
+           * Convert HTML to plain text
            */
           const tempDiv = document.createElement("div");
+
           tempDiv.innerHTML = content;
 
           const plainText =
@@ -121,26 +140,38 @@ const Library = () => {
               : plainText.trim();
 
           /*
-           * Category / label
+           * Category
            */
           const category =
             entry.category?.[0]?.term ||
             "Animal Welfare";
 
           /*
-           * Find first image inside Blogger article
+           * Find first image
            */
-          const firstImage =
-            tempDiv.querySelector("img")?.src || null;
+          let firstImage = null;
+
+          const imageElement =
+            tempDiv.querySelector("img");
+
+          if (imageElement?.src) {
+            firstImage = imageElement.src;
+          }
 
           /*
-           * Estimate reading time
+           * If Blogger thumbnail exists
            */
-          const wordCount =
-            plainText
-              .trim()
-              .split(/\s+/)
-              .filter(Boolean).length;
+          if (!firstImage && entry.media$thumbnail?.url) {
+            firstImage = entry.media$thumbnail.url;
+          }
+
+          /*
+           * Reading time
+           */
+          const wordCount = plainText
+            .trim()
+            .split(/\s+/)
+            .filter(Boolean).length;
 
           const readingMinutes = Math.max(
             1,
@@ -165,7 +196,8 @@ const Library = () => {
 
         setBlogs(formattedBlogs);
       } catch (err) {
-        console.error("Blogger error:", err);
+        console.error("Blogger fetch error:", err);
+
         setError(
           "We couldn't load the articles right now. Please try again."
         );
@@ -184,7 +216,9 @@ const Library = () => {
    */
 
   const selectedBlog = blogs.find(
-    (blog) => blog.id === blogId
+    (blog) =>
+      blog.id === blogId ||
+      blog.bloggerId === blogId
   );
 
   /*
@@ -200,7 +234,9 @@ const Library = () => {
     }
 
     const handleScroll = () => {
-      const scrollTop = window.scrollY;
+      const scrollTop =
+        window.scrollY ||
+        document.documentElement.scrollTop;
 
       const documentHeight =
         document.documentElement.scrollHeight -
@@ -215,11 +251,17 @@ const Library = () => {
         (scrollTop / documentHeight) * 100;
 
       setReadingProgress(
-        Math.min(100, Math.max(0, progress))
+        Math.min(
+          100,
+          Math.max(0, progress)
+        )
       );
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener(
+      "scroll",
+      handleScroll
+    );
 
     handleScroll();
 
@@ -233,7 +275,7 @@ const Library = () => {
 
   /*
    * ---------------------------------------------------------
-   * SCROLL TO TOP WHEN ARTICLE OPENS
+   * SCROLL TO TOP
    * ---------------------------------------------------------
    */
 
@@ -241,7 +283,7 @@ const Library = () => {
     if (selectedBlog) {
       window.scrollTo({
         top: 0,
-        behavior: "instant",
+        behavior: "smooth",
       });
     }
   }, [selectedBlog]);
@@ -253,7 +295,8 @@ const Library = () => {
    */
 
   const filteredBlogs = useMemo(() => {
-    const query = search.trim().toLowerCase();
+    const query =
+      search.trim().toLowerCase();
 
     if (!query) {
       return blogs;
@@ -279,18 +322,64 @@ const Library = () => {
 
   /*
    * ---------------------------------------------------------
-   * ARTICLE READING PAGE
+   * ARTICLE PAGE
    * ---------------------------------------------------------
    */
 
-  if (selectedBlog) {
+  if (blogId) {
+    if (loading) {
+      return (
+        <div className="library-page">
+          <div className="library-loading">
+            <div className="library-loader" />
+
+            <h3>Loading article</h3>
+
+            <p>
+              Please wait while the article is loading.
+            </p>
+          </div>
+        </div>
+      );
+    }
+
+    if (!selectedBlog) {
+      return (
+        <div className="library-page">
+          <div className="library-empty">
+            <div className="library-empty-icon">
+              📄
+            </div>
+
+            <h3>Article not found</h3>
+
+            <p>
+              The article you are looking for could
+              not be found.
+            </p>
+
+            <button
+              type="button"
+              className="library-empty-button"
+              onClick={() =>
+                navigate("/library")
+              }
+            >
+              Back to Library
+            </button>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div
         className={`article-page ${
-          darkMode ? "article-dark-mode" : ""
+          darkMode
+            ? "article-dark-mode"
+            : ""
         }`}
       >
-        {/* Reading progress */}
         <div
           className="reading-progress"
           style={{
@@ -298,13 +387,14 @@ const Library = () => {
           }}
         />
 
-        {/* Header */}
         <header className="article-header">
           <div className="article-header-inner">
             <button
               type="button"
               className="article-back-button"
-              onClick={() => navigate("/library")}
+              onClick={() =>
+                navigate("/library")
+              }
             >
               ← Back to Library
             </button>
@@ -313,17 +403,21 @@ const Library = () => {
               type="button"
               className="article-theme-button"
               onClick={() =>
-                setDarkMode((previous) => !previous)
+                setDarkMode(
+                  (previous) =>
+                    !previous
+                )
               }
               aria-label="Toggle dark mode"
             >
-              {darkMode ? "☀️" : "🌙"}
+              {darkMode
+                ? "☀️"
+                : "🌙"}
             </button>
           </div>
         </header>
 
         <main className="article-document">
-          {/* Article heading */}
           <div className="article-heading">
             <span className="article-category">
               {selectedBlog.category}
@@ -352,7 +446,6 @@ const Library = () => {
             </div>
           </div>
 
-          {/* Hero image */}
           {selectedBlog.image && (
             <figure className="article-hero">
               <img
@@ -367,24 +460,23 @@ const Library = () => {
             </figure>
           )}
 
-          {/* Blogger article */}
           <section className="blogger-reader-section">
             <div className="blogger-reader">
               <iframe
                 src={selectedBlog.bloggerUrl}
                 title={selectedBlog.title}
                 loading="lazy"
-                allow="fullscreen"
+                allowFullScreen
               />
             </div>
           </section>
 
-          {/* Article end */}
           <div className="article-end">
             <div className="article-end-line" />
 
             <p>
-              You have reached the end of this article.
+              You have reached the end of this
+              article.
             </p>
 
             <button
@@ -410,10 +502,11 @@ const Library = () => {
 
   return (
     <div className="library-page">
-      {/* HERO */}
+
       <section className="library-hero">
         <div className="library-container">
           <div className="library-hero-content">
+
             <span className="library-eyebrow">
               VFAW KNOWLEDGE CENTER
             </span>
@@ -428,8 +521,8 @@ const Library = () => {
               and practical information from VFAW.
             </p>
 
-            {/* SEARCH */}
             <div className="library-search">
+
               <span
                 className="library-search-icon"
                 aria-hidden="true"
@@ -441,7 +534,9 @@ const Library = () => {
                 type="search"
                 value={search}
                 onChange={(event) =>
-                  setSearch(event.target.value)
+                  setSearch(
+                    event.target.value
+                  )
                 }
                 placeholder="Search articles, topics, or authors..."
                 aria-label="Search articles"
@@ -451,22 +546,25 @@ const Library = () => {
                 <button
                   type="button"
                   className="library-search-clear"
-                  onClick={() => setSearch("")}
+                  onClick={() =>
+                    setSearch("")
+                  }
                   aria-label="Clear search"
                 >
                   ×
                 </button>
               )}
+
             </div>
           </div>
         </div>
       </section>
 
-      {/* MAIN */}
       <main className="library-container library-main">
-        {/* RESULTS HEADER */}
+
         <div className="library-results-header">
           <div>
+
             <h2>
               Latest Articles
             </h2>
@@ -480,12 +578,13 @@ const Library = () => {
                       : "articles"
                   } available`}
             </p>
+
           </div>
         </div>
 
-        {/* LOADING */}
         {loading && (
           <div className="library-loading">
+
             <div className="library-loader" />
 
             <h3>
@@ -495,12 +594,13 @@ const Library = () => {
             <p>
               Fetching the latest articles from VFAW.
             </p>
+
           </div>
         )}
 
-        {/* ERROR */}
         {!loading && error && (
           <div className="library-empty">
+
             <div className="library-empty-icon">
               ⚠️
             </div>
@@ -522,111 +622,114 @@ const Library = () => {
             >
               Try Again
             </button>
+
           </div>
         )}
 
-        {/* BLOG GRID */}
         {!loading &&
           !error &&
           filteredBlogs.length > 0 && (
             <div className="blog-grid">
-              {filteredBlogs.map((blog) => (
-                <article
-                  key={blog.id}
-                  className="blog-card"
-                >
-                  {/* IMAGE */}
-                  <Link
-                    to={`/library/blog/${blog.id}`}
-                    className="blog-card-image-link"
-                    aria-label={`Read ${blog.title}`}
+
+              {filteredBlogs.map(
+                (blog) => (
+                  <article
+                    key={blog.id}
+                    className="blog-card"
                   >
-                    <div className="blog-card-image">
-                      {blog.image ? (
-                        <img
-                          src={blog.image}
-                          alt={blog.title}
-                          loading="lazy"
-                          onError={(event) => {
-                            event.currentTarget.style.display =
-                              "none";
 
-                            event.currentTarget.parentElement.classList.add(
-                              "blog-image-fallback"
-                            );
-                          }}
-                        />
-                      ) : (
-                        <div className="blog-image-placeholder">
-                          VFAW
-                        </div>
-                      )}
+                    <Link
+                      to={`/library/blog/${blog.id}`}
+                      className="blog-card-image-link"
+                      aria-label={`Read ${blog.title}`}
+                    >
 
-                      <span className="blog-card-category">
-                        {blog.category}
-                      </span>
-                    </div>
-                  </Link>
+                      <div className="blog-card-image">
 
-                  {/* CONTENT */}
-                  <div className="blog-card-content">
-                    {/* META */}
-                    <div className="blog-card-meta">
-                      <span>
-                        {blog.date}
-                      </span>
+                        {blog.image ? (
+                          <img
+                            src={blog.image}
+                            alt={blog.title}
+                            loading="lazy"
+                            onError={(event) => {
+                              event.currentTarget.style.display =
+                                "none";
+                            }}
+                          />
+                        ) : (
+                          <div className="blog-image-placeholder">
+                            VFAW
+                          </div>
+                        )}
 
-                      <span>
-                        •
-                      </span>
-
-                      <span>
-                        {blog.readTime}
-                      </span>
-                    </div>
-
-                    {/* TITLE */}
-                    <h3 className="blog-card-title">
-                      <Link
-                        to={`/library/blog/${blog.id}`}
-                      >
-                        {blog.title}
-                      </Link>
-                    </h3>
-
-                    {/* EXCERPT */}
-                    <p className="blog-card-excerpt">
-                      {blog.excerpt}
-                    </p>
-
-                    {/* FOOTER */}
-                    <div className="blog-card-footer">
-                      <span className="blog-card-author">
-                        By {blog.author}
-                      </span>
-
-                      <Link
-                        to={`/library/blog/${blog.id}`}
-                        className="blog-read-more"
-                      >
-                        Read Article
-
-                        <span aria-hidden="true">
-                          →
+                        <span className="blog-card-category">
+                          {blog.category}
                         </span>
-                      </Link>
+
+                      </div>
+
+                    </Link>
+
+                    <div className="blog-card-content">
+
+                      <div className="blog-card-meta">
+                        <span>
+                          {blog.date}
+                        </span>
+
+                        <span>•</span>
+
+                        <span>
+                          {blog.readTime}
+                        </span>
+                      </div>
+
+                      <h3 className="blog-card-title">
+                        <Link
+                          to={`/library/blog/${blog.id}`}
+                        >
+                          {blog.title}
+                        </Link>
+                      </h3>
+
+                      <p className="blog-card-excerpt">
+                        {blog.excerpt}
+                      </p>
+
+                      <div className="blog-card-footer">
+
+                        <span className="blog-card-author">
+                          By {blog.author}
+                        </span>
+
+                        <Link
+                          to={`/library/blog/${blog.id}`}
+                          className="blog-read-more"
+                        >
+                          Read Article
+                          <span
+                            aria-hidden="true"
+                          >
+                            →
+                          </span>
+                        </Link>
+
+                      </div>
+
                     </div>
-                  </div>
-                </article>
-              ))}
+
+                  </article>
+                )
+              )}
+
             </div>
           )}
 
-        {/* NO RESULTS */}
         {!loading &&
           !error &&
           filteredBlogs.length === 0 && (
             <div className="library-empty">
+
               <div className="library-empty-icon">
                 🔎
               </div>
@@ -649,8 +752,10 @@ const Library = () => {
               >
                 Clear Search
               </button>
+
             </div>
           )}
+
       </main>
     </div>
   );
