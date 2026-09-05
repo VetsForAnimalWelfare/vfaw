@@ -19,7 +19,57 @@ const Gallery = () => {
 
   const images = [
     // Animal Welfare
-  
+{
+  src: '/capacity/p1.png',
+  category: 'Basics of Hematological Tools and Techniques',
+  description: 'Basics of Hematological Tools and Techniques'
+},
+{
+  src: '/capacity/p2.png',
+  category: 'Basics of Hematological Tools and Techniques',
+  description: 'Basics of Hematological Tools and Techniques'
+},
+{
+  src: '/capacity/p3.png',
+  category: 'Basics of Hematological Tools and Techniques',
+  description: 'Basics of Hematological Tools and Techniques'
+},
+{
+  src: '/capacity/p4.png',
+  category: 'Basics of Hematological Tools and Techniques',
+  description: 'Basics of Hematological Tools and Techniques'
+},
+{
+  src: '/capacity/p5.png',
+  category: 'Basics of Hematological Tools and Techniques',
+  description: 'Basics of Hematological Tools and Techniques'
+},
+{
+  src: '/capacity/p6.png',
+  category: 'Basics of Hematological Tools and Techniques',
+  description: 'Basics of Hematological Tools and Techniques'
+},
+{
+  src: '/capacity/p7.png',
+  category: 'Basics of Hematological Tools and Techniques',
+  description: 'Basics of Hematological Tools and Techniques'
+},
+{
+  src: '/capacity/p8.png',
+  category: 'Basics of Hematological Tools and Techniques',
+  description: 'Basics of Hematological Tools and Techniques'
+},
+{
+  src: '/capacity/p9.png',
+  category: 'Basics of Hematological Tools and Techniques',
+  description: 'Basics of Hematological Tools and Techniques'
+},
+{
+  src: '/capacity/p10.png',
+  category: 'Basics of Hematological Tools and Techniques',
+  description: 'Basics of Hematological Tools and Techniques'
+}
+    
     {
       src: '/welfare/IMG_2124.JPG',
       category: 'Animal Welfare',
