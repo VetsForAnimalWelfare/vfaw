@@ -7,6 +7,23 @@ const Programs = () => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
 
   const programs = [
+{
+  title: 'Basics of Hematological Tools and Techniques',
+  description: 'Internal training programs for staff and volunteers.',
+  images: [
+    '/capacity/p1.png',
+    '/capacity/p2.png',
+    '/capacity/p3.png',
+    '/capacity/p4.png',
+    '/capacity/p5.png',
+    '/capacity/p6.png',
+    '/capacity/p7.png',
+    '/capacity/p8.png',
+    '/capacity/p9.png',
+    '/capacity/p10.png'
+  ]
+}
+    
     {
   title: 'Farmed Animal Welfare',
   description: 'Dedicated to the protection, rehabilitation, and compassionate care of farm animals.',
