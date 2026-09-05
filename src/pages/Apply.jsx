@@ -5,821 +5,519 @@ const programs = [
     id: 1,
     title: "Clinical Report Writing Competition",
     description:
-      "Training program focused on the development of student skills and knowledge.",
+      "Training program focused on the development of student skills, knowledge, clinical documentation, and professional communication.",
     date: "2083/05/20",
     type: "Student Development",
     formLink:
       "https://docs.google.com/forms/d/e/1FAIpQLSeh4etkOFN3AlsO-oNBUTR3khVb2I2jvMdw_hlzxYP5IH_vqQ/viewform?usp=header",
+    shade: "blue",
   },
   {
     id: 2,
     title: "Veterinary Workshop",
     description:
-      "Upcoming veterinary education and practical training workshop.",
+      "Upcoming veterinary education and practical training workshop designed to strengthen practical knowledge and professional skills.",
     date: "Coming Soon",
     type: "Veterinary Education",
-    formLink:
-      "https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform?embedded=true",
+    formLink: "",
+    shade: "sky",
   },
   {
     id: 3,
     title: "Youth Development Program",
     description:
-      "A program designed for youth learning, development and meaningful participation.",
+      "A program designed for youth learning, leadership, professional development, and meaningful participation in animal welfare.",
     date: "Coming Soon",
     type: "Youth Development",
-    formLink:
-      "https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform?embedded=true",
+    formLink: "",
+    shade: "cyan",
   },
 ];
 
-const CalendarIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path
-      d="M7 2v3M17 2v3M3.5 9.5h17M5 4.5h14A1.5 1.5 0 0 1 20.5 6v13A1.5 1.5 0 0 1 19 20.5H5A1.5 1.5 0 0 1 3.5 19V6A1.5 1.5 0 0 1 5 4.5Z"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
+const Icon = ({ name, size = 20 }) => {
+  const common = {
+    width: size,
+    height: size,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.8",
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": "true",
+  };
 
-const ArrowIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path
-      d="M5 12h13M13 6l6 6-6 6"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
+  if (name === "calendar") {
+    return (
+      <svg {...common}>
+        <rect x="3" y="4.5" width="18" height="16" rx="2.5" />
+        <path d="M16 2.5v4M8 2.5v4M3 9h18" />
+      </svg>
+    );
+  }
 
-const ExternalIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path
-      d="M14 5h5v5M19 5l-8 8"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M18 13v5a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 4 18V7a1.5 1.5 0 0 1 1.5-1.5h5"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-    />
-  </svg>
-);
+  if (name === "arrow") {
+    return (
+      <svg {...common}>
+        <path d="M5 12h13" />
+        <path d="m13 6 6 6-6 6" />
+      </svg>
+    );
+  }
 
-const FormIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <rect
-      x="4"
-      y="3"
-      width="16"
-      height="18"
-      rx="2.5"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-    />
-    <path
-      d="M8 8h8M8 12h8M8 16h5"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      strokeLinecap="round"
-    />
-  </svg>
-);
+  if (name === "external") {
+    return (
+      <svg {...common}>
+        <path d="M14 4h6v6" />
+        <path d="M20 4 11 13" />
+        <path d="M18 13v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h5" />
+      </svg>
+    );
+  }
 
-const CheckIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path
-      d="m5 12.5 4.2 4.2L19 7"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
+  if (name === "form") {
+    return (
+      <svg {...common}>
+        <rect x="5" y="3" width="14" height="18" rx="2" />
+        <path d="M9 8h6M9 12h6M9 16h4" />
+      </svg>
+    );
+  }
+
+  if (name === "check") {
+    return (
+      <svg {...common}>
+        <path d="m5 12 4 4L19 6" />
+      </svg>
+    );
+  }
+
+  if (name === "close") {
+    return (
+      <svg {...common}>
+        <path d="M6 6l12 12M18 6 6 18" />
+      </svg>
+    );
+  }
+
+  if (name === "back") {
+    return (
+      <svg {...common}>
+        <path d="M19 12H5" />
+        <path d="m11 18-6-6 6-6" />
+      </svg>
+    );
+  }
+
+  return null;
+};
 
 const Apply = () => {
   const [selectedProgram, setSelectedProgram] = useState(null);
 
-  const availablePrograms = useMemo(() => {
-    return programs.filter(
-      (program) => !program.formLink.includes("YOUR_FORM_ID")
-    );
-  }, []);
+  const availablePrograms = useMemo(
+    () => programs.filter((program) => program.formLink),
+    []
+  );
 
   useEffect(() => {
-    if (!selectedProgram) {
-      return;
-    }
-
-    const previousOverflow = document.body.style.overflow;
-
-    document.body.style.overflow = "hidden";
-
-    const handleEscape = (event) => {
-      if (event.key === "Escape") {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape" && selectedProgram) {
         setSelectedProgram(null);
       }
     };
 
-    window.addEventListener("keydown", handleEscape);
+    window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", handleEscape);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [selectedProgram]);
 
-  const openProgram = (program) => {
-    if (program.formLink.includes("YOUR_FORM_ID")) {
-      return;
-    }
+  useEffect(() => {
+    document.body.style.overflow = selectedProgram ? "hidden" : "";
 
-    setSelectedProgram(program);
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [selectedProgram]);
+
+  const getCardClass = (shade) => {
+    if (shade === "sky") return "apply-card apply-card-sky";
+    if (shade === "cyan") return "apply-card apply-card-cyan";
+    return "apply-card apply-card-blue";
   };
 
   return (
-    <>
+    <div className="apply-page">
       <style>{`
+        * {
+          box-sizing: border-box;
+        }
+
         .apply-page {
-          --apply-primary: #1671b8;
-          --apply-primary-dark: #075183;
-          --apply-primary-deep: #052f4d;
-          --apply-cyan: #38bdf8;
-          --apply-sky: #7dd3fc;
-          --apply-text: #172b38;
-          --apply-muted: #6c7f8c;
-          --apply-background: #f4f8fb;
-          --apply-white: #ffffff;
-          --apply-border: #d7e3eb;
-
           min-height: 100vh;
+          padding: 118px 24px 80px;
           background:
-            radial-gradient(
-              circle at 10% 20%,
-              rgba(56, 189, 248, 0.07),
-              transparent 30%
-            ),
-            radial-gradient(
-              circle at 90% 70%,
-              rgba(22, 113, 184, 0.06),
-              transparent 30%
-            ),
-            var(--apply-background);
-
-          color: var(--apply-text);
-          overflow-x: hidden;
-        }
-
-        .apply-hero {
+            radial-gradient(circle at 10% 10%, rgba(56, 189, 248, 0.12), transparent 28%),
+            radial-gradient(circle at 90% 30%, rgba(14, 165, 233, 0.10), transparent 30%),
+            linear-gradient(135deg, #f5fbff 0%, #ffffff 45%, #eef8ff 100%);
+          color: #13232f;
           position: relative;
-          min-height: 570px;
-          display: flex;
-          align-items: center;
           overflow: hidden;
-          color: white;
-
-          background:
-            radial-gradient(
-              circle at 80% 20%,
-              rgba(56, 189, 248, 0.2),
-              transparent 28%
-            ),
-            linear-gradient(
-              135deg,
-              #052f4d 0%,
-              #075183 48%,
-              #0b659d 100%
-            );
         }
 
-        .apply-grid {
+        .apply-page::before {
+          content: "";
           position: absolute;
           inset: 0;
-
-          background-image:
-            linear-gradient(
-              rgba(255, 255, 255, 0.045) 1px,
-              transparent 1px
-            ),
-            linear-gradient(
-              90deg,
-              rgba(255, 255, 255, 0.045) 1px,
-              transparent 1px
-            );
-
-          background-size: 48px 48px;
-
-          mask-image:
-            linear-gradient(
-              to bottom,
-              black 0%,
-              rgba(0, 0, 0, 0.7) 70%,
-              transparent 100%
-            );
-        }
-
-        .apply-glow {
-          position: absolute;
-          border-radius: 999px;
           pointer-events: none;
+          opacity: 0.28;
+          background-image:
+            linear-gradient(rgba(22, 113, 184, 0.035) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(22, 113, 184, 0.035) 1px, transparent 1px);
+          background-size: 42px 42px;
         }
 
-        .apply-glow-one {
-          width: 390px;
-          height: 390px;
-          right: -120px;
-          top: -130px;
-
-          background: rgba(56, 189, 248, 0.13);
-
-          filter: blur(5px);
-
-          box-shadow:
-            0 0 110px rgba(56, 189, 248, 0.25);
-        }
-
-        .apply-glow-two {
-          width: 270px;
-          height: 270px;
-          left: -120px;
-          bottom: -130px;
-
-          background: rgba(125, 211, 252, 0.08);
-          filter: blur(5px);
-        }
-
-        .apply-hero-content {
-          position: relative;
-          z-index: 2;
-
-          width: min(1240px, calc(100% - 48px));
+        .apply-container {
+          width: min(1220px, 100%);
           margin: 0 auto;
-
-          padding: 110px 0 90px;
+          position: relative;
+          z-index: 1;
         }
 
-        .apply-eyebrow {
+        /* =========================
+           HERO / OPPORTUNITIES BOX
+        ========================= */
+
+        .opportunity-box {
+          width: min(850px, 100%);
+          margin: 0 auto 58px;
+          padding: 32px 35px 34px;
+          text-align: center;
+          border-radius: 28px;
+          background: rgba(255, 255, 255, 0.88);
+          border: 1px solid rgba(22, 113, 184, 0.16);
+          box-shadow:
+            0 24px 70px rgba(5, 47, 77, 0.10),
+            0 4px 18px rgba(22, 113, 184, 0.06);
+          backdrop-filter: blur(14px);
+        }
+
+        .opportunity-label {
           display: inline-flex;
           align-items: center;
-          gap: 10px;
-
-          padding: 9px 15px;
-
-          border: 1px solid rgba(255, 255, 255, 0.17);
+          justify-content: center;
+          padding: 9px 17px;
           border-radius: 999px;
-
-          background: rgba(255, 255, 255, 0.075);
-
-          backdrop-filter: blur(14px);
-
-          font-size: 11px;
+          background: #e8f6ff;
+          color: #075183;
+          border: 1px solid #c7e8f9;
+          font-size: 12px;
           font-weight: 800;
-          letter-spacing: 0.17em;
-
-          color: #dff5ff;
+          letter-spacing: 1.8px;
+          margin-bottom: 16px;
         }
 
-        .apply-eyebrow-dot {
-          width: 7px;
-          height: 7px;
-
-          border-radius: 50%;
-
-          background: #7dd3fc;
-
-          box-shadow:
-            0 0 0 5px rgba(125, 211, 252, 0.08),
-            0 0 18px rgba(125, 211, 252, 0.6);
-        }
-
-        .apply-hero h1 {
-          max-width: 850px;
-
-          margin: 25px 0 20px;
-
-          font-size: clamp(48px, 6.5vw, 82px);
-
-          line-height: 0.99;
-
-          letter-spacing: -0.055em;
-
-          font-weight: 850;
-        }
-
-        .apply-hero h1 span {
-          color: #7dd3fc;
-        }
-
-        .apply-hero-description {
-          max-width: 650px;
-
+        .opportunity-title {
           margin: 0;
-
-          color: rgba(255, 255, 255, 0.76);
-
-          font-size: 18px;
-
-          line-height: 1.75;
+          color: #062f4c;
+          font-size: clamp(32px, 4vw, 48px);
+          line-height: 1.08;
+          font-weight: 900;
+          letter-spacing: -1.4px;
         }
+
+        .opportunity-description {
+          max-width: 650px;
+          margin: 15px auto 0;
+          color: #667b89;
+          font-size: 16px;
+          line-height: 1.7;
+        }
+
+        .opportunity-line {
+          width: 75px;
+          height: 4px;
+          border-radius: 10px;
+          margin: 22px auto 0;
+          background: linear-gradient(90deg, #1671b8, #38bdf8);
+        }
+
+        /* =========================
+           STATS
+        ========================= */
 
         .apply-stats {
-          display: flex;
-          align-items: center;
-
-          margin-top: 55px;
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 18px;
+          margin-bottom: 42px;
         }
 
         .apply-stat {
-          display: flex;
-          flex-direction: column;
-
-          gap: 5px;
-
-          min-width: 150px;
+          padding: 21px 24px;
+          border-radius: 20px;
+          background: rgba(255, 255, 255, 0.82);
+          border: 1px solid #d9eaf3;
+          box-shadow: 0 12px 35px rgba(5, 47, 77, 0.06);
+          text-align: center;
         }
 
-        .apply-stat strong {
+        .apply-stat-number {
+          display: block;
+          color: #075183;
           font-size: 27px;
-          font-weight: 800;
-          letter-spacing: -0.03em;
+          font-weight: 900;
+          margin-bottom: 4px;
         }
 
-        .apply-stat span {
-          color: rgba(255, 255, 255, 0.57);
-
-          font-size: 11px;
+        .apply-stat-label {
+          color: #718391;
+          font-size: 13px;
           font-weight: 700;
-
-          text-transform: uppercase;
-
-          letter-spacing: 0.12em;
         }
 
-        .apply-stat-divider {
-          width: 1px;
-          height: 42px;
-
-          margin: 0 28px;
-
-          background: rgba(255, 255, 255, 0.16);
-        }
-
-        .apply-content {
-          width: min(1240px, calc(100% - 48px));
-
-          margin: 0 auto;
-
-          padding: 100px 0 30px;
-        }
-
-        .apply-section-heading {
-          display: flex;
-
-          align-items: flex-end;
-
-          justify-content: space-between;
-
-          gap: 50px;
-
-          margin-bottom: 48px;
-        }
-
-        .apply-kicker {
-          color: var(--apply-primary);
-
-          font-size: 11px;
-
-          font-weight: 850;
-
-          letter-spacing: 0.18em;
-        }
-
-        .apply-section-heading h2 {
-          margin: 8px 0 0;
-
-          font-size: clamp(34px, 4vw, 50px);
-
-          line-height: 1;
-
-          letter-spacing: -0.045em;
-        }
-
-        .apply-section-heading p {
-          max-width: 460px;
-
-          margin: 0;
-
-          color: var(--apply-muted);
-
-          font-size: 15px;
-
-          line-height: 1.75;
-        }
+        /* =========================
+           PROGRAM GRID
+        ========================= */
 
         .program-grid {
           display: grid;
-
-          grid-template-columns:
-            repeat(3, minmax(0, 1fr));
-
-          gap: 24px;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 28px;
         }
 
-        .program-card {
+        .program-wrapper {
+          perspective: 1200px;
+        }
+
+        .apply-card {
+          min-height: 470px;
           position: relative;
-
-          min-height: 455px;
-
-          padding: 30px;
-
           overflow: hidden;
-
-          border: 1px solid var(--apply-border);
-
-          border-radius: 25px;
-
-          background:
-            linear-gradient(
-              145deg,
-              #ffffff,
-              #f9fcfe
-            );
-
+          border-radius: 27px;
+          padding: 30px;
+          border: 1px solid rgba(22, 113, 184, 0.16);
           box-shadow:
-            0 20px 55px rgba(5, 47, 77, 0.1);
-
+            0 16px 42px rgba(5, 47, 77, 0.09),
+            inset 0 1px 0 rgba(255,255,255,0.65);
           transition:
-            transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
+            transform 0.45s ease,
             box-shadow 0.45s ease,
             border-color 0.45s ease;
         }
 
-        .program-card:hover {
-          transform: translateY(-10px);
-
-          border-color:
-            rgba(22, 113, 184, 0.3);
-
+        .apply-card:hover {
+          transform: translateY(-10px) rotateX(1deg);
           box-shadow:
-            0 30px 70px rgba(5, 47, 77, 0.18);
+            0 28px 65px rgba(5, 47, 77, 0.16),
+            inset 0 1px 0 rgba(255,255,255,0.8);
         }
 
-        .program-card::before {
-          content: "";
-
-          position: absolute;
-
-          top: 0;
-          left: 0;
-          right: 0;
-
-          height: 3px;
-
+        .apply-card-blue {
           background:
-            linear-gradient(
-              90deg,
-              var(--apply-primary),
-              var(--apply-cyan)
-            );
-
-          transform: scaleX(0);
-
-          transform-origin: left;
-
-          transition:
-            transform 0.45s ease;
+            radial-gradient(circle at 100% 0%, rgba(56, 189, 248, 0.20), transparent 32%),
+            linear-gradient(145deg, #e8f6ff 0%, #d7efff 52%, #c8e8fa 100%);
         }
 
-        .program-card:hover::before {
-          transform: scaleX(1);
+        .apply-card-sky {
+          background:
+            radial-gradient(circle at 0% 100%, rgba(14, 165, 233, 0.18), transparent 35%),
+            linear-gradient(145deg, #edfaff 0%, #dff5ff 52%, #d1edfa 100%);
         }
 
-        .program-card-glow {
+        .apply-card-cyan {
+          background:
+            radial-gradient(circle at 100% 20%, rgba(6, 182, 212, 0.17), transparent 35%),
+            linear-gradient(145deg, #e8fbff 0%, #d8f5fa 52%, #ccecf3 100%);
+        }
+
+        .card-glow {
           position: absolute;
-
-          width: 220px;
-          height: 220px;
-
-          right: -100px;
-          top: -100px;
-
+          width: 150px;
+          height: 150px;
+          right: -55px;
+          top: -60px;
           border-radius: 50%;
-
-          background:
-            rgba(56, 189, 248, 0.09);
-
-          filter: blur(5px);
-
-          transition:
-            transform 0.5s ease;
+          background: rgba(255,255,255,0.45);
+          filter: blur(4px);
+          pointer-events: none;
         }
 
-        .program-card:hover
-        .program-card-glow {
-          transform: scale(1.35);
-        }
-
-        .program-top {
+        .card-top {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 12px;
+          margin-bottom: 27px;
           position: relative;
           z-index: 2;
-
-          display: flex;
-
-          justify-content: space-between;
-
-          align-items: center;
-
-          gap: 15px;
         }
 
         .program-number {
-          width: 48px;
-          height: 48px;
-
+          width: 56px;
+          height: 56px;
           display: flex;
-
           align-items: center;
-
           justify-content: center;
-
-          border-radius: 15px;
-
-          background:
-            linear-gradient(
-              145deg,
-              #eaf7ff,
-              #dff2fc
-            );
-
-          color: var(--apply-primary);
-
-          font-size: 14px;
-
-          font-weight: 850;
-        }
-
-        .program-status {
-          display: flex;
-
-          align-items: center;
-
-          gap: 7px;
-
-          padding: 7px 10px;
-
-          border-radius: 999px;
-
-          font-size: 9px;
-
-          font-weight: 800;
-
-          letter-spacing: 0.06em;
-
-          text-transform: uppercase;
-        }
-
-        .program-status span {
-          width: 6px;
-          height: 6px;
-
-          border-radius: 50%;
-        }
-
-        .status-available {
-          color: #08724e;
-
-          background: #e8f8f1;
-        }
-
-        .status-available span {
-          background: #18a773;
-
-          box-shadow:
-            0 0 10px rgba(24, 167, 115, 0.5);
-        }
-
-        .status-soon {
-          color: #687782;
-
-          background: #edf2f5;
-        }
-
-        .status-soon span {
-          background: #8c9ba5;
-        }
-
-        .program-icon {
-          width: 62px;
-          height: 62px;
-
-          display: flex;
-
-          align-items: center;
-
-          justify-content: center;
-
-          margin-top: 30px;
-
-          border-radius: 19px;
-
-          color: var(--apply-primary);
-
-          background:
-            linear-gradient(
-              145deg,
-              #f0f9ff,
-              #e6f4fc
-            );
-
-          transition:
-            transform 0.45s ease,
-            background 0.45s ease,
-            color 0.45s ease;
-        }
-
-        .program-icon svg {
-          width: 27px;
-          height: 27px;
-        }
-
-        .program-card:hover
-        .program-icon {
-          transform:
-            rotate(-4deg)
-            scale(1.08);
-
-          color: white;
-
-          background:
-            linear-gradient(
-              145deg,
-              var(--apply-primary),
-              var(--apply-primary-dark)
-            );
-        }
-
-        .program-category {
-          margin-top: 24px;
-
-          color: var(--apply-primary);
-
-          font-size: 10px;
-
-          font-weight: 850;
-
-          text-transform: uppercase;
-
-          letter-spacing: 0.15em;
-        }
-
-        .program-card h3 {
-          position: relative;
-
-          z-index: 2;
-
-          margin: 10px 0 12px;
-
-          color: var(--apply-text);
-
-          font-size: 23px;
-
-          line-height: 1.2;
-
-          letter-spacing: -0.035em;
-
-          transition:
-            color 0.3s ease;
-        }
-
-        .program-card:hover h3 {
-          color: var(--apply-primary-dark);
-        }
-
-        .program-description {
-          position: relative;
-
-          z-index: 2;
-
-          min-height: 67px;
-
-          margin: 0;
-
-          color: var(--apply-muted);
-
-          font-size: 14px;
-
-          line-height: 1.65;
-        }
-
-        .program-meta {
-          margin-top: 22px;
-
-          padding-top: 18px;
-
-          border-top:
-            1px solid #e5edf2;
+          border-radius: 17px;
+          background: rgba(255,255,255,0.70);
+          border: 1px solid rgba(255,255,255,0.9);
+          color: #075183;
+          font-size: 16px;
+          font-weight: 900;
+          box-shadow: 0 8px 20px rgba(5, 47, 77, 0.08);
         }
 
         .program-date {
-          display: flex;
-
+          display: inline-flex;
           align-items: center;
+          gap: 7px;
+          padding: 8px 11px;
+          border-radius: 12px;
+          background: rgba(255,255,255,0.72);
+          color: #23627f;
+          border: 1px solid rgba(255,255,255,0.85);
+          font-size: 11px;
+          font-weight: 800;
+          white-space: nowrap;
+        }
 
+        /* =========================
+           RED BLINKING AVAILABLE
+        ========================= */
+
+        .available-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 7px;
+          margin-bottom: 15px;
+          padding: 7px 12px;
+          border-radius: 999px;
+          background: #fff1f1;
+          color: #dc2626;
+          border: 1px solid #fecaca;
+          font-size: 11px;
+          font-weight: 900;
+          letter-spacing: 0.8px;
+          text-transform: uppercase;
+          animation: availabilityBlink 1.25s infinite;
+        }
+
+        .available-dot {
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: #ef4444;
+          box-shadow: 0 0 0 4px rgba(239,68,68,0.12);
+        }
+
+        @keyframes availabilityBlink {
+          0%, 100% {
+            opacity: 1;
+            transform: scale(1);
+          }
+          50% {
+            opacity: 0.48;
+            transform: scale(0.97);
+          }
+        }
+
+        .coming-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 7px;
+          margin-bottom: 15px;
+          padding: 7px 12px;
+          border-radius: 999px;
+          background: rgba(255,255,255,0.62);
+          color: #55788d;
+          border: 1px solid rgba(255,255,255,0.9);
+          font-size: 11px;
+          font-weight: 900;
+          letter-spacing: 0.8px;
+          text-transform: uppercase;
+        }
+
+        .apply-card-title {
+          margin: 0 0 14px;
+          color: #083b5d;
+          font-size: 25px;
+          line-height: 1.22;
+          font-weight: 900;
+          letter-spacing: -0.5px;
+          position: relative;
+          z-index: 2;
+        }
+
+        .apply-card-description {
+          color: #527083;
+          font-size: 14px;
+          line-height: 1.75;
+          margin: 0;
+          position: relative;
+          z-index: 2;
+        }
+
+        .card-divider {
+          height: 1px;
+          background: rgba(7,81,131,0.12);
+          margin: 25px 0 20px;
+        }
+
+        .program-type {
+          display: flex;
+          align-items: center;
           gap: 9px;
-
-          color: #526875;
-
+          color: #28617c;
           font-size: 12px;
-
-          font-weight: 700;
+          font-weight: 800;
         }
 
-        .program-date svg {
-          width: 17px;
-          height: 17px;
-
-          color: var(--apply-primary);
+        .program-type-icon {
+          width: 31px;
+          height: 31px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 10px;
+          background: rgba(255,255,255,0.70);
+          color: #1671b8;
         }
 
-        .program-footer {
-          margin-top: 22px;
+        .card-bottom {
+          position: absolute;
+          left: 30px;
+          right: 30px;
+          bottom: 30px;
         }
 
         .apply-button {
           width: 100%;
-
-          min-height: 50px;
-
+          min-height: 52px;
+          border: none;
+          border-radius: 15px;
           display: flex;
-
           align-items: center;
-
-          justify-content: space-between;
-
-          padding: 0 17px;
-
-          border: 0;
-
-          border-radius: 14px;
-
-          background: #122c3b;
-
-          color: white;
-
-          font-size: 12px;
-
+          justify-content: center;
+          gap: 10px;
+          background: #063b5e;
+          color: #ffffff;
+          font-size: 14px;
           font-weight: 800;
-
           cursor: pointer;
-
           transition:
-            background 0.3s ease,
             transform 0.3s ease,
+            background 0.3s ease,
             box-shadow 0.3s ease;
-        }
-
-        .apply-button svg {
-          width: 20px;
-          height: 20px;
-
-          transition:
-            transform 0.3s ease;
+          box-shadow: 0 10px 24px rgba(5,47,77,0.17);
         }
 
         .apply-button:hover {
-          background:
-            linear-gradient(
-              135deg,
-              var(--apply-primary),
-              var(--apply-primary-dark)
-            );
-
           transform: translateY(-2px);
-
-          box-shadow:
-            0 12px 25px
-            rgba(22, 113, 184, 0.2);
-        }
-
-        .apply-button:hover svg {
-          transform: translateX(4px);
+          background: #1671b8;
+          box-shadow: 0 14px 30px rgba(22,113,184,0.24);
         }
 
         .apply-button:active {
@@ -827,1131 +525,537 @@ const Apply = () => {
         }
 
         .apply-button-disabled {
-          background: #e8eef2;
-
-          color: #83939d;
-
-          cursor: not-allowed;
-        }
-
-        .apply-button-disabled:hover {
-          background: #e8eef2;
-
-          transform: none;
-
+          background: rgba(255,255,255,0.72);
+          color: #718998;
+          cursor: default;
           box-shadow: none;
         }
 
-        .program-index {
-          position: absolute;
-
-          right: 28px;
-
-          bottom: 15px;
-
-          color:
-            rgba(22, 113, 184, 0.06);
-
-          font-size: 70px;
-
-          font-weight: 900;
-
-          line-height: 1;
-
-          pointer-events: none;
+        .apply-button-disabled:hover {
+          transform: none;
+          background: rgba(255,255,255,0.72);
+          box-shadow: none;
         }
 
-        .apply-info-section {
-          width:
-            min(1240px, calc(100% - 48px));
+        /* =========================
+           APPLICATION VIEW
+        ========================= */
 
-          margin: 0 auto;
-
-          padding:
-            55px 0 100px;
-        }
-
-        .apply-info-card {
-          display: flex;
-
-          align-items: flex-start;
-
-          gap: 22px;
-
-          padding: 28px 32px;
-
-          border:
-            1px solid var(--apply-border);
-
-          border-radius: 21px;
-
+        .application-screen {
+          position: fixed;
+          inset: 0;
+          z-index: 9999;
           background:
-            rgba(255, 255, 255, 0.78);
-
-          box-shadow:
-            0 12px 35px
-            rgba(5, 47, 77, 0.055);
-        }
-
-        .apply-info-icon {
-          flex: 0 0 auto;
-
-          width: 45px;
-          height: 45px;
-
-          display: flex;
-
-          align-items: center;
-
-          justify-content: center;
-
-          border-radius: 14px;
-
-          color:
-            var(--apply-primary);
-
-          background:
-            #eaf7ff;
-        }
-
-        .apply-info-icon svg {
-          width: 21px;
-          height: 21px;
-        }
-
-        .apply-info-label {
-          color:
-            var(--apply-primary);
-
-          font-size: 9px;
-
-          font-weight: 850;
-
-          letter-spacing: 0.15em;
-        }
-
-        .apply-info-card h3 {
-          margin:
-            5px 0;
-
-          font-size: 17px;
-
-          letter-spacing: -0.02em;
-        }
-
-        .apply-info-card p {
-          max-width: 850px;
-
-          margin: 0;
-
-          color:
-            var(--apply-muted);
-
-          font-size: 13px;
-
-          line-height: 1.7;
-        }
-
-        .application-workspace {
-          min-height: 100vh;
-
-          padding-bottom: 60px;
-
-          background:
-            radial-gradient(
-              circle at 10% 10%,
-              rgba(56, 189, 248, 0.08),
-              transparent 25%
-            ),
-            #f1f6f9;
-        }
-
-        .application-topbar {
-          height: 76px;
-
-          display: flex;
-
-          align-items: center;
-
-          justify-content: space-between;
-
-          padding:
-            0 max(
-              24px,
-              calc((100vw - 1240px) / 2)
-            );
-
-          border-bottom:
-            1px solid
-            rgba(203, 219, 230, 0.8);
-
-          background:
-            rgba(255, 255, 255, 0.9);
-
-          backdrop-filter:
-            blur(20px);
-
-          position: sticky;
-
-          top: 0;
-
-          z-index: 50;
-        }
-
-        .back-button {
-          display: inline-flex;
-
-          align-items: center;
-
-          gap: 10px;
-
-          padding: 10px 14px;
-
-          border: 0;
-
-          border-radius: 11px;
-
-          background: transparent;
-
-          color: #526875;
-
-          font-size: 12px;
-
-          font-weight: 800;
-
-          cursor: pointer;
-
-          transition:
-            color 0.25s ease,
-            background 0.25s ease;
-        }
-
-        .back-button:hover {
-          color:
-            var(--apply-primary);
-
-          background:
-            #edf7fc;
-        }
-
-        .back-arrow {
-          font-size: 19px;
-
-          line-height: 1;
-        }
-
-        .workspace-label {
-          display: flex;
-
-          align-items: center;
-
-          gap: 8px;
-
-          color: #82939e;
-
-          font-size: 9px;
-
-          font-weight: 850;
-
-          letter-spacing: 0.15em;
-        }
-
-        .workspace-dot {
-          width: 7px;
-          height: 7px;
-
-          border-radius: 50%;
-
-          background: #19a875;
-
-          box-shadow:
-            0 0 0 4px
-            rgba(25, 168, 117, 0.08);
-        }
-
-        .application-container {
-          width:
-            min(1180px, calc(100% - 36px));
-
-          margin:
-            35px auto 0;
-
-          overflow: hidden;
-
-          border:
-            1px solid #d7e3eb;
-
-          border-radius: 24px;
-
-          background: white;
-
-          box-shadow:
-            0 25px 80px
-            rgba(5, 47, 77, 0.1);
+            linear-gradient(135deg, #f3f9fd 0%, #ffffff 45%, #eef7fc 100%);
+          overflow-y: auto;
         }
 
         .application-header {
+          position: sticky;
+          top: 0;
+          z-index: 20;
+          min-height: 76px;
           display: flex;
-
           align-items: center;
-
           justify-content: space-between;
-
-          gap: 30px;
-
-          padding:
-            35px 38px;
-
-          color: white;
-
-          background:
-            radial-gradient(
-              circle at 90% 0%,
-              rgba(56, 189, 248, 0.22),
-              transparent 30%
-            ),
-            linear-gradient(
-              135deg,
-              #052f4d,
-              #075183
-            );
-        }
-
-        .application-header-content {
-          display: flex;
-
-          align-items: center;
-
           gap: 20px;
+          padding: 12px 28px;
+          background: rgba(255,255,255,0.94);
+          border-bottom: 1px solid #d9e7ef;
+          backdrop-filter: blur(18px);
+          box-shadow: 0 8px 28px rgba(5,47,77,0.07);
         }
 
-        .application-header-icon {
-          flex: 0 0 auto;
-
-          width: 62px;
-          height: 62px;
-
+        .application-header-left {
           display: flex;
-
           align-items: center;
-
-          justify-content: center;
-
-          border:
-            1px solid
-            rgba(255, 255, 255, 0.13);
-
-          border-radius: 17px;
-
-          background:
-            rgba(255, 255, 255, 0.09);
-
-          color:
-            #7dd3fc;
-
-          backdrop-filter:
-            blur(10px);
+          gap: 14px;
+          min-width: 0;
         }
 
-        .application-header-icon svg {
-          width: 28px;
-          height: 28px;
-        }
-
-        .application-label {
-          color:
-            rgba(255, 255, 255, 0.55);
-
-          font-size: 9px;
-
-          font-weight: 850;
-
-          letter-spacing: 0.16em;
-        }
-
-        .application-header h1 {
-          margin:
-            7px 0 12px;
-
-          font-size:
-            clamp(25px, 3vw, 36px);
-
-          line-height: 1.1;
-
-          letter-spacing: -0.04em;
-        }
-
-        .application-details {
+        .back-button {
+          flex-shrink: 0;
+          height: 44px;
+          padding: 0 15px;
           display: flex;
-
           align-items: center;
-
-          gap: 18px;
-
-          color:
-            rgba(255, 255, 255, 0.67);
-
-          font-size: 11px;
-
-          font-weight: 700;
-        }
-
-        .application-details div {
-          display: flex;
-
-          align-items: center;
-
-          gap: 7px;
-        }
-
-        .application-details svg {
-          width: 16px;
-          height: 16px;
-
-          color:
-            #7dd3fc;
-        }
-
-        .detail-dot {
-          width: 5px;
-          height: 5px;
-
-          border-radius: 50%;
-
-          background:
-            #7dd3fc;
-        }
-
-        .external-form-button {
-          flex: 0 0 auto;
-
-          display: inline-flex;
-
-          align-items: center;
-
-          gap: 10px;
-
-          padding:
-            13px 16px;
-
-          border:
-            1px solid
-            rgba(255, 255, 255, 0.16);
-
+          gap: 8px;
+          border: 1px solid #d6e5ed;
           border-radius: 12px;
-
-          background:
-            rgba(255, 255, 255, 0.09);
-
-          color: white;
-
-          font-size: 11px;
-
+          background: #ffffff;
+          color: #31586e;
+          font-size: 13px;
           font-weight: 800;
-
-          text-decoration: none;
-
-          backdrop-filter:
-            blur(10px);
-
-          transition:
-            background 0.25s ease,
-            transform 0.25s ease;
+          cursor: pointer;
+          transition: all 0.25s ease;
         }
 
-        .external-form-button svg {
-          width: 16px;
-          height: 16px;
+        .back-button:hover {
+          background: #eaf7ff;
+          color: #075183;
+          border-color: #b9dced;
         }
 
-        .external-form-button:hover {
-          background:
-            rgba(255, 255, 255, 0.16);
-
-          transform:
-            translateY(-2px);
+        .application-heading {
+          min-width: 0;
         }
 
-        .application-body {
-          padding: 22px;
-        }
-
-        .application-notice {
-          display: flex;
-
-          align-items: center;
-
-          gap: 13px;
-
-          margin-bottom: 20px;
-
-          padding: 14px 17px;
-
-          border:
-            1px solid #dcebf2;
-
-          border-radius: 14px;
-
-          background:
-            #f7fbfd;
-        }
-
-        .notice-icon {
-          flex: 0 0 auto;
-
-          width: 34px;
-          height: 34px;
-
-          display: flex;
-
-          align-items: center;
-
-          justify-content: center;
-
-          border-radius: 10px;
-
-          color: #15946b;
-
-          background: #e8f8f1;
-        }
-
-        .notice-icon svg {
-          width: 17px;
-          height: 17px;
-        }
-
-        .notice-text {
-          display: flex;
-
-          flex-direction: column;
-
-          gap: 2px;
-        }
-
-        .notice-text strong {
-          color:
-            var(--apply-text);
-
-          font-size: 12px;
-        }
-
-        .notice-text span {
-          color:
-            var(--apply-muted);
-
-          font-size: 11px;
-        }
-
-        .form-frame {
-          overflow: hidden;
-
-          min-height: 900px;
-
-          border:
-            1px solid #dce6ec;
-
-          border-radius: 17px;
-
-          background:
-            white;
-        }
-
-        .application-iframe {
+        .application-small-label {
           display: block;
+          color: #1671b8;
+          font-size: 10px;
+          font-weight: 900;
+          letter-spacing: 1.5px;
+          text-transform: uppercase;
+          margin-bottom: 3px;
+        }
 
+        .application-title {
+          margin: 0;
+          color: #092f49;
+          font-size: 17px;
+          font-weight: 900;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .open-form-button {
+          flex-shrink: 0;
+          height: 44px;
+          padding: 0 16px;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          border: none;
+          border-radius: 12px;
+          background: #075183;
+          color: white;
+          font-size: 12px;
+          font-weight: 800;
+          cursor: pointer;
+          text-decoration: none;
+          transition: all 0.25s ease;
+        }
+
+        .open-form-button:hover {
+          background: #1671b8;
+          transform: translateY(-1px);
+        }
+
+        .application-content {
+          width: min(1250px, calc(100% - 32px));
+          margin: 24px auto 40px;
+        }
+
+        .form-intro {
+          padding: 21px 24px;
+          margin-bottom: 18px;
+          border-radius: 18px;
+          background: linear-gradient(135deg, #075183, #1671b8);
+          color: white;
+          box-shadow: 0 12px 32px rgba(5,47,77,0.14);
+        }
+
+        .form-intro-title {
+          margin: 0 0 5px;
+          font-size: 18px;
+          font-weight: 900;
+        }
+
+        .form-intro-text {
+          margin: 0;
+          color: rgba(255,255,255,0.82);
+          font-size: 13px;
+          line-height: 1.6;
+        }
+
+        /*
+          GOOGLE FORM WORKSPACE
+
+          The iframe is intentionally very tall and full-width.
+          This gives Google Forms enough vertical space and avoids
+          the cramped appearance of the previous version.
+        */
+
+        .google-form-container {
           width: 100%;
+          min-height: calc(100vh - 210px);
+          padding: 12px;
+          background: #ffffff;
+          border: 1px solid #d6e5ed;
+          border-radius: 22px;
+          box-shadow:
+            0 18px 50px rgba(5,47,77,0.10),
+            0 2px 8px rgba(5,47,77,0.04);
+          overflow: hidden;
+        }
 
-          height: 900px;
-
+        .google-form-frame {
+          display: block;
+          width: 100%;
+          height: 1100px;
+          min-height: 850px;
           border: 0;
-
-          background:
-            white;
+          border-radius: 14px;
+          background: #ffffff;
         }
 
-        .apply-button:focus-visible,
-        .back-button:focus-visible,
-        .external-form-button:focus-visible {
-          outline:
-            3px solid
-            rgba(56, 189, 248, 0.45);
-
-          outline-offset: 3px;
+        .form-fallback {
+          margin-top: 15px;
+          padding: 18px;
+          text-align: center;
+          border-radius: 14px;
+          background: #f5faff;
+          border: 1px solid #d8ebf5;
+          color: #66808f;
+          font-size: 13px;
+          line-height: 1.6;
         }
 
-        @media (max-width: 1050px) {
+        .form-fallback a {
+          color: #1671b8;
+          font-weight: 800;
+          text-decoration: none;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 1000px) {
           .program-grid {
-            grid-template-columns:
-              repeat(2, minmax(0, 1fr));
-          }
-
-          .apply-section-heading {
-            align-items:
-              flex-start;
-
-            flex-direction:
-              column;
-
-            gap: 18px;
-          }
-
-          .apply-section-heading p {
-            max-width: 650px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
           }
         }
 
-        @media (max-width: 760px) {
-          .apply-hero {
-            min-height: 520px;
+        @media (max-width: 700px) {
+          .apply-page {
+            padding: 94px 15px 55px;
           }
 
-          .apply-hero-content {
-            width:
-              min(100% - 36px, 620px);
-
-            padding:
-              90px 0 70px;
+          .opportunity-box {
+            padding: 27px 20px 28px;
+            margin-bottom: 35px;
+            border-radius: 22px;
           }
 
-          .apply-hero h1 {
-            font-size:
-              clamp(43px, 12vw, 65px);
+          .opportunity-title {
+            font-size: 31px;
           }
 
-          .apply-hero-description {
-            font-size: 15px;
+          .opportunity-description {
+            font-size: 14px;
           }
 
           .apply-stats {
-            margin-top: 40px;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-bottom: 28px;
           }
 
           .apply-stat {
-            min-width: auto;
-          }
-
-          .apply-stat strong {
-            font-size: 21px;
-          }
-
-          .apply-stat span {
-            font-size: 9px;
-          }
-
-          .apply-stat-divider {
-            margin: 0 15px;
-          }
-
-          .apply-content {
-            width:
-              min(100% - 36px, 620px);
-
-            padding-top: 75px;
+            padding: 16px;
           }
 
           .program-grid {
             grid-template-columns: 1fr;
-          }
-
-          .program-card {
-            min-height: auto;
-          }
-
-          .apply-info-section {
-            width:
-              min(100% - 36px, 620px);
-
-            padding-bottom: 70px;
-          }
-
-          .application-header {
-            align-items:
-              flex-start;
-
-            flex-direction:
-              column;
-          }
-
-          .external-form-button {
-            width: 100%;
-
-            justify-content:
-              center;
-          }
-
-          .application-body {
-            padding: 14px;
-          }
-
-          .application-container {
-            width:
-              calc(100% - 24px);
-
-            margin-top: 20px;
-
-            border-radius: 18px;
-          }
-        }
-
-        @media (max-width: 520px) {
-          .apply-hero-content {
-            width:
-              calc(100% - 30px);
-          }
-
-          .apply-eyebrow {
-            font-size: 9px;
-          }
-
-          .apply-hero h1 {
-            font-size: 42px;
-
-            letter-spacing: -0.06em;
-          }
-
-          .apply-hero-description {
-            font-size: 14px;
-
-            line-height: 1.65;
-          }
-
-          .apply-stats {
-            flex-wrap: wrap;
-
             gap: 18px;
           }
 
-          .apply-stat-divider {
-            display: none;
-          }
-
-          .apply-stat {
-            min-width:
-              calc(50% - 10px);
-          }
-
-          .apply-content {
-            width:
-              calc(100% - 30px);
-          }
-
-          .apply-section-heading h2 {
-            font-size: 36px;
-          }
-
-          .program-card {
+          .apply-card {
+            min-height: 440px;
             padding: 24px;
-
-            border-radius: 21px;
+            border-radius: 22px;
           }
 
-          .program-top {
-            align-items:
-              flex-start;
-          }
-
-          .program-status {
-            max-width: 155px;
-
-            text-align: right;
-          }
-
-          .program-card h3 {
-            font-size: 21px;
-          }
-
-          .apply-info-section {
-            width:
-              calc(100% - 30px);
-          }
-
-          .apply-info-card {
-            flex-direction:
-              column;
-
-            padding: 23px;
-          }
-
-          .application-topbar {
-            height: 65px;
-
-            padding: 0 12px;
-          }
-
-          .back-button {
-            padding: 9px;
-          }
-
-          .back-button span:last-child {
-            display: none;
-          }
-
-          .workspace-label {
-            font-size: 8px;
-          }
-
-          .application-container {
-            width:
-              calc(100% - 16px);
-
-            margin-top: 12px;
+          .card-bottom {
+            left: 24px;
+            right: 24px;
+            bottom: 24px;
           }
 
           .application-header {
-            padding:
-              25px 20px;
+            padding: 10px 13px;
+            min-height: 66px;
           }
 
-          .application-header-content {
-            align-items:
-              flex-start;
-
-            flex-direction:
-              column;
+          .application-header-left {
+            gap: 9px;
           }
 
-          .application-header h1 {
-            font-size: 25px;
+          .back-button {
+            width: 42px;
+            height: 42px;
+            padding: 0;
+            justify-content: center;
           }
 
-          .application-details {
-            align-items:
-              flex-start;
-
-            flex-direction:
-              column;
-
-            gap: 8px;
-          }
-
-          .application-details .detail-dot {
+          .back-button span {
             display: none;
           }
 
-          .application-body {
-            padding: 9px;
+          .application-small-label {
+            display: none;
           }
 
-          .application-notice {
-            align-items:
-              flex-start;
+          .application-title {
+            font-size: 13px;
+            max-width: 180px;
           }
 
-          .notice-text span {
-            line-height: 1.5;
+          .open-form-button {
+            width: 42px;
+            height: 42px;
+            padding: 0;
+            justify-content: center;
           }
 
-          .form-frame {
-            border-radius: 12px;
+          .open-form-button span {
+            display: none;
           }
 
-          .application-iframe {
-            height: 850px;
+          .application-content {
+            width: calc(100% - 18px);
+            margin: 12px auto 25px;
+          }
+
+          .form-intro {
+            padding: 17px;
+            border-radius: 15px;
+          }
+
+          .form-intro-title {
+            font-size: 15px;
+          }
+
+          .form-intro-text {
+            font-size: 12px;
+          }
+
+          .google-form-container {
+            padding: 5px;
+            border-radius: 16px;
+          }
+
+          .google-form-frame {
+            height: 1050px;
+            min-height: 900px;
+            border-radius: 10px;
           }
         }
 
         @media (prefers-reduced-motion: reduce) {
-          .program-card,
-          .program-icon,
-          .program-card-glow,
+          .apply-card,
           .apply-button,
-          .external-form-button {
+          .back-button,
+          .open-form-button {
             transition: none;
+          }
+
+          .available-badge {
+            animation: none;
           }
         }
       `}</style>
 
-      <main className="apply-page">
-        {!selectedProgram ? (
-          <>
-            <section className="apply-hero">
-              <div className="apply-grid" />
-              <div className="apply-glow apply-glow-one" />
-              <div className="apply-glow apply-glow-two" />
+      {!selectedProgram ? (
+        <div className="apply-container">
+          {/* =========================
+              OPPORTUNITIES HEADER
+          ========================= */}
 
-              <div className="apply-hero-content">
-                <div className="apply-eyebrow">
-                  <span className="apply-eyebrow-dot" />
-                  PROGRAM APPLICATIONS
-                </div>
+          <section className="opportunity-box">
+            <div className="opportunity-label">OPPORTUNITIES</div>
 
-                <h1>
-                  Learn.
-                  <span> Participate.</span>
-                  <br />
-                  Make an Impact.
-                </h1>
+            <h1 className="opportunity-title">Choose a Program</h1>
 
-                <p className="apply-hero-description">
-                  Explore educational programs, training opportunities and
-                  student-focused initiatives by Vets For Animal Welfare.
-                </p>
+            <p className="opportunity-description">
+              Explore current and upcoming VFAW opportunities and select a
+              program that matches your interests, skills, and goals.
+            </p>
 
-                <div className="apply-stats">
-                  <div className="apply-stat">
-                    <strong>{programs.length}</strong>
-                    <span>Programs</span>
-                  </div>
+            <div className="opportunity-line" />
+          </section>
 
-                  <div className="apply-stat-divider" />
+          {/* =========================
+              STATS
+          ========================= */}
 
-                  <div className="apply-stat">
-                    <strong>{availablePrograms.length}</strong>
-                    <span>Applications Available</span>
-                  </div>
+          <div className="apply-stats">
+            <div className="apply-stat">
+              <span className="apply-stat-number">{programs.length}</span>
+              <span className="apply-stat-label">Programs Listed</span>
+            </div>
 
-                  <div className="apply-stat-divider" />
+            <div className="apply-stat">
+              <span className="apply-stat-number">
+                {availablePrograms.length}
+              </span>
+              <span className="apply-stat-label">Applications Available</span>
+            </div>
 
-                  <div className="apply-stat">
-                    <strong>VFAW</strong>
-                    <span>Student Led</span>
-                  </div>
-                </div>
-              </div>
-            </section>
+            <div className="apply-stat">
+              <span className="apply-stat-number">VFAW</span>
+              <span className="apply-stat-label">Student-Led Initiative</span>
+            </div>
+          </div>
 
-            <section className="apply-content">
-              <div className="apply-section-heading">
-                <div>
-                  <span className="apply-kicker">
-                    OPPORTUNITIES
-                  </span>
+          {/* =========================
+              PROGRAM CARDS
+          ========================= */}
 
-                  <h2>
-                    Choose a Program
-                  </h2>
-                </div>
+          <div className="program-grid">
+            {programs.map((program) => {
+              const isAvailable = Boolean(program.formLink);
 
-                <p>
-                  Find an opportunity that matches your interests and take the
-                  next step in your learning journey.
-                </p>
-              </div>
+              return (
+                <div className="program-wrapper" key={program.id}>
+                  <article className={getCardClass(program.shade)}>
+                    <div className="card-glow" />
 
-              <div className="program-grid">
-                {programs.map((program, index) => {
-                  const formAvailable =
-                    !program.formLink.includes("YOUR_FORM_ID");
-
-                  return (
-                    <article
-                      key={program.id}
-                      className="program-card"
-                    >
-                      <div className="program-card-glow" />
-
-                      <div className="program-top">
-                        <div className="program-number">
-                          {String(program.id).padStart(2, "0")}
-                        </div>
-
-                        <div
-                          className={`program-status ${
-                            formAvailable
-                              ? "status-available"
-                              : "status-soon"
-                          }`}
-                        >
-                          <span />
-
-                          {formAvailable
-                            ? "Application Available"
-                            : "Coming Soon"}
-                        </div>
+                    <div className="card-top">
+                      <div className="program-number">
+                        {String(program.id).padStart(2, "0")}
                       </div>
 
-                      <div className="program-icon">
-                        <FormIcon />
+                      <div className="program-date">
+                        <Icon name="calendar" size={14} />
+                        {program.date}
                       </div>
+                    </div>
 
-                      <div className="program-category">
-                        {program.type}
+                    {isAvailable ? (
+                      <div className="available-badge">
+                        <span className="available-dot" />
+                        Application Available
                       </div>
-
-                      <h3>
-                        {program.title}
-                      </h3>
-
-                      <p className="program-description">
-                        {program.description}
-                      </p>
-
-                      <div className="program-meta">
-                        <div className="program-date">
-                          <CalendarIcon />
-
-                          <span>
-                            {program.date}
-                          </span>
-                        </div>
+                    ) : (
+                      <div className="coming-badge">
+                        <Icon name="calendar" size={13} />
+                        Coming Soon
                       </div>
+                    )}
 
-                      <div className="program-footer">
-                        {formAvailable ? (
-                          <button
-                            type="button"
-                            className="apply-button"
-                            onClick={() =>
-                              openProgram(program)
-                            }
-                          >
-                            <span>
-                              Apply Now
-                            </span>
+                    <h2 className="apply-card-title">{program.title}</h2>
 
-                            <ArrowIcon />
-                          </button>
-                        ) : (
-                          <button
-                            type="button"
-                            className="apply-button apply-button-disabled"
-                            disabled
-                          >
-                            <span>
-                              Applications Coming Soon
-                            </span>
-                          </button>
-                        )}
-                      </div>
+                    <p className="apply-card-description">
+                      {program.description}
+                    </p>
 
-                      <span className="program-index">
-                        0{index + 1}
+                    <div className="card-divider" />
+
+                    <div className="program-type">
+                      <span className="program-type-icon">
+                        <Icon name="form" size={16} />
                       </span>
-                    </article>
-                  );
-                })}
-              </div>
-            </section>
 
-            <section className="apply-info-section">
-              <div className="apply-info-card">
-                <div className="apply-info-icon">
-                  <CheckIcon />
+                      {program.type}
+                    </div>
+
+                    <div className="card-bottom">
+                      {isAvailable ? (
+                        <button
+                          type="button"
+                          className="apply-button"
+                          onClick={() => setSelectedProgram(program)}
+                        >
+                          Apply Now
+                          <Icon name="arrow" size={18} />
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          className="apply-button apply-button-disabled"
+                          disabled
+                        >
+                          Applications Coming Soon
+                        </button>
+                      )}
+                    </div>
+                  </article>
                 </div>
+              );
+            })}
+          </div>
+        </div>
+      ) : (
+        /* =========================
+           FULL APPLICATION SCREEN
+        ========================= */
 
-                <div>
-                  <span className="apply-info-label">
-                    BEFORE YOU APPLY
-                  </span>
-
-                  <h3>
-                    Choose the opportunity that fits you best.
-                  </h3>
-
-                  <p>
-                    Review the program information and complete the
-                    application form carefully. Programs marked Coming Soon
-                    will become available when registration opens.
-                  </p>
-                </div>
-              </div>
-            </section>
-          </>
-        ) : (
-          <section className="application-workspace">
-            <div className="application-topbar">
+        <div className="application-screen">
+          <header className="application-header">
+            <div className="application-header-left">
               <button
                 type="button"
                 className="back-button"
-                onClick={() =>
-                  setSelectedProgram(null)
-                }
+                onClick={() => setSelectedProgram(null)}
+                aria-label="Back to programs"
               >
-                <span className="back-arrow">
-                  ←
-                </span>
-
-                <span>
-                  Back to Programs
-                </span>
+                <Icon name="back" size={18} />
+                <span>Back</span>
               </button>
 
-              <div className="workspace-label">
-                <span className="workspace-dot" />
-                APPLICATION FORM
+              <div className="application-heading">
+                <span className="application-small-label">
+                  Program Application
+                </span>
+
+                <h1 className="application-title">
+                  {selectedProgram.title}
+                </h1>
               </div>
             </div>
 
-            <div className="application-container">
-              <header className="application-header">
-                <div className="application-header-content">
-                  <div className="application-header-icon">
-                    <FormIcon />
-                  </div>
+            <a
+              href={selectedProgram.formLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="open-form-button"
+            >
+              <Icon name="external" size={16} />
+              <span>Open in New Tab</span>
+            </a>
+          </header>
 
-                  <div>
-                    <span className="application-label">
-                      PROGRAM APPLICATION
-                    </span>
+          <main className="application-content">
+            <div className="form-intro">
+              <h2 className="form-intro-title">
+                Complete Your Application
+              </h2>
 
-                    <h1>
-                      {selectedProgram.title}
-                    </h1>
+              <p className="form-intro-text">
+                Please fill in all required information carefully. If the form
+                does not load correctly, use the “Open in New Tab” button above.
+              </p>
+            </div>
 
-                    <div className="application-details">
-                      <div>
-                        <CalendarIcon />
-                        {selectedProgram.date}
-                      </div>
+            <div className="google-form-container">
+              <iframe
+                src={selectedProgram.formLink}
+                title={`${selectedProgram.title} Application Form`}
+                className="google-form-frame"
+                loading="eager"
+                allow="camera; microphone; fullscreen"
+              />
 
-                      <div>
-                        <span className="detail-dot" />
-                        {selectedProgram.type}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
+              <div className="form-fallback">
+                Having trouble viewing the form?{" "}
                 <a
                   href={selectedProgram.formLink}
                   target="_blank"
-                  rel="noreferrer"
-                  className="external-form-button"
+                  rel="noopener noreferrer"
                 >
-                  <span>
-                    Open in New Tab
-                  </span>
-
-                  <ExternalIcon />
+                  Open the application form in a new tab
                 </a>
-              </header>
-
-              <div className="application-body">
-                <div className="application-notice">
-                  <div className="notice-icon">
-                    <CheckIcon />
-                  </div>
-
-                  <div className="notice-text">
-                    <strong>
-                      Application Form
-                    </strong>
-
-                    <span>
-                      Complete the form below. If the form does not load,
-                      use “Open in New Tab”.
-                    </span>
-                  </div>
-                </div>
-
-                <div className="form-frame">
-                  <iframe
-                    src={selectedProgram.formLink}
-                    title={`${selectedProgram.title} application form`}
-                    className="application-iframe"
-                    frameBorder="0"
-                    marginHeight="0"
-                    marginWidth="0"
-                  >
-                    Loading application form…
-                  </iframe>
-                </div>
+                .
               </div>
             </div>
-          </section>
-        )}
-      </main>
-    </>
+          </main>
+        </div>
+      )}
+    </div>
   );
 };
 
