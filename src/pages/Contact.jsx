@@ -1,762 +1,650 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+```jsx
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const Contact = () => {
   const [visible, setVisible] = useState(false);
-  const [copied, setCopied] = useState('');
+  const [copied, setCopied] = useState("");
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setVisible(true);
-    }, 100);
-
-    return () => clearTimeout(timer);
+    setVisible(true);
   }, []);
 
-  const copyToClipboard = async (text, type) => {
+  const copyText = async (text, type) => {
     try {
       await navigator.clipboard.writeText(text);
       setCopied(type);
 
       setTimeout(() => {
-        setCopied('');
-      }, 2000);
+        setCopied("");
+      }, 1800);
     } catch (error) {
-      console.error('Unable to copy:', error);
+      console.error("Copy failed:", error);
     }
   };
 
-  const contactInfo = [
-    {
-      title: 'Visit Our Office',
-      shortTitle: 'Office',
-      value: 'Siddharthanagar-1, Bhairahawa',
-      description:
-        'Connect with the VFAW team at our office during regular working hours.',
-      type: 'location',
-    },
-    {
-      title: 'Call Us',
-      shortTitle: 'Phone',
-      value: '+977 9844898004',
-      description:
-        'Reach our team directly during business hours for assistance and inquiries.',
-      type: 'phone',
-    },
-    {
-      title: 'Email Us',
-      shortTitle: 'Email',
-      value: 'vfaw2017@gmail.com',
-      description:
-        'Send us your questions, ideas, collaboration proposals, or general inquiries.',
-      type: 'email',
-    },
-  ];
-
-  const socialLinks = [
-    {
-      name: 'Instagram',
-      href: 'https://www.instagram.com/vetsforanimalwelfare?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==',
-      letter: 'IG',
-    },
-    {
-      name: 'Facebook',
-      href: 'https://www.facebook.com/vetsforanimalwelfare',
-      letter: 'FB',
-    },
-    {
-      name: 'LinkedIn',
-      href: 'https://www.linkedin.com/company/vets-for-animal-welfare/posts/?feedView=all',
-      letter: 'LI',
-    },
-  ];
+  const phone = "+977 9844898004";
+  const email = "vfaw2017@gmail.com";
 
   return (
-    <main className="min-h-screen bg-[#f7f9fc] text-gray-900 overflow-hidden">
+    <main className="min-h-screen bg-slate-50 text-slate-900 overflow-hidden">
 
       {/* =========================================================
           HERO
-      ========================================================= */}
+      ========================================================== */}
+      <section className="relative bg-[#07152d] text-white overflow-hidden">
+        {/* Background effects */}
+        <div className="absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full bg-blue-500/20 blur-3xl" />
+        <div className="absolute -bottom-48 -left-40 w-[500px] h-[500px] rounded-full bg-cyan-400/10 blur-3xl" />
 
-      <section className="relative overflow-hidden bg-[#07152f] text-white">
+        <div className="absolute top-20 right-[15%] w-3 h-3 rounded-full bg-blue-400/70" />
+        <div className="absolute top-[45%] left-[10%] w-2 h-2 rounded-full bg-cyan-300/60" />
 
-        {/* Background gradients */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#07152f] via-[#10285a] to-[#173b79]" />
+        <div
+          className={`relative max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-24 sm:py-28 lg:py-32 transition-all duration-1000 ${
+            visible
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-8"
+          }`}
+        >
+          <div className="max-w-4xl">
 
-        <div className="absolute -top-40 -right-40 w-[550px] h-[550px] rounded-full bg-blue-500/15 blur-3xl" />
-
-        <div className="absolute -bottom-48 -left-48 w-[600px] h-[600px] rounded-full bg-indigo-500/15 blur-3xl" />
-
-        {/* Decorative circles */}
-        <div className="absolute top-16 right-[12%] w-32 h-32 rounded-full border border-white/10" />
-
-        <div className="absolute bottom-12 left-[8%] w-20 h-20 rounded-full border border-white/10" />
-
-        <div className="relative max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 py-28 lg:py-36">
-
-          <div
-            className={`max-w-4xl mx-auto text-center transition-all duration-1000 ${
-              visible
-                ? 'opacity-100 translate-y-0'
-                : 'opacity-0 translate-y-8'
-            }`}
-          >
-
-            {/* Label */}
-            <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-sm font-semibold tracking-wide">
-
-              <span className="w-2.5 h-2.5 rounded-full bg-blue-300 shadow-[0_0_14px_rgba(147,197,253,0.9)]" />
-
-              VETS FOR ANIMAL WELFARE
-
+            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-white/15 bg-white/5 backdrop-blur-md mb-7">
+              <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+              <span className="text-xs sm:text-sm tracking-[0.18em] uppercase text-blue-100">
+                Vets For Animal Welfare
+              </span>
             </div>
 
-            {/* Heading */}
-            <h1 className="mt-8 text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1]">
-
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight leading-[1.05]">
               Let's connect.
-              <span className="block mt-2 text-blue-300">
+              <span className="block text-blue-300 mt-2">
                 We're here to help.
               </span>
-
             </h1>
 
-            {/* Description */}
-            <p className="max-w-2xl mx-auto mt-7 text-lg sm:text-xl text-white/70 leading-relaxed">
-
-              Whether you want to learn more about our work,
-              collaborate with us, volunteer, or support animal welfare,
-              we'd love to hear from you.
-
+            <p className="mt-7 max-w-2xl text-base sm:text-lg lg:text-xl leading-8 text-slate-300">
+              Have a question, partnership idea, volunteering opportunity,
+              or simply want to learn more about VFAW? We'd love to hear from
+              you.
             </p>
 
+            <div className="flex flex-wrap gap-4 mt-9">
+              <a
+                href="#contact-information"
+                className="inline-flex items-center justify-center px-6 py-3.5 rounded-xl bg-white text-[#07152d] font-semibold hover:bg-blue-50 transition-all duration-300 shadow-lg hover:-translate-y-1"
+              >
+                Contact Information
+              </a>
+
+              <Link
+                to="/get-involved"
+                className="inline-flex items-center justify-center px-6 py-3.5 rounded-xl border border-white/20 bg-white/5 text-white font-semibold hover:bg-white/10 hover:-translate-y-1 transition-all duration-300"
+              >
+                Get Involved
+              </Link>
+            </div>
           </div>
-
         </div>
-
       </section>
-
 
       {/* =========================================================
           CONTACT CARDS
-      ========================================================= */}
+      ========================================================== */}
+      <section
+        id="contact-information"
+        className="relative max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-20 lg:py-24"
+      >
+        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-600 mb-3">
+            Contact Information
+          </p>
 
-      <section className="relative -mt-12 sm:-mt-16 z-20">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-slate-900">
+            We're always happy to hear from you.
+          </h2>
 
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
-
-          <div className="grid md:grid-cols-3 gap-5">
-
-            {contactInfo.map((item, index) => (
-
-              <div
-                key={item.title}
-                className={`group relative bg-white rounded-3xl border-2 border-gray-100 p-7 lg:p-8 shadow-[0_20px_50px_rgba(15,23,42,0.10)] hover:shadow-[0_30px_70px_rgba(15,23,42,0.18)] hover:-translate-y-3 transition-all duration-500 ${
-                  visible
-                    ? 'opacity-100 translate-y-0'
-                    : 'opacity-0 translate-y-8'
-                }`}
-                style={{
-                  transitionDelay: `${index * 120}ms`,
-                }}
-              >
-
-                {/* Top accent */}
-                <div className="absolute top-0 left-8 right-8 h-1 rounded-b-full bg-gradient-to-r from-indigo-600 to-blue-500" />
-
-                {/* Icon */}
-                <div className="w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-700 font-black group-hover:bg-indigo-700 group-hover:text-white transition-all duration-500">
-
-                  {item.type === 'location' && (
-                    <svg
-                      className="w-7 h-7"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="1.8"
-                        d="M12 21s7-6.2 7-12a7 7 0 10-14 0c0 5.8 7 12 7 12z"
-                      />
-                      <circle
-                        cx="12"
-                        cy="9"
-                        r="2.5"
-                        strokeWidth="1.8"
-                      />
-                    </svg>
-                  )}
-
-                  {item.type === 'phone' && (
-                    <svg
-                      className="w-7 h-7"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="1.8"
-                        d="M5 4h3l2 5-2 1.5a14 14 0 006.5 6.5L16 15l5 2v3a1 1 0 01-1 1C11.7 21 3 12.3 3 4a1 1 0 011-1h1z"
-                      />
-                    </svg>
-                  )}
-
-                  {item.type === 'email' && (
-                    <svg
-                      className="w-7 h-7"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <rect
-                        x="3"
-                        y="5"
-                        width="18"
-                        height="14"
-                        rx="2"
-                        strokeWidth="1.8"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="1.8"
-                        d="M4 7l8 6 8-6"
-                      />
-                    </svg>
-                  )}
-
-                </div>
-
-                <p className="mt-6 text-xs uppercase tracking-[0.2em] font-bold text-indigo-600">
-                  {item.shortTitle}
-                </p>
-
-                <h2 className="mt-2 text-2xl font-black text-gray-950">
-                  {item.title}
-                </h2>
-
-                {/* Clickable values */}
-                {item.type === 'phone' ? (
-                  <a
-                    href="tel:+9779844898004"
-                    className="block mt-4 text-lg font-bold text-indigo-700 hover:text-indigo-900 transition-colors"
-                  >
-                    {item.value}
-                  </a>
-                ) : item.type === 'email' ? (
-                  <a
-                    href="mailto:vfaw2017@gmail.com"
-                    className="block mt-4 text-base sm:text-lg font-bold text-indigo-700 hover:text-indigo-900 transition-colors break-all"
-                  >
-                    {item.value}
-                  </a>
-                ) : (
-                  <p className="mt-4 text-lg font-bold text-indigo-700">
-                    {item.value}
-                  </p>
-                )}
-
-                <p className="mt-4 text-gray-500 leading-relaxed">
-                  {item.description}
-                </p>
-
-                {/* Copy button */}
-                {(item.type === 'phone' || item.type === 'email') && (
-                  <button
-                    onClick={() =>
-                      copyToClipboard(
-                        item.value,
-                        item.type
-                      )
-                    }
-                    className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-gray-700 hover:text-indigo-700 transition-colors"
-                  >
-
-                    {copied === item.type ? (
-                      <>
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M5 13l4 4L19 7"
-                          />
-                        </svg>
-
-                        Copied
-                      </>
-                    ) : (
-                      <>
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <rect
-                            x="9"
-                            y="9"
-                            width="10"
-                            height="10"
-                            rx="2"
-                            strokeWidth="2"
-                          />
-                          <path
-                            strokeLinecap="round"
-                            strokeWidth="2"
-                            d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"
-                          />
-                        </svg>
-
-                        Copy {item.type === 'phone' ? 'number' : 'email'}
-                      </>
-                    )}
-
-                  </button>
-                )}
-
-              </div>
-
-            ))}
-
-          </div>
-
+          <p className="mt-5 text-slate-600 leading-7">
+            Reach VFAW through any of the channels below. Whether you are
+            interested in animal welfare, collaboration, volunteering, or
+            educational activities, our team is ready to connect.
+          </p>
         </div>
 
-      </section>
+        <div className="grid md:grid-cols-3 gap-6">
 
+          {/* OFFICE */}
+          <div className="group rounded-3xl border border-slate-200 bg-white p-7 shadow-[0_10px_40px_rgba(15,23,42,0.06)] hover:shadow-[0_20px_60px_rgba(15,23,42,0.12)] hover:-translate-y-2 transition-all duration-500">
+            <div className="w-14 h-14 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+              <svg
+                width="25"
+                height="25"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+              >
+                <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
+                <circle cx="12" cy="10" r="2.5" />
+              </svg>
+            </div>
+
+            <h3 className="mt-6 text-xl font-semibold text-slate-900">
+              Our Office
+            </h3>
+
+            <p className="mt-3 text-slate-600 leading-7">
+              Siddharthanagar-1,
+              <br />
+              Bhairahawa, Nepal
+            </p>
+          </div>
+
+          {/* PHONE */}
+          <div className="group rounded-3xl border border-slate-200 bg-white p-7 shadow-[0_10px_40px_rgba(15,23,42,0.06)] hover:shadow-[0_20px_60px_rgba(15,23,42,0.12)] hover:-translate-y-2 transition-all duration-500">
+            <div className="w-14 h-14 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+              <svg
+                width="25"
+                height="25"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+              >
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.63a2 2 0 0 1-.45 2.11L8 9.73a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.85.29 1.73.5 2.63.62A2 2 0 0 1 22 16.92Z" />
+              </svg>
+            </div>
+
+            <h3 className="mt-6 text-xl font-semibold text-slate-900">
+              Phone
+            </h3>
+
+            <a
+              href="tel:+9779844898004"
+              className="block mt-3 text-slate-600 hover:text-blue-600 transition-colors break-words"
+            >
+              {phone}
+            </a>
+
+            {/* FIXED COPY BOX */}
+            <button
+              type="button"
+              onClick={() => copyText(phone, "phone")}
+              className="mt-5 w-full min-h-[48px] px-4 py-3 rounded-xl border border-slate-300 bg-slate-50 text-slate-700 hover:bg-white hover:border-blue-400 hover:text-blue-700 active:bg-blue-50 transition-all duration-300 flex items-center justify-center gap-2 font-medium shadow-sm"
+            >
+              {copied === "phone" ? (
+                <>
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path d="m5 12 4 4L19 6" />
+                  </svg>
+                  Number Copied
+                </>
+              ) : (
+                <>
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <rect x="9" y="9" width="11" height="11" rx="2" />
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                  </svg>
+                  Copy Number
+                </>
+              )}
+            </button>
+          </div>
+
+          {/* EMAIL */}
+          <div className="group rounded-3xl border border-slate-200 bg-white p-7 shadow-[0_10px_40px_rgba(15,23,42,0.06)] hover:shadow-[0_20px_60px_rgba(15,23,42,0.12)] hover:-translate-y-2 transition-all duration-500">
+            <div className="w-14 h-14 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+              <svg
+                width="25"
+                height="25"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+              >
+                <rect x="3" y="5" width="18" height="14" rx="2" />
+                <path d="m3 7 9 6 9-6" />
+              </svg>
+            </div>
+
+            <h3 className="mt-6 text-xl font-semibold text-slate-900">
+              Email
+            </h3>
+
+            <a
+              href={`mailto:${email}`}
+              className="block mt-3 text-slate-600 hover:text-blue-600 transition-colors break-all"
+            >
+              {email}
+            </a>
+
+            {/* FIXED COPY BOX */}
+            <button
+              type="button"
+              onClick={() => copyText(email, "email")}
+              className="mt-5 w-full min-h-[48px] px-4 py-3 rounded-xl border border-slate-300 bg-slate-50 text-slate-700 hover:bg-white hover:border-blue-400 hover:text-blue-700 active:bg-blue-50 transition-all duration-300 flex items-center justify-center gap-2 font-medium shadow-sm"
+            >
+              {copied === "email" ? (
+                <>
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path d="m5 12 4 4L19 6" />
+                  </svg>
+                  Email Copied
+                </>
+              ) : (
+                <>
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <rect x="9" y="9" width="11" height="11" rx="2" />
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                  </svg>
+                  Copy Email
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+      </section>
 
       {/* =========================================================
-          MAIN CONTACT AREA
-      ========================================================= */}
+          OFFICE INFORMATION
+      ========================================================== */}
+      <section className="bg-white border-y border-slate-200">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-20">
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
-      <section className="py-24 lg:py-32">
-
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
-
-          <div className="grid lg:grid-cols-[1fr_1.15fr] gap-8 lg:gap-12">
-
-            {/* LEFT */}
             <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-600">
+                Office Information
+              </p>
 
-              {/* Section heading */}
-              <div className="mb-10">
+              <h2 className="mt-4 text-3xl sm:text-4xl font-semibold tracking-tight text-slate-900">
+                Visit or reach our team.
+              </h2>
 
-                <div className="flex items-center gap-3 mb-5">
+              <p className="mt-5 text-slate-600 leading-7 max-w-xl">
+                Our team works to support animal welfare initiatives,
+                veterinary education, community engagement, and student-led
+                outreach activities.
+              </p>
 
-                  <span className="w-10 h-px bg-indigo-600" />
+              <div className="mt-8 space-y-5">
 
-                  <span className="text-sm font-bold tracking-[0.2em] uppercase text-indigo-600">
-                    Contact VFAW
-                  </span>
-
-                </div>
-
-                <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-gray-950">
-                  We're always
-                  <span className="block text-indigo-700">
-                    happy to connect.
-                  </span>
-                </h2>
-
-                <p className="mt-6 text-lg text-gray-600 leading-relaxed">
-                  Have a question about our programs, want to collaborate,
-                  or interested in supporting our work? Reach out through
-                  any of the channels below.
-                </p>
-
-              </div>
-
-
-              {/* Office Hours */}
-              <div className="bg-white rounded-3xl border-2 border-gray-100 shadow-lg p-7 sm:p-8">
-
-                <div className="flex items-start justify-between gap-5">
-
-                  <div>
-
-                    <p className="text-xs uppercase tracking-[0.2em] font-bold text-indigo-600">
-                      Office Information
-                    </p>
-
-                    <h3 className="mt-2 text-2xl font-black text-gray-950">
-                      Office Hours
-                    </h3>
-
-                  </div>
-
-                  <div className="w-12 h-12 rounded-xl bg-green-50 border border-green-100 flex items-center justify-center">
-
-                    <span className="w-3 h-3 rounded-full bg-green-500 shadow-[0_0_12px_rgba(34,197,94,0.6)]" />
-
-                  </div>
-
-                </div>
-
-                <div className="mt-7 space-y-4">
-
-                  <div className="flex items-center justify-between py-3 border-b border-gray-100">
-
-                    <span className="text-gray-600">
-                      Monday – Friday
-                    </span>
-
-                    <span className="font-bold text-gray-900">
-                      9:00 AM – 5:00 PM
-                    </span>
-
-                  </div>
-
-                  <div className="flex items-center justify-between py-3">
-
-                    <span className="text-gray-600">
-                      Saturday – Sunday
-                    </span>
-
-                    <span className="font-bold text-gray-900">
-                      Closed
-                    </span>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-
-              {/* Quick Contact */}
-              <div className="mt-5 relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-700 to-blue-800 text-white p-7 sm:p-8 shadow-xl">
-
-                <div className="absolute -right-16 -top-16 w-48 h-48 rounded-full border border-white/10" />
-
-                <div className="relative">
-
-                  <p className="text-xs uppercase tracking-[0.2em] font-bold text-blue-200">
-                    Quick Contact
-                  </p>
-
-                  <h3 className="mt-3 text-2xl font-black">
-                    Need to speak with us?
-                  </h3>
-
-                  <p className="mt-3 text-white/75 leading-relaxed">
-                    For direct assistance, call our team during office
-                    hours.
-                  </p>
-
-                  <a
-                    href="tel:+9779844898004"
-                    className="mt-6 inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white text-indigo-800 font-bold hover:-translate-y-1 hover:shadow-xl transition-all duration-300"
-                  >
-
+                <div className="flex gap-4">
+                  <div className="w-11 h-11 shrink-0 rounded-xl bg-slate-100 flex items-center justify-center text-blue-600">
                     <svg
-                      className="w-5 h-5"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
-                      viewBox="0 0 24 24"
+                      strokeWidth="1.8"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M5 4h3l2 5-2 1.5a14 14 0 006.5 6.5L16 15l5 2v3a1 1 0 01-1 1C11.7 21 3 12.3 3 4a1 1 0 011-1h1z"
-                      />
+                      <circle cx="12" cy="12" r="9" />
+                      <path d="M12 7v5l3 2" />
                     </svg>
-
-                    Call VFAW
-
-                  </a>
-
-                </div>
-
-              </div>
-
-            </div>
-
-
-            {/* RIGHT - MAP */}
-            <div>
-
-              <div className="bg-white rounded-3xl border-2 border-gray-100 shadow-xl overflow-hidden">
-
-                {/* Map header */}
-                <div className="p-6 sm:p-7 border-b border-gray-100">
-
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-
-                    <div>
-
-                      <p className="text-xs uppercase tracking-[0.2em] font-bold text-indigo-600">
-                        Find Us
-                      </p>
-
-                      <h3 className="mt-2 text-2xl font-black text-gray-950">
-                        Visit VFAW
-                      </h3>
-
-                    </div>
-
-                    <a
-                      href="https://www.google.com/maps/search/?api=1&query=Tribhuvan+University+Institute+of+Agriculture+and+Animal+Science+Paklihawa+Campus"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full border-2 border-gray-200 text-sm font-bold text-gray-800 hover:bg-indigo-700 hover:text-white hover:border-indigo-700 transition-all duration-300"
-                    >
-
-                      Open Maps
-
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4m-6-8l8-8m0 0v6m0-6h-6"
-                        />
-                      </svg>
-
-                    </a>
-
                   </div>
 
-                  <p className="mt-4 text-gray-500">
-                    Siddharthanagar-1, Bhairahawa
-                  </p>
-
+                  <div>
+                    <h3 className="font-semibold text-slate-900">
+                      Office Hours
+                    </h3>
+                    <p className="text-slate-600 mt-1">
+                      Monday – Friday: 9:00 AM – 5:00 PM
+                    </p>
+                    <p className="text-slate-500 text-sm mt-1">
+                      Saturday & Sunday: Closed
+                    </p>
+                  </div>
                 </div>
 
+                <div className="flex gap-4">
+                  <div className="w-11 h-11 shrink-0 rounded-xl bg-slate-100 flex items-center justify-center text-blue-600">
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                    >
+                      <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
+                      <circle cx="12" cy="10" r="2.5" />
+                    </svg>
+                  </div>
 
-                {/* Map */}
-                <div className="relative h-[420px] sm:h-[500px]">
-
-                  <iframe
-                    title="VFAW Location Map"
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3539.624236186741!2d83.44431810941039!3d27.480955476214255!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3996998c34ee29e3%3A0xa8fe981339e44737!2sTribhuvan%20University%2C%20Institute%20of%20Agriculture%20and%20Animal%20Science%2C%20Paklihawa%20Campus!5e0!3m2!1sen!2snp!4v1746232409315!5m2!1sen!2snp"
-                    width="100%"
-                    height="100%"
-                    style={{
-                      border: 0,
-                    }}
-                    allowFullScreen
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    className="w-full h-full"
-                  />
-
+                  <div>
+                    <h3 className="font-semibold text-slate-900">
+                      Location
+                    </h3>
+                    <p className="text-slate-600 mt-1">
+                      Siddharthanagar-1, Bhairahawa, Nepal
+                    </p>
+                  </div>
                 </div>
 
               </div>
+            </div>
 
+            {/* MAP */}
+            <div className="relative rounded-3xl overflow-hidden border border-slate-200 shadow-xl min-h-[350px]">
+              <iframe
+                title="VFAW Office Location"
+                src="https://www.google.com/maps?q=Siddharthanagar-1,+Bhairahawa,+Nepal&output=embed"
+                className="absolute inset-0 w-full h-full border-0"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=Siddharthanagar-1,+Bhairahawa,+Nepal"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute bottom-5 right-5 inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-white text-slate-900 font-semibold shadow-lg hover:-translate-y-1 transition-all duration-300"
+              >
+                Open Maps
+                <svg
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path d="M7 17 17 7" />
+                  <path d="M7 7h10v10" />
+                </svg>
+              </a>
             </div>
 
           </div>
-
         </div>
-
       </section>
-
 
       {/* =========================================================
           SOCIAL MEDIA
-      ========================================================= */}
+      ========================================================== */}
+      <section className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-16 sm:py-20">
 
-      <section className="py-24 bg-white border-y border-gray-100">
-
-        <div className="max-w-6xl mx-auto px-5 sm:px-8 text-center">
-
-          <div className="max-w-2xl mx-auto">
-
-            <div className="flex items-center justify-center gap-3 mb-5">
-
-              <span className="w-8 h-px bg-indigo-600" />
-
-              <span className="text-sm font-bold tracking-[0.2em] uppercase text-indigo-600">
-                Stay Connected
-              </span>
-
-              <span className="w-8 h-px bg-indigo-600" />
-
-            </div>
-
-            <h2 className="text-4xl sm:text-5xl font-black tracking-tight">
-              Follow our journey.
-            </h2>
-
-            <p className="mt-5 text-lg text-gray-600">
-              Stay updated with our programs, activities,
-              educational initiatives, and animal welfare work.
-            </p>
-
-          </div>
-
-
-          <div className="grid sm:grid-cols-3 gap-5 mt-12">
-
-            {socialLinks.map((social) => (
-
-              <a
-                key={social.name}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group bg-gray-50 border-2 border-gray-100 rounded-3xl p-7 hover:bg-white hover:border-indigo-200 hover:-translate-y-2 hover:shadow-xl transition-all duration-500"
-              >
-
-                <div className="mx-auto w-16 h-16 rounded-2xl bg-white border-2 border-gray-100 flex items-center justify-center text-indigo-700 font-black text-lg group-hover:bg-indigo-700 group-hover:text-white group-hover:border-indigo-700 transition-all duration-500">
-
-                  {social.letter}
-
-                </div>
-
-                <h3 className="mt-5 text-xl font-black text-gray-900">
-                  {social.name}
-                </h3>
-
-                <div className="mt-3 inline-flex items-center gap-2 text-indigo-600 font-bold">
-
-                  Follow VFAW
-
-                  <svg
-                    className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
-                    />
-                  </svg>
-
-                </div>
-
-              </a>
-
-            ))}
-
-          </div>
-
-        </div>
-
-      </section>
-
-
-      {/* =========================================================
-          FINAL CTA
-      ========================================================= */}
-
-      <section className="relative overflow-hidden bg-[#07152f] text-white">
-
-        <div className="absolute inset-0 bg-gradient-to-br from-[#07152f] via-indigo-950 to-blue-950" />
-
-        <div className="absolute -top-48 -right-48 w-[600px] h-[600px] rounded-full border border-white/5" />
-
-        <div className="absolute -bottom-64 -left-48 w-[700px] h-[700px] rounded-full border border-white/5" />
-
-        <div className="relative max-w-4xl mx-auto px-5 sm:px-8 py-28 text-center">
-
-          <div className="inline-flex px-5 py-2.5 rounded-full border border-white/15 bg-white/5 backdrop-blur-md text-sm text-white/70">
-            Let's work together
-          </div>
-
-          <h2 className="mt-8 text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight">
-            Have an idea?
-            <span className="block text-blue-300">
-              Let's make it happen.
-            </span>
-          </h2>
-
-          <p className="max-w-2xl mx-auto mt-6 text-lg text-white/70 leading-relaxed">
-            We welcome partnerships, collaborations, educational
-            initiatives, and people who share our commitment to
-            improving animal welfare.
+        <div className="text-center mb-10">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-600">
+            Follow VFAW
           </p>
 
-          <div className="flex flex-col sm:flex-row justify-center gap-4 mt-10">
+          <h2 className="mt-3 text-3xl sm:text-4xl font-semibold tracking-tight">
+            Stay connected with us.
+          </h2>
 
-            <a
-              href="mailto:vfaw2017@gmail.com"
-              className="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-white text-indigo-950 font-bold text-lg hover:-translate-y-1 hover:shadow-2xl transition-all duration-300"
-            >
-
-              Email VFAW
-
-              <svg
-                className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M17 8l4 4m0 0l-4 4m4-4H3"
-                />
-              </svg>
-
-            </a>
-
-            <Link
-              to="/get-involved"
-              className="inline-flex items-center justify-center px-8 py-4 rounded-full border-2 border-white/25 bg-white/5 backdrop-blur-md text-white font-bold text-lg hover:bg-white/10 hover:-translate-y-1 transition-all duration-300"
-            >
-              Get Involved
-            </Link>
-
-          </div>
-
+          <p className="mt-4 text-slate-600">
+            Follow our work, campaigns, educational programs, and animal
+            welfare initiatives.
+          </p>
         </div>
 
+        <div className="grid md:grid-cols-3 gap-5">
+
+          {/* FACEBOOK */}
+          <a
+            href="https://www.facebook.com/vetsforanimalwelfare"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex items-center gap-5 p-6 rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-xl hover:-translate-y-2 hover:border-blue-200 transition-all duration-300"
+          >
+            <div className="w-14 h-14 shrink-0 rounded-2xl bg-[#1877F2] flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
+              {/* REAL FACEBOOK ICON */}
+              <svg
+                viewBox="0 0 24 24"
+                width="30"
+                height="30"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path d="M13.5 22v-8h2.7l.4-3h-3.1V9.1c0-.9.3-1.6 1.7-1.6h1.8V4.8c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3V11H7.5v3h2.8v8h3.2Z" />
+              </svg>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-slate-900 text-lg">
+                Facebook
+              </h3>
+              <p className="text-slate-500 text-sm mt-1">
+                Follow our updates
+              </p>
+            </div>
+
+            <svg
+              className="ml-auto text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M5 12h14" />
+              <path d="m13 6 6 6-6 6" />
+            </svg>
+          </a>
+
+          {/* INSTAGRAM */}
+          <a
+            href="https://www.instagram.com/vetsforanimalwelfare"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex items-center gap-5 p-6 rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-xl hover:-translate-y-2 hover:border-pink-200 transition-all duration-300"
+          >
+            <div className="w-14 h-14 shrink-0 rounded-2xl bg-gradient-to-br from-[#833AB4] via-[#E1306C] to-[#FCAF45] flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
+              {/* REAL INSTAGRAM ICON */}
+              <svg
+                viewBox="0 0 24 24"
+                width="29"
+                height="29"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                aria-hidden="true"
+              >
+                <rect x="3" y="3" width="18" height="18" rx="5" />
+                <circle cx="12" cy="12" r="4" />
+                <circle
+                  cx="17.5"
+                  cy="6.5"
+                  r="1"
+                  fill="currentColor"
+                  stroke="none"
+                />
+              </svg>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-slate-900 text-lg">
+                Instagram
+              </h3>
+              <p className="text-slate-500 text-sm mt-1">
+                See our latest work
+              </p>
+            </div>
+
+            <svg
+              className="ml-auto text-slate-400 group-hover:text-pink-600 group-hover:translate-x-1 transition-all"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M5 12h14" />
+              <path d="m13 6 6 6-6 6" />
+            </svg>
+          </a>
+
+          {/* LINKEDIN */}
+          <a
+            href="https://www.linkedin.com/company/vets-for-animal-welfare/posts/?feedView=all"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex items-center gap-5 p-6 rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-xl hover:-translate-y-2 hover:border-sky-200 transition-all duration-300"
+          >
+            <div className="w-14 h-14 shrink-0 rounded-2xl bg-[#0A66C2] flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
+              {/* REAL LINKEDIN ICON */}
+              <svg
+                viewBox="0 0 24 24"
+                width="29"
+                height="29"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path d="M6.5 8.5H3.2V21h3.3V8.5ZM4.85 3A1.95 1.95 0 1 0 4.85 6.9 1.95 1.95 0 0 0 4.85 3ZM21 13.85c0-3.76-2.01-5.51-4.7-5.51-2.17 0-3.14 1.19-3.68 2.03V8.5H9.33V21h3.29v-6.19c0-1.63.31-3.2 2.32-3.2 1.98 0 2 1.85 2 3.31V21H21v-7.15Z" />
+              </svg>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-slate-900 text-lg">
+                LinkedIn
+              </h3>
+              <p className="text-slate-500 text-sm mt-1">
+                Connect professionally
+              </p>
+            </div>
+
+            <svg
+              className="ml-auto text-slate-400 group-hover:text-sky-600 group-hover:translate-x-1 transition-all"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M5 12h14" />
+              <path d="m13 6 6 6-6 6" />
+            </svg>
+          </a>
+
+        </div>
       </section>
 
+      {/* =========================================================
+          CTA
+      ========================================================== */}
+      <section className="px-5 sm:px-8 lg:px-12 pb-16 sm:pb-24">
+        <div className="max-w-7xl mx-auto relative overflow-hidden rounded-[2rem] bg-[#07152d] text-white">
+
+          <div className="absolute -right-32 -top-32 w-80 h-80 rounded-full bg-blue-500/20 blur-3xl" />
+          <div className="absolute -left-32 -bottom-32 w-80 h-80 rounded-full bg-cyan-400/10 blur-3xl" />
+
+          <div className="relative px-7 sm:px-12 lg:px-16 py-12 sm:py-16 lg:py-20 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+
+            <div className="max-w-2xl">
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-300">
+                Get involved
+              </p>
+
+              <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight">
+                Have an idea?
+                <span className="block text-blue-300">
+                  Let's make it happen.
+                </span>
+              </h2>
+
+              <p className="mt-5 text-slate-300 leading-7">
+                Join us in creating a more compassionate future for animals
+                through education, action, and collaboration.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap gap-4">
+              <a
+                href={`mailto:${email}`}
+                className="inline-flex items-center justify-center px-6 py-3.5 rounded-xl bg-white text-[#07152d] font-semibold hover:bg-blue-50 hover:-translate-y-1 transition-all duration-300"
+              >
+                Email VFAW
+              </a>
+
+              <Link
+                to="/get-involved"
+                className="inline-flex items-center justify-center px-6 py-3.5 rounded-xl border border-white/20 bg-white/5 text-white font-semibold hover:bg-white/10 hover:-translate-y-1 transition-all duration-300"
+              >
+                Get Involved
+              </Link>
+            </div>
+
+          </div>
+        </div>
+      </section>
 
       {/* =========================================================
-          ANIMATIONS
-      ========================================================= */}
-
+          MOBILE / ACCESSIBILITY FIXES
+      ========================================================== */}
       <style>{`
-
         html {
           scroll-behavior: smooth;
         }
 
-        ::selection {
-          background: rgba(79, 70, 229, 0.2);
+        button,
+        a {
+          -webkit-tap-highlight-color: transparent;
+        }
+
+        @media (max-width: 640px) {
+          /*
+            Prevent long contact details from breaking
+            the mobile card layout.
+          */
+          .break-all {
+            overflow-wrap: anywhere;
+          }
+
+          /*
+            Make buttons easier to tap on mobile.
+          */
+          button {
+            min-height: 48px;
+          }
         }
 
         @media (prefers-reduced-motion: reduce) {
-
           *,
           *::before,
           *::after {
             animation-duration: 0.01ms !important;
             animation-iteration-count: 1 !important;
-            transition-duration: 0.01ms !important;
             scroll-behavior: auto !important;
+            transition-duration: 0.01ms !important;
           }
-
         }
-
       `}</style>
-
     </main>
   );
 };
 
 export default Contact;
+```
