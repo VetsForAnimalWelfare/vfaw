@@ -89,7 +89,7 @@ const Navbar = () => {
               </h1>
 
               <p className="hidden xl:block text-[9px] font-semibold tracking-[0.12em] text-emerald-600 uppercase mt-1">
-                Voice For Animal Welfare
+                Vets For Animal Welfare
               </p>
             </div>
           </Link>
