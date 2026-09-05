@@ -2,26 +2,145 @@ import React, { useEffect, useMemo, useState } from "react";
 import "../Library.css";
 
 /* =========================================================
+   INLINE ICONS
+========================================================= */
+
+const Icon = ({ name, size = 20, strokeWidth = 1.8 }) => {
+  const common = {
+    width: size,
+    height: size,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": "true",
+  };
+
+  const icons = {
+    search: (
+      <svg {...common}>
+        <circle cx="11" cy="11" r="7" />
+        <path d="m20 20-4-4" />
+      </svg>
+    ),
+
+    close: (
+      <svg {...common}>
+        <path d="M6 6l12 12" />
+        <path d="M18 6 6 18" />
+      </svg>
+    ),
+
+    arrow: (
+      <svg {...common}>
+        <path d="M5 12h13" />
+        <path d="m13 6 6 6-6 6" />
+      </svg>
+    ),
+
+    book: (
+      <svg {...common}>
+        <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5z" />
+        <path d="M4 5.5v16" />
+        <path d="M8 7h8" />
+        <path d="M8 11h7" />
+      </svg>
+    ),
+
+    file: (
+      <svg {...common}>
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        <path d="M14 2v6h6" />
+        <path d="M8 13h8" />
+        <path d="M8 17h6" />
+      </svg>
+    ),
+
+    presentation: (
+      <svg {...common}>
+        <rect x="3" y="4" width="18" height="13" rx="2" />
+        <path d="M8 21h8" />
+        <path d="M12 17v4" />
+        <path d="m8 10 2.5 2.5L16 8" />
+      </svg>
+    ),
+
+    external: (
+      <svg {...common}>
+        <path d="M14 5h5v5" />
+        <path d="M19 5 10 14" />
+        <path d="M19 13v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h5" />
+      </svg>
+    ),
+
+    download: (
+      <svg {...common}>
+        <path d="M12 3v12" />
+        <path d="m7 10 5 5 5-5" />
+        <path d="M5 21h14" />
+      </svg>
+    ),
+
+    fullscreen: (
+      <svg {...common}>
+        <path d="M8 3H5a2 2 0 0 0-2 2v3" />
+        <path d="M16 3h3a2 2 0 0 1 2 2v3" />
+        <path d="M21 16v3a2 2 0 0 1-2 2h-3" />
+        <path d="M3 16v3a2 2 0 0 0 2 2h3" />
+      </svg>
+    ),
+
+    calendar: (
+      <svg {...common}>
+        <rect x="3" y="4.5" width="18" height="16" rx="2" />
+        <path d="M16 2.5v4" />
+        <path d="M8 2.5v4" />
+        <path d="M3 9h18" />
+      </svg>
+    ),
+
+    spark: (
+      <svg {...common}>
+        <path d="m12 3 1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" />
+        <path d="m19 15 .7 2.3L22 18l-2.3.7L19 21l-.7-2.3L16 18l2.3-.7z" />
+      </svg>
+    ),
+
+    filter: (
+      <svg {...common}>
+        <path d="M4 6h16" />
+        <path d="M7 12h10" />
+        <path d="M10 18h4" />
+      </svg>
+    ),
+  };
+
+  return icons[name] || null;
+};
+
+/* =========================================================
    LIBRARY RESOURCES
 ========================================================= */
 
 const resources = [
   {
-  id: 7,
-  type: "pptx",
-  category: "Presentations",
-  title: "Basics of Hematological Tools and  Techniques in Veterinary Practice",
-  excerpt:
-    "Educational presentation By BalKrishna Acharya.",
-  author: "Vets For Animal Welfare",
-  date: "September 2026",
-  readTime: "2 Hours",
+    id: 7,
+    type: "pptx",
+    category: "Presentations",
+    title:
+      "Basics of Hematological Tools and Techniques in Veterinary Practice",
+    excerpt:
+      "Educational presentation covering the fundamentals of hematological tools and techniques used in veterinary practice.",
+    author: "Vets For Animal Welfare",
+    date: "September 2026",
+    meta: "2 Hours",
+    pptxUrl:
+      "https://docs.google.com/presentation/d/13NtC7DuyPTB6Syjx_xUCJLi5c6lykr0G/embed?start=false&loop=false&delayms=0",
+  },
 
-  pptxUrl:
-    "https://docs.google.com/presentation/d/13NtC7DuyPTB6Syjx_xUCJLi5c6lykr0G/embed?start=false&loop=false&delayms=0",
-},
-   
-   {
+  {
     id: 1,
     type: "blogger",
     category: "Veterinary Medicine",
@@ -70,6 +189,16 @@ const resources = [
         animal management.
       </p>
 
+      <h2>Practical Welfare Considerations</h2>
+
+      <ul>
+        <li>Providing adequate food and clean drinking water</li>
+        <li>Maintaining appropriate housing and environmental conditions</li>
+        <li>Preventing and treating disease and injury</li>
+        <li>Reducing unnecessary fear, pain and distress</li>
+        <li>Using humane handling and management practices</li>
+      </ul>
+
       <h2>Conclusion</h2>
 
       <p>
@@ -95,7 +224,8 @@ const resources = [
 
       <p>
         Whole blood contains cellular components together with the liquid
-        component known as plasma.
+        component known as plasma. It represents blood in its relatively
+        complete state before separation into individual components.
       </p>
 
       <h2>Major Components of Whole Blood</h2>
@@ -125,7 +255,16 @@ const resources = [
 
       <p>
         Plasma is obtained from anticoagulated blood, while serum is obtained
-        after the blood has been allowed to clot.
+        after the blood has been allowed to clot. The appropriate sample depends
+        on the laboratory test being performed.
+      </p>
+
+      <h2>Conclusion</h2>
+
+      <p>
+        Understanding the difference between whole blood, plasma and serum is
+        fundamental for students and professionals working with veterinary
+        laboratory diagnostics.
       </p>
     `,
   },
@@ -176,6 +315,17 @@ const resources = [
       <p>
         Hematological examination helps veterinarians identify anemia,
         infection, inflammation, blood loss and other pathological conditions.
+        It can also be useful for monitoring the response of an animal to
+        treatment.
+      </p>
+
+      <h2>Basic Approach</h2>
+
+      <p>
+        A proper hematological examination begins with appropriate sample
+        collection and handling. Laboratory measurements and microscopic
+        examination can then provide valuable information about the animal's
+        health status.
       </p>
 
       <h2>Conclusion</h2>
@@ -204,7 +354,7 @@ const resources = [
 ];
 
 /* =========================================================
-   HELPER FUNCTIONS
+   HELPERS
 ========================================================= */
 
 function getTypeLabel(type) {
@@ -219,6 +369,13 @@ function getActionLabel(type) {
   if (type === "pdf") return "View PDF";
   if (type === "pptx") return "Open Presentation";
   return "Start Reading";
+}
+
+function getTypeIcon(type) {
+  if (type === "blogger") return "external";
+  if (type === "pdf") return "file";
+  if (type === "pptx") return "presentation";
+  return "book";
 }
 
 /* =========================================================
@@ -265,7 +422,10 @@ function Library() {
     });
   }, [search, category]);
 
-  /* Prevent background scrolling when reader is open */
+  /* =======================================================
+     BODY SCROLL LOCK
+  ======================================================= */
+
   useEffect(() => {
     if (selectedResource) {
       document.body.style.overflow = "hidden";
@@ -278,7 +438,10 @@ function Library() {
     };
   }, [selectedResource]);
 
-  /* ESC closes reader */
+  /* =======================================================
+     ESC KEY
+  ======================================================= */
+
   useEffect(() => {
     const handleEscape = (event) => {
       if (event.key === "Escape") {
@@ -294,7 +457,19 @@ function Library() {
   }, []);
 
   /* =======================================================
-     PRESENTATION FULL SCREEN
+     OPEN RESOURCE
+  ======================================================= */
+
+  const openResource = (resource) => {
+    setSelectedResource(resource);
+  };
+
+  const closeReader = () => {
+    setSelectedResource(null);
+  };
+
+  /* =======================================================
+     PRESENTATION FULLSCREEN
   ======================================================= */
 
   const openPresentationFullscreen = async () => {
@@ -302,9 +477,7 @@ function Library() {
       ".presentation-stage"
     );
 
-    if (!presentationStage) {
-      return;
-    }
+    if (!presentationStage) return;
 
     try {
       if (presentationStage.requestFullscreen) {
@@ -337,7 +510,10 @@ function Library() {
 
           <div className="hero-eyebrow">
             <span className="eyebrow-line"></span>
-            VFAW KNOWLEDGE LIBRARY
+
+            <span>
+              VFAW KNOWLEDGE LIBRARY
+            </span>
           </div>
 
           <h1>
@@ -352,14 +528,44 @@ function Library() {
             created to support better veterinary practice and animal welfare.
           </p>
 
+          <div className="hero-bottom">
+
+            <div className="hero-info-card">
+              <div className="hero-info-icon">
+                <Icon name="book" size={18} />
+              </div>
+
+              <div>
+                <strong>{resources.length}</strong>
+                <span>Learning Resources</span>
+              </div>
+            </div>
+
+            <div className="hero-info-card">
+              <div className="hero-info-icon">
+                <Icon name="spark" size={18} />
+              </div>
+
+              <div>
+                <strong>VFAW</strong>
+                <span>Veterinary Education</span>
+              </div>
+            </div>
+
+          </div>
+
         </div>
       </section>
 
       {/* ===================================================
-          MAIN LIBRARY
+          MAIN
       =================================================== */}
 
       <main className="library-container">
+
+        {/* =================================================
+            HEADING
+        ================================================= */}
 
         <section className="library-heading">
 
@@ -381,8 +587,19 @@ function Library() {
           </div>
 
           <div className="resource-stat">
-            <strong>{resources.length}</strong>
-            <span>Resources</span>
+
+            <div className="resource-stat-icon">
+              <Icon name="book" size={18} />
+            </div>
+
+            <strong>
+              {resources.length}
+            </strong>
+
+            <span>
+              Resources
+            </span>
+
           </div>
 
         </section>
@@ -396,7 +613,7 @@ function Library() {
           <div className="search-wrapper">
 
             <span className="search-icon">
-              ⌕
+              <Icon name="search" size={20} />
             </span>
 
             <input
@@ -414,7 +631,7 @@ function Library() {
                 onClick={() => setSearch("")}
                 aria-label="Clear search"
               >
-                ×
+                <Icon name="close" size={16} />
               </button>
             )}
 
@@ -423,8 +640,21 @@ function Library() {
         </section>
 
         {/* =================================================
-            CATEGORIES
+            FILTER BAR
         ================================================= */}
+
+        <div className="library-filter-header">
+
+          <div className="filter-label">
+            <Icon name="filter" size={16} />
+            <span>Filter by category</span>
+          </div>
+
+          <span className="filter-count">
+            {filteredResources.length} available
+          </span>
+
+        </div>
 
         <div className="category-row">
 
@@ -442,11 +672,24 @@ function Library() {
         </div>
 
         <div className="result-summary">
+
           Showing{" "}
-          <strong>{filteredResources.length}</strong>{" "}
+
+          <strong>
+            {filteredResources.length}
+          </strong>{" "}
+
           {filteredResources.length === 1
             ? "resource"
             : "resources"}
+
+          {search && (
+            <>
+              {" "}
+              for <strong>"{search}"</strong>
+            </>
+          )}
+
         </div>
 
         {/* =================================================
@@ -454,15 +697,24 @@ function Library() {
         ================================================= */}
 
         {filteredResources.length > 0 ? (
+
           <section className="resource-grid">
 
-            {filteredResources.map((resource) => (
+            {filteredResources.map((resource, index) => (
+
               <article
                 className="resource-card"
                 key={resource.id}
+                style={{
+                  "--card-index": index,
+                }}
               >
 
                 <div className="card-glow"></div>
+
+                <div className="card-number">
+                  {String(index + 1).padStart(2, "0")}
+                </div>
 
                 <div className="card-top">
 
@@ -471,8 +723,22 @@ function Library() {
                   </span>
 
                   <span className="resource-type">
+                    <Icon
+                      name={getTypeIcon(resource.type)}
+                      size={13}
+                    />
+
                     {getTypeLabel(resource.type)}
                   </span>
+
+                </div>
+
+                <div className="card-icon">
+
+                  <Icon
+                    name={getTypeIcon(resource.type)}
+                    size={24}
+                  />
 
                 </div>
 
@@ -505,27 +771,36 @@ function Library() {
                 <button
                   type="button"
                   className="resource-action"
-                  onClick={() => setSelectedResource(resource)}
+                  onClick={() => openResource(resource)}
                 >
+
                   <span>
                     {getActionLabel(resource.type)}
                   </span>
 
                   <b>
-                    →
+                    <Icon name="arrow" size={17} />
                   </b>
+
                 </button>
 
               </article>
+
             ))}
 
           </section>
+
         ) : (
+
           <div className="empty-library">
 
             <div className="empty-icon">
-              ⌕
+              <Icon name="search" size={25} />
             </div>
+
+            <span className="empty-label">
+              SEARCH RESULTS
+            </span>
 
             <h3>
               No resources found
@@ -546,6 +821,7 @@ function Library() {
             </button>
 
           </div>
+
         )}
 
       </main>
@@ -555,49 +831,82 @@ function Library() {
       =================================================== */}
 
       {selectedResource && (
+
         <div className="library-reader">
 
-          {/* READER HEADER */}
+          {/* =================================================
+              READER HEADER
+          ================================================= */}
 
           <header className="reader-header">
 
             <div className="reader-brand">
 
-              <strong>
-                VFAW
-              </strong>
+              <div className="reader-brand-mark">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
 
-              <span></span>
+              <div className="reader-brand-text">
 
-              <small>
-                KNOWLEDGE LIBRARY
-              </small>
+                <strong>
+                  VFAW
+                </strong>
+
+                <span>
+                  KNOWLEDGE LIBRARY
+                </span>
+
+              </div>
 
             </div>
 
-            <button
-              type="button"
-              className="reader-close"
-              onClick={() => setSelectedResource(null)}
-              aria-label="Close reader"
-            >
-              ×
-            </button>
+            <div className="reader-header-right">
+
+              <span className="reader-type-label">
+                {getTypeLabel(selectedResource.type)}
+              </span>
+
+              <button
+                type="button"
+                className="reader-close"
+                onClick={closeReader}
+                aria-label="Close reader"
+              >
+                <Icon name="close" size={20} />
+
+                <span>
+                  Close
+                </span>
+              </button>
+
+            </div>
 
           </header>
 
           {/* =================================================
-              ARTICLE READER
+              ARTICLE
           ================================================= */}
 
           {selectedResource.type === "article" && (
+
             <div className="article-reader">
 
               <article className="article-content">
 
-                <span className="article-category">
-                  {selectedResource.category}
-                </span>
+                <div className="article-top-line">
+
+                  <span className="article-category">
+                    {selectedResource.category}
+                  </span>
+
+                  <span className="article-type">
+                    <Icon name="book" size={14} />
+                    Article
+                  </span>
+
+                </div>
 
                 <h1>
                   {selectedResource.title}
@@ -636,41 +945,38 @@ function Library() {
                   }}
                 />
 
+                <div className="article-end">
+
+                  <div className="article-end-line"></div>
+
+                  <span>
+                    VFAW KNOWLEDGE LIBRARY
+                  </span>
+
+                  <div className="article-end-line"></div>
+
+                </div>
+
               </article>
 
             </div>
+
           )}
 
           {/* =================================================
-              BLOGGER READER
+              BLOGGER
           ================================================= */}
 
           {selectedResource.type === "blogger" && (
+
             <div className="blog-reader">
 
-              <iframe
-                src={selectedResource.url}
-                title={selectedResource.title}
-                className="blog-frame"
-                loading="eager"
-              ></iframe>
+              <div className="external-resource-bar">
 
-            </div>
-          )}
-
-          {/* =================================================
-              PDF VIEWER
-          ================================================= */}
-
-          {selectedResource.type === "pdf" && (
-            <div className="pdf-reader">
-
-              <div className="pdf-header">
-
-                <div className="viewer-title">
+                <div>
 
                   <span>
-                    {selectedResource.category}
+                    VETERINARY MEDICINE
                   </span>
 
                   <strong>
@@ -680,12 +986,71 @@ function Library() {
                 </div>
 
                 <a
+                  href={selectedResource.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="external-resource-link"
+                >
+                  <span>
+                    Open Original
+                  </span>
+
+                  <Icon name="external" size={15} />
+                </a>
+
+              </div>
+
+              <iframe
+                src={selectedResource.url}
+                title={selectedResource.title}
+                className="blog-frame"
+                loading="eager"
+              ></iframe>
+
+            </div>
+
+          )}
+
+          {/* =================================================
+              PDF
+          ================================================= */}
+
+          {selectedResource.type === "pdf" && (
+
+            <div className="pdf-reader">
+
+              <div className="pdf-header">
+
+                <div className="viewer-title">
+
+                  <div className="viewer-icon">
+                    <Icon name="file" size={18} />
+                  </div>
+
+                  <div>
+
+                    <span>
+                      {selectedResource.category}
+                    </span>
+
+                    <strong>
+                      {selectedResource.title}
+                    </strong>
+
+                  </div>
+
+                </div>
+
+                <a
                   href={selectedResource.pdfUrl}
                   download
                   className="download-pdf"
                 >
-                  <span>↓</span>
-                  Download PDF
+                  <Icon name="download" size={15} />
+
+                  <span>
+                    Download PDF
+                  </span>
                 </a>
 
               </div>
@@ -697,26 +1062,36 @@ function Library() {
               ></iframe>
 
             </div>
+
           )}
 
           {/* =================================================
-              PRESENTATION VIEWER
+              PRESENTATION
           ================================================= */}
 
           {selectedResource.type === "pptx" && (
+
             <div className="presentation-reader">
 
               <div className="presentation-toolbar">
 
                 <div className="presentation-title">
 
-                  <span>
-                    {selectedResource.category}
-                  </span>
+                  <div className="presentation-icon">
+                    <Icon name="presentation" size={19} />
+                  </div>
 
-                  <strong>
-                    {selectedResource.title}
-                  </strong>
+                  <div>
+
+                    <span>
+                      {selectedResource.category}
+                    </span>
+
+                    <strong>
+                      {selectedResource.title}
+                    </strong>
+
+                  </div>
 
                 </div>
 
@@ -725,13 +1100,13 @@ function Library() {
                   className="presentation-fullscreen"
                   onClick={openPresentationFullscreen}
                 >
-                  <span className="fullscreen-icon">
-                    ⛶
-                  </span>
+
+                  <Icon name="fullscreen" size={17} />
 
                   <span>
                     Full Screen
                   </span>
+
                 </button>
 
               </div>
@@ -749,9 +1124,11 @@ function Library() {
               </div>
 
             </div>
+
           )}
 
         </div>
+
       )}
 
     </div>
