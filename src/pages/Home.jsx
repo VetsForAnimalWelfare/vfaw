@@ -1,304 +1,823 @@
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import hero from '../../public/hero.jpg';
-import React, { useEffect, useState } from 'react';
-import logo from '../../public/logohome.png';
 import VoicesSnapshot from '../components/VoicesSnapshot';
 
 const Home = () => {
-  const [scrollPosition, setScrollPosition] = useState(0);
+  const [scrollY, setScrollY] = useState(0);
+  const [visibleSections, setVisibleSections] = useState({});
+
+  const sectionRefs = useRef([]);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrollPosition(window.scrollY);
+      setScrollY(window.scrollY);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisibleSections((prev) => ({
+              ...prev,
+              [entry.target.dataset.section]: true,
+            }));
+          }
+        });
+      },
+      {
+        threshold: 0.12,
+        rootMargin: '0px 0px -80px 0px',
+      }
+    );
+
+    sectionRefs.current.forEach((section) => {
+      if (section) observer.observe(section);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const addSectionRef = (element, name) => {
+    if (element && !sectionRefs.current.includes(element)) {
+      element.dataset.section = name;
+      sectionRefs.current.push(element);
+    }
+  };
 
   const featuredActivities = [
     {
       title: 'Animal Welfare',
-      description: 'Providing medical care and treatment for street animals, including before and after treatment cases.',
+      description:
+        'Providing medical care and treatment for street animals, including before and after treatment cases.',
       image: '/welfare/IMG_2131.JPG',
-      color: 'bg-indigo-50'
+      number: '01',
     },
     {
-      title: 'Animal Birth Control and Vaccination',
-      description: 'Implementing birth control programs and vaccination drives for street animals.',
+      title: 'Animal Birth Control & Vaccination',
+      description:
+        'Implementing birth control programs and vaccination drives to protect street animals and improve community health.',
       image: '/control/IMG_20240216_000413_Original.JPG',
-      color: 'bg-purple-50'
+      number: '02',
     },
     {
       title: 'Street Dog Feeding Program',
-      description: 'Regular feeding programs to ensure the well-being of street dogs.',
+      description:
+        'Regular feeding initiatives focused on improving the health, nutrition, and well-being of street dogs.',
       image: '/feeding/IMG_2119.JPG',
-      color: 'bg-pink-50'
-    }
+      number: '03',
+    },
+  ];
+
+  const galleryItems = [
+    {
+      image: '/awareness/7.jpg',
+      title: 'Awareness Program',
+      description: 'Spreading knowledge and compassion',
+      size: 'large',
+    },
+    {
+      image: '/vaccination/7.jpg',
+      title: 'Vaccination Program',
+      description: 'Protecting animal health',
+      size: 'normal',
+    },
+    {
+      image: '/feeding/IMG_2117.JPG',
+      title: 'Feeding Program',
+      description: 'Supporting street animals',
+      size: 'normal',
+    },
+    {
+      image: '/capacity/1.JPG',
+      title: 'Capacity Building',
+      description: 'Empowering future leaders',
+      size: 'large',
+    },
+  ];
+
+  const collaborators = [2, 3, 4, 6, 7, 1];
+
+  const stats = [
+    {
+      value: '2017',
+      label: 'Founded',
+      description: 'Student-led journey',
+    },
+    {
+      value: '100+',
+      label: 'Activities',
+      description: 'Community initiatives',
+    },
+    {
+      value: '1000+',
+      label: 'Animals Reached',
+      description: 'Through welfare programs',
+    },
+    {
+      value: '∞',
+      label: 'Commitment',
+      description: 'For animal welfare',
+    },
   ];
 
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        <div 
-          className="absolute inset-0"
+    <main className="min-h-screen bg-white text-gray-900 overflow-hidden">
+
+      {/* =========================================================
+          HERO SECTION
+      ========================================================= */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+
+        {/* Background Image */}
+        <div
+          className="absolute inset-0 scale-110"
           style={{
-            transform: `translateY(${scrollPosition * 0.5}px)`,
-            transition: 'transform 0.1s ease-out'
+            transform: `translateY(${scrollY * 0.22}px) scale(1.1)`,
           }}
         >
           <img
-            className="w-full h-full object-cover"
             src={hero}
-            alt="Hero background"
+            alt="Vets for Animal Welfare"
+            className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/60"></div>
-          <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/50 via-purple-900/30 to-pink-900/50"></div>
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 text-center">
-          <div className="space-y-8">
-            <div className="relative">
-              <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg blur opacity-30 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
-              <h1 className="text-6xl font-extrabold tracking-tight sm:text-7xl lg:text-8xl relative">
-                <span className="block text-white mb-4 drop-shadow-lg">Welcome to</span>
-                <span className="block bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 text-transparent bg-clip-text drop-shadow-lg">
-                  VETS FOR ANIMAL WELFARE
-                </span>
-              </h1>
+        {/* Dark cinematic overlay */}
+        <div className="absolute inset-0 bg-black/55" />
+
+        {/* Blue gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-950/90 via-indigo-900/55 to-transparent" />
+
+        {/* Bottom fade */}
+        <div className="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-black/70 to-transparent" />
+
+        {/* Animated light effects */}
+        <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-blue-500/20 blur-3xl animate-pulse" />
+
+        <div
+          className="absolute top-1/3 -right-40 w-[500px] h-[500px] rounded-full bg-indigo-500/20 blur-3xl"
+          style={{
+            animation: 'float 8s ease-in-out infinite',
+          }}
+        />
+
+        {/* Hero Content */}
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 pt-20">
+
+          <div className="max-w-5xl mx-auto text-center">
+
+            {/* Small label */}
+            <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-white/90 text-sm sm:text-base font-medium tracking-wide mb-8 animate-[fadeInUp_0.8s_ease-out]">
+              <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+              VETS FOR ANIMAL WELFARE
             </div>
-            <p className="mt-6 text-2xl text-white/90 max-w-3xl mx-auto font-medium drop-shadow-lg">
-              "Animal Welfare for a Better World"
+
+            {/* Main Heading */}
+            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[0.95] text-white animate-[fadeInUp_1s_ease-out]">
+
+              <span className="block">
+                Compassion
+              </span>
+
+              <span className="block mt-2 bg-gradient-to-r from-blue-300 via-indigo-300 to-white bg-clip-text text-transparent">
+                In Action.
+              </span>
+
+            </h1>
+
+            {/* Description */}
+            <p className="max-w-2xl mx-auto mt-8 text-lg sm:text-xl lg:text-2xl leading-relaxed text-white/80 animate-[fadeInUp_1.2s_ease-out]">
+              A student-led movement advancing animal welfare,
+              veterinary education, and compassionate community action.
             </p>
-            <div className="mt-12 space-x-6">
+
+            {/* Buttons */}
+            <div className="flex flex-col sm:flex-row justify-center gap-4 mt-10 animate-[fadeInUp_1.4s_ease-out]">
+
               <Link
                 to="/get-involved"
-                className="inline-block bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-8 py-4 rounded-full text-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                className="group relative overflow-hidden inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-white text-indigo-900 font-bold text-lg shadow-2xl shadow-black/20 transition-all duration-500 hover:-translate-y-1 hover:shadow-white/20"
               >
-                Get Involved
+                <span className="relative z-10">
+                  Get Involved
+                </span>
+
+                <svg
+                  className="w-5 h-5 relative z-10 transition-transform duration-300 group-hover:translate-x-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
+                </svg>
+
+                <span className="absolute inset-0 bg-gradient-to-r from-blue-100 to-indigo-100 translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
               </Link>
+
               <Link
                 to="/about"
-                className="inline-block bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-full text-xl font-semibold backdrop-blur-sm transition-all duration-300 transform hover:scale-105 border border-white/20"
+                className="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full border border-white/30 bg-white/10 backdrop-blur-md text-white font-semibold text-lg transition-all duration-500 hover:bg-white/20 hover:border-white/50 hover:-translate-y-1"
               >
-                Learn More
+                Discover VFAW
+
+                <svg
+                  className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
+                </svg>
               </Link>
+
             </div>
+
           </div>
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
-          <div className="animate-bounce">
-            <svg
-              className="w-6 h-6 text-white"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-            </svg>
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
+
+          <div className="flex flex-col items-center gap-3 text-white/60">
+
+            <span className="text-xs uppercase tracking-[0.3em]">
+              Scroll
+            </span>
+
+            <div className="w-6 h-10 rounded-full border border-white/30 flex justify-center pt-2">
+              <div className="w-1 h-2.5 rounded-full bg-white/70 animate-bounce" />
+            </div>
+
           </div>
+
         </div>
+
       </section>
 
-      
-      {/* Featured Activities Preview */}
-      <section className="py-16 bg-gradient-to-b from-purple-50 to-pink-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-extrabold text-gray-900 sm:text-5xl">
-              Making a Difference
-            </h2>
-            <p className="mt-4 text-xl text-gray-600">
-              Discover how we're transforming lives, one animal at a time
-            </p>
+
+      {/* =========================================================
+          INTRO / STATS
+      ========================================================= */}
+      <section
+        ref={(el) => addSectionRef(el, 'stats')}
+        className="relative bg-white"
+      >
+
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+
+          <div className="relative -mt-16 z-20">
+
+            <div className="grid grid-cols-2 lg:grid-cols-4 bg-white rounded-3xl shadow-2xl shadow-indigo-900/10 border border-gray-100 overflow-hidden">
+
+              {stats.map((stat, index) => (
+
+                <div
+                  key={stat.label}
+                  className={`relative p-6 sm:p-8 lg:p-10 text-center group transition-all duration-500 hover:bg-indigo-50/60 ${
+                    index !== stats.length - 1
+                      ? 'border-r border-gray-100'
+                      : ''
+                  }`}
+                >
+
+                  <div className="text-3xl sm:text-4xl lg:text-5xl font-black text-indigo-700 tracking-tight">
+                    {stat.value}
+                  </div>
+
+                  <div className="mt-2 font-bold text-gray-900">
+                    {stat.label}
+                  </div>
+
+                  <div className="mt-1 text-sm text-gray-500">
+                    {stat.description}
+                  </div>
+
+                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-1 bg-indigo-600 group-hover:w-16 transition-all duration-500 rounded-full" />
+
+                </div>
+
+              ))}
+
+            </div>
+
           </div>
-          <div className="mt-12 grid gap-8 md:grid-cols-2">
-            {featuredActivities.slice(0,2).map((activity) => (
+
+        </div>
+
+      </section>
+
+
+      {/* =========================================================
+          MAKING A DIFFERENCE
+      ========================================================= */}
+      <section
+        ref={(el) => addSectionRef(el, 'activities')}
+        className={`relative py-28 lg:py-36 bg-gray-50 transition-all duration-1000 ${
+          visibleSections.activities
+            ? 'opacity-100 translate-y-0'
+            : 'opacity-0 translate-y-10'
+        }`}
+      >
+
+        {/* Decorative background */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-100/50 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
+
+          {/* Heading */}
+          <div className="max-w-3xl mb-16">
+
+            <div className="flex items-center gap-3 mb-5">
+              <span className="w-10 h-px bg-indigo-600" />
+              <span className="text-sm font-bold tracking-[0.2em] uppercase text-indigo-600">
+                What We Do
+              </span>
+            </div>
+
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-gray-950 leading-tight">
+              Making a difference
+              <span className="text-indigo-600"> where it matters.</span>
+            </h2>
+
+            <p className="mt-6 text-lg sm:text-xl text-gray-600 leading-relaxed">
+              From direct veterinary intervention to community education,
+              our programs turn compassion into meaningful action.
+            </p>
+
+          </div>
+
+
+          {/* Activity Cards */}
+          <div className="grid lg:grid-cols-3 gap-7">
+
+            {featuredActivities.map((activity, index) => (
+
               <Link
                 to="/programs"
                 key={activity.title}
-                className={`${activity.color} rounded-2xl shadow-lg overflow-hidden group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2`}
+                className="group relative bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-lg shadow-gray-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-700 hover:-translate-y-3"
+                style={{
+                  transitionDelay: `${index * 100}ms`,
+                }}
               >
-                <div className="relative h-64 overflow-hidden">
+
+                {/* Image */}
+                <div className="relative h-72 overflow-hidden">
+
                   <img
-                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                     src={activity.image}
                     alt={activity.title}
+                    loading="lazy"
+                    className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </div>
-                <div className="p-8">
-                  <h3 className="text-2xl font-bold text-gray-900 group-hover:text-indigo-600 transition-colors duration-300">
-                    {activity.title}
-                  </h3>
-                  <p className="mt-4 text-gray-600">{activity.description}</p>
-                  <div className="mt-6 flex items-center text-indigo-600 group-hover:text-indigo-700 transition-colors duration-300">
-                    <span className="font-semibold">Learn More</span>
-                    <svg className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
+
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+
+                  {/* Number */}
+                  <div className="absolute top-5 left-5 w-11 h-11 rounded-full bg-white/15 backdrop-blur-md border border-white/30 flex items-center justify-center text-white font-bold">
+                    {activity.number}
                   </div>
+
+                  {/* Bottom title */}
+                  <div className="absolute bottom-0 left-0 right-0 p-7">
+
+                    <h3 className="text-2xl font-bold text-white">
+                      {activity.title}
+                    </h3>
+
+                  </div>
+
                 </div>
+
+                {/* Content */}
+                <div className="p-7">
+
+                  <p className="text-gray-600 leading-relaxed">
+                    {activity.description}
+                  </p>
+
+                  <div className="mt-6 flex items-center gap-2 text-indigo-600 font-bold">
+
+                    <span>
+                      Explore Program
+                    </span>
+
+                    <svg
+                      className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M17 8l4 4m0 0l-4 4m4-4H3"
+                      />
+                    </svg>
+
+                  </div>
+
+                </div>
+
               </Link>
+
             ))}
+
           </div>
-          <div className="mt-12 text-center">
+
+
+          {/* Button */}
+          <div className="mt-14 text-center">
+
             <Link
               to="/programs"
-              className="inline-flex items-center px-8 py-4 rounded-full text-lg font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+              className="group inline-flex items-center gap-3 px-8 py-4 rounded-full bg-indigo-700 text-white font-bold shadow-lg shadow-indigo-700/20 hover:bg-indigo-800 hover:-translate-y-1 hover:shadow-xl transition-all duration-300"
             >
-              Explore All Our Programs
-              <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+
+              Explore All Programs
+
+              <svg
+                className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                />
               </svg>
+
             </Link>
+
           </div>
+
         </div>
+
       </section>
 
-      {/* Gallery Preview */}
-      <section className="py-16 bg-gradient-to-b from-pink-50 to-indigo-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-extrabold text-gray-900 sm:text-5xl">
-              Moments That Matter
-            </h2>
-            <p className="mt-4 text-xl text-gray-600">
-              Witness the impact of our work through these powerful moments
-            </p>
-          </div>
-          <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {/* Gallery Snapshots */}
-            <Link to="/gallery" className="group block rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300">
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src="/awareness/7.jpg"
-                  alt="Awareness Program"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+      {/* =========================================================
+          GALLERY
+      ========================================================= */}
+      <section
+        ref={(el) => addSectionRef(el, 'gallery')}
+        className={`py-28 lg:py-36 bg-white transition-all duration-1000 ${
+          visibleSections.gallery
+            ? 'opacity-100 translate-y-0'
+            : 'opacity-0 translate-y-10'
+        }`}
+      >
+
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-14">
+
+            <div className="max-w-3xl">
+
+              <div className="flex items-center gap-3 mb-5">
+                <span className="w-10 h-px bg-indigo-600" />
+                <span className="text-sm font-bold tracking-[0.2em] uppercase text-indigo-600">
+                  Our Work
+                </span>
               </div>
-              <div className="p-4 bg-white">
-                <h3 className="text-lg font-bold text-gray-900 mb-1">Awareness Program</h3>
-                <p className="text-gray-600 text-sm">Spreading knowledge and compassion</p>
-              </div>
-            </Link>
-            <Link to="/gallery" className="group block rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300">
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src="/vaccination/7.jpg"
-                  alt="Vaccination Program"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              </div>
-              <div className="p-4 bg-white">
-                <h3 className="text-lg font-bold text-gray-900 mb-1">Vaccination Program</h3>
-                <p className="text-gray-600 text-sm">Protecting animal health</p>
-              </div>
-            </Link>
-            <Link to="/gallery" className="group block rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300">
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src="/feeding/IMG_2117.JPG"
-                  alt="Feeding Program"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              </div>
-              <div className="p-4 bg-white">
-                <h3 className="text-lg font-bold text-gray-900 mb-1">Feeding Program</h3>
-                <p className="text-gray-600 text-sm">Ensuring well-being of street animals</p>
-              </div>
-            </Link>
-            <Link to="/gallery" className="group block rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300">
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src="/capacity/1.JPG"
-                  alt="Capacity Building"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              </div>
-              <div className="p-4 bg-white">
-                <h3 className="text-lg font-bold text-gray-900 mb-1">Capacity Building</h3>
-                <p className="text-gray-600 text-sm">Empowering future leaders</p>
-              </div>
-            </Link>
-          </div>
-          <div className="mt-12 text-center">
+
+              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight">
+                Moments that
+                <span className="text-indigo-600"> matter.</span>
+              </h2>
+
+              <p className="mt-6 text-lg text-gray-600 leading-relaxed">
+                Every program represents a story of compassion,
+                collaboration, and meaningful change.
+              </p>
+
+            </div>
+
             <Link
               to="/gallery"
-              className="inline-flex items-center px-8 py-4 rounded-full text-lg font-semibold text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+              className="group inline-flex items-center gap-2 text-indigo-700 font-bold hover:text-indigo-900 transition-colors"
+            >
+              View Full Gallery
+
+              <svg
+                className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                />
+              </svg>
+
+            </Link>
+
+          </div>
+
+
+          {/* Gallery Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+
+            {galleryItems.map((item, index) => (
+
+              <Link
+                to="/gallery"
+                key={item.title}
+                className={`group relative overflow-hidden rounded-3xl ${
+                  item.size === 'large'
+                    ? 'lg:row-span-2 min-h-[420px]'
+                    : 'min-h-[300px]'
+                }`}
+              >
+
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  loading="lazy"
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                />
+
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+
+                <div className="absolute inset-x-0 bottom-0 p-6 transform transition-transform duration-500 group-hover:-translate-y-2">
+
+                  <div className="w-10 h-1 bg-white rounded-full mb-4 transition-all duration-500 group-hover:w-16" />
+
+                  <h3 className="text-xl font-bold text-white">
+                    {item.title}
+                  </h3>
+
+                  <p className="mt-1 text-sm text-white/75">
+                    {item.description}
+                  </p>
+
+                </div>
+
+                {/* Hover border */}
+                <div className="absolute inset-0 rounded-3xl border border-white/0 group-hover:border-white/40 transition-all duration-500" />
+
+              </Link>
+
+            ))}
+
+          </div>
+
+
+          <div className="mt-12 text-center">
+
+            <Link
+              to="/gallery"
+              className="inline-flex items-center gap-3 px-8 py-4 rounded-full border border-gray-200 text-gray-900 font-bold hover:bg-gray-950 hover:text-white hover:border-gray-950 transition-all duration-300"
             >
               Explore Our Full Gallery
-              <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </Link>
-          </div>
-        </div>
-      </section>
 
-      {/* Voices of VFAW Snapshot */}
-      <VoicesSnapshot />
-
-      {/* Collaborators Section */}
-      <section className="py-16 bg-gradient-to-b from-indigo-50 to-purple-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-extrabold text-gray-900 sm:text-5xl">
-              Our Collaborators
-            </h2>
-            <p className="mt-4 text-xl text-gray-600">
-              Working together for a better future
-            </p>
-          </div>
-          <div className="mt-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
-            {[2, 3, 4, 6, 7, 1].map((num) => (
-              <div key={num} className="group relative">
-                <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg bg-gray-200">
-                  <img
-                    src={`/collaborators/${num}.${num === 1 || num === 7 ? 'jpg' : 'JPG'}`}
-                    alt={`Collaborator ${num}`}
-                    className="h-full w-full object-cover object-center group-hover:opacity-75 transition-opacity duration-300"
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Call to Action */}
-      <section className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white">
-        <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-3xl font-extrabold sm:text-4xl">
-              Ready to Make a Difference?
-            </h2>
-            <p className="mt-4 text-lg">
-              Join us in our mission to create positive change in our community.
-            </p>
-            <div className="mt-8">
-              <Link
-                to="/contact"
-                className="inline-block bg-white text-indigo-600 px-6 py-3 rounded-md text-lg font-medium hover:bg-gray-100"
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                Contact Us
-              </Link>
-            </div>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                />
+              </svg>
+
+            </Link>
+
           </div>
+
         </div>
+
       </section>
-    </div>
+
+
+      {/* =========================================================
+          VOICES
+      ========================================================= */}
+      <section
+        ref={(el) => addSectionRef(el, 'voices')}
+        className={`transition-all duration-1000 ${
+          visibleSections.voices
+            ? 'opacity-100 translate-y-0'
+            : 'opacity-0 translate-y-10'
+        }`}
+      >
+        <VoicesSnapshot />
+      </section>
+
+
+      {/* =========================================================
+          COLLABORATORS
+      ========================================================= */}
+      <section
+        ref={(el) => addSectionRef(el, 'collaborators')}
+        className={`relative py-28 lg:py-36 bg-gray-50 overflow-hidden transition-all duration-1000 ${
+          visibleSections.collaborators
+            ? 'opacity-100 translate-y-0'
+            : 'opacity-0 translate-y-10'
+        }`}
+      >
+
+        <div className="absolute top-0 left-0 w-96 h-96 bg-indigo-100/50 rounded-full blur-3xl" />
+
+        <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
+
+          <div className="text-center max-w-2xl mx-auto mb-16">
+
+            <div className="flex items-center justify-center gap-3 mb-5">
+
+              <span className="w-8 h-px bg-indigo-600" />
+
+              <span className="text-sm font-bold tracking-[0.2em] uppercase text-indigo-600">
+                Collaboration
+              </span>
+
+              <span className="w-8 h-px bg-indigo-600" />
+
+            </div>
+
+            <h2 className="text-4xl sm:text-5xl font-black tracking-tight">
+              Stronger
+              <span className="text-indigo-600"> together.</span>
+            </h2>
+
+            <p className="mt-5 text-lg text-gray-600">
+              Meaningful change becomes possible when organizations,
+              communities, and individuals work together.
+            </p>
+
+          </div>
+
+
+          {/* Collaborator logos */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-5">
+
+            {collaborators.map((num) => (
+
+              <div
+                key={num}
+                className="group aspect-square bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-500 flex items-center justify-center p-5 overflow-hidden"
+              >
+
+                <img
+                  src={`/collaborators/${num}.${num === 1 || num === 7 ? 'jpg' : 'JPG'}`}
+                  alt={`Collaborator ${num}`}
+                  loading="lazy"
+                  className="w-full h-full object-contain transition-all duration-500 group-hover:scale-105"
+                />
+
+              </div>
+
+            ))}
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      {/* =========================================================
+          FINAL CTA
+      ========================================================= */}
+      <section className="relative py-28 lg:py-36 overflow-hidden bg-indigo-950 text-white">
+
+        {/* Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-indigo-950 via-blue-950 to-indigo-900" />
+
+        {/* Decorative circles */}
+        <div className="absolute -top-48 -right-48 w-[600px] h-[600px] rounded-full border border-white/5" />
+        <div className="absolute -bottom-64 -left-48 w-[700px] h-[700px] rounded-full border border-white/5" />
+
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-500/20 blur-3xl rounded-full" />
+
+        <div className="relative max-w-4xl mx-auto px-6 text-center">
+
+          <div className="inline-flex items-center px-4 py-2 rounded-full border border-white/15 bg-white/5 backdrop-blur-md text-sm text-white/70 mb-8">
+            Be part of the change
+          </div>
+
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
+            Compassion needs
+            <span className="block text-blue-300">
+              action.
+            </span>
+          </h2>
+
+          <p className="max-w-2xl mx-auto mt-6 text-lg sm:text-xl text-white/70 leading-relaxed">
+            Whether you are a veterinary student, professional,
+            organization, or animal lover, there is a place for you
+            in the movement for better animal welfare.
+          </p>
+
+          <div className="flex flex-col sm:flex-row justify-center gap-4 mt-10">
+
+            <Link
+              to="/get-involved"
+              className="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-white text-indigo-950 font-bold text-lg hover:-translate-y-1 hover:shadow-2xl transition-all duration-300"
+            >
+
+              Get Involved
+
+              <svg
+                className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                />
+              </svg>
+
+            </Link>
+
+            <Link
+              to="/contact"
+              className="inline-flex items-center justify-center px-8 py-4 rounded-full border border-white/25 bg-white/5 backdrop-blur-md text-white font-semibold text-lg hover:bg-white/10 hover:-translate-y-1 transition-all duration-300"
+            >
+              Contact VFAW
+            </Link>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      {/* =========================================================
+          GLOBAL ANIMATIONS
+      ========================================================= */}
+      <style>{`
+
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes float {
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+
+          50% {
+            transform: translateY(-25px);
+          }
+        }
+
+        html {
+          scroll-behavior: smooth;
+        }
+
+        ::selection {
+          background: rgba(79, 70, 229, 0.25);
+        }
+
+      `}</style>
+
+    </main>
   );
 };
 
-export default Home; 
+export default Home;
