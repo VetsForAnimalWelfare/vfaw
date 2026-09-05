@@ -22,7 +22,7 @@ const Programs = () => {
     '/capacity/p9.png',
     '/capacity/p10.png'
   ]
-}
+},
     
     {
   title: 'Farmed Animal Welfare',
