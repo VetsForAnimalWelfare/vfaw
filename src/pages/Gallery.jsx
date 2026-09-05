@@ -68,7 +68,7 @@ const Gallery = () => {
   src: '/capacity/p10.png',
   category: 'Basics of Hematological Tools and Techniques',
   description: 'Basics of Hematological Tools and Techniques'
-}
+},
     
     {
       src: '/welfare/IMG_2124.JPG',
