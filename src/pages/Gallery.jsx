@@ -22,52 +22,52 @@ const Gallery = () => {
 {
   src: '/capacity/p1.png',
   category: 'Basics of Hematological Tools and Techniques',
-  description: 'Basics of Hematological Tools and Techniques'
+  description: 'Sep 5, Paklihawa Campus and Farm'
 },
 {
   src: '/capacity/p2.png',
   category: 'Basics of Hematological Tools and Techniques',
-  description: 'Basics of Hematological Tools and Techniques'
+  description: 'Sep 5, Paklihawa Campus and Farm'
 },
 {
   src: '/capacity/p3.png',
   category: 'Basics of Hematological Tools and Techniques',
-  description: 'Basics of Hematological Tools and Techniques'
+  description: 'Sep 5, Paklihawa Campus and Farm'
 },
 {
   src: '/capacity/p4.png',
   category: 'Basics of Hematological Tools and Techniques',
-  description: 'Basics of Hematological Tools and Techniques'
+  description: 'Sep 5, Paklihawa Campus and Farm'
 },
 {
   src: '/capacity/p5.png',
   category: 'Basics of Hematological Tools and Techniques',
-  description: 'Basics of Hematological Tools and Techniques'
+  description: 'Sep 5, Paklihawa Campus and Farm'
 },
 {
   src: '/capacity/p6.png',
   category: 'Basics of Hematological Tools and Techniques',
-  description: 'Basics of Hematological Tools and Techniques'
+  description: 'Sep 5, Paklihawa Campus and Farm'
 },
 {
   src: '/capacity/p7.png',
   category: 'Basics of Hematological Tools and Techniques',
-  description: 'Basics of Hematological Tools and Techniques'
+  description: 'Sep 5, Paklihawa Campus and Farm'
 },
 {
   src: '/capacity/p8.png',
   category: 'Basics of Hematological Tools and Techniques',
-  description: 'Basics of Hematological Tools and Techniques'
+  description: 'Sep 5, Paklihawa Campus and Farm'
 },
 {
   src: '/capacity/p9.png',
   category: 'Basics of Hematological Tools and Techniques',
-  description: 'Basics of Hematological Tools and Techniques'
+  description: 'Sep 5, Paklihawa Campus and Farm'
 },
 {
   src: '/capacity/p10.png',
   category: 'Basics of Hematological Tools and Techniques',
-  description: 'Basics of Hematological Tools and Techniques'
+  description: 'Sep 5, Paklihawa Campus and Farm'
 },
     
     {
