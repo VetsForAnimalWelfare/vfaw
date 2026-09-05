@@ -1,6 +1,18 @@
 import { useEffect, useMemo, useState } from "react";
 
 const programs = [
+   {
+    id: 4,
+    slug: "lsd-report-writing",
+    title: "LSD Report Writing Competition",
+    description:
+      "To Develop Skill And Knowledge.",
+    date: "2083/05/20",
+    type: "Skill Development",
+    formLink:
+      "https://docs.google.com/forms/d/e/1FAIpQLSeh4etkOFN3AlsO-oNBUTR3khVb2I2jvMdw_hlzxYP5IH_vqQ/viewform?embedded=true",
+    shade: "blue",
+  },
   {
     id: 1,
     slug: "clinical-report-writing",
