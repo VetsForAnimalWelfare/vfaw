@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 const Gallery = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
 
   const categories = [
     'All',
@@ -18,58 +18,59 @@ const Gallery = () => {
   ];
 
   const images = [
+    // Basics of Hematological Tools and Techniques
+    {
+      src: '/capacity/p1.png',
+      category: 'Basics of Hematological Tools and Techniques',
+      description: 'Sep 5, Paklihawa Campus and Farm'
+    },
+    {
+      src: '/capacity/p2.png',
+      category: 'Basics of Hematological Tools and Techniques',
+      description: 'Sep 5, Paklihawa Campus and Farm'
+    },
+    {
+      src: '/capacity/p3.png',
+      category: 'Basics of Hematological Tools and Techniques',
+      description: 'Sep 5, Paklihawa Campus and Farm'
+    },
+    {
+      src: '/capacity/p4.png',
+      category: 'Basics of Hematological Tools and Techniques',
+      description: 'Sep 5, Paklihawa Campus and Farm'
+    },
+    {
+      src: '/capacity/p5.png',
+      category: 'Basics of Hematological Tools and Techniques',
+      description: 'Sep 5, Paklihawa Campus and Farm'
+    },
+    {
+      src: '/capacity/p6.png',
+      category: 'Basics of Hematological Tools and Techniques',
+      description: 'Sep 5, Paklihawa Campus and Farm'
+    },
+    {
+      src: '/capacity/p7.png',
+      category: 'Basics of Hematological Tools and Techniques',
+      description: 'Sep 5, Paklihawa Campus and Farm'
+    },
+    {
+      src: '/capacity/p8.png',
+      category: 'Basics of Hematological Tools and Techniques',
+      description: 'Sep 5, Paklihawa Campus and Farm'
+    },
+    {
+      src: '/capacity/p9.png',
+      category: 'Basics of Hematological Tools and Techniques',
+      description: 'Sep 5, Paklihawa Campus and Farm'
+    },
+    {
+      src: '/capacity/p10.png',
+      category: 'Basics of Hematological Tools and Techniques',
+      description: 'Sep 5, Paklihawa Campus and Farm'
+    },
+
     // Animal Welfare
-{
-  src: '/capacity/p1.png',
-  category: 'Basics of Hematological Tools and Techniques',
-  description: 'Sep 5, Paklihawa Campus and Farm'
-},
-{
-  src: '/capacity/p2.png',
-  category: 'Basics of Hematological Tools and Techniques',
-  description: 'Sep 5, Paklihawa Campus and Farm'
-},
-{
-  src: '/capacity/p3.png',
-  category: 'Basics of Hematological Tools and Techniques',
-  description: 'Sep 5, Paklihawa Campus and Farm'
-},
-{
-  src: '/capacity/p4.png',
-  category: 'Basics of Hematological Tools and Techniques',
-  description: 'Sep 5, Paklihawa Campus and Farm'
-},
-{
-  src: '/capacity/p5.png',
-  category: 'Basics of Hematological Tools and Techniques',
-  description: 'Sep 5, Paklihawa Campus and Farm'
-},
-{
-  src: '/capacity/p6.png',
-  category: 'Basics of Hematological Tools and Techniques',
-  description: 'Sep 5, Paklihawa Campus and Farm'
-},
-{
-  src: '/capacity/p7.png',
-  category: 'Basics of Hematological Tools and Techniques',
-  description: 'Sep 5, Paklihawa Campus and Farm'
-},
-{
-  src: '/capacity/p8.png',
-  category: 'Basics of Hematological Tools and Techniques',
-  description: 'Sep 5, Paklihawa Campus and Farm'
-},
-{
-  src: '/capacity/p9.png',
-  category: 'Basics of Hematological Tools and Techniques',
-  description: 'Sep 5, Paklihawa Campus and Farm'
-},
-{
-  src: '/capacity/p10.png',
-  category: 'Basics of Hematological Tools and Techniques',
-  description: 'Sep 5, Paklihawa Campus and Farm'
-},
-    
     {
       src: '/welfare/IMG_2124.JPG',
       category: 'Animal Welfare',
@@ -693,124 +694,780 @@ const Gallery = () => {
     }
   ];
 
-  const filteredImages = selectedCategory === 'All'
-    ? images
-    : images.filter(image => image.category === selectedCategory);
+  const filteredImages = useMemo(() => {
+    if (selectedCategory === 'All') {
+      return images;
+    }
 
-  const openImageModal = (image) => {
-    setSelectedImage(image);
+    return images.filter(
+      (image) => image.category === selectedCategory
+    );
+  }, [selectedCategory]);
+
+  const selectedImage =
+    selectedImageIndex !== null
+      ? filteredImages[selectedImageIndex]
+      : null;
+
+  const openImageModal = (index) => {
+    setSelectedImageIndex(index);
     document.body.style.overflow = 'hidden';
   };
 
   const closeImageModal = () => {
-    setSelectedImage(null);
-    document.body.style.overflow = 'auto';
+    setSelectedImageIndex(null);
+    document.body.style.overflow = '';
   };
 
+  const showPreviousImage = (event) => {
+    event?.stopPropagation();
+
+    if (selectedImageIndex === null || filteredImages.length === 0) {
+      return;
+    }
+
+    setSelectedImageIndex((current) =>
+      current === 0 ? filteredImages.length - 1 : current - 1
+    );
+  };
+
+  const showNextImage = (event) => {
+    event?.stopPropagation();
+
+    if (selectedImageIndex === null || filteredImages.length === 0) {
+      return;
+    }
+
+    setSelectedImageIndex((current) =>
+      current === filteredImages.length - 1 ? 0 : current + 1
+    );
+  };
+
+  useEffect(() => {
+    const handleKeyboard = (event) => {
+      if (selectedImageIndex === null) {
+        return;
+      }
+
+      if (event.key === 'Escape') {
+        closeImageModal();
+      }
+
+      if (event.key === 'ArrowLeft') {
+        showPreviousImage();
+      }
+
+      if (event.key === 'ArrowRight') {
+        showNextImage();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyboard);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyboard);
+    };
+  }, [selectedImageIndex, filteredImages.length]);
+
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white">
-        <div className="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
-          <div className="relative">
-            <div className="absolute top-2 right-2">
-              <div className="relative">
-                <div className="absolute inset-0 bg-red-500 rounded-sm transform rotate-45 shadow-lg"></div>
-                <div className="absolute inset-0 bg-red-500 rounded-sm transform -rotate-45 shadow-lg"></div>
-              </div>
+    <main className="min-h-screen bg-slate-950 text-white">
+
+      {/* =========================================================
+          HERO SECTION
+      ========================================================= */}
+      <section className="relative overflow-hidden bg-blue-950">
+
+        <div className="absolute -top-32 -right-32 h-96 w-96 rounded-full border border-blue-800 opacity-40" />
+        <div className="absolute -bottom-40 -left-40 h-96 w-96 rounded-full border border-blue-800 opacity-30" />
+
+        <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8 lg:py-28">
+
+          <div className="mx-auto max-w-4xl text-center">
+
+            <div className="mb-6 inline-flex items-center gap-3 rounded-full border border-blue-700 bg-blue-900 px-5 py-2 text-xs font-bold uppercase tracking-[0.25em] text-blue-200">
+              <span className="h-2 w-2 rounded-full bg-red-500" />
+              VFAW Visual Archive
             </div>
-            <div className="text-center">
-              <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
-                Our Gallery
-              </h1>
-              <p className="mt-6 text-xl max-w-3xl mx-auto">
-                A visual journey through our programs and impact
+
+            <h1 className="text-4xl font-black tracking-tight sm:text-5xl lg:text-7xl">
+              Our
+              <span className="text-red-500"> Gallery</span>
+            </h1>
+
+            <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-blue-100 sm:text-lg">
+              Explore moments from our animal welfare, veterinary,
+              vaccination, training, awareness and community programs.
+            </p>
+
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+
+              <div className="border border-blue-700 bg-blue-900 px-6 py-4">
+                <p className="text-2xl font-black">
+                  {images.length}
+                </p>
+                <p className="mt-1 text-xs uppercase tracking-widest text-blue-300">
+                  Total Images
+                </p>
+              </div>
+
+              <div className="border border-blue-700 bg-blue-900 px-6 py-4">
+                <p className="text-2xl font-black">
+                  {categories.length - 1}
+                </p>
+                <p className="mt-1 text-xs uppercase tracking-widest text-blue-300">
+                  Categories
+                </p>
+              </div>
+
+              <div className="border border-red-900 bg-red-950 px-6 py-4">
+                <p className="text-2xl font-black text-red-400">
+                  {filteredImages.length}
+                </p>
+                <p className="mt-1 text-xs uppercase tracking-widest text-red-300">
+                  Showing
+                </p>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================
+          CATEGORY FILTER
+      ========================================================= */}
+      <section className="sticky top-0 z-30 border-b border-blue-900 bg-slate-950/95 backdrop-blur-xl">
+
+        <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
+
+          <div className="mb-4 flex items-center justify-between gap-4">
+
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-red-500">
+                Explore
+              </p>
+
+              <h2 className="mt-1 text-lg font-bold text-white">
+                Browse by Category
+              </h2>
+            </div>
+
+            <div className="hidden text-right sm:block">
+              <p className="text-sm font-semibold text-blue-200">
+                {filteredImages.length} images
+              </p>
+
+              <p className="text-xs text-slate-500">
+                {selectedCategory}
               </p>
             </div>
+
+          </div>
+
+          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin">
+
+            {categories.map((category) => {
+
+              const isActive = selectedCategory === category;
+
+              return (
+                <button
+                  key={category}
+                  type="button"
+                  onClick={() => {
+                    setSelectedCategory(category);
+                    setSelectedImageIndex(null);
+                  }}
+                  className={`
+                    group relative flex-shrink-0 overflow-hidden
+                    border px-4 py-2.5
+                    text-xs font-bold
+                    uppercase tracking-wide
+                    transition-all duration-300
+                    ${
+                      isActive
+                        ? 'border-red-500 bg-red-600 text-white shadow-lg shadow-red-900/30'
+                        : 'border-blue-800 bg-blue-950 text-blue-200 hover:border-red-500 hover:bg-red-600 hover:text-white'
+                    }
+                  `}
+                >
+                  {category}
+                </button>
+              );
+            })}
+
           </div>
         </div>
       </section>
 
-      {/* Category Filter */}
-      <section className="py-8 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap justify-center gap-4">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-300 ${
-                  selectedCategory === category
-                    ? 'bg-indigo-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* =========================================================
+          GALLERY
+      ========================================================= */}
+      <section className="bg-slate-950 py-14 sm:py-20">
 
-      {/* Image Grid */}
-      <section className="py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredImages.map((image, index) => (
-              <div
-                key={index}
-                className="relative group cursor-pointer"
-                onClick={() => openImageModal(image)}
-              >
-                <img
-                  src={image.src}
-                  alt={image.description}
-                  className="w-full h-64 object-cover rounded-lg shadow-lg transform group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 rounded-lg flex items-center justify-center">
-                  <div className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center p-4">
-                    <h3 className="text-lg font-semibold">{image.category}</h3>
-                    <p className="text-sm">{image.description}</p>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+          {/* Section heading */}
+          <div className="mb-10 flex flex-col justify-between gap-6 border-b border-blue-900 pb-8 sm:flex-row sm:items-end">
+
+            <div>
+
+              <p className="text-xs font-bold uppercase tracking-[0.25em] text-red-500">
+                Visual Stories
+              </p>
+
+              <h2 className="mt-2 text-3xl font-black tracking-tight text-white sm:text-4xl">
+                {selectedCategory === 'All'
+                  ? 'All Activities'
+                  : selectedCategory}
+              </h2>
+
+              <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-400">
+                A collection of moments documenting our work,
+                field activities and community impact.
+              </p>
+
+            </div>
+
+            <div className="flex items-center gap-3">
+
+              <span className="h-2 w-2 rounded-full bg-red-500" />
+
+              <span className="text-sm font-semibold text-blue-300">
+                {filteredImages.length} photographs
+              </span>
+
+            </div>
+
+          </div>
+
+          {/* Image grid */}
+          {filteredImages.length > 0 ? (
+
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+
+              {filteredImages.map((image, index) => (
+
+                <article
+                  key={`${image.src}-${index}`}
+                  onClick={() => openImageModal(index)}
+                  className="
+                    group cursor-pointer
+                    overflow-hidden
+                    border border-blue-800
+                    bg-blue-950
+                    shadow-xl shadow-black/20
+                    transition-all duration-500
+                    hover:-translate-y-2
+                    hover:border-red-500
+                    hover:bg-blue-900
+                    hover:shadow-2xl
+                    hover:shadow-red-950/40
+                  "
+                >
+
+                  {/* Image frame */}
+                  <div className="relative m-3 overflow-hidden border border-blue-800 bg-slate-900">
+
+                    {/* Top label */}
+                    <div className="absolute left-3 top-3 z-10">
+
+                      <div className="border border-white/20 bg-blue-950/95 px-3 py-1.5 backdrop-blur-md">
+
+                        <span className="text-[9px] font-black uppercase tracking-[0.18em] text-blue-200">
+                          VFAW
+                        </span>
+
+                      </div>
+
+                    </div>
+
+                    {/* Image */}
+                    <div className="relative aspect-[4/3] overflow-hidden">
+
+                      <img
+                        src={image.src}
+                        alt={image.description}
+                        loading="lazy"
+                        className="
+                          h-full
+                          w-full
+                          object-cover
+                          transition-transform
+                          duration-700
+                          ease-out
+                          group-hover:scale-110
+                        "
+                      />
+
+                      {/* Dark image overlay */}
+                      <div className="
+                        absolute inset-0
+                        bg-blue-950/0
+                        transition-all duration-500
+                        group-hover:bg-blue-950/20
+                      " />
+
+                      {/* Red hover border */}
+                      <div className="
+                        pointer-events-none
+                        absolute inset-0
+                        border-2 border-transparent
+                        transition-all duration-500
+                        group-hover:border-red-500
+                      " />
+
+                      {/* View button */}
+                      <div className="
+                        absolute bottom-4 right-4
+                        translate-y-3
+                        opacity-0
+                        transition-all duration-500
+                        group-hover:translate-y-0
+                        group-hover:opacity-100
+                      ">
+
+                        <div className="flex h-11 w-11 items-center justify-center border border-white/20 bg-red-600 text-white shadow-lg">
+
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            className="h-5 w-5"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                            />
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                            />
+                          </svg>
+
+                        </div>
+
+                      </div>
+
+                    </div>
+
                   </div>
-                </div>
+
+                  {/* Card content */}
+                  <div className="px-5 pb-5 pt-2">
+
+                    {/* Category */}
+                    <div className="mb-3 flex items-center gap-2">
+
+                      <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
+
+                      <p className="line-clamp-1 text-[10px] font-black uppercase tracking-[0.18em] text-blue-300">
+                        {image.category}
+                      </p>
+
+                    </div>
+
+                    {/* Title */}
+                    <h3 className="
+                      min-h-[48px]
+                      text-base
+                      font-bold
+                      leading-6
+                      text-white
+                      transition-colors
+                      duration-300
+                      group-hover:text-red-400
+                    ">
+                      {image.description}
+                    </h3>
+
+                    {/* Bottom line */}
+                    <div className="mt-5 flex items-center justify-between border-t border-blue-800 pt-4">
+
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                        View Image
+                      </span>
+
+                      <span className="
+                        flex h-7 w-7
+                        items-center justify-center
+                        border border-blue-700
+                        text-blue-300
+                        transition-all duration-300
+                        group-hover:border-red-500
+                        group-hover:bg-red-600
+                        group-hover:text-white
+                      ">
+
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          className="h-3.5 w-3.5"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M5 12h14"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M13 6l6 6-6 6"
+                          />
+                        </svg>
+
+                      </span>
+
+                    </div>
+
+                  </div>
+
+                </article>
+
+              ))}
+
+            </div>
+
+          ) : (
+
+            <div className="border border-blue-800 bg-blue-950 px-6 py-20 text-center">
+
+              <div className="mx-auto flex h-16 w-16 items-center justify-center border border-blue-700 bg-blue-900">
+
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  className="h-7 w-7 text-blue-300"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M4 16l4.5-4.5a2 2 0 012.828 0L15 15l1.5-1.5a2 2 0 012.828 0L20 14"
+                  />
+                  <rect
+                    x="3"
+                    y="4"
+                    width="18"
+                    height="16"
+                    rx="2"
+                  />
+                </svg>
+
               </div>
-            ))}
-          </div>
+
+              <h3 className="mt-6 text-xl font-bold text-white">
+                No Images Found
+              </h3>
+
+              <p className="mt-2 text-sm text-slate-400">
+                There are currently no photographs in this category.
+              </p>
+
+            </div>
+
+          )}
+
         </div>
       </section>
 
-      {/* Image Modal */}
+      {/* =========================================================
+          IMAGE MODAL
+      ========================================================= */}
       {selectedImage && (
+
         <div
-          className="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4"
+          className="
+            fixed inset-0 z-[100]
+            flex items-center justify-center
+            bg-slate-950/98
+            p-3
+            sm:p-6
+          "
           onClick={closeImageModal}
         >
-          <div className="relative max-w-4xl w-full">
-            <button
-              onClick={closeImageModal}
-              className="absolute top-4 right-4 z-10"
-            >
-              <div className="relative w-8 h-8 bg-white rounded-full p-1 shadow-lg">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-6 h-1 bg-red-500 rounded-full transform rotate-45"></div>
-                  <div className="w-6 h-1 bg-red-500 rounded-full transform -rotate-45 absolute"></div>
+
+          {/* Modal container */}
+          <div
+            className="
+              relative
+              flex
+              max-h-[96vh]
+              w-full
+              max-w-7xl
+              flex-col
+              overflow-hidden
+              border
+              border-blue-800
+              bg-blue-950
+              shadow-2xl
+              shadow-black/70
+            "
+            onClick={(event) => event.stopPropagation()}
+          >
+
+            {/* Modal header */}
+            <div className="flex items-center justify-between border-b border-blue-800 bg-blue-950 px-4 py-4 sm:px-6">
+
+              <div className="min-w-0 pr-4">
+
+                <div className="flex items-center gap-2">
+
+                  <span className="h-2 w-2 rounded-full bg-red-500" />
+
+                  <p className="truncate text-[10px] font-black uppercase tracking-[0.2em] text-blue-300">
+                    {selectedImage.category}
+                  </p>
+
                 </div>
+
+                <p className="mt-1 text-xs text-slate-500">
+                  Image {selectedImageIndex + 1} of {filteredImages.length}
+                </p>
+
               </div>
-            </button>
-            <img
-              src={selectedImage.src}
-              alt={selectedImage.description}
-              className="w-full h-auto max-h-[80vh] object-contain rounded-lg"
-            />
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4 text-white rounded-b-lg">
-              <h3 className="text-xl font-semibold">{selectedImage.category}</h3>
-              <p className="text-sm opacity-90">{selectedImage.description}</p>
+
+              <button
+                type="button"
+                onClick={closeImageModal}
+                aria-label="Close image viewer"
+                className="
+                  flex h-11 w-11
+                  flex-shrink-0
+                  items-center justify-center
+                  border border-blue-700
+                  bg-blue-900
+                  text-blue-200
+                  transition-all duration-300
+                  hover:border-red-500
+                  hover:bg-red-600
+                  hover:text-white
+                "
+              >
+
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  className="h-5 w-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 6l12 12M18 6L6 18"
+                  />
+                </svg>
+
+              </button>
+
             </div>
+
+            {/* Image area */}
+            <div className="relative flex min-h-0 flex-1 items-center justify-center bg-slate-950 p-3 sm:p-6">
+
+              {/* Previous */}
+              {filteredImages.length > 1 && (
+
+                <button
+                  type="button"
+                  onClick={showPreviousImage}
+                  aria-label="Previous image"
+                  className="
+                    absolute left-3 top-1/2 z-10
+                    flex h-12 w-12
+                    -translate-y-1/2
+                    items-center justify-center
+                    border border-blue-700
+                    bg-blue-950/95
+                    text-white
+                    shadow-xl
+                    transition-all duration-300
+                    hover:border-red-500
+                    hover:bg-red-600
+                  "
+                >
+
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    className="h-5 w-5"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15 18l-6-6 6-6"
+                    />
+                  </svg>
+
+                </button>
+
+              )}
+
+              {/* Image */}
+              <div className="relative flex max-h-[68vh] w-full items-center justify-center">
+
+                <img
+                  src={selectedImage.src}
+                  alt={selectedImage.description}
+                  className="
+                    max-h-[68vh]
+                    max-w-full
+                    object-contain
+                    border border-blue-800
+                    bg-slate-900
+                    p-1
+                    shadow-2xl
+                  "
+                />
+
+              </div>
+
+              {/* Next */}
+              {filteredImages.length > 1 && (
+
+                <button
+                  type="button"
+                  onClick={showNextImage}
+                  aria-label="Next image"
+                  className="
+                    absolute right-3 top-1/2 z-10
+                    flex h-12 w-12
+                    -translate-y-1/2
+                    items-center justify-center
+                    border border-blue-700
+                    bg-blue-950/95
+                    text-white
+                    shadow-xl
+                    transition-all duration-300
+                    hover:border-red-500
+                    hover:bg-red-600
+                  "
+                >
+
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    className="h-5 w-5"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9 18l6-6-6-6"
+                    />
+                  </svg>
+
+                </button>
+
+              )}
+
+            </div>
+
+            {/* Modal footer */}
+            <div className="border-t border-blue-800 bg-blue-950 px-5 py-5 sm:px-7">
+
+              <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+
+                <div className="min-w-0">
+
+                  <p className="text-xs font-black uppercase tracking-[0.18em] text-red-500">
+                    Program Activity
+                  </p>
+
+                  <h3 className="mt-2 text-lg font-bold text-white sm:text-xl">
+                    {selectedImage.description}
+                  </h3>
+
+                </div>
+
+                <div className="flex items-center gap-2">
+
+                  <button
+                    type="button"
+                    onClick={showPreviousImage}
+                    className="
+                      border border-blue-700
+                      bg-blue-900
+                      px-4 py-2.5
+                      text-xs font-bold uppercase tracking-wider
+                      text-blue-200
+                      transition-all duration-300
+                      hover:border-red-500
+                      hover:bg-red-600
+                      hover:text-white
+                    "
+                  >
+                    Previous
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={showNextImage}
+                    className="
+                      border border-red-500
+                      bg-red-600
+                      px-4 py-2.5
+                      text-xs font-bold uppercase tracking-wider
+                      text-white
+                      transition-all duration-300
+                      hover:bg-red-700
+                    "
+                  >
+                    Next
+                  </button>
+
+                </div>
+
+              </div>
+
+              <div className="mt-4 flex flex-wrap items-center gap-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">
+
+                <span>
+                  ← Previous
+                </span>
+
+                <span>
+                  → Next
+                </span>
+
+                <span>
+                  ESC Close
+                </span>
+
+              </div>
+
+            </div>
+
           </div>
+
         </div>
+
       )}
-    </div>
+
+    </main>
   );
 };
 
-export default Gallery; 
+export default Gallery;
