@@ -874,21 +874,52 @@ function Library() {
 
                 </div>
 
-                <button
-                  type="button"
-                  className="resource-action"
-                  onClick={() => openResource(resource)}
-                >
+                <div className="resource-card-actions">
+  <button
+    type="button"
+    className="resource-share"
+    onClick={(event) => {
+      event.stopPropagation();
+      handleShare(resource);
+    }}
+    aria-label={`Share ${resource.title}`}
+  >
+    <span>Share</span>
 
-                  <span>
-                    {getActionLabel(resource.type)}
-                  </span>
+    <svg
+      width="17"
+      height="17"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="18" cy="5" r="3" />
+      <circle cx="6" cy="12" r="3" />
+      <circle cx="18" cy="19" r="3" />
 
-                  <b>
-                    <Icon name="arrow" size={17} />
-                  </b>
+      <path d="m8.6 10.5 6.8-4" />
+      <path d="m8.6 13.5 6.8 4" />
+    </svg>
+  </button>
 
-                </button>
+  <button
+    type="button"
+    className="resource-action"
+    onClick={() => openResource(resource)}
+  >
+    <span>
+      {getActionLabel(resource.type)}
+    </span>
+
+    <b>
+      <Icon name="arrow" size={17} />
+    </b>
+  </button>
+</div>
 
               </article>
 
