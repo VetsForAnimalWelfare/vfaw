@@ -4,8 +4,12 @@ const GetInvolved = () => {
   const membershipOptions = [
     {
       title: 'Lifetime Membership',
-      description: 'Become a driving force for animal welfare and contribute to building a better world. As a member of VFAW, you will have the opportunity to actively engage in impactful initiatives, including awareness campaigns, Animal Birth Control programs, vaccination drives, virtual sessions, the Veterinary Talk Series, leadership development activities, animal welfare projects, and other specialized online programs.',
+      shortTitle: 'Lifetime',
+      description:
+        'Become a driving force for animal welfare and contribute to building a better world. As a member of VFAW, you will have the opportunity to actively engage in impactful initiatives, including awareness campaigns, Animal Birth Control programs, vaccination drives, virtual sessions, the Veterinary Talk Series, leadership development activities, animal welfare projects, and other specialized online programs.',
       price: '3,000',
+      period: 'lifetime',
+      type: 'premium',
       benefits: [
         'Permanent Membership Status: Enjoy lifelong affiliation with VFAW without the need for annual renewals',
         'Exclusive Event Participation: Access to all VFAW events, programs, and training sessions',
@@ -14,258 +18,827 @@ const GetInvolved = () => {
         'Recognition: Receive a lifetime membership certificate acknowledging your commitment to animal welfare',
         'Meaningful Contribution: Play an ongoing role in improving animal welfare standards and promoting humane practices'
       ],
-      formLink: 'https://docs.google.com/forms/d/e/1FAIpQLScQODnpyoZpB4o4JJyDqqUIN9Zm6OBdS0-pU4DVzs1hn1JpGw/viewform',
+      formLink:
+        'https://docs.google.com/forms/d/e/1FAIpQLScQODnpyoZpB4o4JJyDqqUIN9Zm6OBdS0-pU4DVzs1hn1JpGw/viewform',
       buttonText: 'Apply for Lifetime Membership'
     },
     {
       title: 'Yearly Membership',
-      description: 'Join VFAW and contribute to building a better world for animals. As a member, you will have the opportunity to engage in a range of impactful initiatives, including awareness campaigns, animal birth control programs, vaccination drives, virtual sessions, the Veterinary Talk Series, leadership development activities, animal welfare projects, and other educational programs.',
+      shortTitle: 'Yearly',
+      description:
+        'Join VFAW and contribute to building a better world for animals. As a member, you will have the opportunity to engage in a range of impactful initiatives, including awareness campaigns, animal birth control programs, vaccination drives, virtual sessions, the Veterinary Talk Series, leadership development activities, animal welfare projects, and other educational programs.',
       price: '250',
+      period: 'year',
+      type: 'standard',
       benefits: [
         'Participation in exclusive events',
         'Opportunity to improve animal welfare standards',
         'Valuable networking opportunities',
         'A platform to contribute to meaningful change'
       ],
-      formLink: 'https://docs.google.com/forms/d/e/1FAIpQLSfZdM4_81s7b_d4_L55XttYlgHvlPK_mOAzbK8Ocd_0RaFYow/viewform',
+      formLink:
+        'https://docs.google.com/forms/d/e/1FAIpQLSfZdM4_81s7b_d4_L55XttYlgHvlPK_mOAzbK8Ocd_0RaFYow/viewform',
       buttonText: 'Apply for Yearly Membership'
     }
   ];
 
+  const whyJoin = [
+    {
+      number: '01',
+      title: 'Education & Action',
+      description:
+        'Advance animal welfare through comprehensive education programs and hands-on initiatives that make a real difference.',
+      icon: (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.7"
+          className="h-7 w-7"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M4 19.5A2.5 2.5 0 016.5 17H20"
+          />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"
+          />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M8 6h8M8 10h8"
+          />
+        </svg>
+      )
+    },
+    {
+      number: '02',
+      title: 'Professional Network',
+      description:
+        'Build valuable connections with veterinarians, animal welfare experts, and professionals across various fields.',
+      icon: (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.7"
+          className="h-7 w-7"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"
+          />
+          <circle cx="9" cy="7" r="4" />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"
+          />
+        </svg>
+      )
+    },
+    {
+      number: '03',
+      title: 'Leadership Development',
+      description:
+        'Develop essential leadership skills through hands-on experience in organizing and managing animal welfare initiatives.',
+      icon: (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.7"
+          className="h-7 w-7"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M12 2l2.4 6.1L21 9l-5 4.3L17.5 20 12 16.6 6.5 20 8 13.3 3 9l6.6-.9L12 2z"
+          />
+        </svg>
+      )
+    },
+    {
+      number: '04',
+      title: 'Meaningful Impact',
+      description:
+        'Participate in meaningful animal welfare initiatives that create lasting positive change in your community.',
+      icon: (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.7"
+          className="h-7 w-7"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"
+          />
+        </svg>
+      )
+    },
+    {
+      number: '05',
+      title: 'Welfare Standards',
+      description:
+        'Contribute to raising animal welfare standards through education, advocacy, and practical initiatives.',
+      icon: (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.7"
+          className="h-7 w-7"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+          />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M9 12l2 2 4-4"
+          />
+        </svg>
+      )
+    },
+    {
+      number: '06',
+      title: 'Continuous Growth',
+      description:
+        'Engage in ongoing learning and development opportunities to enhance your knowledge and skills in animal welfare.',
+      icon: (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.7"
+          className="h-7 w-7"
+        >
+          <circle cx="12" cy="12" r="9" />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M12 7v5l3 2"
+          />
+        </svg>
+      )
+    }
+  ];
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white">
-        <div className="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
-              Join Vets for Animal Welfare (VFAW)
+    <main className="min-h-screen overflow-hidden bg-slate-950 text-white">
+
+      {/* =========================================================
+          HERO
+      ========================================================= */}
+      <section className="relative overflow-hidden bg-blue-950">
+
+        {/* Decorative elements */}
+        <div className="pointer-events-none absolute -right-40 -top-40 h-[500px] w-[500px] rounded-full border border-blue-800/50" />
+
+        <div className="pointer-events-none absolute -right-20 -top-20 h-[300px] w-[300px] rounded-full border border-blue-800/40" />
+
+        <div className="pointer-events-none absolute -bottom-48 -left-48 h-[550px] w-[550px] rounded-full border border-blue-800/40" />
+
+        <div className="pointer-events-none absolute right-[15%] top-[25%] h-3 w-3 rounded-full bg-red-500 shadow-lg shadow-red-500/50" />
+
+        <div className="pointer-events-none absolute bottom-[25%] left-[12%] h-2 w-2 rounded-full bg-blue-400" />
+
+        <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8 lg:py-28">
+
+          <div className="mx-auto max-w-5xl text-center">
+
+            {/* Eyebrow */}
+            <div className="mb-7 inline-flex items-center gap-3 rounded-full border border-blue-700 bg-blue-900/80 px-5 py-2.5">
+
+              <span className="h-2 w-2 rounded-full bg-red-500" />
+
+              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-200">
+                Become Part of the Movement
+              </span>
+
+            </div>
+
+            {/* Main heading */}
+            <h1 className="text-4xl font-black leading-tight tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+
+              Join
+              <span className="text-red-500"> Vets for Animal Welfare</span>
+
             </h1>
-            <p className="mt-6 text-xl max-w-3xl mx-auto">
-              Become a driving force for animal welfare and contribute to building a better world
+
+            <p className="mx-auto mt-7 max-w-3xl text-base leading-8 text-blue-100 sm:text-lg">
+
+              Become a driving force for animal welfare and contribute
+              to building a more compassionate and responsible world
+              for animals.
+
             </p>
+
+            {/* Stats */}
+            <div className="mt-12 flex flex-wrap justify-center gap-3 sm:gap-4">
+
+              <div className="rounded-2xl border border-blue-700 bg-blue-900/80 px-5 py-4 backdrop-blur-sm sm:px-7">
+
+                <p className="text-2xl font-black text-white">
+                  02
+                </p>
+
+                <p className="mt-1 text-[9px] font-bold uppercase tracking-[0.2em] text-blue-300">
+                  Membership Plans
+                </p>
+
+              </div>
+
+              <div className="rounded-2xl border border-blue-700 bg-blue-900/80 px-5 py-4 backdrop-blur-sm sm:px-7">
+
+                <p className="text-2xl font-black text-white">
+                  100%
+                </p>
+
+                <p className="mt-1 text-[9px] font-bold uppercase tracking-[0.2em] text-blue-300">
+                  Impact Driven
+                </p>
+
+              </div>
+
+              <div className="rounded-2xl border border-red-800 bg-red-950/80 px-5 py-4 backdrop-blur-sm sm:px-7">
+
+                <p className="text-2xl font-black text-red-400">
+                  VFAW
+                </p>
+
+                <p className="mt-1 text-[9px] font-bold uppercase tracking-[0.2em] text-red-300">
+                  Animal Welfare
+                </p>
+
+              </div>
+
+            </div>
+
           </div>
         </div>
       </section>
 
-      {/* Membership Options */}
-      <section className="py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-8 md:grid-cols-2">
-            {membershipOptions.map((option, idx) => (
-              <div
+      {/* =========================================================
+          MEMBERSHIP INTRO
+      ========================================================= */}
+      <section className="bg-slate-950 px-4 pb-8 pt-16 sm:px-6 lg:px-8 lg:pt-20">
+
+        <div className="mx-auto max-w-7xl">
+
+          <div className="mx-auto max-w-3xl text-center">
+
+            <p className="text-xs font-black uppercase tracking-[0.3em] text-red-500">
+              Membership
+            </p>
+
+            <h2 className="mt-3 text-3xl font-black tracking-tight text-white sm:text-4xl">
+              Choose Your Way to Contribute
+            </h2>
+
+            <p className="mt-4 text-sm leading-7 text-slate-400 sm:text-base">
+              Whether you choose lifelong commitment or yearly
+              participation, your membership helps strengthen the
+              mission of VFAW and support meaningful animal welfare work.
+            </p>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* =========================================================
+          MEMBERSHIP CARDS
+      ========================================================= */}
+      <section className="bg-slate-950 px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
+
+        <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-2">
+
+          {membershipOptions.map((option, index) => {
+
+            const isLifetime = option.type === 'premium';
+
+            return (
+              <article
                 key={option.title}
-                className={`relative bg-white rounded-3xl shadow-xl overflow-hidden border-2 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 ${
-                  idx === 0
-                    ? 'border-yellow-400 hover:border-yellow-500' // Lifetime Membership
-                    : 'border-indigo-400 hover:border-indigo-500' // Yearly Membership
-                }`}
+                className={`
+                  group relative overflow-hidden rounded-[2rem]
+                  border bg-blue-950
+                  transition-all duration-500
+                  hover:-translate-y-3
+                  ${
+                    isLifetime
+                      ? 'border-red-700/70 shadow-[0_25px_70px_rgba(220,38,38,0.12)] hover:border-red-500 hover:shadow-[0_35px_90px_rgba(220,38,38,0.25)]'
+                      : 'border-blue-800 shadow-[0_25px_70px_rgba(0,0,0,0.3)] hover:border-red-500 hover:shadow-[0_35px_90px_rgba(220,38,38,0.18)]'
+                  }
+                `}
               >
-                {/* Badge */}
-                <div className={`absolute top-6 right-6 px-4 py-1 rounded-full text-sm font-semibold tracking-wide shadow-md ${
-                  idx === 0
-                    ? 'bg-yellow-100 text-yellow-800 border border-yellow-300' // Lifetime
-                    : 'bg-indigo-100 text-indigo-800 border border-indigo-300' // Yearly
-                }`}>
-                  {option.title}
-                </div>
-                {/* Icon */}
-                <div className="flex justify-center mt-8 mb-4">
-                  {idx === 0 ? (
-                    <div className="bg-yellow-100 p-4 rounded-full shadow-inner">
-                      <svg className="w-10 h-10 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 1.343-3 3 0 1.657 1.343 3 3 3s3-1.343 3-3c0-1.657-1.343-3-3-3zm0 0V4m0 7v9m-7-7h14" />
-                      </svg>
+
+                {/* Top accent */}
+                <div
+                  className={`
+                    absolute left-0 right-0 top-0 h-1
+                    ${
+                      isLifetime
+                        ? 'bg-red-500'
+                        : 'bg-blue-600'
+                    }
+                  `}
+                />
+
+                {/* Decorative corner */}
+                <div
+                  className={`
+                    absolute -right-20 -top-20
+                    h-52 w-52 rounded-full
+                    border
+                    ${
+                      isLifetime
+                        ? 'border-red-800/40'
+                        : 'border-blue-800/40'
+                    }
+                  `}
+                />
+
+                <div className="relative p-6 sm:p-8 lg:p-10">
+
+                  {/* Card top */}
+                  <div className="flex items-start justify-between gap-5">
+
+                    <div className="flex items-center gap-4">
+
+                      {/* Icon */}
+                      <div
+                        className={`
+                          flex h-14 w-14 flex-shrink-0
+                          items-center justify-center
+                          rounded-2xl border
+                          ${
+                            isLifetime
+                              ? 'border-red-700 bg-red-950 text-red-400'
+                              : 'border-blue-700 bg-blue-900 text-blue-300'
+                          }
+                        `}
+                      >
+
+                        {isLifetime ? (
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.7"
+                            className="h-7 w-7"
+                          >
+                            <circle cx="12" cy="8" r="3" />
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M5 21c.8-4 3.1-6 7-6s6.2 2 7 6"
+                            />
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M4 4l1.5 2L8 5"
+                            />
+                          </svg>
+                        ) : (
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.7"
+                            className="h-7 w-7"
+                          >
+                            <circle cx="12" cy="8" r="3" />
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M5 21c.8-4 3.1-6 7-6s6.2 2 7 6"
+                            />
+                          </svg>
+                        )}
+
+                      </div>
+
+                      <div>
+
+                        <p
+                          className={`
+                            text-[10px] font-black uppercase
+                            tracking-[0.22em]
+                            ${
+                              isLifetime
+                                ? 'text-red-400'
+                                : 'text-blue-300'
+                            }
+                          `}
+                        >
+                          Membership
+                        </p>
+
+                        <h3 className="mt-1 text-xl font-black text-white sm:text-2xl">
+                          {option.title}
+                        </h3>
+
+                      </div>
+
                     </div>
-                  ) : (
-                    <div className="bg-indigo-100 p-4 rounded-full shadow-inner">
-                      <svg className="w-10 h-10 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
+
+                    {/* Badge */}
+                    <span
+                      className={`
+                        hidden rounded-full border px-3 py-1.5
+                        text-[9px] font-black uppercase
+                        tracking-widest sm:inline-block
+                        ${
+                          isLifetime
+                            ? 'border-red-700 bg-red-950 text-red-300'
+                            : 'border-blue-700 bg-blue-900 text-blue-300'
+                        }
+                      `}
+                    >
+                      {isLifetime ? 'Best Value' : 'Popular'}
+                    </span>
+
+                  </div>
+
+                  {/* Price */}
+                  <div className="mt-8 rounded-2xl border border-blue-800 bg-slate-950/50 p-5">
+
+                    <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">
+                      Membership Contribution
+                    </p>
+
+                    <div className="mt-2 flex items-end gap-3">
+
+                      <span
+                        className={`
+                          text-4xl font-black tracking-tight
+                          ${
+                            isLifetime
+                              ? 'text-red-400'
+                              : 'text-blue-300'
+                          }
+                        `}
+                      >
+                        NPR {option.price}
+                      </span>
+
+                      <span className="mb-1 text-xs font-medium text-slate-500">
+                        per {option.period}
+                      </span>
+
                     </div>
-                  )}
-                </div>
-                {/* Apply Button and Demarcation at the top */}
-                <div className="flex flex-col items-center mb-6">
-                  <div className="w-16 h-1 bg-gradient-to-r from-indigo-300 via-gray-200 to-yellow-300 rounded-full mb-2"></div>
-                  <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold tracking-wider uppercase shadow-sm ${idx === 0 ? 'bg-yellow-100 text-yellow-700' : 'bg-indigo-100 text-indigo-700'}`}>Apply Now</span>
+
+                  </div>
+
+                  {/* Description */}
+                  <p className="mt-7 text-sm leading-7 text-slate-400">
+                    {option.description}
+                  </p>
+
+                  {/* Divider */}
+                  <div className="my-8 h-px bg-blue-800" />
+
+                  {/* Benefits */}
+                  <div>
+
+                    <div className="mb-5 flex items-center gap-3">
+
+                      <span
+                        className={`
+                          h-1.5 w-1.5 rounded-full
+                          ${
+                            isLifetime
+                              ? 'bg-red-500'
+                              : 'bg-blue-500'
+                          }
+                        `}
+                      />
+
+                      <h4 className="text-xs font-black uppercase tracking-[0.2em] text-white">
+                        Membership Benefits
+                      </h4>
+
+                    </div>
+
+                    <ul className="space-y-4">
+
+                      {option.benefits.map((benefit) => (
+
+                        <li
+                          key={benefit}
+                          className="flex items-start gap-3"
+                        >
+
+                          <span
+                            className={`
+                              mt-0.5 flex h-5 w-5
+                              flex-shrink-0 items-center
+                              justify-center rounded-full
+                              ${
+                                isLifetime
+                                  ? 'bg-red-950 text-red-400'
+                                  : 'bg-blue-900 text-blue-300'
+                              }
+                            `}
+                          >
+
+                            <svg
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="3"
+                              className="h-3 w-3"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M5 12l4 4L19 7"
+                              />
+                            </svg>
+
+                          </span>
+
+                          <span className="text-sm leading-6 text-slate-300">
+                            {benefit}
+                          </span>
+
+                        </li>
+
+                      ))}
+
+                    </ul>
+
+                  </div>
+
+                  {/* Apply button */}
                   <a
                     href={option.formLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`mt-3 inline-block w-full text-center px-6 py-3 rounded-xl text-lg font-bold shadow-md transition-colors duration-300 relative group focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                      idx === 0
-                        ? 'bg-yellow-400 text-yellow-900 hover:bg-yellow-500 focus:ring-yellow-400'
-                        : 'bg-indigo-600 text-white hover:bg-indigo-700 focus:ring-indigo-500'
-                    }`}
+                    className={`
+                      group/button mt-9 flex w-full
+                      items-center justify-center gap-3
+                      rounded-xl border
+                      px-6 py-4
+                      text-sm font-black
+                      transition-all duration-300
+                      ${
+                        isLifetime
+                          ? 'border-red-500 bg-red-600 text-white hover:bg-red-700 hover:shadow-[0_15px_40px_rgba(220,38,38,0.3)]'
+                          : 'border-blue-600 bg-blue-700 text-white hover:border-red-500 hover:bg-red-600 hover:shadow-[0_15px_40px_rgba(220,38,38,0.25)]'
+                      }
+                    `}
                   >
-                    {option.buttonText}
-                    <span className="ml-2 inline-block align-middle group-hover:translate-x-1 transition-transform duration-200">
-                      <svg className="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                      </svg>
+
+                    <span>
+                      {option.buttonText}
                     </span>
+
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      className="h-5 w-5 transition-transform duration-300 group-hover/button:translate-x-1"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5 12h14"
+                      />
+
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M13 6l6 6-6 6"
+                      />
+                    </svg>
+
                   </a>
-                </div>
-                <div className="p-8 pt-2 flex flex-col h-full items-center text-center">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                    {option.title}
-                  </h3>
-                  <p className={`text-lg font-semibold mb-2 ${idx === 0 ? 'text-yellow-600' : 'text-indigo-600'}`}>
-                    {option.price} <span className="text-sm text-gray-500">per {idx === 0 ? 'lifetime' : 'year'}</span>
+
+                  <p className="mt-4 text-center text-[10px] font-medium uppercase tracking-widest text-slate-600">
+                    Secure application through Google Forms
                   </p>
-                  <p className="text-gray-600 mb-4">{option.description}</p>
-                  <div className="mt-2 mb-6 w-full flex justify-center">
-                    <div>
-                      <h4 className="text-lg font-medium text-gray-900 mb-2">Benefits:</h4>
-                      <ul className="space-y-2">
-                        {option.benefits.map((benefit) => (
-                          <li key={benefit} className="flex items-center gap-2">
-                            <span className={idx === 0 ? 'text-yellow-500' : 'text-indigo-500'}>
-                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                              </svg>
-                            </span>
-                            <span className="text-gray-700 text-left">{benefit}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
+
                 </div>
-              </div>
-            ))}
-          </div>
+
+              </article>
+            );
+          })}
+
         </div>
       </section>
 
-      {/* Additional Information */}
-      <section className="py-16 bg-gradient-to-b from-indigo-50 to-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-extrabold text-gray-900 sm:text-5xl">
+      {/* =========================================================
+          WHY JOIN
+      ========================================================= */}
+      <section className="bg-blue-950 px-4 py-20 sm:px-6 lg:px-8 lg:py-24">
+
+        <div className="mx-auto max-w-7xl">
+
+          {/* Heading */}
+          <div className="mx-auto mb-14 max-w-3xl text-center">
+
+            <p className="text-xs font-black uppercase tracking-[0.3em] text-red-500">
+              The VFAW Difference
+            </p>
+
+            <h2 className="mt-3 text-3xl font-black tracking-tight text-white sm:text-4xl lg:text-5xl">
               Why Join VFAW?
             </h2>
-            <p className="mt-4 text-xl text-gray-600 max-w-3xl mx-auto">
-              As a member of VFAW, you become part of a community dedicated to making a difference in animal welfare
+
+            <p className="mt-5 text-sm leading-7 text-blue-200 sm:text-base">
+              As a member of VFAW, you become part of a community
+              dedicated to making a meaningful and lasting difference
+              in animal welfare.
             </p>
+
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="bg-white rounded-2xl shadow-lg p-8 transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-              <div className="flex items-center mb-6">
-                <div className="bg-indigo-100 p-3 rounded-full">
-                  <svg className="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 ml-4">Education & Action</h3>
-              </div>
-              <p className="text-gray-600 leading-relaxed">
-                Advance animal welfare through comprehensive education programs and hands-on initiatives that make a real difference.
-              </p>
-            </div>
 
-            <div className="bg-white rounded-2xl shadow-lg p-8 transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-              <div className="flex items-center mb-6">
-                <div className="bg-indigo-100 p-3 rounded-full">
-                  <svg className="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 ml-4">Professional Network</h3>
-              </div>
-              <p className="text-gray-600 leading-relaxed">
-                Build valuable connections with veterinarians, animal welfare experts, and professionals across various fields.
-              </p>
-            </div>
+          {/* Benefits grid */}
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
 
-            <div className="bg-white rounded-2xl shadow-lg p-8 transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-              <div className="flex items-center mb-6">
-                <div className="bg-indigo-100 p-3 rounded-full">
-                  <svg className="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 ml-4">Leadership Development</h3>
-              </div>
-              <p className="text-gray-600 leading-relaxed">
-                Develop essential leadership skills through hands-on experience in organizing and managing animal welfare initiatives.
-              </p>
-            </div>
+            {whyJoin.map((item) => (
 
-            <div className="bg-white rounded-2xl shadow-lg p-8 transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-              <div className="flex items-center mb-6">
-                <div className="bg-indigo-100 p-3 rounded-full">
-                  <svg className="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 ml-4">Meaningful Impact</h3>
-              </div>
-              <p className="text-gray-600 leading-relaxed">
-                Participate in meaningful animal welfare initiatives that create lasting positive change in your community.
-              </p>
-            </div>
+              <article
+                key={item.number}
+                className="
+                  group relative overflow-hidden
+                  rounded-3xl
+                  border border-blue-800
+                  bg-blue-900
+                  p-7
+                  transition-all duration-500
+                  hover:-translate-y-2
+                  hover:border-red-500
+                  hover:bg-blue-800
+                  hover:shadow-[0_25px_60px_rgba(220,38,38,0.16)]
+                "
+              >
 
-            <div className="bg-white rounded-2xl shadow-lg p-8 transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-              <div className="flex items-center mb-6">
-                <div className="bg-indigo-100 p-3 rounded-full">
-                  <svg className="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 ml-4">Welfare Standards</h3>
-              </div>
-              <p className="text-gray-600 leading-relaxed">
-                Contribute to raising animal welfare standards through education, advocacy, and practical initiatives.
-              </p>
-            </div>
+                {/* Number */}
+                <span className="absolute right-6 top-5 text-5xl font-black text-blue-800/70 transition-colors duration-500 group-hover:text-red-900/60">
+                  {item.number}
+                </span>
 
-            <div className="bg-white rounded-2xl shadow-lg p-8 transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-              <div className="flex items-center mb-6">
-                <div className="bg-indigo-100 p-3 rounded-full">
-                  <svg className="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
+                {/* Icon */}
+                <div className="
+                  relative
+                  flex h-14 w-14
+                  items-center justify-center
+                  rounded-2xl
+                  border border-blue-700
+                  bg-blue-950
+                  text-blue-300
+                  transition-all duration-500
+                  group-hover:border-red-500
+                  group-hover:bg-red-600
+                  group-hover:text-white
+                ">
+                  {item.icon}
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 ml-4">Continuous Growth</h3>
-              </div>
-              <p className="text-gray-600 leading-relaxed">
-                Engage in ongoing learning and development opportunities to enhance your knowledge and skills in animal welfare.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Contact Section */}
-      <section className="py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-lg shadow-xl overflow-hidden">
-            <div className="px-6 py-8 sm:p-10">
-              <div className="text-center">
-                <h2 className="text-3xl font-extrabold text-white sm:text-4xl">
-                  Ready to Make a Difference?
-                </h2>
-                <p className="mt-4 text-lg text-indigo-100">
-                  Fill out the membership form today and become part of a movement dedicated to making the world better for animals!
+                <h3 className="relative mt-6 text-xl font-black text-white">
+                  {item.title}
+                </h3>
+
+                <p className="relative mt-3 text-sm leading-7 text-blue-200/80">
+                  {item.description}
                 </p>
-                <div className="mt-8">
-                  <a
-                    href="/contact"
-                    className="inline-block bg-white text-indigo-600 px-6 py-3 rounded-md text-lg font-medium hover:bg-gray-100"
-                  >
-                    Contact Us
-                  </a>
-                </div>
-              </div>
-            </div>
+
+                <div className="mt-6 h-px w-10 bg-red-500 transition-all duration-500 group-hover:w-full" />
+
+              </article>
+
+            ))}
+
           </div>
+
         </div>
       </section>
-    </div>
+
+      {/* =========================================================
+          FINAL CTA
+      ========================================================= */}
+      <section className="bg-slate-950 px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+
+        <div className="mx-auto max-w-7xl">
+
+          <div className="
+            relative
+            overflow-hidden
+            rounded-[2rem]
+            border border-red-800
+            bg-red-950
+            shadow-[0_30px_80px_rgba(220,38,38,0.12)]
+          ">
+
+            {/* Decorative circles */}
+            <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full border border-red-800/50" />
+
+            <div className="pointer-events-none absolute -bottom-32 -left-32 h-80 w-80 rounded-full border border-red-800/40" />
+
+            <div className="relative px-6 py-14 text-center sm:px-10 sm:py-16 lg:px-20">
+
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-red-700 bg-red-900 text-red-300">
+
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  className="h-7 w-7"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"
+                  />
+                </svg>
+
+              </div>
+
+              <p className="mt-6 text-xs font-black uppercase tracking-[0.3em] text-red-300">
+                Your Contribution Matters
+              </p>
+
+              <h2 className="mx-auto mt-3 max-w-3xl text-3xl font-black tracking-tight text-white sm:text-4xl lg:text-5xl">
+                Ready to Make a Difference?
+              </h2>
+
+              <p className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-red-100/80 sm:text-base">
+                Fill out the membership form today and become part
+                of a movement dedicated to making the world better
+                for animals.
+              </p>
+
+              <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+
+                <a
+                  href="/contact"
+                  className="
+                    inline-flex
+                    items-center
+                    justify-center
+                    gap-3
+                    rounded-xl
+                    border border-white
+                    bg-white
+                    px-7 py-3.5
+                    text-sm font-black
+                    text-red-700
+                    transition-all duration-300
+                    hover:-translate-y-1
+                    hover:bg-slate-100
+                    hover:shadow-xl
+                  "
+                >
+                  Contact Us
+
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    className="h-4 w-4"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M5 12h14"
+                    />
+
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M13 6l6 6-6 6"
+                    />
+                  </svg>
+
+                </a>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+    </main>
   );
 };
 
-export default GetInvolved; 
+export default GetInvolved;
