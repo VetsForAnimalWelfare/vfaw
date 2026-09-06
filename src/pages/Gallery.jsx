@@ -18,7 +18,6 @@ const Gallery = () => {
   ];
 
   const images = [
-    // Basics of Hematological Tools and Techniques
     {
       src: '/capacity/p1.png',
       category: 'Basics of Hematological Tools and Techniques',
@@ -70,7 +69,6 @@ const Gallery = () => {
       description: 'Sep 5, Paklihawa Campus and Farm'
     },
 
-    // Animal Welfare
     {
       src: '/welfare/IMG_2124.JPG',
       category: 'Animal Welfare',
@@ -177,7 +175,6 @@ const Gallery = () => {
       description: 'Animal welfare activities'
     },
 
-    // Animal Birth Control
     {
       src: '/control/IMG_20240216_000413_Original.JPG',
       category: 'Animal Birth Control',
@@ -254,7 +251,6 @@ const Gallery = () => {
       description: 'Community awareness programs'
     },
 
-    // Street Dog Feeding
     {
       src: '/feeding/IMG_2119.JPG',
       category: 'Street Dog Feeding',
@@ -341,7 +337,6 @@ const Gallery = () => {
       description: 'Community feeding services'
     },
 
-    // Rabies Vaccination
     {
       src: '/rabies/IMG_2008.JPG',
       category: 'Rabies Vaccination',
@@ -383,7 +378,6 @@ const Gallery = () => {
       description: 'Feline vaccination initiative'
     },
 
-    // Farm Animal Vaccination
     {
       src: '/vaccination/7.jpg',
       category: 'Farm Animal Vaccination',
@@ -420,7 +414,6 @@ const Gallery = () => {
       description: 'Animal welfare'
     },
 
-    // Farm Animal Survey
     {
       src: '/survey/IMG_2134.JPG',
       category: 'Farm Animal Survey',
@@ -462,7 +455,6 @@ const Gallery = () => {
       description: 'Field surveys'
     },
 
-    // Training and Awareness
     {
       src: '/awareness/IMG_2024.JPG',
       category: 'Training and Awareness',
@@ -599,7 +591,6 @@ const Gallery = () => {
       description: 'Training activities'
     },
 
-    // Virtual Sessions
     {
       src: '/virtual/IMG_2120.JPG',
       category: 'Virtual Sessions',
@@ -666,7 +657,6 @@ const Gallery = () => {
       description: 'Virtual education'
     },
 
-    // In-house Capacity Building
     {
       src: '/capacity/1.JPG',
       category: 'In-house Capacity Building',
@@ -720,26 +710,40 @@ const Gallery = () => {
   };
 
   const showPreviousImage = (event) => {
-    event?.stopPropagation();
+    if (event) {
+      event.stopPropagation();
+    }
 
-    if (selectedImageIndex === null || filteredImages.length === 0) {
+    if (
+      selectedImageIndex === null ||
+      filteredImages.length === 0
+    ) {
       return;
     }
 
     setSelectedImageIndex((current) =>
-      current === 0 ? filteredImages.length - 1 : current - 1
+      current === 0
+        ? filteredImages.length - 1
+        : current - 1
     );
   };
 
   const showNextImage = (event) => {
-    event?.stopPropagation();
+    if (event) {
+      event.stopPropagation();
+    }
 
-    if (selectedImageIndex === null || filteredImages.length === 0) {
+    if (
+      selectedImageIndex === null ||
+      filteredImages.length === 0
+    ) {
       return;
     }
 
     setSelectedImageIndex((current) =>
-      current === filteredImages.length - 1 ? 0 : current + 1
+      current === filteredImages.length - 1
+        ? 0
+        : current + 1
     );
   };
 
@@ -778,12 +782,11 @@ const Gallery = () => {
   return (
     <main className="min-h-screen bg-slate-950 text-white">
 
-      {/* =========================================================
-          HERO SECTION
-      ========================================================= */}
+      {/* HERO */}
       <section className="relative overflow-hidden bg-blue-950">
 
         <div className="absolute -top-32 -right-32 h-96 w-96 rounded-full border border-blue-800 opacity-40" />
+
         <div className="absolute -bottom-40 -left-40 h-96 w-96 rounded-full border border-blue-800 opacity-30" />
 
         <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8 lg:py-28">
@@ -807,28 +810,31 @@ const Gallery = () => {
 
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
 
-              <div className="border border-blue-700 bg-blue-900 px-6 py-4">
+              <div className="rounded-2xl border border-blue-700 bg-blue-900 px-6 py-4">
                 <p className="text-2xl font-black">
                   {images.length}
                 </p>
+
                 <p className="mt-1 text-xs uppercase tracking-widest text-blue-300">
                   Total Images
                 </p>
               </div>
 
-              <div className="border border-blue-700 bg-blue-900 px-6 py-4">
+              <div className="rounded-2xl border border-blue-700 bg-blue-900 px-6 py-4">
                 <p className="text-2xl font-black">
                   {categories.length - 1}
                 </p>
+
                 <p className="mt-1 text-xs uppercase tracking-widest text-blue-300">
                   Categories
                 </p>
               </div>
 
-              <div className="border border-red-900 bg-red-950 px-6 py-4">
+              <div className="rounded-2xl border border-red-900 bg-red-950 px-6 py-4">
                 <p className="text-2xl font-black text-red-400">
                   {filteredImages.length}
                 </p>
+
                 <p className="mt-1 text-xs uppercase tracking-widest text-red-300">
                   Showing
                 </p>
@@ -839,9 +845,7 @@ const Gallery = () => {
         </div>
       </section>
 
-      {/* =========================================================
-          CATEGORY FILTER
-      ========================================================= */}
+      {/* FILTER */}
       <section className="sticky top-0 z-30 border-b border-blue-900 bg-slate-950/95 backdrop-blur-xl">
 
         <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
@@ -885,10 +889,8 @@ const Gallery = () => {
                     setSelectedImageIndex(null);
                   }}
                   className={`
-                    group relative flex-shrink-0 overflow-hidden
-                    border px-4 py-2.5
-                    text-xs font-bold
-                    uppercase tracking-wide
+                    flex-shrink-0 rounded-xl border px-4 py-2.5
+                    text-xs font-bold uppercase tracking-wide
                     transition-all duration-300
                     ${
                       isActive
@@ -906,14 +908,11 @@ const Gallery = () => {
         </div>
       </section>
 
-      {/* =========================================================
-          GALLERY
-      ========================================================= */}
+      {/* GALLERY */}
       <section className="bg-slate-950 py-14 sm:py-20">
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
-          {/* Section heading */}
           <div className="mb-10 flex flex-col justify-between gap-6 border-b border-blue-900 pb-8 sm:flex-row sm:items-end">
 
             <div>
@@ -947,10 +946,9 @@ const Gallery = () => {
 
           </div>
 
-          {/* Image grid */}
           {filteredImages.length > 0 ? (
 
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 
               {filteredImages.map((image, index) => (
 
@@ -960,25 +958,25 @@ const Gallery = () => {
                   className="
                     group cursor-pointer
                     overflow-hidden
+                    rounded-3xl
                     border border-blue-800
                     bg-blue-950
-                    shadow-xl shadow-black/20
+                    shadow-[0_18px_45px_rgba(0,0,0,0.35)]
                     transition-all duration-500
-                    hover:-translate-y-2
+                    hover:-translate-y-3
+                    hover:scale-[1.015]
                     hover:border-red-500
                     hover:bg-blue-900
-                    hover:shadow-2xl
-                    hover:shadow-red-950/40
+                    hover:shadow-[0_25px_60px_rgba(220,38,38,0.28)]
                   "
                 >
 
-                  {/* Image frame */}
-                  <div className="relative m-3 overflow-hidden border border-blue-800 bg-slate-900">
+                  {/* IMAGE FRAME */}
+                  <div className="relative m-3 overflow-hidden rounded-2xl border border-blue-800 bg-slate-900 shadow-inner">
 
-                    {/* Top label */}
                     <div className="absolute left-3 top-3 z-10">
 
-                      <div className="border border-white/20 bg-blue-950/95 px-3 py-1.5 backdrop-blur-md">
+                      <div className="rounded-lg border border-white/20 bg-blue-950/95 px-3 py-1.5 shadow-lg backdrop-blur-md">
 
                         <span className="text-[9px] font-black uppercase tracking-[0.18em] text-blue-200">
                           VFAW
@@ -988,8 +986,7 @@ const Gallery = () => {
 
                     </div>
 
-                    {/* Image */}
-                    <div className="relative aspect-[4/3] overflow-hidden">
+                    <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
 
                       <img
                         src={image.src}
@@ -1006,7 +1003,6 @@ const Gallery = () => {
                         "
                       />
 
-                      {/* Dark image overlay */}
                       <div className="
                         absolute inset-0
                         bg-blue-950/0
@@ -1014,16 +1010,15 @@ const Gallery = () => {
                         group-hover:bg-blue-950/20
                       " />
 
-                      {/* Red hover border */}
                       <div className="
                         pointer-events-none
                         absolute inset-0
+                        rounded-xl
                         border-2 border-transparent
                         transition-all duration-500
                         group-hover:border-red-500
                       " />
 
-                      {/* View button */}
                       <div className="
                         absolute bottom-4 right-4
                         translate-y-3
@@ -1033,7 +1028,7 @@ const Gallery = () => {
                         group-hover:opacity-100
                       ">
 
-                        <div className="flex h-11 w-11 items-center justify-center border border-white/20 bg-red-600 text-white shadow-lg">
+                        <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/20 bg-red-600 text-white shadow-xl">
 
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -1048,6 +1043,7 @@ const Gallery = () => {
                               strokeLinejoin="round"
                               d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
                             />
+
                             <path
                               strokeLinecap="round"
                               strokeLinejoin="round"
@@ -1063,10 +1059,9 @@ const Gallery = () => {
 
                   </div>
 
-                  {/* Card content */}
+                  {/* CARD CONTENT */}
                   <div className="px-5 pb-5 pt-2">
 
-                    {/* Category */}
                     <div className="mb-3 flex items-center gap-2">
 
                       <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
@@ -1077,7 +1072,6 @@ const Gallery = () => {
 
                     </div>
 
-                    {/* Title */}
                     <h3 className="
                       min-h-[48px]
                       text-base
@@ -1091,7 +1085,6 @@ const Gallery = () => {
                       {image.description}
                     </h3>
 
-                    {/* Bottom line */}
                     <div className="mt-5 flex items-center justify-between border-t border-blue-800 pt-4">
 
                       <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
@@ -1099,8 +1092,9 @@ const Gallery = () => {
                       </span>
 
                       <span className="
-                        flex h-7 w-7
+                        flex h-8 w-8
                         items-center justify-center
+                        rounded-lg
                         border border-blue-700
                         text-blue-300
                         transition-all duration-300
@@ -1122,6 +1116,7 @@ const Gallery = () => {
                             strokeLinejoin="round"
                             d="M5 12h14"
                           />
+
                           <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
@@ -1143,35 +1138,9 @@ const Gallery = () => {
 
           ) : (
 
-            <div className="border border-blue-800 bg-blue-950 px-6 py-20 text-center">
+            <div className="rounded-3xl border border-blue-800 bg-blue-950 px-6 py-20 text-center">
 
-              <div className="mx-auto flex h-16 w-16 items-center justify-center border border-blue-700 bg-blue-900">
-
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  className="h-7 w-7 text-blue-300"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M4 16l4.5-4.5a2 2 0 012.828 0L15 15l1.5-1.5a2 2 0 012.828 0L20 14"
-                  />
-                  <rect
-                    x="3"
-                    y="4"
-                    width="18"
-                    height="16"
-                    rx="2"
-                  />
-                </svg>
-
-              </div>
-
-              <h3 className="mt-6 text-xl font-bold text-white">
+              <h3 className="text-xl font-bold text-white">
                 No Images Found
               </h3>
 
@@ -1186,9 +1155,7 @@ const Gallery = () => {
         </div>
       </section>
 
-      {/* =========================================================
-          IMAGE MODAL
-      ========================================================= */}
+      {/* IMAGE MODAL */}
       {selectedImage && (
 
         <div
@@ -1202,7 +1169,6 @@ const Gallery = () => {
           onClick={closeImageModal}
         >
 
-          {/* Modal container */}
           <div
             className="
               relative
@@ -1212,16 +1178,16 @@ const Gallery = () => {
               max-w-7xl
               flex-col
               overflow-hidden
+              rounded-3xl
               border
               border-blue-800
               bg-blue-950
-              shadow-2xl
-              shadow-black/70
+              shadow-[0_30px_100px_rgba(0,0,0,0.75)]
             "
             onClick={(event) => event.stopPropagation()}
           >
 
-            {/* Modal header */}
+            {/* MODAL HEADER */}
             <div className="flex items-center justify-between border-b border-blue-800 bg-blue-950 px-4 py-4 sm:px-6">
 
               <div className="min-w-0 pr-4">
@@ -1242,21 +1208,38 @@ const Gallery = () => {
 
               </div>
 
+              {/* LARGE VISIBLE CLOSE BUTTON */}
               <button
                 type="button"
                 onClick={closeImageModal}
                 aria-label="Close image viewer"
                 className="
-                  flex h-11 w-11
+                  relative
+                  z-50
+                  flex
+                  h-12
+                  w-12
                   flex-shrink-0
-                  items-center justify-center
-                  border border-blue-700
-                  bg-blue-900
-                  text-blue-200
-                  transition-all duration-300
-                  hover:border-red-500
-                  hover:bg-red-600
-                  hover:text-white
+                  items-center
+                  justify-center
+                  rounded-xl
+                  border-2
+                  border-red-500
+                  bg-red-600
+                  text-white
+                  shadow-lg
+                  shadow-red-950/50
+                  transition-all
+                  duration-300
+                  hover:scale-110
+                  hover:bg-red-700
+                  hover:shadow-xl
+                  hover:shadow-red-900/60
+                  focus:outline-none
+                  focus:ring-2
+                  focus:ring-red-400
+                  focus:ring-offset-2
+                  focus:ring-offset-blue-950
                 "
               >
 
@@ -1265,13 +1248,19 @@ const Gallery = () => {
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth="2"
-                  className="h-5 w-5"
+                  strokeWidth="2.5"
+                  className="h-6 w-6"
                 >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    d="M6 6l12 12M18 6L6 18"
+                    d="M6 6l12 12"
+                  />
+
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M18 6L6 18"
                   />
                 </svg>
 
@@ -1279,10 +1268,9 @@ const Gallery = () => {
 
             </div>
 
-            {/* Image area */}
+            {/* IMAGE AREA */}
             <div className="relative flex min-h-0 flex-1 items-center justify-center bg-slate-950 p-3 sm:p-6">
 
-              {/* Previous */}
               {filteredImages.length > 1 && (
 
                 <button
@@ -1290,15 +1278,17 @@ const Gallery = () => {
                   onClick={showPreviousImage}
                   aria-label="Previous image"
                   className="
-                    absolute left-3 top-1/2 z-10
+                    absolute left-3 top-1/2 z-20
                     flex h-12 w-12
                     -translate-y-1/2
                     items-center justify-center
+                    rounded-xl
                     border border-blue-700
                     bg-blue-950/95
                     text-white
                     shadow-xl
                     transition-all duration-300
+                    hover:scale-110
                     hover:border-red-500
                     hover:bg-red-600
                   "
@@ -1323,7 +1313,6 @@ const Gallery = () => {
 
               )}
 
-              {/* Image */}
               <div className="relative flex max-h-[68vh] w-full items-center justify-center">
 
                 <img
@@ -1332,17 +1321,18 @@ const Gallery = () => {
                   className="
                     max-h-[68vh]
                     max-w-full
-                    object-contain
-                    border border-blue-800
+                    rounded-2xl
+                    border-2
+                    border-blue-800
                     bg-slate-900
                     p-1
+                    object-contain
                     shadow-2xl
                   "
                 />
 
               </div>
 
-              {/* Next */}
               {filteredImages.length > 1 && (
 
                 <button
@@ -1350,15 +1340,17 @@ const Gallery = () => {
                   onClick={showNextImage}
                   aria-label="Next image"
                   className="
-                    absolute right-3 top-1/2 z-10
+                    absolute right-3 top-1/2 z-20
                     flex h-12 w-12
                     -translate-y-1/2
                     items-center justify-center
+                    rounded-xl
                     border border-blue-700
                     bg-blue-950/95
                     text-white
                     shadow-xl
                     transition-all duration-300
+                    hover:scale-110
                     hover:border-red-500
                     hover:bg-red-600
                   "
@@ -1385,7 +1377,7 @@ const Gallery = () => {
 
             </div>
 
-            {/* Modal footer */}
+            {/* MODAL FOOTER */}
             <div className="border-t border-blue-800 bg-blue-950 px-5 py-5 sm:px-7">
 
               <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
@@ -1408,6 +1400,7 @@ const Gallery = () => {
                     type="button"
                     onClick={showPreviousImage}
                     className="
+                      rounded-xl
                       border border-blue-700
                       bg-blue-900
                       px-4 py-2.5
@@ -1426,6 +1419,7 @@ const Gallery = () => {
                     type="button"
                     onClick={showNextImage}
                     className="
+                      rounded-xl
                       border border-red-500
                       bg-red-600
                       px-4 py-2.5
