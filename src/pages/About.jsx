@@ -281,34 +281,89 @@ const About = () => {
     },
   ];
 
+  /* ============================================================
+     TEAM CARD
+     ============================================================ */
+
   const TeamCard = ({ member }) => {
     return (
-      <div className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
-        <div className="h-72 w-full overflow-hidden bg-slate-100 p-3">
-          <img
-            src={member.image}
-            alt={member.name}
-            loading="lazy"
-            className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
-          />
+      <div className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+
+        {/* ======================================================
+            IMAGE SECTION
+        ====================================================== */}
+
+        <div className="relative h-72 w-full overflow-hidden bg-indigo-700 p-4">
+
+          {/* Solid background */}
+          <div className="absolute inset-0 bg-indigo-700" />
+
+          {/* Top-left decorative frame */}
+          <div className="absolute left-3 top-3 z-20 h-9 w-9 border-l-2 border-t-2 border-white/30 transition-all duration-300 group-hover:h-12 group-hover:w-12 group-hover:border-white/50" />
+
+          {/* Bottom-right decorative frame */}
+          <div className="absolute bottom-3 right-3 z-20 h-9 w-9 border-b-2 border-r-2 border-white/30 transition-all duration-300 group-hover:h-12 group-hover:w-12 group-hover:border-white/50" />
+
+          {/* Image container */}
+          <div className="relative z-10 flex h-full w-full items-center justify-center overflow-hidden rounded-xl bg-white/10">
+
+            <img
+              src={member.image}
+              alt={member.name}
+              loading="lazy"
+              className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-[1.04]"
+            />
+
+          </div>
+
         </div>
 
-        <div className="border-t border-slate-100 p-5">
-          <h3 className="text-lg font-bold text-slate-900">
-            {member.name}
-          </h3>
 
-          <p className="mt-2 text-sm font-semibold leading-6 text-indigo-600">
-            {member.role}
-          </p>
+        {/* ======================================================
+            NAME + POSITION BOX
+        ====================================================== */}
+
+        <div className="relative overflow-hidden bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 px-5 py-5">
+
+          {/* Left accent */}
+          <div className="absolute left-0 top-0 h-full w-1 bg-blue-500 transition-all duration-300 group-hover:w-2" />
+
+          {/* Decorative circle */}
+          <div className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-blue-500/10 transition-transform duration-500 group-hover:scale-150" />
+
+          <div className="relative">
+
+            {/* NAME */}
+            <h3 className="text-lg font-bold leading-6 text-white">
+              {member.name}
+            </h3>
+
+            {/* POSITION BOX */}
+            <div className="mt-3 inline-block max-w-full rounded-lg border border-blue-400/20 bg-blue-500/15 px-3 py-1.5">
+
+              <p className="text-sm font-semibold leading-5 text-blue-200">
+                {member.role}
+              </p>
+
+            </div>
+
+          </div>
+
         </div>
+
       </div>
     );
   };
 
+
+  /* ============================================================
+     SECTION HEADING
+     ============================================================ */
+
   const SectionHeading = ({ title, description }) => {
     return (
       <div className="mb-12 text-center">
+
         <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
           {title}
         </h2>
@@ -320,14 +375,19 @@ const About = () => {
         )}
 
         <div className="mx-auto mt-5 h-1 w-20 rounded-full bg-indigo-600" />
+
       </div>
     );
   };
 
+
   return (
     <div className="min-h-screen overflow-hidden bg-slate-50">
 
-      {/* HERO */}
+      {/* =========================================================
+          HERO
+      ========================================================= */}
+
       <section className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-indigo-950 to-indigo-700 text-white">
 
         <div className="absolute -left-32 -top-32 h-96 w-96 rounded-full bg-indigo-500 opacity-20 blur-3xl" />
@@ -341,53 +401,71 @@ const About = () => {
           </div>
 
           <h1 className="text-5xl font-black tracking-tight sm:text-6xl lg:text-7xl">
+
             About{' '}
+
             <span className="text-indigo-300">
               VFAW
             </span>
+
           </h1>
 
           <p className="mx-auto mt-7 max-w-3xl text-lg leading-8 text-indigo-100 sm:text-xl">
+
             Vets for Animal Welfare (VFAW) - A student-led organization
             dedicated to animal welfare and veterinary education.
+
           </p>
 
           <div className="mt-12 flex flex-wrap justify-center gap-4">
 
             <div className="min-w-[150px] rounded-2xl border border-white/15 bg-white/10 px-6 py-4 backdrop-blur">
+
               <p className="text-xs font-semibold uppercase tracking-wider text-indigo-200">
                 Founded
               </p>
+
               <p className="mt-1 text-xl font-bold">
                 2017 AD
               </p>
+
             </div>
 
             <div className="min-w-[150px] rounded-2xl border border-white/15 bg-white/10 px-6 py-4 backdrop-blur">
+
               <p className="text-xs font-semibold uppercase tracking-wider text-indigo-200">
                 Institution
               </p>
+
               <p className="mt-1 text-xl font-bold">
                 IAAS, TU
               </p>
+
             </div>
 
             <div className="min-w-[150px] rounded-2xl border border-white/15 bg-white/10 px-6 py-4 backdrop-blur">
+
               <p className="text-xs font-semibold uppercase tracking-wider text-indigo-200">
                 Focus
               </p>
+
               <p className="mt-1 text-xl font-bold">
                 Animal Welfare
               </p>
+
             </div>
 
           </div>
 
         </div>
+
       </section>
 
 
-      {/* OUR STORY */}
+      {/* =========================================================
+          OUR STORY
+      ========================================================= */}
+
       <section className="bg-slate-50 py-24 lg:py-28">
 
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -399,7 +477,6 @@ const About = () => {
 
           <div className="grid gap-8 lg:grid-cols-2">
 
-            {/* FIRST BLUE CARD */}
             <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 p-8 text-white shadow-xl shadow-blue-900/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:p-10">
 
               <div className="absolute -right-20 -top-20 h-56 w-56 rounded-full bg-white/10" />
@@ -415,6 +492,7 @@ const About = () => {
                 </h3>
 
                 <p className="mt-6 text-lg leading-8 text-blue-50">
+
                   Vets for Animal Welfare (VFAW) is a non-political,
                   non-beneficial, non-governmental, student-led organization
                   operating under the esteemed Institute of Agriculture and
@@ -422,10 +500,12 @@ const About = () => {
                   (2074 BS) by visionary IAAS, Paklihawa Campus students, VFAW
                   began with a focused mission: to assist and care for street
                   animals under the guiding principle,
+
                   <span className="font-bold text-white">
                     {' '}
                     "Animal Welfare for a Better World."
                   </span>
+
                 </p>
 
               </div>
@@ -433,7 +513,6 @@ const About = () => {
             </div>
 
 
-            {/* SECOND BLUE CARD */}
             <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-500 via-indigo-600 to-purple-700 p-8 text-white shadow-xl shadow-indigo-900/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:p-10">
 
               <div className="absolute -right-20 -top-20 h-56 w-56 rounded-full bg-white/10" />
@@ -449,12 +528,14 @@ const About = () => {
                 </h3>
 
                 <p className="mt-6 text-lg leading-8 text-indigo-50">
+
                   Since its inception, VFAW has steadily expanded its outreach,
                   evolving to address the health and welfare of farm animals and
                   promoting broader veterinary welfare initiatives across Nepal.
                   Today, VFAW stands at the forefront of advancing animal health
                   and well-being through comprehensive veterinary services,
                   community engagement, and educational programs.
+
                 </p>
 
               </div>
@@ -468,7 +549,10 @@ const About = () => {
       </section>
 
 
-      {/* PRESIDENT */}
+      {/* =========================================================
+          PRESIDENT
+      ========================================================= */}
+
       <section className="bg-white py-24 lg:py-28">
 
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -532,7 +616,10 @@ const About = () => {
       </section>
 
 
-      {/* VISION MISSION ACTIVITIES */}
+      {/* =========================================================
+          VISION MISSION ACTIVITIES
+      ========================================================= */}
+
       <section className="bg-slate-50 py-24 lg:py-28">
 
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -553,9 +640,11 @@ const About = () => {
               </h3>
 
               <p className="mt-5 leading-8 text-blue-50">
+
                 To create a healthier and more compassionate world for street
                 dogs and farm animals by promoting welfare-driven practices and
                 spreading knowledge within communities.
+
               </p>
 
             </div>
@@ -570,10 +659,12 @@ const About = () => {
               </h3>
 
               <p className="mt-5 leading-8 text-indigo-50">
+
                 To advance the well-being of street and farm animals through
                 student-led veterinary outreach, public education, and
                 collaborative community initiatives that empower both people
                 and animals.
+
               </p>
 
             </div>
@@ -620,7 +711,10 @@ const About = () => {
       </section>
 
 
-      {/* VALUES */}
+      {/* =========================================================
+          VALUES
+      ========================================================= */}
+
       <section className="bg-white py-24 lg:py-28">
 
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -660,7 +754,10 @@ const About = () => {
       </section>
 
 
-      {/* OUR TEAM */}
+      {/* =========================================================
+          OUR TEAM
+      ========================================================= */}
+
       <section className="bg-slate-50 py-24 lg:py-28">
 
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -671,7 +768,10 @@ const About = () => {
           />
 
 
-          {/* ADVISORY COMMITTEE */}
+          {/* =====================================================
+              ADVISORY COMMITTEE
+          ===================================================== */}
+
           <div className="mb-24">
 
             <div className="mb-8 flex items-center gap-5">
@@ -679,6 +779,7 @@ const About = () => {
               <div className="h-10 w-1 rounded-full bg-indigo-600" />
 
               <div>
+
                 <h2 className="text-3xl font-extrabold text-slate-900">
                   Advisory Committee
                 </h2>
@@ -686,6 +787,7 @@ const About = () => {
                 <p className="mt-1 text-slate-600">
                   Guidance, mentorship and leadership.
                 </p>
+
               </div>
 
             </div>
@@ -693,10 +795,12 @@ const About = () => {
             <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
 
               {advisoryCommittee.map((member) => (
+
                 <TeamCard
                   key={member.name}
                   member={member}
                 />
+
               ))}
 
             </div>
@@ -704,7 +808,10 @@ const About = () => {
           </div>
 
 
-          {/* EXECUTIVE COMMITTEE */}
+          {/* =====================================================
+              EXECUTIVE COMMITTEE
+          ===================================================== */}
+
           <div className="mb-24">
 
             <div className="mb-12 text-center">
@@ -727,10 +834,12 @@ const About = () => {
             <div className="mb-12 grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
 
               {executiveLeadership.map((member) => (
+
                 <TeamCard
                   key={member.name}
                   member={member}
                 />
+
               ))}
 
             </div>
@@ -743,10 +852,12 @@ const About = () => {
             <div className="grid gap-7 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
 
               {executiveMembers.map((member) => (
+
                 <TeamCard
                   key={member.name}
                   member={member}
                 />
+
               ))}
 
             </div>
@@ -754,7 +865,10 @@ const About = () => {
           </div>
 
 
-          {/* FOUNDING COMMITTEE */}
+          {/* =====================================================
+              FOUNDING COMMITTEE
+          ===================================================== */}
+
           <div>
 
             <div className="mb-12 text-center">
@@ -768,8 +882,10 @@ const About = () => {
               </h2>
 
               <p className="mx-auto mt-4 max-w-2xl text-slate-600">
+
                 The individuals who laid the foundation of Vets for Animal
                 Welfare.
+
               </p>
 
             </div>
@@ -777,10 +893,12 @@ const About = () => {
             <div className="grid gap-7 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
 
               {foundingCommittee.map((member) => (
+
                 <TeamCard
                   key={member.name}
                   member={member}
                 />
+
               ))}
 
             </div>
@@ -792,7 +910,10 @@ const About = () => {
       </section>
 
 
-      {/* FINAL SECTION */}
+      {/* =========================================================
+          FINAL SECTION
+      ========================================================= */}
+
       <section className="bg-gradient-to-br from-slate-950 via-indigo-950 to-indigo-800 py-24 text-white">
 
         <div className="mx-auto max-w-4xl px-6 text-center">
@@ -804,9 +925,11 @@ const About = () => {
           </h2>
 
           <p className="mt-6 text-lg leading-8 text-indigo-100">
+
             Together, through compassion, knowledge, education and action,
             we can create a healthier and more compassionate future for
             animals and communities.
+
           </p>
 
         </div>
