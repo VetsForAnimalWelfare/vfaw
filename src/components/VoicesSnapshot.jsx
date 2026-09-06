@@ -5,539 +5,366 @@ const voices = [
     name: "Mr. Janma Jaya Gaire",
     role: "Campus Chief",
     image: "/voice/campus chief.JPG",
-    text: "Vets for Animal Welfare (VFAW) embodies the true spirit of veterinary compassion and responsibility. Through their tireless efforts — from treating and feeding street animals to conducting welfare programs, vaccination drives, animal birth control initiatives, and educational sessions — they are making a lasting difference both within and beyond our campus. By empowering veterinary students with practical experience and a profound sense of empathy, VFAW is shaping the future of animal welfare. We are proud to support and stand alongside such a dedicated and impactful organization.",
+    text: "Vets for Animal Welfare (VFAW) reflects the true spirit of veterinary compassion, responsibility, and service. Through initiatives such as treatment and feeding of street animals, vaccination campaigns, animal birth control programs, welfare activities, and educational sessions, the organization is creating a meaningful impact both within and beyond the campus. By providing veterinary students with practical exposure and strengthening their sense of empathy and professional responsibility, VFAW is helping shape a more compassionate future for animal welfare. We are proud to support and stand alongside such a dedicated and impactful organization."
   },
   {
     name: "Sandesh Bhusal",
     role: "Semester: 4th",
     image: "/voice/Sandesh.jpg",
-    text: "While working on the ABC (Animal Birth Control) program, I realized how important humane population management is for improving the lives of both stray animals and people. The experience helped me understand that controlling stray animal populations is not simply about reducing numbers—it is about promoting animal welfare, preventing unnecessary suffering, and creating a safer and healthier relationship between animals and communities. Through the program, I learned that humane approaches such as sterilization, vaccination, and proper care can create long-term positive changes. These efforts help prevent the uncontrolled growth of stray animal populations while also reducing the risks of disease transmission, injuries, and conflicts between humans and animals.",
+    text: "My experience working in the Animal Birth Control (ABC) program helped me understand the importance of humane and sustainable population management. I learned that responsible stray animal management is not simply about reducing numbers; it is about improving animal welfare, preventing unnecessary suffering, and building safer and healthier relationships between animals and communities. Humane approaches such as sterilization, vaccination, and continued care can create meaningful long-term change while reducing disease risks, injuries, and human–animal conflict."
   },
   {
     name: "Eliza Gautam",
     role: "Semester: 7th",
     image: "/voice/Eliza Gautam.png",
-    text: "Feeding street dogs during World Veterinary Day made me feel deeply connected to them. The experience showed me that even simple acts of kindness can bring comfort, happiness, and hope to innocent animals living on the streets.",
+    text: "Participating in the street animal feeding initiative during World Veterinary Day was a deeply meaningful experience. It reminded me that even simple acts of kindness and care can make a significant difference in the lives of vulnerable animals. The experience strengthened my connection with animal welfare and reinforced the importance of compassion in veterinary practice."
   },
   {
     name: "Bibek Kumar Chaudhary",
     role: "Semester: 7th",
     image: "/voice/Bibek Kumar Chaudhary.png",
-    text: "Volunteering in the anti-rabies vaccination program made me proud to contribute to a cause that protects both animals and people. The experience gave me a deeper understanding of how important prevention, awareness, and responsible veterinary action are for the health of our communities.",
-  },
+    text: "Volunteering in the anti-rabies vaccination program was both a valuable learning experience and a source of professional pride. The program provided a deeper understanding of the importance of preventive healthcare in protecting animals and communities. It reinforced how veterinary interventions can contribute directly to public health, animal welfare, and safer human–animal relationships."
+  }
 ];
 
 const VoicesSnapshot = () => {
   const [selectedVoice, setSelectedVoice] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-  const [isPaused, setIsPaused] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+
+  /* ===============================
+     AUTO PLAY
+  =============================== */
 
   useEffect(() => {
-    if (!isAutoPlaying || isPaused || selectedVoice) {
-      return;
-    }
+    if (isHovered) return;
 
     const interval = setInterval(() => {
-      setCurrentIndex((previousIndex) =>
-        (previousIndex + 1) % voices.length
+      setCurrentIndex((prevIndex) =>
+        (prevIndex + 1) % voices.length
       );
-    }, 7000);
+    }, 5500);
 
     return () => clearInterval(interval);
-  }, [isAutoPlaying, isPaused, selectedVoice]);
+  }, [isHovered]);
 
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (selectedVoice && event.key === "Escape") {
-        setSelectedVoice(null);
-      }
+  /* ===============================
+     NAVIGATION
+  =============================== */
 
-      if (!selectedVoice) {
-        if (event.key === "ArrowRight") {
-          handleNext();
-        }
-
-        if (event.key === "ArrowLeft") {
-          handlePrevious();
-        }
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [selectedVoice]);
-
-  const handlePrevious = () => {
-    setIsAutoPlaying(false);
-
-    setCurrentIndex((previousIndex) =>
-      previousIndex === 0
-        ? voices.length - 1
-        : previousIndex - 1
+  const handlePrev = () => {
+    setCurrentIndex(
+      (prevIndex) =>
+        (prevIndex - 1 + voices.length) % voices.length
     );
   };
 
   const handleNext = () => {
-    setIsAutoPlaying(false);
-
-    setCurrentIndex((previousIndex) =>
-      (previousIndex + 1) % voices.length
+    setCurrentIndex(
+      (prevIndex) =>
+        (prevIndex + 1) % voices.length
     );
   };
 
   const handleDotClick = (index) => {
-    setIsAutoPlaying(false);
     setCurrentIndex(index);
-  };
-
-  const handleToggleAutoPlay = () => {
-    setIsAutoPlaying((previousState) => !previousState);
   };
 
   const currentVoice = voices[currentIndex];
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-[#f8fbfd] via-white to-[#eef7fb] py-24">
+    <section className="relative overflow-hidden bg-gradient-to-b from-white via-slate-50 to-blue-50 py-16 lg:py-20">
 
       {/* Background Decoration */}
 
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+      <div className="absolute top-0 left-0 w-96 h-96 bg-blue-200/20 blur-3xl rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
 
-        <div className="absolute -left-40 top-20 h-96 w-96 rounded-full bg-sky-200/30 blur-3xl" />
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-sky-200/20 blur-3xl rounded-full translate-x-1/3 translate-y-1/3 pointer-events-none" />
 
-        <div className="absolute -right-40 bottom-0 h-[500px] w-[500px] rounded-full bg-blue-200/30 blur-3xl" />
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <div
-          className="absolute inset-0 opacity-[0.035]"
-          style={{
-            backgroundImage:
-              "linear-gradient(#1671b8 1px, transparent 1px), linear-gradient(90deg, #1671b8 1px, transparent 1px)",
-            backgroundSize: "60px 60px",
-          }}
-        />
+        {/* ===============================
+            SECTION HEADER
+        =============================== */}
 
-      </div>
+        <div className="text-center mb-10 lg:mb-12">
 
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-blue-100 bg-blue-50 text-blue-700 text-xs font-bold tracking-wider mb-5">
 
-        {/* Section Header */}
+            <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
 
-        <div className="mx-auto mb-16 max-w-3xl text-center">
-
-          <div className="mb-5 inline-flex items-center gap-3 rounded-full border border-blue-100 bg-white px-5 py-2 shadow-sm">
-
-            <span className="h-2 w-2 rounded-full bg-[#1671b8] shadow-[0_0_12px_rgba(22,113,184,0.6)]" />
-
-            <span className="text-[10px] font-extrabold tracking-[0.18em] text-[#1671b8]">
-              COMMUNITY VOICES
-            </span>
+            COMMUNITY VOICES
 
           </div>
 
-          <h2 className="text-4xl font-extrabold tracking-tight text-[#13232f] sm:text-5xl lg:text-6xl">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900">
 
             Voices of{" "}
 
-            <span className="bg-gradient-to-r from-[#075183] via-[#1671b8] to-[#38bdf8] bg-clip-text text-transparent">
+            <span className="text-blue-600">
               VFAW
             </span>
 
           </h2>
 
-          <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-[#6c7f8c] sm:text-lg">
+          <p className="mt-4 max-w-2xl mx-auto text-sm sm:text-base text-slate-600 leading-relaxed">
 
-            Real experiences from the people who learn, volunteer,
-            contribute, and grow with Vets For Animal Welfare.
+            Experiences, perspectives, and reflections from members of
+            the Vets for Animal Welfare community.
 
           </p>
 
         </div>
 
 
-        {/* Main Testimonial Area */}
+        {/* ===============================
+            TESTIMONIAL CAROUSEL
+        =============================== */}
 
         <div
-          className="relative mx-auto max-w-6xl"
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
+          className="relative max-w-5xl mx-auto"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
         >
 
-          {/* Main Card */}
+          {/* PREVIOUS BUTTON */}
 
-          <div className="relative overflow-hidden rounded-[32px] border border-[#d9e7ef] bg-white shadow-[0_30px_80px_rgba(11,66,101,0.12)]">
+          <button
+            onClick={handlePrev}
+            aria-label="Previous testimonial"
+            className="
+              absolute
+              left-0
+              top-1/2
+              -translate-y-1/2
+              -translate-x-5
+              lg:-translate-x-16
+              z-20
 
-            {/* Top Accent */}
+              w-11
+              h-11
 
-            <div className="absolute left-0 right-0 top-0 h-1.5 bg-gradient-to-r from-[#075183] via-[#1671b8] to-[#38bdf8]" />
+              flex
+              items-center
+              justify-center
 
+              rounded-full
 
-            {/* Decorative Glow */}
+              bg-white
+              border
+              border-slate-200
 
-            <div className="pointer-events-none absolute -right-32 -top-32 h-80 w-80 rounded-full bg-[#38bdf8]/10 blur-3xl" />
+              text-blue-600
 
-            <div className="pointer-events-none absolute -bottom-40 -left-32 h-96 w-96 rounded-full bg-[#1671b8]/10 blur-3xl" />
+              shadow-lg
 
+              transition-all
+              duration-300
 
-            <div className="relative grid min-h-[470px] grid-cols-1 lg:grid-cols-[330px_1fr]">
+              hover:bg-blue-600
+              hover:text-white
+              hover:border-blue-600
+              hover:scale-110
 
+              active:scale-95
+            "
+          >
 
-              {/* Profile Section */}
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
 
-              <div className="relative flex flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-[#052f4d] via-[#075183] to-[#1671b8] px-8 py-14 text-center">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
 
-                {/* Background Circle */}
+            </svg>
 
-                <div className="absolute -left-20 -top-20 h-56 w-56 rounded-full border border-white/10" />
+          </button>
 
-                <div className="absolute -bottom-28 -right-28 h-72 w-72 rounded-full border border-white/10" />
 
+          {/* ===============================
+              MAIN CARD
+          =============================== */}
 
-                {/* Slide Number */}
+          <div
+            className="
+              relative
 
-                <div className="absolute left-7 top-7 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-[10px] font-bold tracking-[0.16em] text-white/80 backdrop-blur-md">
+              min-h-[390px]
 
-                  {String(currentIndex + 1).padStart(2, "0")} /{" "}
-                  {String(voices.length).padStart(2, "0")}
+              bg-white
 
-                </div>
+              rounded-3xl
 
+              border
+              border-slate-200
 
-                {/* Image */}
+              shadow-[0_20px_60px_rgba(15,23,42,0.10)]
 
-                <div className="relative">
+              overflow-hidden
 
-                  <div className="absolute inset-0 scale-110 rounded-full bg-sky-300/20 blur-2xl" />
+              transition-all
+              duration-500
+            "
+          >
 
-                  <img
-                    src={currentVoice.image}
-                    alt={currentVoice.name}
-                    className="relative h-40 w-40 rounded-full border-[5px] border-white/20 object-cover shadow-[0_20px_45px_rgba(0,0,0,0.3)]"
-                  />
+            {/* TOP ACCENT */}
 
-                </div>
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-600 via-sky-500 to-blue-600" />
 
 
-                {/* Name */}
+            {/* Decorative Quote */}
 
-                <h3 className="relative mt-7 text-2xl font-extrabold text-white">
+            <div className="absolute top-7 right-8 text-[120px] leading-none font-serif text-blue-50 pointer-events-none select-none">
 
-                  {currentVoice.name}
-
-                </h3>
-
-
-                {/* Role */}
-
-                <div className="relative mt-3 rounded-full border border-white/15 bg-white/10 px-4 py-2 backdrop-blur-md">
-
-                  <span className="text-xs font-semibold tracking-wide text-sky-100">
-
-                    {currentVoice.role}
-
-                  </span>
-
-                </div>
-
-
-                {/* Community Label */}
-
-                <div className="relative mt-8 flex items-center gap-2 text-[9px] font-bold tracking-[0.18em] text-white/50">
-
-                  <span className="h-px w-8 bg-white/30" />
-
-                  VFAW COMMUNITY
-
-                  <span className="h-px w-8 bg-white/30" />
-
-                </div>
-
-              </div>
-
-
-              {/* Content Section */}
-
-              <div className="relative flex flex-col justify-between px-8 py-12 sm:px-12 lg:px-16">
-
-
-                {/* Quote Icon */}
-
-                <div className="absolute right-8 top-7 text-[120px] font-serif leading-none text-[#1671b8]/[0.06]">
-
-                  “
-
-                </div>
-
-
-                <div className="relative">
-
-
-                  <div className="mb-7 flex items-center gap-3">
-
-                    <div className="h-px w-10 bg-[#1671b8]" />
-
-                    <span className="text-[10px] font-extrabold tracking-[0.18em] text-[#1671b8]">
-
-                      THEIR EXPERIENCE
-
-                    </span>
-
-                  </div>
-
-
-                  <blockquote className="max-w-3xl text-xl font-medium leading-[1.9] text-[#3d535f] sm:text-2xl">
-
-                    “{currentVoice.text}”
-
-                  </blockquote>
-
-                </div>
-
-
-                {/* Bottom Controls */}
-
-                <div className="relative mt-10 flex flex-col gap-6 border-t border-[#e3edf2] pt-7 sm:flex-row sm:items-center sm:justify-between">
-
-
-                  {/* Navigation Dots */}
-
-                  <div className="flex items-center gap-3">
-
-                    {voices.map((voice, index) => (
-
-                      <button
-                        key={voice.name}
-                        type="button"
-                        onClick={() => handleDotClick(index)}
-                        aria-label={`View testimonial ${index + 1}`}
-                        className={`group relative h-3 rounded-full transition-all duration-300 ${
-                          index === currentIndex
-                            ? "w-10 bg-[#1671b8]"
-                            : "w-3 bg-[#cbdde8] hover:bg-[#75b5d5]"
-                        }`}
-                      >
-
-                        {index === currentIndex && isAutoPlaying && !isPaused && (
-
-                          <span className="absolute inset-0 animate-pulse rounded-full bg-[#38bdf8]/30" />
-
-                        )}
-
-                      </button>
-
-                    ))}
-
-                  </div>
-
-
-                  {/* Controls */}
-
-                  <div className="flex items-center gap-3">
-
-
-                    {/* Previous */}
-
-                    <button
-                      type="button"
-                      onClick={handlePrevious}
-                      className="flex h-11 w-11 items-center justify-center rounded-xl border border-[#d5e3eb] bg-white text-[#1671b8] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#1671b8] hover:bg-[#eef8fc] hover:shadow-md"
-                      aria-label="Previous testimonial"
-                    >
-
-                      <svg
-                        className="h-5 w-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M15 19l-7-7 7-7"
-                        />
-                      </svg>
-
-                    </button>
-
-
-                    {/* Autoplay */}
-
-                    <button
-                      type="button"
-                      onClick={handleToggleAutoPlay}
-                      className="flex h-11 items-center justify-center gap-2 rounded-xl border border-[#d5e3eb] bg-[#f8fbfd] px-4 text-xs font-bold text-[#496675] transition-all duration-300 hover:border-[#1671b8] hover:text-[#1671b8]"
-                    >
-
-                      {isAutoPlaying ? (
-
-                        <>
-                          <span>Ⅱ</span>
-                          Pause
-                        </>
-
-                      ) : (
-
-                        <>
-                          <span>▶</span>
-                          Play
-                        </>
-
-                      )}
-
-                    </button>
-
-
-                    {/* Next */}
-
-                    <button
-                      type="button"
-                      onClick={handleNext}
-                      className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-[#075183] to-[#1671b8] text-white shadow-[0_8px_20px_rgba(22,113,184,0.25)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(22,113,184,0.35)]"
-                      aria-label="Next testimonial"
-                    >
-
-                      <svg
-                        className="h-5 w-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-
-                    </button>
-
-                  </div>
-
-                </div>
-
-              </div>
+              “
 
             </div>
 
-          </div>
+
+            {/* CONTENT */}
+
+            <div className="relative z-10 p-7 sm:p-10 lg:p-12">
+
+              <div className="flex flex-col md:flex-row items-center gap-8 lg:gap-10">
 
 
-          {/* View Full Story */}
+                {/* PROFILE */}
 
-          <div className="mt-10 text-center">
+                <div className="flex-shrink-0">
 
-            <button
-              type="button"
-              onClick={() => setSelectedVoice(currentVoice)}
-              className="group inline-flex items-center gap-3 rounded-xl bg-[#13232f] px-7 py-4 text-sm font-bold text-white shadow-[0_12px_30px_rgba(19,35,47,0.18)] transition-all duration-300 hover:-translate-y-1 hover:bg-[#1671b8] hover:shadow-[0_18px_40px_rgba(22,113,184,0.25)]"
-            >
+                  <div className="relative">
 
-              Read Full Testimonial
+                    <div className="
+                      absolute
+                      inset-0
+                      rounded-full
+                      bg-blue-400/20
+                      blur-xl
+                      scale-110
+                    " />
 
-              <svg
-                className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M14 5l7 7m0 0l-7 7m7-7H3"
-                />
-              </svg>
+                    <img
+                      src={currentVoice.image}
+                      alt={currentVoice.name}
+                      className="
+                        relative
 
-            </button>
+                        w-28
+                        h-28
 
-          </div>
+                        sm:w-32
+                        sm:h-32
 
-        </div>
+                        lg:w-36
+                        lg:h-36
 
-      </div>
+                        rounded-full
 
+                        object-cover
 
-      {/* =====================================================
-          FULL TESTIMONIAL MODAL
-      ===================================================== */}
+                        border-[5px]
+                        border-white
 
-      {selectedVoice && (
+                        ring-1
+                        ring-blue-100
 
-        <div
-          className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#06131c]/70 p-4 backdrop-blur-md"
-          onClick={() => setSelectedVoice(null)}
-        >
+                        shadow-xl
+                      "
+                    />
 
-          <div
-            className="relative max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-[28px] border border-white/20 bg-white shadow-[0_30px_100px_rgba(0,0,0,0.35)]"
-            onClick={(event) => event.stopPropagation()}
-          >
+                  </div>
 
-            {/* Modal Top */}
-
-            <div className="relative overflow-hidden bg-gradient-to-br from-[#052f4d] via-[#075183] to-[#1671b8] px-8 py-10 sm:px-12">
-
-              <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full border border-white/10" />
-
-              <div className="absolute -bottom-32 -left-20 h-64 w-64 rounded-full bg-sky-300/10 blur-3xl" />
+                </div>
 
 
-              {/* Close Button */}
+                {/* TEXT CONTENT */}
 
-              <button
-                type="button"
-                onClick={() => setSelectedVoice(null)}
-                aria-label="Close testimonial"
-                className="absolute right-6 top-6 flex h-11 w-11 items-center justify-center rounded-xl border border-white/15 bg-white/10 text-white backdrop-blur-md transition-all duration-300 hover:rotate-90 hover:bg-white hover:text-[#1671b8]"
-              >
+                <div className="flex-1 text-center md:text-left">
 
-                <svg
-                  className="h-6 w-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
+                  <div className="
+                    inline-flex
+                    items-center
+                    px-3
+                    py-1
 
-              </button>
+                    mb-4
+
+                    rounded-full
+
+                    bg-blue-50
+
+                    text-blue-600
+
+                    text-[10px]
+
+                    font-extrabold
+
+                    tracking-[0.15em]
+                  ">
+
+                    VFAW COMMUNITY MEMBER
+
+                  </div>
 
 
-              <div className="relative flex flex-col items-center gap-6 text-center sm:flex-row sm:text-left">
+                  <h3 className="
+                    text-2xl
+                    sm:text-3xl
 
-                <img
-                  src={selectedVoice.image}
-                  alt={selectedVoice.name}
-                  className="h-24 w-24 rounded-full border-4 border-white/20 object-cover shadow-xl"
-                />
+                    font-bold
 
-                <div>
+                    tracking-tight
 
-                  <span className="text-[10px] font-bold tracking-[0.18em] text-sky-200">
+                    text-slate-900
 
-                    VFAW COMMUNITY VOICE
+                    mb-2
+                  ">
 
-                  </span>
-
-                  <h3 className="mt-2 text-3xl font-extrabold text-white">
-
-                    {selectedVoice.name}
+                    {currentVoice.name}
 
                   </h3>
 
-                  <p className="mt-2 text-sm font-medium text-sky-100">
 
-                    {selectedVoice.role}
+                  <p className="
+                    text-sm
+
+                    font-semibold
+
+                    text-blue-600
+
+                    mb-6
+                  ">
+
+                    {currentVoice.role}
+
+                  </p>
+
+
+                  {/* TESTIMONIAL TEXT */}
+
+                  <p className="
+                    max-w-2xl
+
+                    text-sm
+                    sm:text-[15px]
+
+                    leading-7
+                    sm:leading-8
+
+                    text-slate-600
+
+                    font-normal
+                  ">
+
+                    "{currentVoice.text}"
 
                   </p>
 
@@ -548,32 +375,514 @@ const VoicesSnapshot = () => {
             </div>
 
 
-            {/* Modal Content */}
+            {/* CARD FOOTER */}
 
-            <div className="relative px-8 py-10 sm:px-12 sm:py-12">
+            <div className="
+              absolute
+              bottom-0
+              left-0
+              right-0
 
-              <div className="absolute left-8 top-4 text-8xl font-serif leading-none text-[#1671b8]/5">
+              px-7
+              sm:px-10
+
+              py-4
+
+              border-t
+              border-slate-100
+
+              bg-slate-50/70
+            ">
+
+              <div className="
+                flex
+                items-center
+                justify-between
+              ">
+
+                <span className="
+                  text-[10px]
+                  font-bold
+                  tracking-[0.12em]
+                  text-slate-400
+                ">
+
+                  VETS FOR ANIMAL WELFARE
+
+                </span>
+
+
+                {/* AUTO PLAY STATUS */}
+
+                <div className="
+                  flex
+                  items-center
+                  gap-2
+
+                  text-[10px]
+
+                  font-semibold
+
+                  text-slate-400
+                ">
+
+                  <span
+                    className={`
+                      w-2
+                      h-2
+                      rounded-full
+
+                      ${
+                        isHovered
+                          ? "bg-slate-300"
+                          : "bg-green-500 animate-pulse"
+                      }
+                    `}
+                  />
+
+                  {isHovered
+                    ? "AUTO PLAY PAUSED"
+                    : "AUTO PLAY"
+                  }
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          {/* NEXT BUTTON */}
+
+          <button
+            onClick={handleNext}
+            aria-label="Next testimonial"
+            className="
+              absolute
+              right-0
+              top-1/2
+              -translate-y-1/2
+              translate-x-5
+              lg:translate-x-16
+              z-20
+
+              w-11
+              h-11
+
+              flex
+              items-center
+              justify-center
+
+              rounded-full
+
+              bg-white
+              border
+              border-slate-200
+
+              text-blue-600
+
+              shadow-lg
+
+              transition-all
+              duration-300
+
+              hover:bg-blue-600
+              hover:text-white
+              hover:border-blue-600
+              hover:scale-110
+
+              active:scale-95
+            "
+          >
+
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
+
+            </svg>
+
+          </button>
+
+        </div>
+
+
+        {/* ===============================
+            DOT NAVIGATION
+        =============================== */}
+
+        <div className="
+          flex
+          justify-center
+          items-center
+          gap-3
+          mt-8
+        ">
+
+          {voices.map((voice, index) => (
+
+            <button
+              key={voice.name}
+              onClick={() => handleDotClick(index)}
+              aria-label={`View testimonial ${index + 1}`}
+              className={`
+                transition-all
+                duration-300
+
+                rounded-full
+
+                ${
+                  index === currentIndex
+                    ? "w-8 h-2.5 bg-blue-600"
+                    : "w-2.5 h-2.5 bg-slate-300 hover:bg-blue-400"
+                }
+              `}
+            />
+
+          ))}
+
+        </div>
+
+
+        {/* ===============================
+            VIEW FULL TESTIMONIAL
+        =============================== */}
+
+        <div className="text-center mt-9">
+
+          <button
+            onClick={() => setSelectedVoice(currentVoice)}
+            className="
+              inline-flex
+              items-center
+              justify-center
+              gap-3
+
+              px-6
+              py-3.5
+
+              rounded-xl
+
+              bg-slate-900
+
+              text-white
+
+              text-sm
+              font-semibold
+
+              shadow-lg
+
+              transition-all
+              duration-300
+
+              hover:bg-blue-600
+              hover:-translate-y-1
+              hover:shadow-xl
+
+              active:translate-y-0
+              active:scale-95
+            "
+          >
+
+            Read Full Experience
+
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M14 5l7 7m0 0l-7 7m7-7H3"
+              />
+
+            </svg>
+
+          </button>
+
+        </div>
+
+      </div>
+
+
+      {/* ===============================
+          MODAL
+      =============================== */}
+
+      {selectedVoice && (
+
+        <div
+          className="
+            fixed
+            inset-0
+            z-[9999]
+
+            flex
+            items-center
+            justify-center
+
+            p-4
+
+            bg-slate-950/60
+
+            backdrop-blur-md
+          "
+          onClick={() => setSelectedVoice(null)}
+        >
+
+          <div
+            className="
+              relative
+
+              w-full
+              max-w-3xl
+
+              max-h-[85vh]
+
+              overflow-y-auto
+
+              bg-white
+
+              rounded-3xl
+
+              shadow-2xl
+
+              border
+              border-white/40
+            "
+            onClick={(event) => event.stopPropagation()}
+          >
+
+
+            {/* MODAL HEADER */}
+
+            <div className="
+              sticky
+              top-0
+
+              z-20
+
+              flex
+              items-center
+              justify-between
+
+              p-6
+
+              bg-white/95
+
+              backdrop-blur-md
+
+              border-b
+              border-slate-100
+            ">
+
+              <div className="flex items-center gap-4">
+
+                <img
+                  src={selectedVoice.image}
+                  alt={selectedVoice.name}
+                  className="
+                    w-14
+                    h-14
+
+                    rounded-full
+
+                    object-cover
+
+                    border-2
+                    border-blue-100
+
+                    shadow-md
+                  "
+                />
+
+                <div>
+
+                  <h3 className="
+                    text-lg
+                    sm:text-xl
+
+                    font-bold
+
+                    text-slate-900
+                  ">
+
+                    {selectedVoice.name}
+
+                  </h3>
+
+                  <p className="
+                    text-sm
+                    font-medium
+                    text-blue-600
+                  ">
+
+                    {selectedVoice.role}
+
+                  </p>
+
+                </div>
+
+              </div>
+
+
+              {/* CLOSE BUTTON */}
+
+              <button
+                onClick={() => setSelectedVoice(null)}
+                aria-label="Close testimonial"
+                className="
+                  w-10
+                  h-10
+
+                  flex
+                  items-center
+                  justify-center
+
+                  rounded-full
+
+                  bg-slate-100
+
+                  text-slate-500
+
+                  transition-all
+                  duration-300
+
+                  hover:bg-red-50
+                  hover:text-red-500
+                  hover:rotate-90
+                "
+              >
+
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+
+                </svg>
+
+              </button>
+
+            </div>
+
+
+            {/* MODAL CONTENT */}
+
+            <div className="p-7 sm:p-10">
+
+              <div className="
+                absolute
+                right-8
+                top-24
+
+                text-[120px]
+
+                font-serif
+
+                leading-none
+
+                text-blue-50
+
+                select-none
+
+                pointer-events-none
+              ">
 
                 “
 
               </div>
 
-              <p className="relative text-base leading-9 text-[#4b616d] sm:text-lg sm:leading-9">
 
-                {selectedVoice.text}
+              <p className="
+                relative
+                z-10
+
+                text-[15px]
+                sm:text-base
+
+                leading-8
+                sm:leading-9
+
+                text-slate-600
+              ">
+
+                "{selectedVoice.text}"
 
               </p>
 
+            </div>
 
-              <div className="mt-10 flex items-center gap-3 border-t border-[#e3edf2] pt-7">
 
-                <div className="h-1.5 w-1.5 rounded-full bg-[#1671b8]" />
+            {/* MODAL FOOTER */}
 
-                <span className="text-[10px] font-bold tracking-[0.16em] text-[#8a9da8]">
+            <div className="
+              px-7
+              sm:px-10
 
-                  VETS FOR ANIMAL WELFARE
+              py-5
+
+              border-t
+              border-slate-100
+
+              bg-slate-50
+            ">
+
+              <div className="
+                flex
+                justify-between
+                items-center
+              ">
+
+                <span className="
+                  text-[10px]
+                  font-bold
+                  tracking-[0.15em]
+                  text-slate-400
+                ">
+
+                  VFAW • COMMUNITY VOICES
 
                 </span>
+
+
+                <button
+                  onClick={() => setSelectedVoice(null)}
+                  className="
+                    text-sm
+                    font-semibold
+                    text-blue-600
+
+                    hover:text-blue-800
+                  "
+                >
+
+                  Close
+
+                </button>
 
               </div>
 
