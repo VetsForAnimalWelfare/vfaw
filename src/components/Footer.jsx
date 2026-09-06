@@ -50,79 +50,15 @@ const Footer = () => {
           BACKGROUND DECORATION
       ========================================================= */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -top-48 -right-48 h-[520px] w-[520px] rounded-full bg-blue-600/10 blur-3xl" />
+
+        <div className="absolute -right-48 -top-48 h-[520px] w-[520px] rounded-full bg-blue-600/10 blur-3xl" />
+
         <div className="absolute -bottom-56 -left-56 h-[620px] w-[620px] rounded-full bg-indigo-500/10 blur-3xl" />
 
         <div className="absolute right-[15%] top-[35%] h-40 w-40 rounded-full border border-white/[0.04]" />
+
         <div className="absolute right-[13%] top-[33%] h-64 w-64 rounded-full border border-white/[0.025]" />
-      </div>
 
-      {/* =========================================================
-          TOP CTA
-      ========================================================= */}
-      <div className="relative z-10 border-b border-white/10">
-        <div className="mx-auto max-w-7xl px-5 py-8 sm:px-8 lg:px-10">
-
-          <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-r from-[#0d2b59] via-[#123b78] to-[#0b2854] px-6 py-8 shadow-[0_25px_70px_rgba(0,0,0,0.25)] sm:px-10 lg:px-12">
-
-            <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full border border-white/10" />
-            <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full border border-white/10" />
-
-            <div className="relative flex flex-col gap-7 lg:flex-row lg:items-center lg:justify-between">
-
-              <div className="max-w-2xl">
-
-                <div className="mb-3 flex items-center gap-3">
-                  <span className="h-px w-8 bg-blue-300" />
-
-                  <span className="text-xs font-bold uppercase tracking-[0.22em] text-blue-200">
-                    Join the movement
-                  </span>
-                </div>
-
-                <h2 className="text-2xl font-black tracking-tight text-white sm:text-3xl lg:text-4xl">
-                  Compassion becomes powerful
-                  <span className="text-blue-300">
-                    {' '}through action.
-                  </span>
-                </h2>
-
-                <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/65 sm:text-base">
-                  Join VFAW in creating a more compassionate future for
-                  animals through veterinary knowledge, community action,
-                  and responsible animal welfare.
-                </p>
-
-              </div>
-
-              <div className="shrink-0">
-
-                <Link
-                  to="/get-involved"
-                  className="group inline-flex w-full items-center justify-center gap-3 rounded-full bg-white px-7 py-3.5 text-sm font-bold text-[#092044] shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:w-auto"
-                >
-                  Get Involved
-
-                  <svg
-                    className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
-                    />
-                  </svg>
-                </Link>
-
-              </div>
-
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* =========================================================
@@ -133,14 +69,14 @@ const Footer = () => {
         <div className="grid grid-cols-1 gap-14 lg:grid-cols-12 lg:gap-10">
 
           {/* =====================================================
-              BRAND
+              BRAND COLUMN
           ===================================================== */}
           <div className="lg:col-span-4">
 
             {/* LOGO */}
             <div className="group mb-7 inline-flex items-center">
 
-              <div className="relative flex h-[88px] w-[88px] items-center justify-center overflow-hidden rounded-2xl bg-white p-3 shadow-[0_12px_35px_rgba(0,0,0,0.25)] transition-all duration-500 group-hover:-translate-y-1 group-hover:shadow-[0_18px_45px_rgba(0,0,0,0.35)]">
+              <div className="relative flex h-[92px] w-[92px] items-center justify-center overflow-hidden rounded-2xl bg-white p-3 shadow-[0_15px_40px_rgba(0,0,0,0.28)] transition-all duration-500 group-hover:-translate-y-1 group-hover:shadow-[0_22px_50px_rgba(0,0,0,0.38)]">
 
                 <div className="absolute inset-1 rounded-xl border border-slate-200" />
 
@@ -156,12 +92,16 @@ const Footer = () => {
 
             {/* ORGANIZATION NAME */}
             <h2 className="max-w-sm text-2xl font-black tracking-tight text-white sm:text-3xl">
+
               Vets for
+
               <span className="block text-blue-300">
                 Animal Welfare
               </span>
+
             </h2>
 
+            {/* DESCRIPTION */}
             <p className="mt-5 max-w-md text-sm leading-7 text-white/60 sm:text-base">
               A student-led organization working to advance animal welfare,
               veterinary education, and compassionate community action in Nepal.
@@ -180,7 +120,9 @@ const Footer = () => {
 
             </div>
 
-            {/* SOCIAL MEDIA */}
+            {/* =================================================
+                SOCIAL MEDIA
+            ================================================= */}
             <div className="mt-8 flex items-center gap-3">
 
               {/* FACEBOOK */}
@@ -235,6 +177,7 @@ const Footer = () => {
               </a>
 
             </div>
+
           </div>
 
           {/* =====================================================
@@ -264,6 +207,7 @@ const Footer = () => {
               ))}
 
             </ul>
+
           </div>
 
           {/* =====================================================
@@ -293,6 +237,7 @@ const Footer = () => {
               ))}
 
             </ul>
+
           </div>
 
           {/* =====================================================
@@ -347,12 +292,13 @@ const Footer = () => {
                   </div>
 
                 </div>
+
               </div>
 
               {/* EMAIL */}
               <a
                 href="mailto:vfaw2017@gmail.com"
-                className="group block rounded-2xl border border-white/[0.07] bg-white/[0.035] p-4 transition-all duration-300 hover:-translate-y-1 hover:border-white/15 hover:bg-white/[0.06]"
+                className="group block rounded-2xl border border-white/[0.07] bg-white/[0.035] p-4 transition-all duration-300 hover:-translate-y-1 hover:border-blue-400/20 hover:bg-white/[0.06]"
               >
 
                 <div className="flex items-start gap-4">
@@ -390,7 +336,7 @@ const Footer = () => {
                       Email
                     </p>
 
-                    <p className="mt-1 break-all text-sm font-medium text-white/75 group-hover:text-blue-300">
+                    <p className="mt-1 break-all text-sm font-medium text-white/75 transition-colors duration-300 group-hover:text-blue-300">
                       vfaw2017@gmail.com
                     </p>
 
@@ -400,15 +346,19 @@ const Footer = () => {
 
               </a>
 
-              {/* PHONE */}
+              {/* =================================================
+                  DIRECT CALL BUTTON
+              ================================================= */}
               <a
                 href="tel:+9779844898004"
-                className="group block rounded-2xl border border-white/[0.07] bg-white/[0.035] p-4 transition-all duration-300 hover:-translate-y-1 hover:border-white/15 hover:bg-white/[0.06]"
+                className="group relative block overflow-hidden rounded-2xl border border-red-400/20 bg-gradient-to-r from-red-600 to-red-500 p-4 shadow-[0_12px_30px_rgba(220,38,38,0.18)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(220,38,38,0.30)]"
               >
 
-                <div className="flex items-start gap-4">
+                <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-white/10 transition-transform duration-500 group-hover:scale-150" />
 
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-500/10 text-red-300">
+                <div className="relative flex items-center gap-4">
+
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/15 text-white">
 
                     <svg
                       className="h-5 w-5"
@@ -426,76 +376,48 @@ const Footer = () => {
 
                   </div>
 
-                  <div>
+                  <div className="flex-1">
 
-                    <p className="text-xs font-semibold uppercase tracking-wider text-white/35">
-                      Phone
+                    <p className="text-xs font-bold uppercase tracking-wider text-white/65">
+                      Call VFAW
                     </p>
 
-                    <p className="mt-1 text-sm font-medium text-white/75 group-hover:text-red-300">
+                    <p className="mt-1 text-base font-black text-white">
                       +977 9844898004
                     </p>
 
                   </div>
+
+                  <svg
+                    className="h-5 w-5 text-white transition-transform duration-300 group-hover:translate-x-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M17 8l4 4m0 0l-4 4"
+                    />
+                  </svg>
 
                 </div>
 
               </a>
 
             </div>
-          </div>
-
-        </div>
-      </div>
-
-      {/* =========================================================
-          CONNECTION STRIP
-      ========================================================= */}
-      <div className="relative z-10 border-y border-white/10 bg-black/10">
-
-        <div className="mx-auto flex max-w-7xl flex-col gap-5 px-5 py-7 sm:px-8 md:flex-row md:items-center md:justify-between lg:px-10">
-
-          <div>
-
-            <p className="text-sm font-bold text-white">
-              Stay connected with VFAW
-            </p>
-
-            <p className="mt-1 text-xs text-white/45 sm:text-sm">
-              Follow our work and discover new animal welfare initiatives.
-            </p>
 
           </div>
 
-          <Link
-            to="/contact"
-            className="group inline-flex items-center gap-2 self-start rounded-full border border-white/15 bg-white/[0.05] px-5 py-2.5 text-xs font-bold text-white/75 transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-400/40 hover:bg-blue-500/10 hover:text-blue-300 md:self-auto"
-          >
-            Contact VFAW
-
-            <svg
-              className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M17 8l4 4m0 0l-4 4m4-4H3"
-              />
-            </svg>
-
-          </Link>
-
         </div>
+
       </div>
 
       {/* =========================================================
           BOTTOM BAR
       ========================================================= */}
-      <div className="relative z-10">
+      <div className="relative z-10 border-t border-white/10">
 
         <div className="mx-auto max-w-7xl px-5 py-8 sm:px-8 lg:px-10">
 
@@ -511,7 +433,9 @@ const Footer = () => {
 
             </div>
 
-            {/* DESIGN CREDITS */}
+            {/* =================================================
+                DESIGN CREDITS
+            ================================================= */}
             <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-5">
 
               {/* BIBASH - PROMINENT */}
@@ -523,7 +447,7 @@ const Footer = () => {
 
                 <a
                   href="#"
-                  className="group mt-1 inline-flex items-center gap-2 transition-all duration-300"
+                  className="group mt-1 inline-flex items-center gap-2"
                 >
 
                   <span className="text-sm font-black tracking-wide text-blue-300 transition-all duration-300 group-hover:text-white group-hover:drop-shadow-[0_0_12px_rgba(147,197,253,0.45)] sm:text-base">
@@ -538,7 +462,7 @@ const Footer = () => {
 
               <span className="hidden h-8 w-px bg-white/10 sm:block" />
 
-              {/* NIRAJAN - RETAINED WATERMARK */}
+              {/* NIRAJAN - ORIGINAL WATERMARK */}
               <div className="text-center sm:text-left">
 
                 <p className="text-[10px] font-medium uppercase tracking-[0.15em] text-white/20">
@@ -567,6 +491,7 @@ const Footer = () => {
           </div>
 
         </div>
+
       </div>
 
       {/* =========================================================
@@ -604,7 +529,7 @@ const Footer = () => {
 };
 
 /* =============================================================
-   FOOTER HEADING
+   FOOTER HEADING COMPONENT
 ============================================================= */
 const FooterHeading = ({ title }) => {
   return (
