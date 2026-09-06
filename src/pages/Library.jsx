@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import "../Library.css";
 
 /* =========================================================
@@ -113,6 +113,23 @@ const Icon = ({ name, size = 20, strokeWidth = 1.8 }) => {
         <path d="M4 6h16" />
         <path d="M7 12h10" />
         <path d="M10 18h4" />
+      </svg>
+    ),
+
+    share: (
+      <svg {...common}>
+        <circle cx="18" cy="5" r="3" />
+        <circle cx="6" cy="12" r="3" />
+        <circle cx="18" cy="19" r="3" />
+        <path d="m8.6 10.5 6.8-4" />
+        <path d="m8.6 13.5 6.8 4" />
+      </svg>
+    ),
+
+    copy: (
+      <svg {...common}>
+        <rect x="9" y="9" width="11" height="11" rx="2" />
+        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
       </svg>
     ),
   };
@@ -386,6 +403,7 @@ function Library() {
   const [selectedResource, setSelectedResource] = useState(null);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
+  const [copiedResource, setCopiedResource] = useState(null);
 
   const categories = useMemo(() => {
     const uniqueCategories = [];
@@ -423,6 +441,25 @@ function Library() {
   }, [search, category]);
 
   /* =======================================================
+     OPEN SHARED RESOURCE FROM URL
+  ======================================================= */
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const resourceId = params.get("resource");
+
+    if (resourceId) {
+      const resource = resources.find(
+        (item) => item.id === Number(resourceId)
+      );
+
+      if (resource) {
+        setSelectedResource(resource);
+      }
+    }
+  }, []);
+
+  /* =======================================================
      BODY SCROLL LOCK
   ======================================================= */
 
@@ -445,7 +482,7 @@ function Library() {
   useEffect(() => {
     const handleEscape = (event) => {
       if (event.key === "Escape") {
-        setSelectedResource(null);
+        closeReader();
       }
     };
 
@@ -462,10 +499,71 @@ function Library() {
 
   const openResource = (resource) => {
     setSelectedResource(resource);
+
+    const url = new URL(window.location.href);
+    url.searchParams.set("resource", resource.id);
+
+    window.history.pushState({}, "", url);
   };
 
   const closeReader = () => {
     setSelectedResource(null);
+
+    const url = new URL(window.location.href);
+    url.searchParams.delete("resource");
+
+    window.history.pushState({}, "", url);
+  };
+
+  /* =======================================================
+     SHARE RESOURCE
+  ======================================================= */
+
+  const getShareUrl = (resource) => {
+    const url = new URL(window.location.href);
+
+    url.searchParams.set("resource", resource.id);
+
+    return url.toString();
+  };
+
+  const handleShare = async (resource) => {
+    const shareUrl = getShareUrl(resource);
+
+    const shareData = {
+      title: resource.title,
+      text: `Check out this resource from VFAW Knowledge Library: ${resource.title}`,
+      url: shareUrl,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+        return;
+      }
+
+      await navigator.clipboard.writeText(shareUrl);
+
+      setCopiedResource(resource.id);
+
+      setTimeout(() => {
+        setCopiedResource(null);
+      }, 2500);
+    } catch (error) {
+      console.error("Sharing failed:", error);
+
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+
+        setCopiedResource(resource.id);
+
+        setTimeout(() => {
+          setCopiedResource(null);
+        }, 2500);
+      } catch (copyError) {
+        console.error("Copy failed:", copyError);
+      }
+    }
   };
 
   /* =======================================================
@@ -495,9 +593,7 @@ function Library() {
   return (
     <div className="library-page">
 
-      {/* ===================================================
-          HERO
-      =================================================== */}
+      {/* HERO */}
 
       <section className="library-hero">
 
@@ -557,15 +653,9 @@ function Library() {
         </div>
       </section>
 
-      {/* ===================================================
-          MAIN
-      =================================================== */}
+      {/* MAIN */}
 
       <main className="library-container">
-
-        {/* =================================================
-            HEADING
-        ================================================= */}
 
         <section className="library-heading">
 
@@ -604,9 +694,7 @@ function Library() {
 
         </section>
 
-        {/* =================================================
-            SEARCH
-        ================================================= */}
+        {/* SEARCH */}
 
         <section className="library-search-section">
 
@@ -639,9 +727,7 @@ function Library() {
 
         </section>
 
-        {/* =================================================
-            FILTER BAR
-        ================================================= */}
+        {/* FILTER */}
 
         <div className="library-filter-header">
 
@@ -692,9 +778,7 @@ function Library() {
 
         </div>
 
-        {/* =================================================
-            RESOURCE GRID
-        ================================================= */}
+        {/* RESOURCE GRID */}
 
         {filteredResources.length > 0 ? (
 
@@ -715,6 +799,28 @@ function Library() {
                 <div className="card-number">
                   {String(index + 1).padStart(2, "0")}
                 </div>
+
+                {/* SHARE BUTTON */}
+
+                <button
+                  type="button"
+                  className="resource-share"
+                  onClick={() => handleShare(resource)}
+                  aria-label={`Share ${resource.title}`}
+                  title="Share this resource"
+                >
+                  {copiedResource === resource.id ? (
+                    <>
+                      <Icon name="copy" size={16} />
+                      <span>Copied</span>
+                    </>
+                  ) : (
+                    <>
+                      <Icon name="share" size={16} />
+                      <span>Share</span>
+                    </>
+                  )}
+                </button>
 
                 <div className="card-top">
 
@@ -826,17 +932,11 @@ function Library() {
 
       </main>
 
-      {/* ===================================================
-          FULL SCREEN READER
-      =================================================== */}
+      {/* FULL SCREEN READER */}
 
       {selectedResource && (
 
         <div className="library-reader">
-
-          {/* =================================================
-              READER HEADER
-          ================================================= */}
 
           <header className="reader-header">
 
@@ -885,9 +985,7 @@ function Library() {
 
           </header>
 
-          {/* =================================================
-              ARTICLE
-          ================================================= */}
+          {/* ARTICLE */}
 
           {selectedResource.type === "article" && (
 
@@ -963,9 +1061,7 @@ function Library() {
 
           )}
 
-          {/* =================================================
-              BLOGGER
-          ================================================= */}
+          {/* BLOGGER */}
 
           {selectedResource.type === "blogger" && (
 
@@ -1011,9 +1107,7 @@ function Library() {
 
           )}
 
-          {/* =================================================
-              PDF
-          ================================================= */}
+          {/* PDF */}
 
           {selectedResource.type === "pdf" && (
 
@@ -1065,9 +1159,7 @@ function Library() {
 
           )}
 
-          {/* =================================================
-              PRESENTATION
-          ================================================= */}
+          {/* PRESENTATION */}
 
           {selectedResource.type === "pptx" && (
 
