@@ -8,68 +8,76 @@ const Home = () => {
   const [visibleSections, setVisibleSections] = useState({});
   const [statsStarted, setStatsStarted] = useState(false);
 
+  const sectionRefs = useRef([]);
   const statsRef = useRef(null);
-  const sectionRefs = useRef({});
 
-  /* =========================
+  /* =========================================================
      SCROLL / PARALLAX
-  ========================= */
+  ========================================================= */
+
   useEffect(() => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('scroll', handleScroll, {
+      passive: true,
+    });
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
-  /* =========================
-     SECTION REVEAL
-  ========================= */
+  /* =========================================================
+     SCROLL REVEAL
+  ========================================================= */
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const id = entry.target.dataset.section;
-
-            setVisibleSections((prev) => ({
-              ...prev,
-              [id]: true,
+            setVisibleSections((previous) => ({
+              ...previous,
+              [entry.target.dataset.section]: true,
             }));
           }
         });
       },
       {
         threshold: 0.12,
+        rootMargin: '0px 0px -70px 0px',
       }
     );
 
-    Object.values(sectionRefs.current).forEach((section) => {
-      if (section) observer.observe(section);
+    sectionRefs.current.forEach((section) => {
+      if (section) {
+        observer.observe(section);
+      }
     });
 
     return () => observer.disconnect();
   }, []);
 
-  /* =========================
-     STAT COUNTER
-  ========================= */
+  /* =========================================================
+     STATISTICS OBSERVER
+  ========================================================= */
+
   useEffect(() => {
     if (!statsRef.current) return;
 
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setStatsStarted(true);
-          observer.disconnect();
-        }
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setStatsStarted(true);
+            observer.disconnect();
+          }
+        });
       },
       {
-        threshold: 0.3,
+        threshold: 0.35,
       }
     );
 
@@ -78,469 +86,504 @@ const Home = () => {
     return () => observer.disconnect();
   }, []);
 
-  /* =========================
-     COUNTER
-  ========================= */
-  const Counter = ({ value, suffix = '' }) => {
+  /* =========================================================
+     SECTION REF
+  ========================================================= */
+
+  const addSectionRef = (element, name) => {
+    if (element && !sectionRefs.current.includes(element)) {
+      element.dataset.section = name;
+      sectionRefs.current.push(element);
+    }
+  };
+
+  /* =========================================================
+     ANIMATED COUNTER
+  ========================================================= */
+
+  const Counter = ({
+    end,
+    suffix = '',
+    duration = 1800,
+  }) => {
     const [count, setCount] = useState(0);
 
     useEffect(() => {
       if (!statsStarted) return;
 
-      const duration = 1600;
-      const startTime = performance.now();
+      let startTime = null;
 
       const animate = (currentTime) => {
+        if (!startTime) {
+          startTime = currentTime;
+        }
+
         const progress = Math.min(
           (currentTime - startTime) / duration,
           1
         );
 
-        const eased =
+        const easedProgress =
           1 - Math.pow(1 - progress, 3);
 
-        setCount(Math.floor(value * eased));
+        setCount(
+          Math.floor(easedProgress * end)
+        );
 
         if (progress < 1) {
           requestAnimationFrame(animate);
+        } else {
+          setCount(end);
         }
       };
 
       requestAnimationFrame(animate);
-    }, [statsStarted, value]);
+    }, [statsStarted, end, duration]);
 
     return (
       <>
-        {count}
+        {count.toLocaleString()}
         {suffix}
       </>
     );
   };
 
-  /* =========================
+  /* =========================================================
      FEATURED ACTIVITIES
-  ========================= */
+  ========================================================= */
+
   const featuredActivities = [
     {
-      number: '01',
       title: 'Animal Welfare',
       description:
-        'Promoting compassionate treatment, responsible care and protection of animals through community-based initiatives.',
+        'Providing medical care and treatment for street animals, including before and after treatment cases.',
       image: '/welfare/IMG_2131.JPG',
+      number: '01',
     },
     {
-      number: '02',
       title: 'Animal Birth Control & Vaccination',
       description:
-        'Supporting humane population management and preventive healthcare to improve the lives of community animals.',
-      image: '/control/IMG_20240216_000413_Original.JPG',
+        'Implementing birth control programs and vaccination drives to protect street animals and improve community health.',
+      image:
+        '/control/IMG_20240216_000413_Original.JPG',
+      number: '02',
     },
     {
-      number: '03',
       title: 'Street Dog Feeding Program',
       description:
-        'Providing food and care to vulnerable street animals while building awareness around responsible community participation.',
+        'Regular feeding initiatives focused on improving the health, nutrition, and well-being of street dogs.',
       image: '/feeding/IMG_2119.JPG',
+      number: '03',
     },
   ];
 
-  /* =========================
+  /* =========================================================
      GALLERY
-  ========================= */
+  ========================================================= */
+
   const galleryItems = [
     {
-      title: 'Awareness Program',
       image: '/awareness/7.jpg',
+      title: 'Awareness Program',
+      description:
+        'Spreading knowledge and compassion',
+      size: 'large',
     },
     {
-      title: 'Vaccination Program',
       image: '/vaccination/7.jpg',
+      title: 'Vaccination Program',
+      description:
+        'Protecting animal health',
+      size: 'normal',
     },
     {
-      title: 'Feeding Program',
       image: '/feeding/IMG_2117.JPG',
+      title: 'Feeding Program',
+      description:
+        'Supporting street animals',
+      size: 'normal',
     },
     {
-      title: 'Capacity Building',
       image: '/capacity/1.JPG',
+      title: 'Capacity Building',
+      description:
+        'Empowering future leaders',
+      size: 'large',
     },
   ];
 
-  /* =========================
+  /* =========================================================
      COLLABORATORS
-  ========================= */
+     
+     ORIGINAL PATH LOGIC PRESERVED
+  ========================================================= */
+
   const collaborators = [2, 3, 4, 6, 7, 1];
 
-  /* =========================
-     REAL HOSTED ANIMAL IMAGES
-  ========================= */
-  const animals = [
-    {
-      name: 'Cow',
-      image:
-        'https://images.unsplash.com/photo-1546447147-3fc2b4f4a9e3?auto=format&fit=crop&w=900&q=85',
-    },
-    {
-      name: 'Buffalo',
-      image:
-        'https://commons.wikimedia.org/wiki/Special:Redirect/file/Indian_Water_Buffalo.jpg',
-    },
-    {
-      name: 'Dog',
-      image:
-        'https://commons.wikimedia.org/wiki/Special:Redirect/file/Good_dog.jpg',
-    },
-    {
-      name: 'Cat',
-      image:
-        'https://commons.wikimedia.org/wiki/Special:Redirect/file/Domestic_Cat.jpg',
-    },
-    {
-      name: 'Horse',
-      image:
-        'https://commons.wikimedia.org/wiki/Special:Redirect/file/Horse.JPG',
-    },
-  ];
+  const collaboratorPath = (num) =>
+    `/collaborators/${num}.${num === 1 || num === 7 ? 'jpg' : 'JPG'}`;
 
   return (
-    <div className="bg-white text-slate-900 overflow-hidden">
+    <main className="min-h-screen bg-white text-gray-900 overflow-hidden">
 
       {/* =====================================================
-          HERO SECTION
+          HERO
       ====================================================== */}
-      <section className="relative min-h-[760px] lg:min-h-[820px] overflow-hidden bg-[#06152f]">
 
-        {/* Background Image */}
+      <section className="relative min-h-[calc(100vh-72px)] lg:min-h-[calc(100vh-78px)] flex items-center justify-center overflow-hidden">
+
+        {/* Background */}
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 scale-110 will-change-transform"
           style={{
-            transform: `translateY(${scrollY * 0.12}px) scale(1.06)`,
+            transform: `translate3d(0, ${scrollY * 0.12}px, 0) scale(1.1)`,
           }}
         >
           <img
             src={hero}
-            alt="VFAW animal welfare"
+            alt="Vets for Animal Welfare"
             className="w-full h-full object-cover"
           />
         </div>
 
-        {/* Dark Cinematic Overlay */}
-        <div className="absolute inset-0 bg-[#06152f]/90" />
+        {/* Main overlay */}
+        <div className="absolute inset-0 bg-black/60" />
 
-        <div className="absolute inset-0 bg-gradient-to-r from-[#06152f] via-[#06152f]/90 to-[#06152f]/60" />
+        {/* Blue overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#06152f]/95 via-[#0b1f4d]/75 to-[#06152f]/40" />
 
-        <div className="absolute inset-0 bg-gradient-to-t from-[#06152f] via-transparent to-[#06152f]/30" />
+        {/* Bottom fade */}
+        <div className="absolute inset-x-0 bottom-0 h-52 bg-gradient-to-t from-[#06152f]/80 to-transparent" />
 
-        {/* Blue Ambient Glow */}
-        <div className="absolute -top-32 -left-32 w-[500px] h-[500px] rounded-full bg-blue-600/20 blur-[120px]" />
+        {/* Ambient light */}
+        <div className="absolute -top-40 -left-40 w-[480px] h-[480px] rounded-full bg-blue-500/15 blur-3xl animate-pulse" />
 
-        <div className="absolute right-0 top-1/3 w-[450px] h-[450px] rounded-full bg-blue-500/10 blur-[120px]" />
-
-        {/* Subtle Grid */}
         <div
-          className="absolute inset-0 opacity-[0.055]"
+          className="absolute -right-48 top-1/4 w-[550px] h-[550px] rounded-full bg-blue-500/10 blur-3xl"
+          style={{
+            animation: 'float 9s ease-in-out infinite',
+          }}
+        />
+
+        {/* Subtle grid */}
+        <div
+          className="absolute inset-0 opacity-[0.035]"
           style={{
             backgroundImage:
-              'linear-gradient(rgba(255,255,255,.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.6) 1px, transparent 1px)',
+              'linear-gradient(rgba(255,255,255,.8) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.8) 1px, transparent 1px)',
             backgroundSize: '60px 60px',
           }}
         />
 
-        {/* Main Hero Container */}
-        <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 pt-28 pb-20 lg:pt-36 lg:pb-24">
+        {/* =================================================
+            HERO CONTENT
+        ================================================== */}
 
-          <div className="grid lg:grid-cols-[0.92fr_1.08fr] gap-12 lg:gap-16 items-center">
+        <div className="relative z-20 w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 pt-10 sm:pt-12 lg:pt-8 pb-20 sm:pb-20">
 
-            {/* =================================================
-                LEFT CONTENT
-            ================================================== */}
-            <div className="max-w-2xl">
+          <div className="max-w-6xl mx-auto text-center">
 
-              {/* Organization Name */}
-              <div className="mb-6">
+            {/* Welcome */}
+            <div
+              className="
+                inline-flex
+                items-center
+                gap-2.5
+                px-5
+                py-2.5
+                rounded-full
+                border
+                border-white/25
+                bg-black/25
+                backdrop-blur-xl
+                text-white
+                text-xs
+                sm:text-sm
+                font-semibold
+                tracking-wide
+                shadow-xl
+                animate-[fadeInUp_0.8s_ease-out]
+              "
+            >
+              <span className="w-2 h-2 rounded-full bg-blue-300 shadow-[0_0_12px_rgba(147,197,253,0.9)] animate-pulse" />
 
-                <div className="inline-flex items-center gap-3 mb-4">
+              Welcome to VFAW
+            </div>
 
-                  <span className="w-9 h-[3px] bg-red-500 rounded-full" />
+            {/* Main heading */}
+            <h1
+              className="
+                mt-5
+                sm:mt-6
+                text-4xl
+                sm:text-5xl
+                md:text-6xl
+                lg:text-[70px]
+                xl:text-[82px]
+                font-black
+                tracking-[-0.04em]
+                leading-[0.9]
+                text-white
+                drop-shadow-2xl
+                animate-[fadeInUp_1s_ease-out]
+              "
+            >
+              VETS FOR
 
-                  <span className="text-blue-300 uppercase tracking-[0.22em] text-[11px] sm:text-xs font-semibold">
-                    Vets for Animal Welfare
-                  </span>
+              <span className="block mt-2 bg-gradient-to-r from-blue-200 via-blue-300 to-white bg-clip-text text-transparent">
+                ANIMAL WELFARE
+              </span>
+            </h1>
 
-                </div>
+            {/* Red accent */}
+            <div className="flex items-center justify-center gap-3 mt-5">
 
-                <p className="text-white/60 text-sm">
-                  Compassion • Veterinary Action • Community
-                </p>
+              <span className="w-12 h-[3px] bg-red-500 rounded-full" />
 
-              </div>
+              <span className="w-16 h-px bg-white/25" />
 
-              {/* Main Heading */}
-              <h1 className="font-black uppercase leading-[0.88] tracking-[-0.055em]">
+              <span className="w-12 h-[3px] bg-red-500 rounded-full" />
 
-                <span className="block text-white text-[48px] sm:text-[64px] md:text-[76px] lg:text-[78px] xl:text-[86px]">
-                  VETS FOR
-                </span>
+            </div>
 
-                <span className="block text-[48px] sm:text-[64px] md:text-[76px] lg:text-[78px] xl:text-[86px] bg-gradient-to-r from-blue-400 via-blue-300 to-white bg-clip-text text-transparent">
-                  ANIMAL
-                </span>
+            {/* Motto */}
+            <p
+              className="
+                mt-5
+                text-lg
+                sm:text-xl
+                lg:text-2xl
+                font-semibold
+                text-white
+                tracking-wide
+                animate-[fadeInUp_1.2s_ease-out]
+              "
+            >
+              Animal Welfare for a
+              <span className="text-red-400">
+                {' '}Better World
+              </span>
+            </p>
 
-                <span className="block text-white text-[48px] sm:text-[64px] md:text-[76px] lg:text-[78px] xl:text-[86px]">
-                  WELFARE
-                </span>
+            {/* Description */}
+            <p
+              className="
+                max-w-2xl
+                mx-auto
+                mt-3
+                text-sm
+                sm:text-base
+                lg:text-lg
+                leading-relaxed
+                text-white/80
+                animate-[fadeInUp_1.3s_ease-out]
+              "
+            >
+              A student-led organization advancing animal welfare,
+              veterinary education, and compassionate community action.
+            </p>
 
-              </h1>
+            {/* HERO BUTTONS */}
+            <div
+              className="
+                relative
+                z-50
+                flex
+                flex-col
+                sm:flex-row
+                items-center
+                justify-center
+                gap-3
+                mt-7
+                animate-[fadeInUp_1.5s_ease-out]
+              "
+            >
 
-              {/* Red Accent */}
-              <div className="flex items-center gap-4 mt-7 mb-6">
-
-                <div className="h-[4px] w-16 bg-red-500 rounded-full" />
-
-                <div className="h-[1px] w-20 bg-white/20" />
-
-              </div>
-
-              {/* Motto */}
-              <h2 className="text-xl sm:text-2xl md:text-[27px] font-semibold text-white leading-snug">
-                Animal Welfare for a
-                <span className="text-red-400"> Better World</span>
-              </h2>
-
-              <p className="mt-5 text-white/70 text-sm sm:text-base leading-7 max-w-xl">
-                A veterinary-led initiative dedicated to creating a
-                compassionate society where animals are protected,
-                communities are empowered and responsible animal care
-                becomes a shared commitment.
-              </p>
-
-              {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-3 mt-8">
-
-                <Link
-                  to="/get-involved"
-                  className="group inline-flex items-center justify-center gap-3 px-7 py-4 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-sm shadow-xl shadow-red-950/30 transition-all duration-300 hover:-translate-y-1"
-                >
+              {/* Get Involved */}
+              <Link
+                to="/get-involved"
+                className="
+                  group
+                  relative
+                  z-50
+                  min-w-[175px]
+                  inline-flex
+                  items-center
+                  justify-center
+                  gap-3
+                  px-7
+                  py-3.5
+                  rounded-full
+                  bg-red-600
+                  text-white
+                  font-bold
+                  text-base
+                  shadow-2xl
+                  border-2
+                  border-red-500
+                  transition-all
+                  duration-300
+                  hover:-translate-y-1
+                  hover:bg-red-500
+                  hover:shadow-[0_20px_45px_rgba(220,38,38,0.35)]
+                "
+              >
+                <span className="relative z-10">
                   Get Involved
+                </span>
 
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    className="transition-transform duration-300 group-hover:translate-x-1"
-                  >
-                    <path d="M5 12h14" />
-                    <path d="m13 6 6 6-6 6" />
-                  </svg>
-                </Link>
-
-                <Link
-                  to="/about"
-                  className="inline-flex items-center justify-center gap-3 px-7 py-4 rounded-xl border border-white/20 bg-white/[0.07] hover:bg-white/[0.13] backdrop-blur-md text-white font-semibold text-sm transition-all duration-300 hover:-translate-y-1"
+                <svg
+                  className="relative z-10 w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  Discover VFAW
-
-                  <svg
-                    width="17"
-                    height="17"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                     strokeWidth="2"
-                  >
-                    <path d="M12 5v14" />
-                    <path d="m19 12-7 7-7-7" />
-                  </svg>
-                </Link>
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
+                </svg>
+              </Link>
 
-              </div>
+              {/* Discover */}
+              <Link
+                to="/about"
+                className="
+                  group
+                  relative
+                  z-50
+                  min-w-[175px]
+                  inline-flex
+                  items-center
+                  justify-center
+                  gap-3
+                  px-7
+                  py-3.5
+                  rounded-full
+                  bg-white/[0.08]
+                  backdrop-blur-xl
+                  text-white
+                  font-bold
+                  text-base
+                  border-2
+                  border-white/45
+                  shadow-2xl
+                  transition-all
+                  duration-300
+                  hover:-translate-y-1
+                  hover:bg-white/[0.16]
+                  hover:border-white/80
+                "
+              >
+                Discover VFAW
 
-              {/* =================================================
-                  THREE TRUST ITEMS
-              ================================================== */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-10 max-w-xl">
-
-                <div className="rounded-xl border border-white/15 bg-white/[0.09] backdrop-blur-md px-4 py-4 shadow-lg">
-                  <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center mb-3">
-                    <svg
-                      width="17"
-                      height="17"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="#60a5fa"
-                      strokeWidth="2"
-                    >
-                      <path d="M12 14c4 0 7 2 7 5" />
-                      <circle cx="12" cy="7" r="3" />
-                      <path d="M5 19c0-3 2-5 5-5" />
-                    </svg>
-                  </div>
-
-                  <p className="text-white font-semibold text-sm leading-tight">
-                    Veterinary Students
-                  </p>
-                </div>
-
-                <div className="rounded-xl border border-white/15 bg-white/[0.09] backdrop-blur-md px-4 py-4 shadow-lg">
-                  <div className="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center mb-3">
-                    <svg
-                      width="17"
-                      height="17"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="#f87171"
-                      strokeWidth="2"
-                    >
-                      <path d="M3 12h18" />
-                      <path d="M12 3v18" />
-                      <circle cx="12" cy="12" r="8" />
-                    </svg>
-                  </div>
-
-                  <p className="text-white font-semibold text-sm leading-tight">
-                    Community Action
-                  </p>
-                </div>
-
-                <div className="rounded-xl border border-white/15 bg-white/[0.09] backdrop-blur-md px-4 py-4 shadow-lg">
-                  <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center mb-3">
-                    <svg
-                      width="17"
-                      height="17"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="#60a5fa"
-                      strokeWidth="2"
-                    >
-                      <path d="M12 21s-7-4.4-9-9.5C1.5 7.5 4 4 7.5 4c2 0 3.5 1 4.5 2.5C13 5 14.5 4 16.5 4 20 4 22.5 7.5 21 11.5 19 16.6 12 21 12 21Z" />
-                    </svg>
-                  </div>
-
-                  <p className="text-white font-semibold text-sm leading-tight">
-                    Animal Welfare
-                  </p>
-                </div>
-
-              </div>
+                <svg
+                  className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
+                </svg>
+              </Link>
 
             </div>
 
             {/* =================================================
-                RIGHT ANIMAL PANEL
+                THREE SUPPORTING ITEMS
             ================================================== */}
-            <div className="relative">
 
-              {/* Main Panel */}
-              <div className="relative rounded-[28px] border border-white/15 bg-white/[0.075] backdrop-blur-xl p-5 sm:p-6 lg:p-7 shadow-2xl">
+            <div
+              className="
+                max-w-2xl
+                mx-auto
+                mt-7
+                grid
+                grid-cols-1
+                sm:grid-cols-3
+                gap-2.5
+                animate-[fadeInUp_1.6s_ease-out]
+              "
+            >
 
-                {/* Panel Header */}
-                <div className="flex items-start justify-between gap-5 mb-6">
+              {/* Veterinary Students */}
+              <div
+                className="
+                  flex
+                  items-center
+                  justify-center
+                  gap-2
+                  px-3
+                  py-3
+                  rounded-xl
+                  border
+                  border-white/20
+                  bg-[#06152f]/70
+                  backdrop-blur-md
+                  shadow-lg
+                "
+              >
+                <span className="w-2 h-2 rounded-full bg-blue-400 shrink-0" />
 
-                  <div>
-
-                    <p className="text-red-400 uppercase tracking-[0.22em] text-[10px] sm:text-xs font-bold mb-2">
-                      Our Mission
-                    </p>
-
-                    <h3 className="text-white text-2xl sm:text-3xl font-bold leading-tight">
-                      Compassion
-                      <span className="text-blue-400"> into action.</span>
-                    </h3>
-
-                  </div>
-
-                  <div className="shrink-0 w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-950/30">
-
-                    <span className="text-white font-black text-sm">
-                      01
-                    </span>
-
-                  </div>
-
-                </div>
-
-                <p className="text-white/65 text-sm leading-6 mb-6 max-w-lg">
-                  Protecting animals through veterinary knowledge,
-                  community participation, preventive healthcare and
-                  practical welfare initiatives.
-                </p>
-
-                {/* =================================================
-                    ANIMAL IMAGE GRID
-                ================================================== */}
-                <div className="grid grid-cols-5 gap-2.5">
-
-                  {animals.map((animal, index) => (
-                    <div
-                      key={animal.name}
-                      className={`group relative overflow-hidden rounded-2xl border border-white/15 bg-white/10 ${
-                        index === 0
-                          ? 'h-40 sm:h-44 lg:h-48'
-                          : 'h-40 sm:h-44 lg:h-48'
-                      }`}
-                    >
-
-                      <img
-                        src={animal.image}
-                        alt={animal.name}
-                        loading="lazy"
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#06152f]/90 via-transparent to-transparent" />
-
-                      <div className="absolute bottom-2 left-2 right-2">
-
-                        <span className="text-[9px] sm:text-[10px] uppercase tracking-wider text-white font-bold">
-                          {animal.name}
-                        </span>
-
-                      </div>
-
-                    </div>
-                  ))}
-
-                </div>
-
-                {/* Mission Points */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-6">
-
-                  <div className="rounded-xl bg-white/[0.06] border border-white/10 px-3 py-3">
-                    <p className="text-blue-300 text-[10px] uppercase tracking-wider font-bold">
-                      Focus
-                    </p>
-                    <p className="text-white text-xs font-semibold mt-1">
-                      Animal Welfare
-                    </p>
-                  </div>
-
-                  <div className="rounded-xl bg-white/[0.06] border border-white/10 px-3 py-3">
-                    <p className="text-red-300 text-[10px] uppercase tracking-wider font-bold">
-                      Approach
-                    </p>
-                    <p className="text-white text-xs font-semibold mt-1">
-                      Community Action
-                    </p>
-                  </div>
-
-                  <div className="rounded-xl bg-white/[0.06] border border-white/10 px-3 py-3">
-                    <p className="text-blue-300 text-[10px] uppercase tracking-wider font-bold">
-                      Driven By
-                    </p>
-                    <p className="text-white text-xs font-semibold mt-1">
-                      Veterinary Students
-                    </p>
-                  </div>
-
-                </div>
-
+                <span className="text-white text-xs sm:text-[13px] font-semibold whitespace-nowrap">
+                  Veterinary Students
+                </span>
               </div>
 
-              {/* Decorative Red Line */}
-              <div className="absolute -bottom-3 left-10 right-10 h-[3px] bg-gradient-to-r from-transparent via-red-500 to-transparent rounded-full" />
+              {/* Community Action */}
+              <div
+                className="
+                  flex
+                  items-center
+                  justify-center
+                  gap-2
+                  px-3
+                  py-3
+                  rounded-xl
+                  border
+                  border-white/20
+                  bg-[#06152f]/70
+                  backdrop-blur-md
+                  shadow-lg
+                "
+              >
+                <span className="w-2 h-2 rounded-full bg-red-400 shrink-0" />
+
+                <span className="text-white text-xs sm:text-[13px] font-semibold whitespace-nowrap">
+                  Community Action
+                </span>
+              </div>
+
+              {/* Animal Welfare */}
+              <div
+                className="
+                  flex
+                  items-center
+                  justify-center
+                  gap-2
+                  px-3
+                  py-3
+                  rounded-xl
+                  border
+                  border-white/20
+                  bg-[#06152f]/70
+                  backdrop-blur-md
+                  shadow-lg
+                "
+              >
+                <span className="w-2 h-2 rounded-full bg-blue-400 shrink-0" />
+
+                <span className="text-white text-xs sm:text-[13px] font-semibold whitespace-nowrap">
+                  Animal Welfare
+                </span>
+              </div>
 
             </div>
 
@@ -548,74 +591,145 @@ const Home = () => {
 
         </div>
 
-        {/* Bottom Fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#06152f] to-transparent pointer-events-none" />
+        {/* Scroll indicator */}
+        <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-30 hidden md:block">
 
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-7 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 text-white/50">
+          <div className="flex flex-col items-center gap-1.5 text-white/60">
 
-          <span className="text-[9px] uppercase tracking-[0.3em]">
-            Scroll
-          </span>
+            <span className="text-[9px] uppercase tracking-[0.35em]">
+              Scroll
+            </span>
 
-          <div className="w-[1px] h-8 bg-gradient-to-b from-white/50 to-transparent" />
+            <div className="w-5 h-8 rounded-full border border-white/35 flex justify-center pt-1.5">
+              <div className="w-1 h-2 rounded-full bg-white animate-bounce" />
+            </div>
+
+          </div>
 
         </div>
 
       </section>
+
 
       {/* =====================================================
           IMPACT STATISTICS
       ====================================================== */}
-      <section
-        ref={(el) => (statsRef.current = el)}
-        className="relative bg-[#06152f] py-14 sm:py-16"
-      >
 
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
+      <section className="relative bg-white">
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
+        <div
+          ref={statsRef}
+          className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10"
+        >
 
-            {[
-              {
-                value: 8,
-                suffix: '+',
-                label: 'Years of Action',
-              },
-              {
-                value: 20,
-                suffix: '+',
-                label: 'Programs',
-              },
-              {
-                value: 1000,
-                suffix: '+',
-                label: 'Animals Reached',
-              },
-              {
-                value: 100,
-                suffix: '%',
-                label: 'Community Driven',
-              },
-            ].map((stat) => (
-              <div
-                key={stat.label}
-                className="group rounded-2xl border border-white/10 bg-white/[0.05] px-5 py-7 text-center hover:bg-white/[0.08] transition-all duration-300"
-              >
+          <div className="relative -mt-14 sm:-mt-16 z-30">
 
-                <div className="text-3xl sm:text-4xl lg:text-5xl font-black text-white">
-                  <Counter
-                    value={stat.value}
-                    suffix={stat.suffix}
-                  />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+
+              {/* Founded */}
+              <div className="group relative min-h-[180px] bg-white rounded-3xl border-2 border-indigo-100 shadow-[0_18px_45px_rgba(30,41,100,0.12)] hover:shadow-[0_28px_60px_rgba(30,41,100,0.22)] hover:-translate-y-3 transition-all duration-500 overflow-hidden">
+
+                <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-indigo-600 to-blue-500" />
+
+                <div className="absolute -right-10 -top-10 w-28 h-28 rounded-full bg-indigo-50 group-hover:scale-150 transition-transform duration-700" />
+
+                <div className="relative h-full flex flex-col items-center justify-center p-7 text-center">
+
+                  <div className="text-4xl sm:text-5xl font-black text-indigo-700 tracking-tight">
+                    <Counter end={2017} />
+                  </div>
+
+                  <div className="mt-2 text-lg font-bold text-gray-900">
+                    Founded
+                  </div>
+
+                  <div className="mt-1 text-sm text-gray-500">
+                    Student-led journey
+                  </div>
+
                 </div>
 
-                <p className="mt-2 text-xs sm:text-sm text-blue-200/70 font-medium">
-                  {stat.label}
-                </p>
+              </div>
+
+
+              {/* Activities */}
+              <div className="group relative min-h-[180px] bg-white rounded-3xl border-2 border-blue-100 shadow-[0_18px_45px_rgba(30,41,100,0.12)] hover:shadow-[0_28px_60px_rgba(30,41,100,0.22)] hover:-translate-y-3 transition-all duration-500 overflow-hidden">
+
+                <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-blue-600 to-indigo-500" />
+
+                <div className="absolute -right-10 -top-10 w-28 h-28 rounded-full bg-blue-50 group-hover:scale-150 transition-transform duration-700" />
+
+                <div className="relative h-full flex flex-col items-center justify-center p-7 text-center">
+
+                  <div className="text-4xl sm:text-5xl font-black text-blue-700 tracking-tight">
+                    <Counter end={100} suffix="+" />
+                  </div>
+
+                  <div className="mt-2 text-lg font-bold text-gray-900">
+                    Activities
+                  </div>
+
+                  <div className="mt-1 text-sm text-gray-500">
+                    Community initiatives
+                  </div>
+
+                </div>
 
               </div>
-            ))}
+
+
+              {/* Animals */}
+              <div className="group relative min-h-[180px] bg-white rounded-3xl border-2 border-indigo-100 shadow-[0_18px_45px_rgba(30,41,100,0.12)] hover:shadow-[0_28px_60px_rgba(30,41,100,0.22)] hover:-translate-y-3 transition-all duration-500 overflow-hidden">
+
+                <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-indigo-500 to-blue-500" />
+
+                <div className="absolute -right-10 -top-10 w-28 h-28 rounded-full bg-indigo-50 group-hover:scale-150 transition-transform duration-700" />
+
+                <div className="relative h-full flex flex-col items-center justify-center p-7 text-center">
+
+                  <div className="text-4xl sm:text-5xl font-black text-indigo-700 tracking-tight">
+                    <Counter end={1000} suffix="+" />
+                  </div>
+
+                  <div className="mt-2 text-lg font-bold text-gray-900">
+                    Animals Reached
+                  </div>
+
+                  <div className="mt-1 text-sm text-gray-500">
+                    Through welfare programs
+                  </div>
+
+                </div>
+
+              </div>
+
+
+              {/* Commitment */}
+              <div className="group relative min-h-[180px] bg-white rounded-3xl border-2 border-blue-100 shadow-[0_18px_45px_rgba(30,41,100,0.12)] hover:shadow-[0_28px_60px_rgba(30,41,100,0.22)] hover:-translate-y-3 transition-all duration-500 overflow-hidden">
+
+                <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-blue-500 to-indigo-600" />
+
+                <div className="absolute -right-10 -top-10 w-28 h-28 rounded-full bg-blue-50 group-hover:scale-150 transition-transform duration-700" />
+
+                <div className="relative h-full flex flex-col items-center justify-center p-7 text-center">
+
+                  <div className="text-5xl sm:text-6xl font-black text-blue-700">
+                    ∞
+                  </div>
+
+                  <div className="mt-1 text-lg font-bold text-gray-900">
+                    Commitment
+                  </div>
+
+                  <div className="mt-1 text-sm text-gray-500">
+                    For animal welfare
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
 
           </div>
 
@@ -623,101 +737,254 @@ const Home = () => {
 
       </section>
 
+
       {/* =====================================================
           WHAT WE DO
       ====================================================== */}
+
       <section
-        data-section="activities"
-        ref={(el) => (sectionRefs.current.activities = el)}
-        className={`py-20 sm:py-24 lg:py-28 bg-white transition-all duration-1000 ${
+        ref={(el) => addSectionRef(el, 'activities')}
+        className={`relative py-20 sm:py-24 lg:py-28 transition-all duration-1000 ${
           visibleSections.activities
             ? 'opacity-100 translate-y-0'
-            : 'opacity-0 translate-y-8'
+            : 'opacity-0 translate-y-10'
         }`}
       >
 
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
+        {/* Background */}
+        <div className="absolute inset-0 bg-[#06152f]" />
 
-          {/* Section Header */}
-          <div className="max-w-2xl mb-12">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-blue-600/10 blur-3xl" />
 
-            <div className="flex items-center gap-3 mb-4">
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-red-600/5 blur-3xl" />
 
-              <span className="w-9 h-[3px] bg-red-500 rounded-full" />
+        <div className="relative max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
 
-              <span className="uppercase tracking-[0.2em] text-xs font-bold text-blue-700">
+          {/* =================================================
+              CENTERED SECTION HEADER
+          ================================================== */}
+
+          <div className="max-w-3xl mx-auto text-center mb-12 sm:mb-14">
+
+            <div className="flex items-center justify-center gap-3 mb-5">
+
+              <span className="w-10 h-[2px] bg-red-500 rounded-full" />
+
+              <span className="text-xs sm:text-sm font-bold tracking-[0.2em] uppercase text-blue-300">
                 What We Do
               </span>
 
+              <span className="w-10 h-[2px] bg-red-500 rounded-full" />
+
             </div>
 
-            <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-[#06152f]">
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight">
+
               Turning concern
-              <span className="text-blue-600"> into action.</span>
+
+              <span className="text-blue-400">
+                {' '}into action.
+              </span>
+
             </h2>
 
-            <p className="mt-5 text-slate-600 leading-7">
+            <p className="mt-5 text-base sm:text-lg text-white/65 leading-relaxed max-w-2xl mx-auto">
               Our work connects veterinary knowledge with practical
               community-based animal welfare programs.
             </p>
 
           </div>
 
-          {/* Activity Cards */}
-          <div className="grid md:grid-cols-3 gap-6">
 
-            {featuredActivities.map((activity) => (
-              <article
-                key={activity.number}
-                className="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500"
-              >
+          {/* =================================================
+              SOLID PROGRAM BOX
+          ================================================== */}
 
-                <div className="relative h-64 overflow-hidden">
+          <div className="relative rounded-[32px] bg-white p-4 sm:p-6 lg:p-7 shadow-[0_30px_80px_rgba(0,0,0,0.28)] border border-white/10">
 
-                  <img
-                    src={activity.image}
-                    alt={activity.title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
+            {/* Top accent */}
+            <div className="absolute top-0 left-12 right-12 h-1 bg-gradient-to-r from-blue-600 via-indigo-600 to-red-500 rounded-full" />
 
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+            <div className="grid lg:grid-cols-3 gap-5 lg:gap-6">
 
-                  <span className="absolute top-5 left-5 w-11 h-11 rounded-xl bg-white/95 flex items-center justify-center text-blue-700 font-black text-sm shadow-lg">
-                    {activity.number}
-                  </span>
+              {featuredActivities.map((activity, index) => (
 
-                </div>
+                <Link
+                  to="/programs"
+                  key={activity.title}
+                  className="
+                    group
+                    relative
+                    bg-white
+                    rounded-3xl
+                    overflow-hidden
+                    border
+                    border-gray-200
+                    shadow-[0_10px_25px_rgba(15,23,42,0.08)]
+                    hover:shadow-[0_28px_55px_rgba(15,23,42,0.20)]
+                    hover:-translate-y-3
+                    hover:rotate-[0.3deg]
+                    transition-all
+                    duration-500
+                  "
+                  style={{
+                    transitionDelay: `${index * 80}ms`,
+                  }}
+                >
 
-                <div className="p-6">
+                  {/* Image */}
+                  <div className="relative h-64 sm:h-72 overflow-hidden">
 
-                  <h3 className="text-xl font-bold text-[#06152f]">
-                    {activity.title}
-                  </h3>
+                    <img
+                      src={activity.image}
+                      alt={activity.title}
+                      loading="lazy"
+                      className="
+                        w-full
+                        h-full
+                        object-cover
+                        transition-transform
+                        duration-700
+                        group-hover:scale-110
+                      "
+                    />
 
-                  <p className="mt-3 text-sm text-slate-600 leading-6">
-                    {activity.description}
-                  </p>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent" />
 
-                  <div className="mt-5 flex items-center gap-2 text-sm font-bold text-blue-700">
-                    Learn more
+                    {/* Number */}
+                    <div className="
+                      absolute
+                      top-5
+                      left-5
+                      w-11
+                      h-11
+                      rounded-xl
+                      bg-[#06152f]/85
+                      backdrop-blur-md
+                      border
+                      border-white/30
+                      flex
+                      items-center
+                      justify-center
+                      text-white
+                      font-black
+                      text-sm
+                      shadow-lg
+                    ">
+                      {activity.number}
+                    </div>
 
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path d="M5 12h14" />
-                      <path d="m13 6 6 6-6 6" />
-                    </svg>
+                    {/* Image title */}
+                    <div className="absolute bottom-0 left-0 right-0 p-6">
+
+                      <h3 className="text-xl sm:text-2xl font-bold text-white leading-tight">
+                        {activity.title}
+                      </h3>
+
+                    </div>
+
                   </div>
 
-                </div>
 
-              </article>
-            ))}
+                  {/* Card content */}
+                  <div className="p-6 sm:p-7">
+
+                    <p className="text-gray-600 leading-relaxed text-sm sm:text-base">
+                      {activity.description}
+                    </p>
+
+                    <div className="mt-6 flex items-center justify-between">
+
+                      <span className="text-blue-700 font-bold text-sm">
+                        Explore Program
+                      </span>
+
+                      <span className="
+                        w-9
+                        h-9
+                        rounded-full
+                        bg-blue-50
+                        flex
+                        items-center
+                        justify-center
+                        text-blue-700
+                        group-hover:bg-red-50
+                        group-hover:text-red-600
+                        transition-all
+                        duration-300
+                      ">
+
+                        <svg
+                          className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M17 8l4 4m0 0l-4 4m4-4H3"
+                          />
+                        </svg>
+
+                      </span>
+
+                    </div>
+
+                  </div>
+
+                </Link>
+
+              ))}
+
+            </div>
+
+          </div>
+
+
+          {/* All programs */}
+          <div className="mt-10 text-center">
+
+            <Link
+              to="/programs"
+              className="
+                group
+                inline-flex
+                items-center
+                gap-3
+                px-8
+                py-4
+                rounded-full
+                bg-red-600
+                text-white
+                font-bold
+                shadow-xl
+                hover:bg-red-500
+                hover:-translate-y-1
+                hover:shadow-2xl
+                transition-all
+                duration-300
+              "
+            >
+
+              Explore All Programs
+
+              <svg
+                className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                />
+              </svg>
+
+            </Link>
 
           </div>
 
@@ -725,168 +992,375 @@ const Home = () => {
 
       </section>
 
+
       {/* =====================================================
           GALLERY
       ====================================================== */}
+
       <section
-        data-section="gallery"
-        ref={(el) => (sectionRefs.current.gallery = el)}
-        className={`py-20 sm:py-24 bg-slate-50 transition-all duration-1000 ${
+        ref={(el) => addSectionRef(el, 'gallery')}
+        className={`py-20 sm:py-24 lg:py-28 bg-white transition-all duration-1000 ${
           visibleSections.gallery
             ? 'opacity-100 translate-y-0'
-            : 'opacity-0 translate-y-8'
+            : 'opacity-0 translate-y-10'
         }`}
       >
 
         <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
 
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-5 mb-10">
+          {/* Header */}
+          <div className="max-w-3xl mx-auto text-center mb-12 sm:mb-14">
 
-            <div>
+            <div className="flex items-center justify-center gap-3 mb-5">
 
-              <div className="flex items-center gap-3 mb-4">
+              <span className="w-10 h-px bg-red-500" />
 
-                <span className="w-9 h-[3px] bg-red-500 rounded-full" />
+              <span className="text-sm font-bold tracking-[0.2em] uppercase text-blue-700">
+                Our Work
+              </span>
 
-                <span className="uppercase tracking-[0.2em] text-xs font-bold text-blue-700">
-                  Our Work
-                </span>
-
-              </div>
-
-              <h2 className="text-4xl sm:text-5xl font-black text-[#06152f]">
-                Moments of
-                <span className="text-blue-600"> impact.</span>
-              </h2>
+              <span className="w-10 h-px bg-red-500" />
 
             </div>
 
-            <Link
-              to="/gallery"
-              className="inline-flex items-center gap-2 text-sm font-bold text-blue-700 hover:text-red-600 transition-colors"
-            >
-              View Full Gallery
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight">
 
-              <svg
-                width="17"
-                height="17"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M5 12h14" />
-                <path d="m13 6 6 6-6 6" />
-              </svg>
+              Moments that
 
-            </Link>
+              <span className="text-blue-600">
+                {' '}matter.
+              </span>
+
+            </h2>
+
+            <p className="mt-5 text-lg text-gray-600 leading-relaxed">
+              Every program represents a story of compassion,
+              collaboration, and meaningful change.
+            </p>
 
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+
+          {/* Gallery */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
 
             {galleryItems.map((item) => (
+
               <Link
                 to="/gallery"
                 key={item.title}
-                className="group relative h-64 sm:h-72 lg:h-80 overflow-hidden rounded-2xl bg-slate-200"
+                className={`group relative overflow-hidden rounded-3xl border-2 border-white shadow-xl ${
+                  item.size === 'large'
+                    ? 'lg:row-span-2 min-h-[420px]'
+                    : 'min-h-[300px]'
+                }`}
               >
 
                 <img
                   src={item.image}
                   alt={item.title}
                   loading="lazy"
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                 />
 
-                <div className="absolute inset-0 bg-gradient-to-t from-[#06152f]/90 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
 
-                <div className="absolute bottom-5 left-5 right-5">
+                <div className="absolute bottom-0 inset-x-0 p-6 transform group-hover:-translate-y-2 transition-transform duration-500">
 
-                  <p className="text-white font-bold text-sm sm:text-base">
+                  <div className="w-10 h-1 bg-red-500 rounded-full mb-4 group-hover:w-16 transition-all duration-500" />
+
+                  <h3 className="text-xl font-bold text-white">
                     {item.title}
-                  </p>
+                  </h3>
 
-                  <div className="w-8 h-[2px] bg-red-500 mt-2 group-hover:w-14 transition-all duration-300" />
+                  <p className="mt-1 text-sm text-white/75">
+                    {item.description}
+                  </p>
 
                 </div>
 
+                <div className="absolute inset-0 rounded-3xl border-2 border-transparent group-hover:border-white/40 transition-all duration-500" />
+
               </Link>
+
             ))}
+
+          </div>
+
+
+          <div className="mt-12 text-center">
+
+            <Link
+              to="/gallery"
+              className="
+                inline-flex
+                items-center
+                gap-3
+                px-8
+                py-4
+                rounded-full
+                border-2
+                border-gray-200
+                text-gray-900
+                font-bold
+                hover:bg-[#06152f]
+                hover:text-white
+                hover:border-[#06152f]
+                transition-all
+                duration-300
+              "
+            >
+
+              Explore Our Full Gallery
+
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                />
+              </svg>
+
+            </Link>
 
           </div>
 
         </div>
 
       </section>
+
 
       {/* =====================================================
           VOICES
       ====================================================== */}
+
       <section
-        data-section="voices"
-        ref={(el) => (sectionRefs.current.voices = el)}
+        ref={(el) => addSectionRef(el, 'voices')}
         className={`transition-all duration-1000 ${
           visibleSections.voices
             ? 'opacity-100 translate-y-0'
-            : 'opacity-0 translate-y-8'
+            : 'opacity-0 translate-y-10'
         }`}
       >
+
         <VoicesSnapshot />
+
       </section>
+
 
       {/* =====================================================
           COLLABORATORS
       ====================================================== */}
+
       <section
-        data-section="collaborators"
-        ref={(el) => (sectionRefs.current.collaborators = el)}
-        className={`py-20 sm:py-24 bg-white transition-all duration-1000 ${
+        ref={(el) => addSectionRef(el, 'collaborators')}
+        className={`relative py-20 sm:py-24 lg:py-28 bg-gray-50 overflow-hidden transition-all duration-1000 ${
           visibleSections.collaborators
             ? 'opacity-100 translate-y-0'
-            : 'opacity-0 translate-y-8'
+            : 'opacity-0 translate-y-10'
         }`}
       >
 
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
+        {/* Decorative background */}
+        <div className="absolute top-0 left-0 w-[450px] h-[450px] bg-blue-100/70 rounded-full blur-3xl" />
 
-          <div className="text-center mb-12">
+        <div className="absolute bottom-0 right-0 w-[350px] h-[350px] bg-red-100/50 rounded-full blur-3xl" />
 
-            <div className="flex justify-center items-center gap-3 mb-4">
+        <div className="relative max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
 
-              <span className="w-9 h-[3px] bg-red-500 rounded-full" />
+          {/* =================================================
+              CENTERED HEADER
+          ================================================== */}
 
-              <span className="uppercase tracking-[0.2em] text-xs font-bold text-blue-700">
-                Our Network
+          <div className="max-w-3xl mx-auto text-center mb-12 sm:mb-14">
+
+            <div className="flex items-center justify-center gap-3 mb-5">
+
+              <span className="w-9 h-[2px] bg-red-500 rounded-full" />
+
+              <span className="text-xs sm:text-sm font-bold tracking-[0.2em] uppercase text-blue-700">
+                Collaboration
               </span>
 
-              <span className="w-9 h-[3px] bg-red-500 rounded-full" />
+              <span className="w-9 h-[2px] bg-red-500 rounded-full" />
 
             </div>
 
-            <h2 className="text-4xl sm:text-5xl font-black text-[#06152f]">
-              Working
-              <span className="text-blue-600"> together.</span>
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-[#06152f]">
+
+              Stronger
+
+              <span className="text-blue-600">
+                {' '}together.
+              </span>
+
             </h2>
+
+            <p className="mt-5 text-base sm:text-lg text-gray-600 leading-relaxed">
+              Meaningful change becomes possible when organizations,
+              communities, and individuals work together.
+            </p>
 
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
 
-            {collaborators.map((number) => (
+          {/* =================================================
+              COLLABORATOR LOGO FRAMES
+          ================================================== */}
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-5">
+
+            {collaborators.map((num, index) => (
+
               <div
-                key={number}
-                className="h-28 rounded-2xl border border-slate-200 bg-white shadow-sm flex items-center justify-center hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                key={num}
+                className="
+                  group
+                  relative
+                  rounded-3xl
+                  bg-white
+                  p-2
+                  border
+                  border-gray-200
+                  shadow-[0_12px_30px_rgba(15,23,42,0.08)]
+                  hover:shadow-[0_25px_50px_rgba(15,23,42,0.16)]
+                  hover:-translate-y-3
+                  transition-all
+                  duration-500
+                "
+                style={{
+                  transitionDelay: `${index * 60}ms`,
+                }}
               >
 
-                <img
-                  src={`/collaborators/${number}.png`}
-                  alt={`Collaborator ${number}`}
-                  className="max-w-[75%] max-h-[65%] object-contain"
-                  loading="lazy"
-                />
+                {/* Outer logo frame */}
+                <div
+                  className="
+                    relative
+                    aspect-square
+                    rounded-[22px]
+                    overflow-hidden
+                    bg-gradient-to-br
+                    from-gray-50
+                    via-white
+                    to-blue-50
+                    border
+                    border-gray-100
+                    flex
+                    items-center
+                    justify-center
+                  "
+                >
+
+                  {/* Decorative frame */}
+                  <div className="
+                    absolute
+                    inset-2
+                    rounded-[18px]
+                    border
+                    border-blue-100
+                    pointer-events-none
+                    group-hover:border-blue-300
+                    transition-colors
+                    duration-500
+                  " />
+
+                  {/* Corner accents */}
+                  <span className="
+                    absolute
+                    top-3
+                    left-3
+                    w-5
+                    h-5
+                    border-t-2
+                    border-l-2
+                    border-blue-500
+                    rounded-tl-md
+                    opacity-60
+                    group-hover:opacity-100
+                    transition-opacity
+                  " />
+
+                  <span className="
+                    absolute
+                    bottom-3
+                    right-3
+                    w-5
+                    h-5
+                    border-b-2
+                    border-r-2
+                    border-red-500
+                    rounded-br-md
+                    opacity-60
+                    group-hover:opacity-100
+                    transition-opacity
+                  " />
+
+                  {/* Logo white presentation area */}
+                  <div className="
+                    relative
+                    z-10
+                    w-[78%]
+                    h-[70%]
+                    rounded-2xl
+                    bg-white
+                    border
+                    border-gray-100
+                    shadow-[0_8px_20px_rgba(15,23,42,0.08)]
+                    flex
+                    items-center
+                    justify-center
+                    p-4
+                    group-hover:shadow-[0_12px_28px_rgba(15,23,42,0.13)]
+                    transition-all
+                    duration-500
+                  ">
+
+                    <img
+                      src={collaboratorPath(num)}
+                      alt={`Collaborator ${num}`}
+                      loading="lazy"
+                      className="
+                        max-w-full
+                        max-h-full
+                        w-auto
+                        h-auto
+                        object-contain
+                        transition-transform
+                        duration-500
+                        group-hover:scale-105
+                      "
+                    />
+
+                  </div>
+
+                  {/* Bottom accent */}
+                  <div className="
+                    absolute
+                    bottom-0
+                    left-1/2
+                    -translate-x-1/2
+                    w-10
+                    h-1
+                    bg-gradient-to-r
+                    from-blue-600
+                    to-red-500
+                    rounded-t-full
+                    group-hover:w-16
+                    transition-all
+                    duration-500
+                  " />
+
+                </div>
 
               </div>
+
             ))}
 
           </div>
@@ -895,68 +1369,115 @@ const Home = () => {
 
       </section>
 
+
       {/* =====================================================
           FINAL CTA
       ====================================================== */}
-      <section className="relative overflow-hidden bg-[#06152f] py-20 sm:py-24">
 
-        <div className="absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full bg-blue-600/20 blur-[120px]" />
+      <section className="relative py-24 sm:py-28 lg:py-32 overflow-hidden bg-[#06152f] text-white">
 
-        <div className="absolute -bottom-40 -left-40 w-[450px] h-[450px] rounded-full bg-red-600/10 blur-[120px]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#06152f] via-blue-950 to-[#10265a]" />
 
-        <div className="relative z-10 max-w-5xl mx-auto px-5 sm:px-8 text-center">
+        <div className="absolute -top-48 -right-48 w-[600px] h-[600px] rounded-full border border-white/5" />
 
-          <div className="flex justify-center items-center gap-3 mb-5">
+        <div className="absolute -bottom-64 -left-48 w-[700px] h-[700px] rounded-full border border-white/5" />
 
-            <span className="w-9 h-[3px] bg-red-500 rounded-full" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-500/10 blur-3xl rounded-full" />
 
-            <span className="uppercase tracking-[0.22em] text-xs font-bold text-blue-300">
-              Be Part of the Change
-            </span>
+        <div className="relative max-w-4xl mx-auto px-6 text-center">
 
-            <span className="w-9 h-[3px] bg-red-500 rounded-full" />
+          <div className="inline-flex items-center px-5 py-2.5 rounded-full border border-white/20 bg-white/5 backdrop-blur-md text-sm text-white/75 mb-7">
+
+            <span className="w-2 h-2 rounded-full bg-red-500 mr-2.5" />
+
+            Be part of the change
 
           </div>
 
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight">
-            Together, we can build
-            <span className="block text-blue-400">
-              a better world for animals.
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
+
+            Compassion needs
+
+            <span className="block text-blue-300">
+              action.
             </span>
+
           </h2>
 
-          <p className="mt-6 max-w-2xl mx-auto text-white/65 leading-7">
-            Join VFAW in creating meaningful change through veterinary
-            action, education, compassion and community participation.
+          <p className="max-w-2xl mx-auto mt-6 text-base sm:text-lg text-white/70 leading-relaxed">
+
+            Whether you are a veterinary student, professional,
+            organization, or animal lover, there is a place for you
+            in the movement for better animal welfare.
+
           </p>
 
-          <div className="flex flex-col sm:flex-row justify-center gap-3 mt-9">
+          <div className="flex flex-col sm:flex-row justify-center gap-4 mt-9">
 
             <Link
               to="/get-involved"
-              className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-sm shadow-xl shadow-red-950/30 transition-all duration-300 hover:-translate-y-1"
+              className="
+                group
+                inline-flex
+                items-center
+                justify-center
+                gap-3
+                px-8
+                py-4
+                rounded-full
+                bg-red-600
+                text-white
+                font-bold
+                text-base
+                hover:bg-red-500
+                hover:-translate-y-1
+                hover:shadow-2xl
+                transition-all
+                duration-300
+              "
             >
+
               Get Involved
 
               <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
+                className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="2"
+                viewBox="0 0 24 24"
               >
-                <path d="M5 12h14" />
-                <path d="m13 6 6 6-6 6" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                />
               </svg>
 
             </Link>
 
             <Link
               to="/contact"
-              className="inline-flex items-center justify-center px-8 py-4 rounded-xl border border-white/20 bg-white/[0.06] hover:bg-white/[0.12] text-white font-semibold text-sm transition-all duration-300"
+              className="
+                inline-flex
+                items-center
+                justify-center
+                px-8
+                py-4
+                rounded-full
+                border-2
+                border-white/25
+                bg-white/5
+                backdrop-blur-md
+                text-white
+                font-semibold
+                text-base
+                hover:bg-white/10
+                hover:-translate-y-1
+                transition-all
+                duration-300
+              "
             >
-              Contact Us
+              Contact VFAW
             </Link>
 
           </div>
@@ -965,33 +1486,75 @@ const Home = () => {
 
       </section>
 
+
       {/* =====================================================
           ANIMATIONS
       ====================================================== */}
+
       <style>{`
-        @keyframes softFloat {
-          0%, 100% {
+
+        html {
+          scroll-behavior: smooth;
+        }
+
+        @keyframes fadeInUp {
+
+          from {
+            opacity: 0;
+            transform: translateY(25px);
+          }
+
+          to {
+            opacity: 1;
             transform: translateY(0);
           }
 
-          50% {
-            transform: translateY(-8px);
+        }
+
+        @keyframes float {
+
+          0%,
+          100% {
+            transform: translateY(0px);
           }
+
+          50% {
+            transform: translateY(-20px);
+          }
+
+        }
+
+        ::selection {
+          background: rgba(37, 99, 235, 0.25);
+        }
+
+        @media (max-width: 640px) {
+
+          .hero-heading {
+            letter-spacing: -0.035em;
+          }
+
         }
 
         @media (prefers-reduced-motion: reduce) {
+
+          html {
+            scroll-behavior: auto;
+          }
+
           *,
           *::before,
           *::after {
-            scroll-behavior: auto !important;
             animation-duration: 0.01ms !important;
             animation-iteration-count: 1 !important;
             transition-duration: 0.01ms !important;
           }
+
         }
+
       `}</style>
 
-    </div>
+    </main>
   );
 };
 
