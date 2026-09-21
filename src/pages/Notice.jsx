@@ -90,28 +90,45 @@ function Notice() {
   return (
     <div className="notice-page">
       <style>{`
+        * {
+          box-sizing: border-box;
+        }
+
         .notice-page {
           min-height: 100vh;
-          background: #f7faff;
-          color: #0f172a;
+          background:
+            radial-gradient(circle at 10% 10%, rgba(30, 136, 229, 0.10), transparent 28%),
+            radial-gradient(circle at 90% 25%, rgba(0, 105, 190, 0.10), transparent 28%),
+            #f5f9ff;
+          color: #102a43;
           font-family: Arial, Helvetica, sans-serif;
+          overflow-x: hidden;
         }
+
+        /* =========================
+           NOTICE TICKER
+        ========================== */
 
         .notice-ticker {
           width: 100%;
           overflow: hidden;
           background: #0757a0;
-          color: white;
-          border-bottom: 1px solid rgba(255,255,255,0.15);
+          color: #ffffff;
+          border-top: 1px solid rgba(255,255,255,0.15);
+          border-bottom: 1px solid rgba(255,255,255,0.18);
+          box-shadow: 0 4px 14px rgba(7,87,160,0.22);
+          cursor: default;
         }
 
         .ticker-content {
           display: flex;
           width: max-content;
-          animation: noticeTicker 28s linear infinite;
+          animation: noticeTicker 12s linear infinite;
+          will-change: transform;
         }
 
-        .ticker-content:hover {
+        /* Stop immediately when cursor is over ticker */
+        .notice-ticker:hover .ticker-content {
           animation-play-state: paused;
         }
 
@@ -119,38 +136,75 @@ function Notice() {
           display: flex;
           align-items: center;
           gap: 10px;
-          padding: 12px 35px;
+          padding: 13px 34px;
           white-space: nowrap;
           font-size: 14px;
-          font-weight: 600;
+          font-weight: 700;
+          letter-spacing: 0.1px;
         }
 
         .ticker-dot {
-          width: 7px;
-          height: 7px;
+          width: 8px;
+          height: 8px;
           background: #ffffff;
           border-radius: 50%;
           display: inline-block;
+          box-shadow: 0 0 0 4px rgba(255,255,255,0.12);
         }
 
         @keyframes noticeTicker {
           from {
             transform: translateX(0);
           }
+
           to {
             transform: translateX(-50%);
           }
         }
 
+        /* =========================
+           HERO
+        ========================== */
+
         .notice-hero {
-          padding: 70px 20px 60px;
+          position: relative;
+          padding: 75px 20px 70px;
+          overflow: hidden;
           background:
-            radial-gradient(circle at top right, rgba(26,115,232,0.16), transparent 35%),
-            linear-gradient(135deg, #ffffff 0%, #eef6ff 100%);
-          border-bottom: 1px solid #e2e8f0;
+            linear-gradient(
+              135deg,
+              #ffffff 0%,
+              #edf6ff 50%,
+              #dceeff 100%
+            );
+          border-bottom: 1px solid #cfe2f5;
+        }
+
+        .notice-hero::before {
+          content: "";
+          position: absolute;
+          width: 330px;
+          height: 330px;
+          right: -100px;
+          top: -120px;
+          border-radius: 50%;
+          background: rgba(7, 87, 160, 0.12);
+        }
+
+        .notice-hero::after {
+          content: "";
+          position: absolute;
+          width: 220px;
+          height: 220px;
+          left: -100px;
+          bottom: -100px;
+          border-radius: 50%;
+          background: rgba(30, 136, 229, 0.10);
         }
 
         .notice-hero-inner {
+          position: relative;
+          z-index: 2;
           max-width: 1180px;
           margin: 0 auto;
           text-align: center;
@@ -160,268 +214,392 @@ function Notice() {
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          padding: 8px 15px;
+          padding: 9px 17px;
           border-radius: 999px;
-          background: #e7f1ff;
-          color: #0757a0;
+          background: #0757a0;
+          color: #ffffff;
           font-size: 13px;
-          font-weight: 700;
-          margin-bottom: 18px;
+          font-weight: 800;
+          margin-bottom: 20px;
+          box-shadow:
+            0 7px 0 #043e73,
+            0 12px 25px rgba(7,87,160,0.22);
         }
 
         .notice-hero h1 {
           margin: 0;
-          font-size: clamp(36px, 6vw, 64px);
-          line-height: 1.05;
-          letter-spacing: -2px;
-          color: #0b2d4d;
+          font-size: clamp(38px, 6vw, 68px);
+          line-height: 1.02;
+          letter-spacing: -2.5px;
+          color: #082d4f;
+          font-weight: 900;
         }
 
         .notice-hero p {
-          max-width: 720px;
-          margin: 20px auto 0;
-          color: #64748b;
+          max-width: 730px;
+          margin: 22px auto 0;
+          color: #526b84;
           font-size: 17px;
-          line-height: 1.7;
+          line-height: 1.75;
         }
+
+        /* =========================
+           MAIN CONTAINER
+        ========================== */
 
         .notice-container {
           max-width: 1180px;
           margin: 0 auto;
-          padding: 45px 20px 80px;
+          padding: 50px 20px 85px;
         }
+
+        /* =========================
+           SEARCH + FILTERS
+        ========================== */
 
         .notice-controls {
           display: flex;
           flex-wrap: wrap;
-          gap: 14px;
+          gap: 16px;
           align-items: center;
           justify-content: space-between;
-          margin-bottom: 35px;
+          margin-bottom: 42px;
         }
 
         .notice-search {
           flex: 1;
-          min-width: 260px;
+          min-width: 270px;
           position: relative;
         }
 
         .notice-search input {
           width: 100%;
-          box-sizing: border-box;
-          padding: 15px 18px;
-          border: 1px solid #d7e0ea;
+          padding: 16px 19px;
+          border: 2px solid #d5e4f2;
           border-radius: 14px;
-          background: white;
+          background: #ffffff;
+          color: #17324d;
           outline: none;
           font-size: 15px;
-          transition: 0.2s ease;
+          font-weight: 500;
+          transition: all 0.25s ease;
+          box-shadow:
+            0 5px 0 #dce8f3,
+            0 12px 25px rgba(15, 76, 129, 0.07);
+        }
+
+        .notice-search input::placeholder {
+          color: #8aa0b5;
         }
 
         .notice-search input:focus {
           border-color: #1677d2;
-          box-shadow: 0 0 0 4px rgba(22,119,210,0.1);
+          transform: translateY(-2px);
+          box-shadow:
+            0 7px 0 #b9d4ec,
+            0 16px 30px rgba(22,119,210,0.13);
         }
 
         .category-list {
           display: flex;
           flex-wrap: wrap;
-          gap: 8px;
+          gap: 9px;
         }
 
         .category-button {
-          border: 1px solid #d7e0ea;
-          background: white;
-          color: #475569;
+          border: 2px solid #d8e6f3;
+          background: #ffffff;
+          color: #41617d;
           padding: 10px 15px;
-          border-radius: 999px;
+          border-radius: 11px;
           cursor: pointer;
           font-size: 13px;
-          font-weight: 600;
-          transition: 0.2s ease;
+          font-weight: 800;
+          transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease,
+            background 0.2s ease,
+            color 0.2s ease;
+          box-shadow: 0 4px 0 #dce7f1;
         }
 
         .category-button:hover {
-          border-color: #1677d2;
+          transform: translateY(-3px);
           color: #0757a0;
+          border-color: #8dbce5;
+          box-shadow: 0 7px 0 #c3d9eb;
+        }
+
+        .category-button:active {
+          transform: translateY(1px);
+          box-shadow: 0 2px 0 #c3d9eb;
         }
 
         .category-button.active {
           background: #0757a0;
-          color: white;
+          color: #ffffff;
           border-color: #0757a0;
+          box-shadow:
+            0 5px 0 #043e73,
+            0 10px 20px rgba(7,87,160,0.20);
         }
+
+        /* =========================
+           SECTION HEADING
+        ========================== */
 
         .notice-heading {
           display: flex;
           align-items: end;
           justify-content: space-between;
           gap: 20px;
-          margin-bottom: 20px;
+          margin-bottom: 23px;
         }
 
         .notice-heading h2 {
           margin: 0;
-          color: #0b2d4d;
-          font-size: 28px;
+          color: #082d4f;
+          font-size: 30px;
+          font-weight: 900;
+          letter-spacing: -0.7px;
         }
 
         .notice-heading p {
-          margin: 6px 0 0;
-          color: #64748b;
+          margin: 7px 0 0;
+          color: #6c8195;
+          font-size: 14px;
         }
 
         .notice-count {
+          padding: 9px 14px;
+          border-radius: 10px;
+          background: #dceeff;
           color: #0757a0;
-          font-weight: 700;
-          font-size: 14px;
+          font-weight: 900;
+          font-size: 13px;
+          box-shadow: 0 4px 0 #c2dbef;
         }
+
+        /* =========================
+           NOTICE CARDS
+        ========================== */
 
         .notice-grid {
           display: grid;
           grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: 22px;
+          gap: 24px;
         }
 
         .notice-card {
-          background: white;
-          border: 1px solid #e2e8f0;
-          border-radius: 20px;
-          padding: 24px;
-          box-shadow: 0 10px 35px rgba(15,23,42,0.06);
-          transition: transform 0.25s ease, box-shadow 0.25s ease;
+          position: relative;
+          background: #ffffff;
+          border: 2px solid #dce8f3;
+          border-radius: 18px;
+          padding: 25px;
+          box-shadow:
+            0 7px 0 #d2e2f0,
+            0 16px 30px rgba(15, 76, 129, 0.08);
+          transition:
+            transform 0.25s ease,
+            box-shadow 0.25s ease,
+            border-color 0.25s ease;
           display: flex;
           flex-direction: column;
-          min-height: 280px;
+          min-height: 305px;
+          overflow: hidden;
+        }
+
+        .notice-card::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 6px;
+          background: #0757a0;
         }
 
         .notice-card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 18px 45px rgba(15,23,42,0.11);
+          transform: translateY(-10px) rotateX(1deg);
+          border-color: #83b8e5;
+          box-shadow:
+            0 12px 0 #b8d2e8,
+            0 28px 45px rgba(7,87,160,0.18);
+        }
+
+        .notice-card:active {
+          transform: translateY(-3px);
         }
 
         .notice-card-top {
           display: flex;
           justify-content: space-between;
+          align-items: flex-start;
           gap: 10px;
-          margin-bottom: 18px;
+          margin: 5px 0 20px;
         }
 
         .notice-category {
           display: inline-flex;
-          padding: 6px 10px;
+          padding: 7px 11px;
           border-radius: 8px;
-          background: #edf6ff;
-          color: #0757a0;
-          font-size: 11px;
-          font-weight: 700;
+          background: #0757a0;
+          color: #ffffff;
+          font-size: 10px;
+          font-weight: 900;
           text-transform: uppercase;
+          letter-spacing: 0.5px;
+          box-shadow: 0 4px 0 #043e73;
         }
 
         .important-label {
-          color: #b45309;
-          background: #fff7df;
-          padding: 6px 10px;
+          color: #ffffff;
+          background: #e67e22;
+          padding: 7px 10px;
           border-radius: 8px;
-          font-size: 11px;
-          font-weight: 700;
+          font-size: 10px;
+          font-weight: 900;
+          box-shadow: 0 4px 0 #b85d0d;
         }
 
         .notice-card h3 {
           margin: 0 0 12px;
-          color: #0b2d4d;
+          color: #092f50;
           font-size: 21px;
           line-height: 1.35;
+          font-weight: 900;
         }
 
         .notice-card-description {
-          color: #64748b;
+          color: #60788e;
           line-height: 1.65;
           font-size: 14px;
           flex: 1;
+          margin: 0;
         }
 
         .notice-date {
-          color: #94a3b8;
-          font-size: 13px;
-          margin: 16px 0;
+          color: #7890a6;
+          font-size: 12px;
+          font-weight: 700;
+          margin: 18px 0;
         }
 
         .notice-actions {
-          display: flex;
-          gap: 9px;
+          display: grid;
+          grid-template-columns: 1fr 1fr 1fr;
+          gap: 8px;
         }
 
         .notice-button {
-          flex: 1;
           border: none;
-          padding: 11px 13px;
-          border-radius: 10px;
+          padding: 11px 8px;
+          border-radius: 9px;
           cursor: pointer;
-          font-size: 13px;
-          font-weight: 700;
+          font-size: 12px;
+          font-weight: 900;
           text-decoration: none;
           text-align: center;
-          box-sizing: border-box;
+          transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
+        }
+
+        .notice-button:hover {
+          transform: translateY(-3px);
+        }
+
+        .notice-button:active {
+          transform: translateY(1px);
         }
 
         .notice-button.primary {
           background: #0757a0;
-          color: white;
+          color: #ffffff;
+          box-shadow: 0 4px 0 #043e73;
         }
 
         .notice-button.primary:hover {
-          background: #06467f;
+          background: #096bc2;
+          box-shadow: 0 6px 0 #043e73;
         }
 
         .notice-button.secondary {
-          background: #eef5fb;
+          background: #e6f2ff;
           color: #0757a0;
+          box-shadow: 0 4px 0 #c6ddf1;
         }
+
+        .notice-button.secondary:hover {
+          background: #cfe8ff;
+          box-shadow: 0 6px 0 #b2d1e9;
+        }
+
+        /* =========================
+           EMPTY STATE
+        ========================== */
 
         .notice-empty {
           text-align: center;
-          background: white;
-          border: 1px solid #e2e8f0;
+          background: #ffffff;
+          border: 2px solid #dce8f3;
           border-radius: 18px;
-          padding: 60px 20px;
+          padding: 65px 20px;
+          box-shadow:
+            0 7px 0 #d2e2f0,
+            0 18px 35px rgba(15,76,129,0.07);
         }
 
         .notice-empty h3 {
           margin: 0 0 8px;
-          color: #0b2d4d;
+          color: #082d4f;
+          font-size: 22px;
         }
 
         .notice-empty p {
           margin: 0;
-          color: #64748b;
+          color: #71879b;
         }
 
+        /* =========================
+           INFO BOX
+        ========================== */
+
         .notice-info {
-          margin-top: 45px;
-          padding: 25px;
-          border-radius: 18px;
-          background: #eaf4ff;
-          border: 1px solid #cfe5fa;
+          margin-top: 48px;
+          padding: 27px;
+          border-radius: 17px;
+          background: #0757a0;
+          color: #ffffff;
+          border: 2px solid #064b8b;
+          box-shadow:
+            0 7px 0 #043e73,
+            0 18px 35px rgba(7,87,160,0.18);
         }
 
         .notice-info h3 {
-          margin: 0 0 8px;
-          color: #0757a0;
+          margin: 0 0 9px;
+          color: #ffffff;
+          font-size: 20px;
         }
 
         .notice-info p {
           margin: 0;
-          color: #475569;
+          color: #e7f3ff;
           line-height: 1.7;
           font-size: 14px;
         }
+
+        /* =========================
+           MODAL
+        ========================== */
 
         .notice-modal {
           position: fixed;
           inset: 0;
           z-index: 9999;
-          background: rgba(15,23,42,0.78);
+          background: rgba(3, 25, 45, 0.82);
+          backdrop-filter: blur(6px);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -431,11 +609,14 @@ function Notice() {
         .notice-modal-content {
           width: min(1100px, 100%);
           height: min(850px, 92vh);
-          background: white;
+          background: #ffffff;
           border-radius: 18px;
           overflow: hidden;
           display: flex;
           flex-direction: column;
+          box-shadow:
+            0 15px 0 #043e73,
+            0 35px 70px rgba(0,0,0,0.35);
         }
 
         .notice-modal-header {
@@ -444,30 +625,39 @@ function Notice() {
           justify-content: space-between;
           gap: 15px;
           padding: 15px 18px;
-          border-bottom: 1px solid #e2e8f0;
+          background: #0757a0;
+          color: #ffffff;
         }
 
         .notice-modal-header h3 {
           margin: 0;
           font-size: 17px;
-          color: #0b2d4d;
+          color: #ffffff;
         }
 
         .notice-close {
           border: none;
-          background: #eef2f7;
-          color: #334155;
+          background: #ffffff;
+          color: #0757a0;
           width: 38px;
           height: 38px;
-          border-radius: 50%;
+          border-radius: 10px;
           cursor: pointer;
-          font-size: 20px;
+          font-size: 22px;
+          font-weight: 900;
+          transition: 0.2s ease;
+          box-shadow: 0 4px 0 #c9dce9;
+        }
+
+        .notice-close:hover {
+          transform: translateY(-2px);
+          background: #eaf5ff;
         }
 
         .notice-preview {
           flex: 1;
           min-height: 0;
-          background: #f1f5f9;
+          background: #edf3f8;
         }
 
         .notice-preview iframe {
@@ -483,19 +673,49 @@ function Notice() {
           display: block;
         }
 
-        @media (max-width: 900px) {
+        /* =========================
+           TABLET
+        ========================== */
+
+        @media (max-width: 950px) {
           .notice-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr));
           }
+
+          .notice-controls {
+            align-items: stretch;
+            flex-direction: column;
+          }
+
+          .notice-search {
+            width: 100%;
+          }
+
+          .category-list {
+            width: 100%;
+          }
         }
 
-        @media (max-width: 640px) {
+        /* =========================
+           MOBILE
+        ========================== */
+
+        @media (max-width: 650px) {
           .notice-hero {
-            padding: 50px 18px 45px;
+            padding: 55px 17px 50px;
+          }
+
+          .notice-hero h1 {
+            font-size: 42px;
+            letter-spacing: -1.5px;
+          }
+
+          .notice-hero p {
+            font-size: 15px;
           }
 
           .notice-container {
-            padding: 30px 15px 60px;
+            padding: 32px 15px 60px;
           }
 
           .notice-grid {
@@ -508,15 +728,25 @@ function Notice() {
           }
 
           .category-list {
-            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
           }
 
           .category-button {
-            flex: 1;
+            width: 100%;
           }
 
           .notice-card {
             min-height: auto;
+          }
+
+          .notice-actions {
+            grid-template-columns: 1fr 1fr 1fr;
+          }
+
+          .ticker-item {
+            padding: 12px 25px;
+            font-size: 13px;
           }
 
           .notice-modal {
@@ -528,9 +758,26 @@ function Notice() {
             border-radius: 12px;
           }
         }
+
+        @media (max-width: 420px) {
+          .notice-hero h1 {
+            font-size: 36px;
+          }
+
+          .notice-actions {
+            grid-template-columns: 1fr;
+          }
+
+          .notice-button {
+            width: 100%;
+          }
+        }
       `}</style>
 
-      {/* Scrolling notice ticker */}
+      {/* =========================
+          FAST NOTICE TICKER
+      ========================== */}
+
       {tickerNotices.length > 0 && (
         <div className="notice-ticker">
           <div className="ticker-content">
@@ -551,10 +798,15 @@ function Notice() {
         </div>
       )}
 
-      {/* Hero section */}
+      {/* =========================
+          HERO
+      ========================== */}
+
       <section className="notice-hero">
         <div className="notice-hero-inner">
-          <div className="notice-badge">VFAW • Official Notices</div>
+          <div className="notice-badge">
+            VFAW • Official Notices
+          </div>
 
           <h1>Notices & Updates</h1>
 
@@ -565,6 +817,10 @@ function Notice() {
           </p>
         </div>
       </section>
+
+      {/* =========================
+          CONTENT
+      ========================== */}
 
       <main className="notice-container">
         {/* Search and filters */}
@@ -595,11 +851,13 @@ function Notice() {
           </div>
         </div>
 
-        {/* Heading */}
+        {/* Section heading */}
         <div className="notice-heading">
           <div>
             <h2>Latest Notices</h2>
-            <p>Official updates and announcements from VFAW.</p>
+            <p>
+              Official updates and announcements from VFAW.
+            </p>
           </div>
 
           <div className="notice-count">
@@ -619,7 +877,9 @@ function Notice() {
                   </span>
 
                   {notice.important && (
-                    <span className="important-label">Important</span>
+                    <span className="important-label">
+                      Important
+                    </span>
                   )}
                 </div>
 
@@ -674,16 +934,20 @@ function Notice() {
         {/* Information box */}
         <section className="notice-info">
           <h3>About VFAW Notices</h3>
+
           <p>
             This section is intended for official VFAW announcements,
             competitions, educational events, volunteer opportunities,
-            programs, and other important updates. Always check the latest
-            notice before participating in an activity.
+            programs, and other important updates. Always check the
+            latest notice before participating in an activity.
           </p>
         </section>
       </main>
 
-      {/* Preview modal */}
+      {/* =========================
+          PREVIEW MODAL
+      ========================== */}
+
       {selectedNotice && (
         <div
           className="notice-modal"
