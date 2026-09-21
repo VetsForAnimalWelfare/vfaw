@@ -37,6 +37,20 @@ const noticesData = [
     important: false,
     pinned: false,
   },
+
+ {
+    id: 4,
+    title: "Afu Seat",
+    description:
+      "Students interested in joining Afu can now submit their applications.",
+    category: "Opportunity",
+    date: "2026-09-15",
+    file: "/notices/seat.png",
+    fileType: "image",
+    important: false,
+    pinned: false,
+  },
+  
 ];
 
 const categories = [
