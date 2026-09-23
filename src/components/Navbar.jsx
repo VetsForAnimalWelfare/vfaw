@@ -1,10 +1,12 @@
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import logoHome from '../../public/logohome.png';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,18 +38,60 @@ const Navbar = () => {
     { name: 'Get Involved', path: '/get-involved' },
     { name: 'Contact', path: '/contact' },
     { name: 'Notice', path: '/notice' },
-    
+  ];
+
+  /*
+   * NOTICE TICKER DATA
+   * Keep the IDs the same as the IDs used in Notice.jsx
+   */
+  const notices = [
+    {
+      id: 1,
+      title: 'Rabies Emergency Card Published',
+      category: 'Notice',
+    },
+    {
+      id: 2,
+      title: 'Clinical Report Writing Competition',
+      category: 'Competition',
+    },
+    {
+      id: 3,
+      title: 'VFAW Educational Webinar',
+      category: 'Event',
+    },
+    {
+      id: 4,
+      title: 'Volunteer Registration Open',
+      category: 'Opportunity',
+    },
+    {
+      id: 5,
+      title: 'AFU Seat',
+      category: 'Opportunity',
+    },
   ];
 
   const closeMenu = () => {
     setIsOpen(false);
   };
 
+  const openNotice = (id) => {
+    closeMenu();
+
+    navigate(`/notice#notice-${id}`);
+  };
+
+  /*
+   * Duplicate the notices so the ticker can loop continuously.
+   */
+  const tickerNotices = [...notices, ...notices];
+
   return (
     <>
-      {/* ================================
-          NAVBAR
-      ================================= */}
+      {/* =========================
+          MAIN NAVBAR
+      ========================== */}
       <header
         className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${
           scrolled
@@ -56,16 +100,13 @@ const Navbar = () => {
         }`}
       >
         <nav className="mx-auto flex h-[84px] max-w-[1500px] items-center px-3 sm:px-5 lg:h-[90px] lg:px-5 xl:px-7">
-          {/* ================================
-              BRAND
-          ================================= */}
+          {/* LOGO + BRAND */}
           <Link
             to="/"
             onClick={closeMenu}
             aria-label="Vets for Animal Welfare Home"
             className="group flex shrink-0 items-center"
           >
-            {/* Transparent Logo */}
             <div className="flex h-[66px] w-[66px] shrink-0 items-center justify-center sm:h-[72px] sm:w-[72px] lg:h-[76px] lg:w-[76px]">
               <img
                 src={logoHome}
@@ -74,7 +115,6 @@ const Navbar = () => {
               />
             </div>
 
-            {/* Organization Name */}
             <div className="ml-2 sm:ml-2.5 lg:ml-3">
               <h1 className="whitespace-nowrap text-[16px] font-black leading-[1.05] tracking-[-0.035em] text-[#0756b8] sm:text-[18px] lg:text-[20px]">
                 Vets for Animal Welfare
@@ -90,9 +130,7 @@ const Navbar = () => {
             </div>
           </Link>
 
-          {/* ================================
-              DESKTOP NAVIGATION
-          ================================= */}
+          {/* DESKTOP NAVIGATION */}
           <div className="ml-auto hidden items-center lg:flex">
             <div className="flex items-center">
               {navigation.map((item) => (
@@ -124,14 +162,11 @@ const Navbar = () => {
               ))}
             </div>
 
-            {/* ================================
-                DONATE BUTTON
-            ================================= */}
+            {/* DONATE BUTTON */}
             <Link
               to="/donate"
               className="group relative ml-2 inline-flex shrink-0 items-center gap-1.5 overflow-hidden rounded-xl bg-[#e32932] px-4 py-3 text-[11px] font-black tracking-wide text-white shadow-[0_8px_22px_rgba(227,41,50,0.24)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#c91f28] hover:shadow-[0_12px_28px_rgba(227,41,50,0.32)] xl:ml-2.5 xl:px-4.5 xl:text-[12px]"
             >
-              {/* Shine Effect */}
               <span className="absolute inset-y-0 -left-10 w-7 -skew-x-12 bg-white/20 transition-all duration-700 group-hover:left-[120%]" />
 
               <svg
@@ -154,14 +189,14 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* ================================
-              MOBILE MENU BUTTON
-          ================================= */}
+          {/* MOBILE MENU BUTTON */}
           <button
             type="button"
             onClick={() => setIsOpen(!isOpen)}
             aria-label={
-              isOpen ? 'Close navigation menu' : 'Open navigation menu'
+              isOpen
+                ? 'Close navigation menu'
+                : 'Open navigation menu'
             }
             aria-expanded={isOpen}
             className="ml-auto flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-[#0756b8] shadow-[0_6px_18px_rgba(7,21,47,0.10)] transition-all duration-300 hover:border-red-200 hover:text-[#e32932] lg:hidden"
@@ -169,28 +204,32 @@ const Navbar = () => {
             <span className="relative flex h-[21px] w-[26px] flex-col justify-between">
               <span
                 className={`block h-[2.5px] w-full rounded-full bg-current transition-all duration-300 ${
-                  isOpen ? 'translate-y-[9px] rotate-45' : ''
+                  isOpen
+                    ? 'translate-y-[9px] rotate-45'
+                    : ''
                 }`}
               />
 
               <span
                 className={`block h-[2.5px] w-[18px] self-end rounded-full bg-current transition-all duration-300 ${
-                  isOpen ? 'translate-x-5 opacity-0' : ''
+                  isOpen
+                    ? 'translate-x-5 opacity-0'
+                    : ''
                 }`}
               />
 
               <span
                 className={`block h-[2.5px] w-full rounded-full bg-current transition-all duration-300 ${
-                  isOpen ? '-translate-y-[9px] -rotate-45' : ''
+                  isOpen
+                    ? '-translate-y-[9px] -rotate-45'
+                    : ''
                 }`}
               />
             </span>
           </button>
         </nav>
 
-        {/* ================================
-            MOBILE NAVIGATION
-        ================================= */}
+        {/* MOBILE MENU */}
         <div
           className={`overflow-hidden border-t border-slate-100 bg-white transition-all duration-300 lg:hidden ${
             isOpen
@@ -199,7 +238,6 @@ const Navbar = () => {
           }`}
         >
           <div className="mx-auto max-w-7xl overflow-y-auto px-4 pb-6 pt-3 sm:px-6">
-            {/* Mobile Links */}
             <div className="rounded-2xl border border-slate-100 bg-[#f8fafc] p-2">
               {navigation.map((item) => (
                 <NavLink
@@ -247,7 +285,7 @@ const Navbar = () => {
               ))}
             </div>
 
-            {/* Mobile Donate */}
+            {/* MOBILE DONATE */}
             <Link
               to="/donate"
               onClick={closeMenu}
@@ -265,7 +303,7 @@ const Navbar = () => {
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
                 />
               </svg>
 
@@ -294,7 +332,6 @@ const Navbar = () => {
               </svg>
             </Link>
 
-            {/* Mobile Brand Footer */}
             <div className="mt-5 flex items-center justify-center gap-3">
               <span className="h-px w-8 bg-slate-200" />
 
@@ -308,8 +345,131 @@ const Navbar = () => {
         </div>
       </header>
 
-      {/* Navbar Height Spacer */}
+      {/* =========================================
+          SPACE FOR FIXED NAVBAR
+      ========================================== */}
       <div className="h-[84px] lg:h-[90px]" />
+
+      {/* =========================================
+          VFAW MOVING NOTICE TICKER
+          Appears directly below the navbar
+      ========================================== */}
+      <section className="relative z-40 w-full overflow-hidden border-b border-slate-200 bg-white">
+        <div className="flex h-[42px] items-stretch">
+          {/* FIXED NOTICE LABEL */}
+          <div className="relative z-20 flex shrink-0 items-center bg-[#0756b8] px-4 sm:px-6">
+            <div className="flex items-center gap-2">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-white" />
+              </span>
+
+              <span className="text-[10px] font-black uppercase tracking-[0.16em] text-white sm:text-[11px]">
+                Notices
+              </span>
+            </div>
+
+            {/* Small angled edge */}
+            <span className="absolute right-[-10px] top-0 h-full w-5 skew-x-[-12deg] bg-[#0756b8]" />
+          </div>
+
+          {/* MOVING AREA */}
+          <div className="relative flex min-w-0 flex-1 items-center overflow-hidden bg-[#f8fbff]">
+            <div className="notice-marquee flex min-w-max items-center">
+              {tickerNotices.map((notice, index) => (
+                <button
+                  key={`${notice.id}-${index}`}
+                  type="button"
+                  onClick={() => openNotice(notice.id)}
+                  className="notice-item group flex shrink-0 items-center border-0 bg-transparent px-5 text-left outline-none sm:px-7"
+                  aria-label={`Open ${notice.title}`}
+                >
+                  {/* Category */}
+                  <span className="mr-2 rounded-full bg-[#0756b8]/10 px-2 py-0.5 text-[8px] font-black uppercase tracking-[0.12em] text-[#0756b8] transition-colors duration-200 group-hover:bg-[#0756b8] group-hover:text-white">
+                    {notice.category}
+                  </span>
+
+                  {/* Title */}
+                  <span className="text-[11px] font-bold text-slate-700 transition-colors duration-200 group-hover:text-[#0756b8] sm:text-[12px]">
+                    {notice.title}
+                  </span>
+
+                  {/* Arrow */}
+                  <svg
+                    className="ml-2 h-3.5 w-3.5 text-slate-300 transition-all duration-200 group-hover:translate-x-1 group-hover:text-[#e32932]"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M5 12h14"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M13 6l6 6-6 6"
+                    />
+                  </svg>
+
+                  {/* Separator */}
+                  <span className="ml-7 h-1 w-1 rounded-full bg-[#e32932]/40" />
+                </button>
+              ))}
+            </div>
+
+            {/* LEFT FADE */}
+            <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-gradient-to-r from-[#f8fbff] to-transparent" />
+
+            {/* RIGHT FADE */}
+            <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-8 bg-gradient-to-l from-[#f8fbff] to-transparent" />
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================
+          TICKER ANIMATION
+      ========================================== */}
+      <style>
+        {`
+          .notice-marquee {
+            animation: vfawNoticeMarquee 32s linear infinite;
+            will-change: transform;
+          }
+
+          .notice-marquee:hover {
+            animation-play-state: paused;
+          }
+
+          .notice-item {
+            cursor: pointer;
+          }
+
+          @keyframes vfawNoticeMarquee {
+            0% {
+              transform: translateX(0);
+            }
+
+            100% {
+              transform: translateX(-50%);
+            }
+          }
+
+          @media (max-width: 640px) {
+            .notice-marquee {
+              animation-duration: 26s;
+            }
+          }
+
+          @media (prefers-reduced-motion: reduce) {
+            .notice-marquee {
+              animation: none;
+            }
+          }
+        `}
+      </style>
     </>
   );
 };
