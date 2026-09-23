@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 const noticesData = [
   {
@@ -8,11 +8,12 @@ const noticesData = [
       "Registration is now open for the VFAW Clinical Report Writing Competition.",
     category: "Competition",
     date: "2026-09-20",
-    file: "/notices/clinical-report-writing.pdf",
+    file: "/Notice/clinical-report-writing.pdf",
     fileType: "pdf",
     important: true,
     pinned: true,
   },
+
   {
     id: 2,
     title: "VFAW Educational Webinar",
@@ -20,11 +21,12 @@ const noticesData = [
       "Join our upcoming educational webinar on animal welfare and veterinary practice.",
     category: "Event",
     date: "2026-09-18",
-    file: "/notices/webinar.pdf",
+    file: "/Notice/webinar.pdf",
     fileType: "pdf",
     important: false,
     pinned: true,
   },
+
   {
     id: 3,
     title: "Volunteer Registration Open",
@@ -32,25 +34,24 @@ const noticesData = [
       "Students interested in joining VFAW activities can now submit their applications.",
     category: "Opportunity",
     date: "2026-09-15",
-    file: "/notices/volunteer.png",
+    file: "/Notice/volunteer.png",
     fileType: "image",
     important: false,
     pinned: false,
   },
 
- {
+  {
     id: 4,
-    title: "Afu Seat",
+    title: "AFU Seat",
     description:
-      "Students interested in joining Afu can now submit their applications.",
+      "Students interested in joining AFU can now submit their applications.",
     category: "Opportunity",
     date: "2026-09-15",
-    file: "/notices/seat.png",
+    file: "/Notice/seat.png",
     fileType: "image",
     important: false,
     pinned: false,
   },
-  
 ];
 
 const categories = [
@@ -62,18 +63,124 @@ const categories = [
   "Announcement",
 ];
 
+/* =========================================================
+   DATE HELPERS
+========================================================= */
+
+function parseLocalDate(dateString) {
+  const [year, month, day] = dateString.split("-").map(Number);
+  return new Date(year, month - 1, day);
+}
+
+function isRecentNotice(dateString) {
+  const noticeDate = parseLocalDate(dateString);
+
+  const today = new Date();
+  const todayOnly = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  );
+
+  const difference =
+    Math.floor(
+      (todayOnly.getTime() - noticeDate.getTime()) / (1000 * 60 * 60 * 24)
+    );
+
+  return difference >= 0 && difference <= 3;
+}
+
 function formatDate(date) {
-  return new Date(date).toLocaleDateString("en-US", {
+  return parseLocalDate(date).toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
     day: "numeric",
   });
 }
 
+/* =========================================================
+   ICONS
+========================================================= */
+
+function SearchIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="11" cy="11" r="6.5" />
+      <path d="M16 16l5 5" />
+    </svg>
+  );
+}
+
+function ShareIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="18" cy="5" r="2.5" />
+      <circle cx="6" cy="12" r="2.5" />
+      <circle cx="18" cy="19" r="2.5" />
+      <path d="M8.2 10.8l7.5-4.2M8.2 13.2l7.5 4.2" />
+    </svg>
+  );
+}
+
+function DownloadIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 3v12" />
+      <path d="M7 10l5 5 5-5" />
+      <path d="M4 20h16" />
+    </svg>
+  );
+}
+
+function ExternalIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M14 4h6v6" />
+      <path d="M20 4l-9 9" />
+      <path d="M19 13v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h6" />
+    </svg>
+  );
+}
+
+function ArrowIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M5 12h13" />
+      <path d="M13 6l6 6-6 6" />
+    </svg>
+  );
+}
+
+function CloseIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M6 6l12 12M18 6L6 18" />
+    </svg>
+  );
+}
+
+function BellIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" />
+      <path d="M10 21h4" />
+    </svg>
+  );
+}
+
+/* =========================================================
+   NOTICE PAGE
+========================================================= */
+
 function Notice() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [selectedNotice, setSelectedNotice] = useState(null);
+  const [shareMessage, setShareMessage] = useState("");
+
+  /* =======================================================
+     FILTER NOTICES
+  ======================================================= */
 
   const filteredNotices = useMemo(() => {
     const searchText = search.trim().toLowerCase();
@@ -97,73 +204,273 @@ function Notice() {
     });
   }, [search, activeCategory]);
 
-  const tickerNotices = noticesData.filter(
-    (notice) => notice.pinned || notice.important
-  );
+  /* =======================================================
+     TICKER
+
+     Automatically shows ALL notices.
+
+     Recent notices:
+     0–3 days old = RED
+
+     Older notices:
+     BLUE
+  ======================================================= */
+
+  const tickerNotices = useMemo(() => {
+    return [...noticesData].sort(
+      (a, b) => parseLocalDate(b.date) - parseLocalDate(a.date)
+    );
+  }, []);
+
+  /* =======================================================
+     SHARE NOTICE
+  ======================================================= */
+
+  const shareNotice = async (notice) => {
+    const shareUrl = `${window.location.origin}${notice.file}`;
+
+    const shareData = {
+      title: notice.title,
+      text: `${notice.title} — VFAW Official Notice`,
+      url: shareUrl,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+        return;
+      }
+
+      await navigator.clipboard.writeText(shareUrl);
+
+      setShareMessage("Notice link copied!");
+
+      setTimeout(() => {
+        setShareMessage("");
+      }, 2500);
+    } catch (error) {
+      if (error?.name === "AbortError") {
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+
+        setShareMessage("Notice link copied!");
+
+        setTimeout(() => {
+          setShareMessage("");
+        }, 2500);
+      } catch {
+        setShareMessage("Unable to share this notice.");
+      }
+    }
+  };
+
+  /* =======================================================
+     ESCAPE KEY FOR MODAL
+  ======================================================= */
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setSelectedNotice(null);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
+  /* =======================================================
+     LOCK BODY WHEN MODAL IS OPEN
+  ======================================================= */
+
+  useEffect(() => {
+    if (selectedNotice) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [selectedNotice]);
 
   return (
     <div className="notice-page">
       <style>{`
-        * {
-          box-sizing: border-box;
-        }
+        /* =====================================================
+           RESET
+        ===================================================== */
 
         .notice-page {
+          --blue: #0759b8;
+          --blue-dark: #06468f;
+          --blue-light: #edf5ff;
+          --blue-soft: #f6faff;
+
+          --red: #e53935;
+          --red-dark: #c62828;
+          --red-soft: #fff1f1;
+
+          --text: #0c1b2a;
+          --muted: #64748b;
+          --border: #e7edf4;
+          --white: #ffffff;
+
           min-height: 100vh;
-          background:
-            radial-gradient(circle at 10% 10%, rgba(30, 136, 229, 0.10), transparent 28%),
-            radial-gradient(circle at 90% 25%, rgba(0, 105, 190, 0.10), transparent 28%),
-            #f5f9ff;
-          color: #102a43;
-          font-family: Arial, Helvetica, sans-serif;
+          background: #fbfcfe;
+          color: var(--text);
+          font-family:
+            Inter,
+            ui-sans-serif,
+            system-ui,
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            sans-serif;
+
           overflow-x: hidden;
         }
 
-        /* =========================
-           NOTICE TICKER
-        ========================== */
-
-        .notice-ticker {
-          width: 100%;
-          overflow: hidden;
-          background: #0757a0;
-          color: #ffffff;
-          border-top: 1px solid rgba(255,255,255,0.15);
-          border-bottom: 1px solid rgba(255,255,255,0.18);
-          box-shadow: 0 4px 14px rgba(7,87,160,0.22);
-          cursor: default;
+        .notice-page *,
+        .notice-page *::before,
+        .notice-page *::after {
+          box-sizing: border-box;
         }
 
-        .ticker-content {
+        /* =====================================================
+           TICKER
+        ===================================================== */
+
+        .notice-ticker {
+          position: relative;
+          width: 100%;
+          height: 46px;
+
           display: flex;
+          align-items: center;
+
+          overflow: hidden;
+
+          background: #ffffff;
+          border-top: 1px solid var(--border);
+          border-bottom: 1px solid var(--border);
+
+          z-index: 10;
+        }
+
+        .ticker-label {
+          position: relative;
+          z-index: 5;
+
+          flex: 0 0 auto;
+
+          height: 100%;
+
+          display: flex;
+          align-items: center;
+          gap: 8px;
+
+          padding: 0 22px;
+
+          background: var(--blue);
+          color: white;
+
+          font-size: 11px;
+          font-weight: 800;
+
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+
+          box-shadow: 8px 0 20px rgba(7, 89, 184, 0.12);
+        }
+
+        .ticker-label svg {
+          width: 15px;
+          height: 15px;
+
+          fill: none;
+          stroke: currentColor;
+          stroke-width: 1.8;
+        }
+
+        .ticker-window {
+          flex: 1;
+          min-width: 0;
+          overflow: hidden;
+        }
+
+        .ticker-track {
           width: max-content;
-          animation: noticeTicker 12s linear infinite;
+
+          display: flex;
+          align-items: center;
+
+          animation: noticeTicker 32s linear infinite;
           will-change: transform;
         }
 
-        /* Stop immediately when cursor is over ticker */
-        .notice-ticker:hover .ticker-content {
+        .notice-ticker:hover .ticker-track {
           animation-play-state: paused;
         }
 
-        .ticker-item {
+        .ticker-group {
           display: flex;
           align-items: center;
+          flex-shrink: 0;
+        }
+
+        .ticker-item {
+          display: inline-flex;
+          align-items: center;
           gap: 10px;
-          padding: 13px 34px;
+
+          padding: 0 32px;
+
+          height: 46px;
+
           white-space: nowrap;
-          font-size: 14px;
+
+          font-size: 13px;
           font-weight: 700;
-          letter-spacing: 0.1px;
+        }
+
+        .ticker-item.recent {
+          color: var(--red);
+        }
+
+        .ticker-item.old {
+          color: var(--blue);
         }
 
         .ticker-dot {
-          width: 8px;
-          height: 8px;
-          background: #ffffff;
+          width: 6px;
+          height: 6px;
+
+          flex: 0 0 6px;
+
           border-radius: 50%;
-          display: inline-block;
-          box-shadow: 0 0 0 4px rgba(255,255,255,0.12);
+          background: currentColor;
+        }
+
+        .ticker-new {
+          padding: 4px 7px;
+
+          border-radius: 5px;
+
+          background: var(--red-soft);
+          color: var(--red);
+
+          font-size: 9px;
+          font-weight: 900;
+
+          letter-spacing: 0.06em;
         }
 
         @keyframes noticeTicker {
@@ -176,524 +483,977 @@ function Notice() {
           }
         }
 
-        /* =========================
+        /* =====================================================
            HERO
-        ========================== */
+        ===================================================== */
 
         .notice-hero {
           position: relative;
-          padding: 75px 20px 70px;
-          overflow: hidden;
+
+          padding: 92px 24px 84px;
+
           background:
+            radial-gradient(
+              circle at 85% 25%,
+              rgba(7, 89, 184, 0.09),
+              transparent 25%
+            ),
+            radial-gradient(
+              circle at 10% 90%,
+              rgba(7, 89, 184, 0.06),
+              transparent 25%
+            ),
+            #ffffff;
+
+          border-bottom: 1px solid var(--border);
+
+          overflow: hidden;
+        }
+
+        .hero-grid {
+          position: absolute;
+          inset: 0;
+
+          opacity: 0.35;
+
+          background-image:
             linear-gradient(
-              135deg,
-              #ffffff 0%,
-              #edf6ff 50%,
-              #dceeff 100%
+              rgba(7, 89, 184, 0.035) 1px,
+              transparent 1px
+            ),
+            linear-gradient(
+              90deg,
+              rgba(7, 89, 184, 0.035) 1px,
+              transparent 1px
             );
-          border-bottom: 1px solid #cfe2f5;
+
+          background-size: 45px 45px;
+
+          mask-image: linear-gradient(
+            to bottom,
+            black,
+            transparent 90%
+          );
         }
 
-        .notice-hero::before {
-          content: "";
-          position: absolute;
-          width: 330px;
-          height: 330px;
-          right: -100px;
-          top: -120px;
-          border-radius: 50%;
-          background: rgba(7, 87, 160, 0.12);
-        }
-
-        .notice-hero::after {
-          content: "";
-          position: absolute;
-          width: 220px;
-          height: 220px;
-          left: -100px;
-          bottom: -100px;
-          border-radius: 50%;
-          background: rgba(30, 136, 229, 0.10);
-        }
-
-        .notice-hero-inner {
+        .hero-inner {
           position: relative;
           z-index: 2;
+
           max-width: 1180px;
           margin: 0 auto;
-          text-align: center;
         }
 
-        .notice-badge {
+        .hero-kicker {
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          padding: 9px 17px;
-          border-radius: 999px;
-          background: #0757a0;
-          color: #ffffff;
-          font-size: 13px;
-          font-weight: 800;
-          margin-bottom: 20px;
-          box-shadow:
-            0 7px 0 #043e73,
-            0 12px 25px rgba(7,87,160,0.22);
-        }
 
-        .notice-hero h1 {
-          margin: 0;
-          font-size: clamp(38px, 6vw, 68px);
-          line-height: 1.02;
-          letter-spacing: -2.5px;
-          color: #082d4f;
+          margin-bottom: 22px;
+
+          color: var(--blue);
+
+          font-size: 12px;
           font-weight: 900;
+
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
         }
 
-        .notice-hero p {
-          max-width: 730px;
-          margin: 22px auto 0;
-          color: #526b84;
+        .hero-kicker::before {
+          content: "";
+
+          width: 26px;
+          height: 2px;
+
+          background: var(--blue);
+        }
+
+        .hero-title {
+          max-width: 820px;
+
+          margin: 0;
+
+          color: var(--text);
+
+          font-size: clamp(46px, 7vw, 86px);
+          line-height: 0.98;
+
+          font-weight: 900;
+
+          letter-spacing: -0.065em;
+        }
+
+        .hero-title span {
+          color: var(--blue);
+        }
+
+        .hero-description {
+          max-width: 650px;
+
+          margin: 26px 0 0;
+
+          color: var(--muted);
+
           font-size: 17px;
           line-height: 1.75;
         }
 
-        /* =========================
-           MAIN CONTAINER
-        ========================== */
+        .hero-meta {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+
+          margin-top: 34px;
+        }
+
+        .hero-meta-item {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+
+          padding: 9px 13px;
+
+          border: 1px solid var(--border);
+          border-radius: 999px;
+
+          background: rgba(255,255,255,0.75);
+
+          color: #526276;
+
+          font-size: 12px;
+          font-weight: 700;
+        }
+
+        .hero-meta-item strong {
+          color: var(--text);
+        }
+
+        .hero-meta-dot {
+          width: 7px;
+          height: 7px;
+
+          border-radius: 50%;
+          background: var(--blue);
+        }
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
 
         .notice-container {
           max-width: 1180px;
+
           margin: 0 auto;
-          padding: 50px 20px 85px;
+
+          padding: 55px 24px 100px;
         }
 
-        /* =========================
-           SEARCH + FILTERS
-        ========================== */
+        /* =====================================================
+           CONTROLS
+        ===================================================== */
 
         .notice-controls {
           display: flex;
-          flex-wrap: wrap;
-          gap: 16px;
           align-items: center;
           justify-content: space-between;
-          margin-bottom: 42px;
+
+          gap: 20px;
+
+          margin-bottom: 48px;
         }
 
-        .notice-search {
-          flex: 1;
-          min-width: 270px;
+        .search-box {
           position: relative;
+
+          width: min(390px, 100%);
         }
 
-        .notice-search input {
+        .search-box svg {
+          position: absolute;
+
+          left: 16px;
+          top: 50%;
+
+          width: 18px;
+          height: 18px;
+
+          transform: translateY(-50%);
+
+          fill: none;
+          stroke: #8a98a8;
+          stroke-width: 1.8;
+
+          pointer-events: none;
+        }
+
+        .search-box input {
           width: 100%;
-          padding: 16px 19px;
-          border: 2px solid #d5e4f2;
-          border-radius: 14px;
-          background: #ffffff;
-          color: #17324d;
+
+          height: 48px;
+
+          padding: 0 16px 0 46px;
+
+          border: 1px solid var(--border);
+          border-radius: 12px;
+
           outline: none;
-          font-size: 15px;
-          font-weight: 500;
-          transition: all 0.25s ease;
-          box-shadow:
-            0 5px 0 #dce8f3,
-            0 12px 25px rgba(15, 76, 129, 0.07);
+
+          background: white;
+
+          color: var(--text);
+
+          font-size: 14px;
+
+          transition:
+            border-color 0.2s ease,
+            box-shadow 0.2s ease;
         }
 
-        .notice-search input::placeholder {
-          color: #8aa0b5;
+        .search-box input::placeholder {
+          color: #9aa7b5;
         }
 
-        .notice-search input:focus {
-          border-color: #1677d2;
-          transform: translateY(-2px);
+        .search-box input:focus {
+          border-color: rgba(7, 89, 184, 0.45);
+
           box-shadow:
-            0 7px 0 #b9d4ec,
-            0 16px 30px rgba(22,119,210,0.13);
+            0 0 0 4px rgba(7, 89, 184, 0.08);
         }
 
         .category-list {
           display: flex;
           flex-wrap: wrap;
-          gap: 9px;
+          justify-content: flex-end;
+
+          gap: 7px;
         }
 
         .category-button {
-          border: 2px solid #d8e6f3;
+          height: 38px;
+
+          padding: 0 14px;
+
+          border: 1px solid var(--border);
+          border-radius: 999px;
+
           background: #ffffff;
-          color: #41617d;
-          padding: 10px 15px;
-          border-radius: 11px;
+
+          color: #68788a;
+
           cursor: pointer;
-          font-size: 13px;
+
+          font-size: 12px;
           font-weight: 800;
+
           transition:
-            transform 0.2s ease,
-            box-shadow 0.2s ease,
+            color 0.2s ease,
             background 0.2s ease,
-            color 0.2s ease;
-          box-shadow: 0 4px 0 #dce7f1;
+            border-color 0.2s ease,
+            transform 0.2s ease;
         }
 
         .category-button:hover {
-          transform: translateY(-3px);
-          color: #0757a0;
-          border-color: #8dbce5;
-          box-shadow: 0 7px 0 #c3d9eb;
-        }
+          transform: translateY(-1px);
 
-        .category-button:active {
-          transform: translateY(1px);
-          box-shadow: 0 2px 0 #c3d9eb;
+          border-color: #c9d9e9;
+
+          color: var(--blue);
         }
 
         .category-button.active {
-          background: #0757a0;
+          border-color: var(--blue);
+
+          background: var(--blue);
+
           color: #ffffff;
-          border-color: #0757a0;
-          box-shadow:
-            0 5px 0 #043e73,
-            0 10px 20px rgba(7,87,160,0.20);
         }
 
-        /* =========================
-           SECTION HEADING
-        ========================== */
+        /* =====================================================
+           SECTION HEADER
+        ===================================================== */
 
-        .notice-heading {
+        .section-header {
           display: flex;
-          align-items: end;
+          align-items: flex-end;
           justify-content: space-between;
+
           gap: 20px;
-          margin-bottom: 23px;
+
+          margin-bottom: 24px;
         }
 
-        .notice-heading h2 {
+        .section-eyebrow {
+          margin: 0 0 7px;
+
+          color: var(--blue);
+
+          font-size: 11px;
+          font-weight: 900;
+
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+        }
+
+        .section-header h2 {
           margin: 0;
-          color: #082d4f;
+
+          color: var(--text);
+
           font-size: 30px;
-          font-weight: 900;
-          letter-spacing: -0.7px;
+          line-height: 1.1;
+
+          letter-spacing: -0.04em;
         }
 
-        .notice-heading p {
-          margin: 7px 0 0;
-          color: #6c8195;
-          font-size: 14px;
+        .section-count {
+          color: #8b98a7;
+
+          font-size: 12px;
+          font-weight: 700;
         }
 
-        .notice-count {
-          padding: 9px 14px;
-          border-radius: 10px;
-          background: #dceeff;
-          color: #0757a0;
-          font-weight: 900;
-          font-size: 13px;
-          box-shadow: 0 4px 0 #c2dbef;
-        }
-
-        /* =========================
-           NOTICE CARDS
-        ========================== */
+        /* =====================================================
+           GRID
+        ===================================================== */
 
         .notice-grid {
           display: grid;
-          grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: 24px;
+
+          grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+
+          gap: 18px;
         }
+
+        /* =====================================================
+           CARD
+        ===================================================== */
 
         .notice-card {
           position: relative;
-          background: #ffffff;
-          border: 2px solid #dce8f3;
-          border-radius: 18px;
-          padding: 25px;
-          box-shadow:
-            0 7px 0 #d2e2f0,
-            0 16px 30px rgba(15, 76, 129, 0.08);
-          transition:
-            transform 0.25s ease,
-            box-shadow 0.25s ease,
-            border-color 0.25s ease;
+
           display: flex;
           flex-direction: column;
-          min-height: 305px;
-          overflow: hidden;
-        }
 
-        .notice-card::before {
-          content: "";
-          position: absolute;
-          left: 0;
-          top: 0;
-          width: 100%;
-          height: 6px;
-          background: #0757a0;
+          min-height: 355px;
+
+          padding: 24px;
+
+          background: #ffffff;
+
+          border: 1px solid var(--border);
+          border-radius: 18px;
+
+          overflow: hidden;
+
+          transition:
+            transform 0.3s cubic-bezier(.2,.8,.2,1),
+            border-color 0.3s ease,
+            box-shadow 0.3s ease;
         }
 
         .notice-card:hover {
-          transform: translateY(-10px) rotateX(1deg);
-          border-color: #83b8e5;
+          transform: translateY(-6px);
+
+          border-color: #d4e2ef;
+
           box-shadow:
-            0 12px 0 #b8d2e8,
-            0 28px 45px rgba(7,87,160,0.18);
+            0 18px 45px rgba(19, 52, 84, 0.10);
         }
 
-        .notice-card:active {
-          transform: translateY(-3px);
+        .notice-card.recent {
+          border-color: rgba(229, 57, 53, 0.18);
+        }
+
+        .notice-card.recent:hover {
+          border-color: rgba(229, 57, 53, 0.34);
+
+          box-shadow:
+            0 18px 45px rgba(229, 57, 53, 0.10);
+        }
+
+        .card-accent {
+          position: absolute;
+
+          left: 0;
+          top: 0;
+
+          width: 100%;
+          height: 3px;
+
+          background: var(--blue);
+        }
+
+        .notice-card.recent .card-accent {
+          background: var(--red);
         }
 
         .notice-card-top {
           display: flex;
+          align-items: center;
           justify-content: space-between;
-          align-items: flex-start;
+
           gap: 10px;
-          margin: 5px 0 20px;
+
+          margin-bottom: 26px;
         }
 
         .notice-category {
           display: inline-flex;
-          padding: 7px 11px;
-          border-radius: 8px;
-          background: #0757a0;
-          color: #ffffff;
+
+          align-items: center;
+
+          min-height: 28px;
+
+          padding: 0 10px;
+
+          border-radius: 7px;
+
+          background: var(--blue-light);
+
+          color: var(--blue);
+
           font-size: 10px;
           font-weight: 900;
+
+          letter-spacing: 0.05em;
           text-transform: uppercase;
-          letter-spacing: 0.5px;
-          box-shadow: 0 4px 0 #043e73;
+        }
+
+        .notice-card.recent .notice-category {
+          background: var(--red-soft);
+
+          color: var(--red);
+        }
+
+        .new-label {
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+
+          color: var(--red);
+
+          font-size: 9px;
+          font-weight: 900;
+
+          letter-spacing: 0.08em;
+        }
+
+        .new-label::before {
+          content: "";
+
+          width: 6px;
+          height: 6px;
+
+          border-radius: 50%;
+
+          background: var(--red);
+
+          box-shadow: 0 0 0 4px rgba(229,57,53,0.08);
         }
 
         .important-label {
-          color: #ffffff;
-          background: #e67e22;
-          padding: 7px 10px;
-          border-radius: 8px;
-          font-size: 10px;
+          display: inline-flex;
+          align-items: center;
+
+          padding: 5px 8px;
+
+          border-radius: 6px;
+
+          background: #fff7e8;
+
+          color: #b86b00;
+
+          font-size: 9px;
           font-weight: 900;
-          box-shadow: 0 4px 0 #b85d0d;
+
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
         }
 
-        .notice-card h3 {
-          margin: 0 0 12px;
-          color: #092f50;
-          font-size: 21px;
-          line-height: 1.35;
-          font-weight: 900;
-        }
-
-        .notice-card-description {
-          color: #60788e;
-          line-height: 1.65;
-          font-size: 14px;
-          flex: 1;
+        .notice-title {
           margin: 0;
+
+          color: var(--text);
+
+          font-size: 21px;
+          line-height: 1.3;
+
+          font-weight: 850;
+
+          letter-spacing: -0.025em;
+        }
+
+        .notice-description {
+          flex: 1;
+
+          margin: 14px 0 0;
+
+          color: #718094;
+
+          font-size: 13px;
+
+          line-height: 1.7;
         }
 
         .notice-date {
-          color: #7890a6;
-          font-size: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+
+          margin-top: 24px;
+          padding-top: 16px;
+
+          border-top: 1px solid #edf1f5;
+
+          color: #8a97a6;
+
+          font-size: 11px;
           font-weight: 700;
-          margin: 18px 0;
         }
+
+        .notice-date.recent-date {
+          color: var(--red);
+        }
+
+        /* =====================================================
+           CARD ACTIONS
+        ===================================================== */
 
         .notice-actions {
           display: grid;
-          grid-template-columns: 1fr 1fr 1fr;
-          gap: 8px;
+
+          grid-template-columns: 1.3fr 1fr 1fr;
+
+          gap: 7px;
+
+          margin-top: 17px;
         }
 
         .notice-button {
-          border: none;
-          padding: 11px 8px;
+          min-height: 39px;
+
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 7px;
+
+          padding: 0 9px;
+
+          border: 1px solid transparent;
           border-radius: 9px;
+
           cursor: pointer;
-          font-size: 12px;
-          font-weight: 900;
+
           text-decoration: none;
-          text-align: center;
+
+          font-family: inherit;
+
+          font-size: 11px;
+          font-weight: 850;
+
           transition:
             transform 0.2s ease,
-            box-shadow 0.2s ease;
+            background 0.2s ease,
+            border-color 0.2s ease;
+        }
+
+        .notice-button svg {
+          width: 14px;
+          height: 14px;
+
+          fill: none;
+          stroke: currentColor;
+          stroke-width: 1.8;
         }
 
         .notice-button:hover {
-          transform: translateY(-3px);
+          transform: translateY(-2px);
         }
 
         .notice-button:active {
-          transform: translateY(1px);
+          transform: translateY(0);
         }
 
         .notice-button.primary {
-          background: #0757a0;
-          color: #ffffff;
-          box-shadow: 0 4px 0 #043e73;
+          background: var(--blue);
+          color: white;
         }
 
         .notice-button.primary:hover {
-          background: #096bc2;
-          box-shadow: 0 6px 0 #043e73;
+          background: var(--blue-dark);
         }
 
         .notice-button.secondary {
-          background: #e6f2ff;
-          color: #0757a0;
-          box-shadow: 0 4px 0 #c6ddf1;
+          border-color: var(--border);
+
+          background: #ffffff;
+
+          color: #526276;
         }
 
         .notice-button.secondary:hover {
-          background: #cfe8ff;
-          box-shadow: 0 6px 0 #b2d1e9;
+          border-color: #cbd9e7;
+
+          background: var(--blue-soft);
+
+          color: var(--blue);
         }
 
-        /* =========================
-           EMPTY STATE
-        ========================== */
+        .notice-card.recent .share-button {
+          border-color: rgba(229,57,53,0.18);
+
+          background: var(--red-soft);
+
+          color: var(--red);
+        }
+
+        .notice-card.recent .share-button:hover {
+          border-color: rgba(229,57,53,0.32);
+
+          background: #ffe5e5;
+        }
+
+        /* =====================================================
+           EMPTY
+        ===================================================== */
 
         .notice-empty {
+          padding: 70px 25px;
+
           text-align: center;
-          background: #ffffff;
-          border: 2px solid #dce8f3;
+
+          border: 1px solid var(--border);
           border-radius: 18px;
-          padding: 65px 20px;
-          box-shadow:
-            0 7px 0 #d2e2f0,
-            0 18px 35px rgba(15,76,129,0.07);
+
+          background: white;
         }
 
         .notice-empty h3 {
           margin: 0 0 8px;
-          color: #082d4f;
-          font-size: 22px;
+
+          font-size: 21px;
         }
 
         .notice-empty p {
           margin: 0;
-          color: #71879b;
-        }
 
-        /* =========================
-           INFO BOX
-        ========================== */
+          color: var(--muted);
 
-        .notice-info {
-          margin-top: 48px;
-          padding: 27px;
-          border-radius: 17px;
-          background: #0757a0;
-          color: #ffffff;
-          border: 2px solid #064b8b;
-          box-shadow:
-            0 7px 0 #043e73,
-            0 18px 35px rgba(7,87,160,0.18);
-        }
-
-        .notice-info h3 {
-          margin: 0 0 9px;
-          color: #ffffff;
-          font-size: 20px;
-        }
-
-        .notice-info p {
-          margin: 0;
-          color: #e7f3ff;
-          line-height: 1.7;
           font-size: 14px;
         }
 
-        /* =========================
-           MODAL
-        ========================== */
+        /* =====================================================
+           INFO
+        ===================================================== */
 
-        .notice-modal {
-          position: fixed;
-          inset: 0;
-          z-index: 9999;
-          background: rgba(3, 25, 45, 0.82);
-          backdrop-filter: blur(6px);
+        .notice-info {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+
+          gap: 30px;
+
+          margin-top: 55px;
+          padding: 28px 30px;
+
+          border: 1px solid #dce9f7;
+          border-radius: 16px;
+
+          background:
+            linear-gradient(
+              135deg,
+              #f4f9ff,
+              #ffffff
+            );
+        }
+
+        .notice-info-left {
+          display: flex;
+          align-items: flex-start;
+          gap: 15px;
+        }
+
+        .info-icon {
+          width: 38px;
+          height: 38px;
+
           display: flex;
           align-items: center;
           justify-content: center;
+
+          flex: 0 0 38px;
+
+          border-radius: 10px;
+
+          background: var(--blue);
+
+          color: white;
+        }
+
+        .info-icon svg {
+          width: 18px;
+          height: 18px;
+
+          fill: none;
+          stroke: currentColor;
+          stroke-width: 1.8;
+        }
+
+        .notice-info h3 {
+          margin: 0 0 5px;
+
+          color: var(--text);
+
+          font-size: 15px;
+        }
+
+        .notice-info p {
+          max-width: 700px;
+
+          margin: 0;
+
+          color: var(--muted);
+
+          font-size: 12px;
+          line-height: 1.65;
+        }
+
+        .info-brand {
+          color: var(--blue);
+
+          font-size: 11px;
+          font-weight: 900;
+
+          white-space: nowrap;
+        }
+
+        /* =====================================================
+           SHARE TOAST
+        ===================================================== */
+
+        .share-toast {
+          position: fixed;
+
+          left: 50%;
+          bottom: 28px;
+
+          z-index: 10001;
+
+          transform: translateX(-50%);
+
+          padding: 12px 18px;
+
+          border-radius: 10px;
+
+          background: #0c1b2a;
+          color: white;
+
+          box-shadow:
+            0 12px 35px rgba(0,0,0,0.18);
+
+          font-size: 12px;
+          font-weight: 800;
+
+          animation: toastIn 0.25s ease;
+        }
+
+        @keyframes toastIn {
+          from {
+            opacity: 0;
+            transform: translate(-50%, 10px);
+          }
+
+          to {
+            opacity: 1;
+            transform: translate(-50%, 0);
+          }
+        }
+
+        /* =====================================================
+           MODAL
+        ===================================================== */
+
+        .notice-modal {
+          position: fixed;
+
+          inset: 0;
+
+          z-index: 10000;
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
           padding: 20px;
+
+          background: rgba(5, 18, 31, 0.78);
+
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+
+          animation: modalBackground 0.2s ease;
+        }
+
+        @keyframes modalBackground {
+          from {
+            opacity: 0;
+          }
+
+          to {
+            opacity: 1;
+          }
         }
 
         .notice-modal-content {
           width: min(1100px, 100%);
-          height: min(850px, 92vh);
-          background: #ffffff;
-          border-radius: 18px;
-          overflow: hidden;
+          height: min(850px, 94vh);
+
           display: flex;
           flex-direction: column;
+
+          overflow: hidden;
+
+          background: white;
+
+          border-radius: 18px;
+
           box-shadow:
-            0 15px 0 #043e73,
-            0 35px 70px rgba(0,0,0,0.35);
+            0 35px 100px rgba(0,0,0,0.3);
+
+          animation: modalIn 0.25s cubic-bezier(.2,.8,.2,1);
+        }
+
+        @keyframes modalIn {
+          from {
+            opacity: 0;
+            transform: scale(0.97) translateY(10px);
+          }
+
+          to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+          }
         }
 
         .notice-modal-header {
+          min-height: 62px;
+
           display: flex;
           align-items: center;
           justify-content: space-between;
+
           gap: 15px;
-          padding: 15px 18px;
-          background: #0757a0;
-          color: #ffffff;
+
+          padding: 0 18px 0 22px;
+
+          border-bottom: 1px solid var(--border);
+
+          background: white;
+        }
+
+        .modal-title-area {
+          min-width: 0;
+        }
+
+        .modal-label {
+          margin-bottom: 3px;
+
+          color: var(--blue);
+
+          font-size: 9px;
+          font-weight: 900;
+
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
         }
 
         .notice-modal-header h3 {
+          overflow: hidden;
+
           margin: 0;
-          font-size: 17px;
-          color: #ffffff;
+
+          color: var(--text);
+
+          font-size: 15px;
+
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
 
         .notice-close {
-          border: none;
-          background: #ffffff;
-          color: #0757a0;
-          width: 38px;
-          height: 38px;
-          border-radius: 10px;
+          width: 36px;
+          height: 36px;
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          flex: 0 0 36px;
+
+          border: 1px solid var(--border);
+          border-radius: 9px;
+
+          background: white;
+
+          color: #637386;
+
           cursor: pointer;
-          font-size: 22px;
-          font-weight: 900;
-          transition: 0.2s ease;
-          box-shadow: 0 4px 0 #c9dce9;
+
+          transition:
+            background 0.2s ease,
+            color 0.2s ease;
         }
 
         .notice-close:hover {
-          transform: translateY(-2px);
-          background: #eaf5ff;
+          background: #f5f7fa;
+          color: var(--text);
+        }
+
+        .notice-close svg {
+          width: 17px;
+          height: 17px;
+
+          fill: none;
+          stroke: currentColor;
+          stroke-width: 2;
         }
 
         .notice-preview {
           flex: 1;
+
           min-height: 0;
-          background: #edf3f8;
+
+          background: #edf2f6;
         }
 
         .notice-preview iframe {
           width: 100%;
           height: 100%;
+
+          display: block;
+
           border: none;
         }
 
         .notice-preview img {
           width: 100%;
           height: 100%;
-          object-fit: contain;
+
           display: block;
+
+          object-fit: contain;
         }
 
-        /* =========================
+        /* =====================================================
            TABLET
-        ========================== */
+        ===================================================== */
 
         @media (max-width: 950px) {
           .notice-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-columns:
+              repeat(2, minmax(0, 1fr));
           }
 
           .notice-controls {
@@ -701,66 +1461,99 @@ function Notice() {
             flex-direction: column;
           }
 
-          .notice-search {
+          .search-box {
             width: 100%;
           }
 
           .category-list {
-            width: 100%;
+            justify-content: flex-start;
           }
         }
 
-        /* =========================
+        /* =====================================================
            MOBILE
-        ========================== */
+        ===================================================== */
 
         @media (max-width: 650px) {
+          .notice-ticker {
+            height: 42px;
+          }
+
+          .ticker-label {
+            padding: 0 13px;
+
+            font-size: 9px;
+          }
+
+          .ticker-label svg {
+            width: 13px;
+            height: 13px;
+          }
+
+          .ticker-item {
+            height: 42px;
+
+            padding: 0 20px;
+
+            font-size: 11px;
+          }
+
           .notice-hero {
-            padding: 55px 17px 50px;
+            padding: 64px 18px 58px;
           }
 
-          .notice-hero h1 {
-            font-size: 42px;
-            letter-spacing: -1.5px;
+          .hero-title {
+            font-size: clamp(44px, 14vw, 62px);
           }
 
-          .notice-hero p {
-            font-size: 15px;
+          .hero-description {
+            font-size: 14px;
+          }
+
+          .hero-meta {
+            margin-top: 25px;
           }
 
           .notice-container {
-            padding: 32px 15px 60px;
-          }
-
-          .notice-grid {
-            grid-template-columns: 1fr;
-          }
-
-          .notice-heading {
-            align-items: flex-start;
-            flex-direction: column;
+            padding: 38px 16px 70px;
           }
 
           .category-list {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+
+            grid-template-columns:
+              repeat(2, 1fr);
+
+            width: 100%;
           }
 
           .category-button {
             width: 100%;
           }
 
+          .section-header {
+            align-items: flex-start;
+
+            flex-direction: column;
+
+            gap: 7px;
+          }
+
+          .notice-grid {
+            grid-template-columns: 1fr;
+          }
+
           .notice-card {
-            min-height: auto;
+            min-height: 330px;
           }
 
-          .notice-actions {
-            grid-template-columns: 1fr 1fr 1fr;
+          .notice-info {
+            align-items: flex-start;
+            flex-direction: column;
           }
 
-          .ticker-item {
-            padding: 12px 25px;
-            font-size: 13px;
+          .info-brand {
+            padding-left: 53px;
           }
 
           .notice-modal {
@@ -768,83 +1561,170 @@ function Notice() {
           }
 
           .notice-modal-content {
-            height: 95vh;
+            height: 96vh;
+
             border-radius: 12px;
           }
         }
 
         @media (max-width: 420px) {
-          .notice-hero h1 {
-            font-size: 36px;
-          }
-
           .notice-actions {
-            grid-template-columns: 1fr;
+            grid-template-columns:
+              1fr 1fr;
           }
 
-          .notice-button {
-            width: 100%;
+          .notice-actions .primary {
+            grid-column: span 2;
+          }
+
+          .hero-title {
+            letter-spacing: -0.055em;
+          }
+        }
+
+        /* =====================================================
+           REDUCED MOTION
+        ===================================================== */
+
+        @media (prefers-reduced-motion: reduce) {
+          .ticker-track {
+            animation: none;
+          }
+
+          .notice-card,
+          .notice-button,
+          .category-button {
+            transition: none;
           }
         }
       `}</style>
 
-      {/* =========================
-          FAST NOTICE TICKER
-      ========================== */}
+      {/* =====================================================
+          MOVING NOTICE TICKER
+      ===================================================== */}
 
       {tickerNotices.length > 0 && (
         <div className="notice-ticker">
-          <div className="ticker-content">
-            {tickerNotices.map((notice) => (
-              <div className="ticker-item" key={notice.id}>
-                <span className="ticker-dot"></span>
-                {notice.title}
-              </div>
-            ))}
+          <div className="ticker-label">
+            <BellIcon />
+            Notices
+          </div>
 
-            {tickerNotices.map((notice) => (
-              <div className="ticker-item" key={`copy-${notice.id}`}>
-                <span className="ticker-dot"></span>
-                {notice.title}
+          <div className="ticker-window">
+            <div className="ticker-track">
+              {/* First copy */}
+              <div className="ticker-group">
+                {tickerNotices.map((notice) => {
+                  const recent = isRecentNotice(notice.date);
+
+                  return (
+                    <div
+                      className={`ticker-item ${
+                        recent ? "recent" : "old"
+                      }`}
+                      key={`ticker-${notice.id}`}
+                    >
+                      <span className="ticker-dot"></span>
+
+                      {recent && (
+                        <span className="ticker-new">NEW</span>
+                      )}
+
+                      <span>{notice.title}</span>
+                    </div>
+                  );
+                })}
               </div>
-            ))}
+
+              {/* Duplicate copy for seamless animation */}
+              <div className="ticker-group" aria-hidden="true">
+                {tickerNotices.map((notice) => {
+                  const recent = isRecentNotice(notice.date);
+
+                  return (
+                    <div
+                      className={`ticker-item ${
+                        recent ? "recent" : "old"
+                      }`}
+                      key={`ticker-copy-${notice.id}`}
+                    >
+                      <span className="ticker-dot"></span>
+
+                      {recent && (
+                        <span className="ticker-new">NEW</span>
+                      )}
+
+                      <span>{notice.title}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
       )}
 
-      {/* =========================
+      {/* =====================================================
           HERO
-      ========================== */}
+      ===================================================== */}
 
-      <section className="notice-hero">
-        <div className="notice-hero-inner">
-          <div className="notice-badge">
-            VFAW • Official Notices
+      <header className="notice-hero">
+        <div className="hero-grid"></div>
+
+        <div className="hero-inner">
+          <div className="hero-kicker">
+            VFAW Official Communication
           </div>
 
-          <h1>Notices & Updates</h1>
+          <h1 className="hero-title">
+            Notices
+            <br />
+            <span>& Updates.</span>
+          </h1>
 
-          <p>
-            Stay informed about competitions, events, opportunities,
-            announcements, and important activities from Vets for Animal
-            Welfare.
+          <p className="hero-description">
+            Stay up to date with official VFAW announcements,
+            competitions, educational events, opportunities and
+            important activities.
           </p>
-        </div>
-      </section>
 
-      {/* =========================
-          CONTENT
-      ========================== */}
+          <div className="hero-meta">
+            <div className="hero-meta-item">
+              <span className="hero-meta-dot"></span>
+              <strong>{noticesData.length}</strong> published notices
+            </div>
+
+            <div className="hero-meta-item">
+              <span className="hero-meta-dot"></span>
+              Updated regularly
+            </div>
+
+            <div className="hero-meta-item">
+              <span className="hero-meta-dot"></span>
+              Official VFAW updates
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* =====================================================
+          MAIN CONTENT
+      ===================================================== */}
 
       <main className="notice-container">
-        {/* Search and filters */}
+
+        {/* Search + Categories */}
         <div className="notice-controls">
-          <div className="notice-search">
+          <div className="search-box">
+            <SearchIcon />
+
             <input
               type="search"
               placeholder="Search notices..."
               value={search}
-              onChange={(event) => setSearch(event.target.value)}
+              onChange={(event) =>
+                setSearch(event.target.value)
+              }
               aria-label="Search notices"
             />
           </div>
@@ -866,101 +1746,173 @@ function Notice() {
         </div>
 
         {/* Section heading */}
-        <div className="notice-heading">
+        <div className="section-header">
           <div>
-            <h2>Latest Notices</h2>
-            <p>
-              Official updates and announcements from VFAW.
+            <p className="section-eyebrow">
+              Official updates
             </p>
+
+            <h2>Latest notices</h2>
           </div>
 
-          <div className="notice-count">
-            {filteredNotices.length} notice
-            {filteredNotices.length !== 1 ? "s" : ""}
+          <div className="section-count">
+            Showing {filteredNotices.length} of{" "}
+            {noticesData.length} notices
           </div>
         </div>
 
-        {/* Notice cards */}
+        {/* ===================================================
+            NOTICE CARDS
+        =================================================== */}
+
         {filteredNotices.length > 0 ? (
           <section className="notice-grid">
-            {filteredNotices.map((notice) => (
-              <article className="notice-card" key={notice.id}>
-                <div className="notice-card-top">
-                  <span className="notice-category">
-                    {notice.category}
-                  </span>
+            {filteredNotices.map((notice) => {
+              const recent = isRecentNotice(notice.date);
 
-                  {notice.important && (
-                    <span className="important-label">
-                      Important
+              return (
+                <article
+                  className={`notice-card ${
+                    recent ? "recent" : ""
+                  }`}
+                  key={notice.id}
+                >
+                  <div className="card-accent"></div>
+
+                  <div className="notice-card-top">
+                    <span className="notice-category">
+                      {notice.category}
                     </span>
-                  )}
-                </div>
 
-                <h3>{notice.title}</h3>
+                    <div>
+                      {recent && (
+                        <span className="new-label">
+                          NEW
+                        </span>
+                      )}
 
-                <p className="notice-card-description">
-                  {notice.description}
-                </p>
+                      {!recent && notice.important && (
+                        <span className="important-label">
+                          Important
+                        </span>
+                      )}
+                    </div>
+                  </div>
 
-                <div className="notice-date">
-                  Published: {formatDate(notice.date)}
-                </div>
+                  <h3 className="notice-title">
+                    {notice.title}
+                  </h3>
 
-                <div className="notice-actions">
-                  <button
-                    type="button"
-                    className="notice-button primary"
-                    onClick={() => setSelectedNotice(notice)}
+                  <p className="notice-description">
+                    {notice.description}
+                  </p>
+
+                  <div
+                    className={`notice-date ${
+                      recent ? "recent-date" : ""
+                    }`}
                   >
-                    View
-                  </button>
+                    <span>
+                      Published {formatDate(notice.date)}
+                    </span>
 
-                  <a
-                    className="notice-button secondary"
-                    href={notice.file}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Open
-                  </a>
+                    {recent && <span>Recent</span>}
+                  </div>
 
+                  {/* Action buttons */}
+                  <div className="notice-actions">
+                    <button
+                      type="button"
+                      className="notice-button primary"
+                      onClick={() =>
+                        setSelectedNotice(notice)
+                      }
+                    >
+                      View
+                      <ArrowIcon />
+                    </button>
+
+                    <a
+                      className="notice-button secondary"
+                      href={notice.file}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Open
+                      <ExternalIcon />
+                    </a>
+
+                    <button
+                      type="button"
+                      className="notice-button secondary share-button"
+                      onClick={() =>
+                        shareNotice(notice)
+                      }
+                    >
+                      Share
+                      <ShareIcon />
+                    </button>
+                  </div>
+
+                  {/* Download kept as a subtle secondary action */}
                   <a
-                    className="notice-button secondary"
                     href={notice.file}
                     download
+                    className="notice-button secondary"
+                    style={{
+                      marginTop: "7px",
+                      width: "100%",
+                    }}
                   >
-                    Download
+                    Download notice
+                    <DownloadIcon />
                   </a>
-                </div>
-              </article>
-            ))}
+                </article>
+              );
+            })}
           </section>
         ) : (
           <div className="notice-empty">
             <h3>No notices found</h3>
+
             <p>
-              Try another search term or select a different category.
+              Try another search term or select a
+              different category.
             </p>
           </div>
         )}
 
-        {/* Information box */}
-        <section className="notice-info">
-          <h3>About VFAW Notices</h3>
+        {/* ===================================================
+            INFORMATION
+        =================================================== */}
 
-          <p>
-            This section is intended for official VFAW announcements,
-            competitions, educational events, volunteer opportunities,
-            programs, and other important updates. Always check the
-            latest notice before participating in an activity.
-          </p>
+        <section className="notice-info">
+          <div className="notice-info-left">
+            <div className="info-icon">
+              <BellIcon />
+            </div>
+
+            <div>
+              <h3>About VFAW Notices</h3>
+
+              <p>
+                This section contains official VFAW
+                announcements, competitions, educational
+                events, volunteer opportunities, programs
+                and other important updates.
+              </p>
+            </div>
+          </div>
+
+          <div className="info-brand">
+            Vets for Animal Welfare
+          </div>
         </section>
       </main>
 
-      {/* =========================
-          PREVIEW MODAL
-      ========================== */}
+      {/* =====================================================
+          NOTICE PREVIEW MODAL
+      ===================================================== */}
 
       {selectedNotice && (
         <div
@@ -975,16 +1927,25 @@ function Notice() {
           }}
         >
           <div className="notice-modal-content">
+
             <div className="notice-modal-header">
-              <h3>{selectedNotice.title}</h3>
+              <div className="modal-title-area">
+                <div className="modal-label">
+                  VFAW Official Notice
+                </div>
+
+                <h3>{selectedNotice.title}</h3>
+              </div>
 
               <button
                 type="button"
                 className="notice-close"
-                onClick={() => setSelectedNotice(null)}
+                onClick={() =>
+                  setSelectedNotice(null)
+                }
                 aria-label="Close notice"
               >
-                ×
+                <CloseIcon />
               </button>
             </div>
 
@@ -1002,6 +1963,16 @@ function Notice() {
               )}
             </div>
           </div>
+        </div>
+      )}
+
+      {/* =====================================================
+          SHARE TOAST
+      ===================================================== */}
+
+      {shareMessage && (
+        <div className="share-toast">
+          {shareMessage}
         </div>
       )}
     </div>
