@@ -1,1255 +1,2994 @@
-import { useEffect, useMemo, useState } from "react";
-import "../Library.css";
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
+import noticesData from "../data/notices";
 
 /* =========================================================
-   INLINE ICONS
+   CATEGORIES
 ========================================================= */
 
-const Icon = ({ name, size = 20, strokeWidth = 1.8 }) => {
-  const common = {
-    width: size,
-    height: size,
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth,
-    strokeLinecap: "round",
-    strokeLinejoin: "round",
-    "aria-hidden": "true",
-  };
-
-  const icons = {
-    search: (
-      <svg {...common}>
-        <circle cx="11" cy="11" r="7" />
-        <path d="m20 20-4-4" />
-      </svg>
-    ),
-
-    close: (
-      <svg {...common}>
-        <path d="M6 6l12 12" />
-        <path d="M18 6 6 18" />
-      </svg>
-    ),
-
-    arrow: (
-      <svg {...common}>
-        <path d="M5 12h13" />
-        <path d="m13 6 6 6-6 6" />
-      </svg>
-    ),
-
-    book: (
-      <svg {...common}>
-        <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5z" />
-        <path d="M4 5.5v16" />
-        <path d="M8 7h8" />
-        <path d="M8 11h7" />
-      </svg>
-    ),
-
-    file: (
-      <svg {...common}>
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-        <path d="M14 2v6h6" />
-        <path d="M8 13h8" />
-        <path d="M8 17h6" />
-      </svg>
-    ),
-
-    presentation: (
-      <svg {...common}>
-        <rect x="3" y="4" width="18" height="13" rx="2" />
-        <path d="M8 21h8" />
-        <path d="M12 17v4" />
-        <path d="m8 10 2.5 2.5L16 8" />
-      </svg>
-    ),
-
-    external: (
-      <svg {...common}>
-        <path d="M14 5h5v5" />
-        <path d="M19 5 10 14" />
-        <path d="M19 13v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h5" />
-      </svg>
-    ),
-
-    download: (
-      <svg {...common}>
-        <path d="M12 3v12" />
-        <path d="m7 10 5 5 5-5" />
-        <path d="M5 21h14" />
-      </svg>
-    ),
-
-    fullscreen: (
-      <svg {...common}>
-        <path d="M8 3H5a2 2 0 0 0-2 2v3" />
-        <path d="M16 3h3a2 2 0 0 1 2 2v3" />
-        <path d="M21 16v3a2 2 0 0 1-2 2h-3" />
-        <path d="M3 16v3a2 2 0 0 0 2 2h3" />
-      </svg>
-    ),
-
-    calendar: (
-      <svg {...common}>
-        <rect x="3" y="4.5" width="18" height="16" rx="2" />
-        <path d="M16 2.5v4" />
-        <path d="M8 2.5v4" />
-        <path d="M3 9h18" />
-      </svg>
-    ),
-
-    spark: (
-      <svg {...common}>
-        <path d="m12 3 1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" />
-        <path d="m19 15 .7 2.3L22 18l-2.3.7L19 21l-.7-2.3L16 18l2.3-.7z" />
-      </svg>
-    ),
-
-    filter: (
-      <svg {...common}>
-        <path d="M4 6h16" />
-        <path d="M7 12h10" />
-        <path d="M10 18h4" />
-      </svg>
-    ),
-
-    share: (
-      <svg {...common}>
-        <circle cx="18" cy="5" r="3" />
-        <circle cx="6" cy="12" r="3" />
-        <circle cx="18" cy="19" r="3" />
-        <path d="m8.6 10.5 6.8-4" />
-        <path d="m8.6 13.5 6.8 4" />
-      </svg>
-    ),
-
-    copy: (
-      <svg {...common}>
-        <rect x="9" y="9" width="11" height="11" rx="2" />
-        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-      </svg>
-    ),
-  };
-
-  return icons[name] || null;
-};
-
-/* =========================================================
-   LIBRARY RESOURCES
-========================================================= */
-
-const resources = [
-  {
-    id: 7,
-    type: "pptx",
-    category: "Presentations",
-    title:
-      "Basics of Hematological Tools and Techniques in Veterinary Practice",
-    excerpt:
-      "Educational presentation covering the fundamentals of hematological tools and techniques used in veterinary practice.",
-    author: "Vets For Animal Welfare",
-    date: "September 2026",
-    meta: "2 Hours",
-    pptxUrl:
-      "https://docs.google.com/presentation/d/13NtC7DuyPTB6Syjx_xUCJLi5c6lykr0G/embed?start=false&loop=false&delayms=0",
-  },
-
-  {
-    id: 1,
-    type: "blogger",
-    category: "Veterinary Medicine",
-    title: "Milk Fever",
-    excerpt:
-      "Learn about milk fever, including its causes, clinical signs, diagnosis, treatment and prevention.",
-    author: "Vets For Animal Welfare",
-    date: "September 2026",
-    meta: "Article",
-    url: "https://vfaw.blogspot.com/2026/09/milk-fever.html",
-  },
-
-  {
-    id: 2,
-    type: "article",
-    category: "Animal Welfare",
-    title: "The Importance of Animal Welfare",
-    excerpt:
-      "Understanding why animal welfare is an essential responsibility for veterinarians, animal owners and society.",
-    author: "Vets For Animal Welfare",
-    date: "September 2026",
-    meta: "5 min read",
-    content: `
-      <h2>Introduction</h2>
-
-      <p>
-        Animal welfare refers to the physical and mental well-being of animals.
-        It includes proper nutrition, suitable housing, disease prevention,
-        humane handling, and protection from unnecessary pain and suffering.
-      </p>
-
-      <h2>Why Animal Welfare Matters</h2>
-
-      <p>
-        Animals play important roles in agriculture, food production,
-        companionship, research, ecosystems and society. Ensuring good welfare
-        improves the quality of life of animals and supports sustainable animal
-        production systems.
-      </p>
-
-      <h2>The Role of Veterinarians</h2>
-
-      <p>
-        Veterinarians diagnose and treat disease while also promoting humane
-        treatment, preventive healthcare, responsible ownership and ethical
-        animal management.
-      </p>
-
-      <h2>Practical Welfare Considerations</h2>
-
-      <ul>
-        <li>Providing adequate food and clean drinking water</li>
-        <li>Maintaining appropriate housing and environmental conditions</li>
-        <li>Preventing and treating disease and injury</li>
-        <li>Reducing unnecessary fear, pain and distress</li>
-        <li>Using humane handling and management practices</li>
-      </ul>
-
-      <h2>Conclusion</h2>
-
-      <p>
-        Animal welfare is not only about preventing cruelty. It is also about
-        creating conditions that allow animals to live healthy, safe and
-        comfortable lives.
-      </p>
-    `,
-  },
-
-  {
-    id: 3,
-    type: "article",
-    category: "Veterinary Education",
-    title: "Understanding Whole Blood, Plasma and Serum",
-    excerpt:
-      "A simple guide to understanding important blood components and the fractions obtained from blood.",
-    author: "VFAW Education",
-    date: "September 2026",
-    meta: "7 min read",
-    content: `
-      <h2>Whole Blood</h2>
-
-      <p>
-        Whole blood contains cellular components together with the liquid
-        component known as plasma. It represents blood in its relatively
-        complete state before separation into individual components.
-      </p>
-
-      <h2>Major Components of Whole Blood</h2>
-
-      <ul>
-        <li>Red Blood Cells</li>
-        <li>White Blood Cells</li>
-        <li>Platelets</li>
-        <li>Plasma</li>
-      </ul>
-
-      <h2>Plasma</h2>
-
-      <p>
-        Plasma is the liquid component of anticoagulated blood. It contains
-        water, proteins, electrolytes, nutrients, hormones and clotting factors.
-      </p>
-
-      <h2>Serum</h2>
-
-      <p>
-        Serum is obtained after blood has clotted. Unlike plasma, it does not
-        contain fibrinogen because fibrinogen participates in clot formation.
-      </p>
-
-      <h2>Plasma vs Serum</h2>
-
-      <p>
-        Plasma is obtained from anticoagulated blood, while serum is obtained
-        after the blood has been allowed to clot. The appropriate sample depends
-        on the laboratory test being performed.
-      </p>
-
-      <h2>Conclusion</h2>
-
-      <p>
-        Understanding the difference between whole blood, plasma and serum is
-        fundamental for students and professionals working with veterinary
-        laboratory diagnostics.
-      </p>
-    `,
-  },
-
-  {
-    id: 4,
-    type: "pdf",
-    category: "Study Materials",
-    title: "Basics of Veterinary Hematology",
-    excerpt:
-      "Study material covering important concepts and basic techniques used in veterinary hematology.",
-    author: "VFAW Education",
-    date: "2026",
-    meta: "PDF",
-    pdfUrl: "/pdfs/veterinary-hematology.pdf",
-  },
-
-  {
-    id: 5,
-    type: "article",
-    category: "Veterinary Education",
-    title: "Introduction to Hematological Examination",
-    excerpt:
-      "A basic introduction to blood examination and its importance in veterinary diagnosis.",
-    author: "VFAW Education",
-    date: "September 2026",
-    meta: "6 min read",
-    content: `
-      <h2>What is Hematology?</h2>
-
-      <p>
-        Hematology is the study of blood and blood-forming organs. It plays an
-        important role in the diagnosis and monitoring of many diseases.
-      </p>
-
-      <h2>Important Components</h2>
-
-      <ul>
-        <li>Red Blood Cells</li>
-        <li>White Blood Cells</li>
-        <li>Platelets</li>
-        <li>Hemoglobin</li>
-        <li>Hematocrit</li>
-      </ul>
-
-      <h2>Importance in Veterinary Practice</h2>
-
-      <p>
-        Hematological examination helps veterinarians identify anemia,
-        infection, inflammation, blood loss and other pathological conditions.
-        It can also be useful for monitoring the response of an animal to
-        treatment.
-      </p>
-
-      <h2>Basic Approach</h2>
-
-      <p>
-        A proper hematological examination begins with appropriate sample
-        collection and handling. Laboratory measurements and microscopic
-        examination can then provide valuable information about the animal's
-        health status.
-      </p>
-
-      <h2>Conclusion</h2>
-
-      <p>
-        Hematological examination is one of the most useful basic diagnostic
-        tools available in veterinary practice.
-      </p>
-    `,
-  },
-
-  {
-    id: 6,
-    type: "pptx",
-    category: "Presentations",
-    title:
-      "Basics of Hematological Tools and Techniques in Veterinary Practice",
-    excerpt:
-      "A professional educational presentation covering the basics of hematological tools and techniques used in veterinary practice.",
-    author: "Vets For Animal Welfare",
-    date: "September 2026",
-    meta: "Presentation",
-    pptxUrl:
-      "https://docs.google.com/presentation/d/13NtC7DuyPTB6Syjx_xUCJLi5c6lykr0G/embed?start=false&loop=false&delayms=0",
-  },
+const categories = [
+  "All",
+  "Important",
+  "Competition",
+  "Event",
+  "Opportunity",
+  "Announcement",
+  "Notice",
 ];
 
 /* =========================================================
-   HELPERS
+   DATE HELPERS
 ========================================================= */
 
-function getTypeLabel(type) {
-  if (type === "blogger") return "BLOG";
-  if (type === "pdf") return "PDF";
-  if (type === "pptx") return "PRESENTATION";
-  return "ARTICLE";
+function parseLocalDate(dateString) {
+  const [year, month, day] = dateString
+    .split("-")
+    .map(Number);
+
+  return new Date(
+    year,
+    month - 1,
+    day
+  );
 }
 
-function getActionLabel(type) {
-  if (type === "blogger") return "Read Article";
-  if (type === "pdf") return "View PDF";
-  if (type === "pptx") return "Open Presentation";
-  return "Start Reading";
+function isRecentNotice(dateString) {
+  const noticeDate =
+    parseLocalDate(dateString);
+
+  const today = new Date();
+
+  const todayOnly = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  );
+
+  const difference = Math.floor(
+    (todayOnly.getTime() -
+      noticeDate.getTime()) /
+      (1000 * 60 * 60 * 24)
+  );
+
+  return (
+    difference >= 0 &&
+    difference <= 3
+  );
 }
 
-function getTypeIcon(type) {
-  if (type === "blogger") return "external";
-  if (type === "pdf") return "file";
-  if (type === "pptx") return "presentation";
-  return "book";
+function formatDate(dateString) {
+  return parseLocalDate(
+    dateString
+  ).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 }
 
 /* =========================================================
-   LIBRARY
+   ICONS
 ========================================================= */
 
-function Library() {
-  const [selectedResource, setSelectedResource] = useState(null);
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("All");
-  const [copiedResource, setCopiedResource] = useState(null);
+function SearchIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <circle
+        cx="11"
+        cy="11"
+        r="6.5"
+      />
 
-  const categories = useMemo(() => {
-    const uniqueCategories = [];
+      <path d="M16 16l5 5" />
+    </svg>
+  );
+}
 
-    resources.forEach((resource) => {
-      if (!uniqueCategories.includes(resource.category)) {
-        uniqueCategories.push(resource.category);
-      }
-    });
+function ShareIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <circle
+        cx="18"
+        cy="5"
+        r="2.5"
+      />
 
-    return ["All", ...uniqueCategories];
-  }, []);
+      <circle
+        cx="6"
+        cy="12"
+        r="2.5"
+      />
 
-  const filteredResources = useMemo(() => {
-    const query = search.toLowerCase().trim();
+      <circle
+        cx="18"
+        cy="19"
+        r="2.5"
+      />
 
-    return resources.filter((resource) => {
-      const searchableContent = [
-        resource.title,
-        resource.excerpt,
-        resource.category,
-        resource.author,
-        resource.type,
-      ]
-        .join(" ")
-        .toLowerCase();
+      <path d="M8.2 10.8l7.5-4.2M8.2 13.2l7.5 4.2" />
+    </svg>
+  );
+}
 
-      const matchesSearch = searchableContent.includes(query);
+function DownloadIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <path d="M12 3v12" />
 
-      const matchesCategory =
-        category === "All" || resource.category === category;
+      <path d="M7 10l5 5 5-5" />
 
-      return matchesSearch && matchesCategory;
-    });
-  }, [search, category]);
+      <path d="M4 20h16" />
+    </svg>
+  );
+}
+
+function ExternalIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <path d="M14 4h6v6" />
+
+      <path d="M20 4l-9 9" />
+
+      <path d="M19 13v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h6" />
+    </svg>
+  );
+}
+
+function ArrowIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <path d="M5 12h13" />
+
+      <path d="M13 6l6 6-6 6" />
+    </svg>
+  );
+}
+
+function CloseIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <path d="M6 6l12 12M18 6L6 18" />
+    </svg>
+  );
+}
+
+function BellIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" />
+
+      <path d="M10 21h4" />
+    </svg>
+  );
+}
+
+/* =========================================================
+   NOTICE PAGE
+========================================================= */
+
+function Notice() {
+
+  const [search, setSearch] =
+    useState("");
+
+  const [activeCategory, setActiveCategory] =
+    useState("All");
+
+  const [selectedNotice, setSelectedNotice] =
+    useState(null);
+
+  const [shareMessage, setShareMessage] =
+    useState("");
+
 
   /* =======================================================
-     OPEN SHARED RESOURCE FROM URL
+     FILTER
+  ======================================================= */
+
+  const filteredNotices = useMemo(() => {
+
+    const searchText =
+      search.trim().toLowerCase();
+
+    return noticesData.filter(
+      (notice) => {
+
+        const matchesSearch =
+          searchText === "" ||
+          notice.title
+            .toLowerCase()
+            .includes(searchText) ||
+          notice.description
+            .toLowerCase()
+            .includes(searchText) ||
+          notice.category
+            .toLowerCase()
+            .includes(searchText);
+
+        let matchesCategory = true;
+
+        if (
+          activeCategory ===
+          "Important"
+        ) {
+
+          matchesCategory =
+            notice.important;
+
+        } else if (
+          activeCategory !==
+          "All"
+        ) {
+
+          matchesCategory =
+            notice.category ===
+            activeCategory;
+
+        }
+
+        return (
+          matchesSearch &&
+          matchesCategory
+        );
+      }
+    );
+
+  }, [
+    search,
+    activeCategory,
+  ]);
+
+
+  /* =======================================================
+     DOWNLOAD
+  ======================================================= */
+
+  const downloadNotice =
+    async (notice) => {
+
+      try {
+
+        const response =
+          await fetch(
+            notice.file
+          );
+
+        if (!response.ok) {
+          throw new Error(
+            "File could not be downloaded."
+          );
+        }
+
+        const blob =
+          await response.blob();
+
+        const blobUrl =
+          window.URL.createObjectURL(
+            blob
+          );
+
+        const link =
+          document.createElement(
+            "a"
+          );
+
+        link.href =
+          blobUrl;
+
+        const cleanPath =
+          notice.file.split("?")[0];
+
+        const fileName =
+          decodeURIComponent(
+            cleanPath
+              .split("/")
+              .pop()
+          ) ||
+          "VFAW-notice";
+
+        link.download =
+          fileName;
+
+        document.body.appendChild(
+          link
+        );
+
+        link.click();
+
+        document.body.removeChild(
+          link
+        );
+
+        window.URL.revokeObjectURL(
+          blobUrl
+        );
+
+      } catch (error) {
+
+        console.error(
+          "Download failed:",
+          error
+        );
+
+        const link =
+          document.createElement(
+            "a"
+          );
+
+        link.href =
+          notice.file;
+
+        link.download =
+          "";
+
+        document.body.appendChild(
+          link
+        );
+
+        link.click();
+
+        document.body.removeChild(
+          link
+        );
+      }
+    };
+
+
+  /* =======================================================
+     SHARE
+  ======================================================= */
+
+  const shareNotice =
+    async (notice) => {
+
+      const shareUrl =
+        `${window.location.origin}${notice.file}`;
+
+      const shareData = {
+        title:
+          notice.title,
+
+        text:
+          `${notice.title} — VFAW Official Notice`,
+
+        url:
+          shareUrl,
+      };
+
+      try {
+
+        if (
+          navigator.share
+        ) {
+
+          await navigator.share(
+            shareData
+          );
+
+          return;
+        }
+
+        if (
+          navigator.clipboard
+        ) {
+
+          await navigator.clipboard.writeText(
+            shareUrl
+          );
+
+          setShareMessage(
+            "Notice link copied!"
+          );
+
+          setTimeout(() => {
+            setShareMessage("");
+          }, 2500);
+
+          return;
+        }
+
+        setShareMessage(
+          "Unable to share this notice."
+        );
+
+        setTimeout(() => {
+          setShareMessage("");
+        }, 2500);
+
+      } catch (error) {
+
+        if (
+          error?.name ===
+          "AbortError"
+        ) {
+          return;
+        }
+
+        setShareMessage(
+          "Unable to share this notice."
+        );
+
+        setTimeout(() => {
+          setShareMessage("");
+        }, 2500);
+      }
+    };
+
+
+  /* =======================================================
+     OPEN NOTICE
+  ======================================================= */
+
+  const openNotice =
+    (notice) => {
+
+      setSelectedNotice(
+        notice
+      );
+
+      window.history.pushState(
+        null,
+        "",
+        `/notice#notice-${notice.id}`
+      );
+    };
+
+
+  /* =======================================================
+     CLOSE NOTICE
+  ======================================================= */
+
+  const closeNotice =
+    () => {
+
+      setSelectedNotice(
+        null
+      );
+
+      if (
+        window.location.hash.startsWith(
+          "#notice-"
+        )
+      ) {
+
+        window.history.replaceState(
+          null,
+          "",
+          window.location.pathname +
+            window.location.search
+        );
+      }
+    };
+
+
+  /* =======================================================
+     OPEN NOTICE FROM HASH
   ======================================================= */
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const resourceId = params.get("resource");
 
-    if (resourceId) {
-      const resource = resources.find(
-        (item) => item.id === Number(resourceId)
+    const openNoticeFromHash =
+      () => {
+
+        const hash =
+          window.location.hash;
+
+        if (
+          !hash.startsWith(
+            "#notice-"
+          )
+        ) {
+          return;
+        }
+
+        const noticeId =
+          Number(
+            hash.replace(
+              "#notice-",
+              ""
+            )
+          );
+
+        if (
+          Number.isNaN(
+            noticeId
+          )
+        ) {
+          return;
+        }
+
+        const notice =
+          noticesData.find(
+            (item) =>
+              item.id ===
+              noticeId
+          );
+
+        if (!notice) {
+          return;
+        }
+
+        setSelectedNotice(
+          notice
+        );
+
+        setTimeout(() => {
+
+          document
+            .getElementById(
+              `notice-${notice.id}`
+            )
+            ?.scrollIntoView({
+              behavior:
+                "smooth",
+
+              block:
+                "center",
+            });
+
+        }, 150);
+      };
+
+
+    openNoticeFromHash();
+
+    window.addEventListener(
+      "hashchange",
+      openNoticeFromHash
+    );
+
+    return () => {
+
+      window.removeEventListener(
+        "hashchange",
+        openNoticeFromHash
       );
 
-      if (resource) {
-        setSelectedResource(resource);
-      }
-    }
+    };
+
   }, []);
+
+
+  /* =======================================================
+     BROWSER BACK/FORWARD
+  ======================================================= */
+
+  useEffect(() => {
+
+    const handlePopState =
+      () => {
+
+        const hash =
+          window.location.hash;
+
+        if (
+          !hash.startsWith(
+            "#notice-"
+          )
+        ) {
+
+          setSelectedNotice(
+            null
+          );
+
+          return;
+        }
+
+        const noticeId =
+          Number(
+            hash.replace(
+              "#notice-",
+              ""
+            )
+          );
+
+        const notice =
+          noticesData.find(
+            (item) =>
+              item.id ===
+              noticeId
+          );
+
+        if (notice) {
+          setSelectedNotice(
+            notice
+          );
+        }
+
+      };
+
+    window.addEventListener(
+      "popstate",
+      handlePopState
+    );
+
+    return () => {
+
+      window.removeEventListener(
+        "popstate",
+        handlePopState
+      );
+
+    };
+
+  }, []);
+
+
+  /* =======================================================
+     ESCAPE KEY
+  ======================================================= */
+
+  useEffect(() => {
+
+    const handleKeyDown =
+      (event) => {
+
+        if (
+          event.key ===
+          "Escape"
+        ) {
+
+          closeNotice();
+
+        }
+      };
+
+    window.addEventListener(
+      "keydown",
+      handleKeyDown
+    );
+
+    return () => {
+
+      window.removeEventListener(
+        "keydown",
+        handleKeyDown
+      );
+
+    };
+
+  }, []);
+
 
   /* =======================================================
      BODY SCROLL LOCK
   ======================================================= */
 
   useEffect(() => {
-    if (selectedResource) {
-      document.body.style.overflow = "hidden";
+
+    if (
+      selectedNotice
+    ) {
+
+      document.body.style.overflow =
+        "hidden";
+
     } else {
-      document.body.style.overflow = "";
+
+      document.body.style.overflow =
+        "";
+
     }
 
     return () => {
-      document.body.style.overflow = "";
-    };
-  }, [selectedResource]);
 
-  /* =======================================================
-     ESC KEY
-  ======================================================= */
+      document.body.style.overflow =
+        "";
 
-  useEffect(() => {
-    const handleEscape = (event) => {
-      if (event.key === "Escape") {
-        closeReader();
-      }
     };
 
-    window.addEventListener("keydown", handleEscape);
+  }, [
+    selectedNotice,
+  ]);
 
-    return () => {
-      window.removeEventListener("keydown", handleEscape);
-    };
-  }, []);
-
-  /* =======================================================
-     OPEN RESOURCE
-  ======================================================= */
-
-  const openResource = (resource) => {
-    setSelectedResource(resource);
-
-    const url = new URL(window.location.href);
-    url.searchParams.set("resource", resource.id);
-
-    window.history.pushState({}, "", url);
-  };
-
-  const closeReader = () => {
-    setSelectedResource(null);
-
-    const url = new URL(window.location.href);
-    url.searchParams.delete("resource");
-
-    window.history.pushState({}, "", url);
-  };
-
-  /* =======================================================
-     SHARE RESOURCE
-  ======================================================= */
-
-  const getShareUrl = (resource) => {
-    const url = new URL(window.location.href);
-
-    url.searchParams.set("resource", resource.id);
-
-    return url.toString();
-  };
-
-  const handleShare = async (resource) => {
-    const shareUrl = getShareUrl(resource);
-
-    const shareData = {
-      title: resource.title,
-      text: `Check out this resource from VFAW Knowledge Library: ${resource.title}`,
-      url: shareUrl,
-    };
-
-    try {
-      if (navigator.share) {
-        await navigator.share(shareData);
-        return;
-      }
-
-      await navigator.clipboard.writeText(shareUrl);
-
-      setCopiedResource(resource.id);
-
-      setTimeout(() => {
-        setCopiedResource(null);
-      }, 2500);
-    } catch (error) {
-      console.error("Sharing failed:", error);
-
-      try {
-        await navigator.clipboard.writeText(shareUrl);
-
-        setCopiedResource(resource.id);
-
-        setTimeout(() => {
-          setCopiedResource(null);
-        }, 2500);
-      } catch (copyError) {
-        console.error("Copy failed:", copyError);
-      }
-    }
-  };
-
-  /* =======================================================
-     PRESENTATION FULLSCREEN
-  ======================================================= */
-
-  const openPresentationFullscreen = async () => {
-    const presentationStage = document.querySelector(
-      ".presentation-stage"
-    );
-
-    if (!presentationStage) return;
-
-    try {
-      if (presentationStage.requestFullscreen) {
-        await presentationStage.requestFullscreen();
-      } else if (presentationStage.webkitRequestFullscreen) {
-        presentationStage.webkitRequestFullscreen();
-      } else {
-        alert("Fullscreen is not supported by this browser.");
-      }
-    } catch (error) {
-      console.error("Fullscreen error:", error);
-    }
-  };
 
   return (
-    <div className="library-page">
 
-      {/* HERO */}
+    <div className="notice-page">
 
-      <section className="library-hero">
+      <style>{`
 
-        <div className="hero-pattern"></div>
+        /* =====================================================
+           BASE
+        ===================================================== */
 
-        <div className="hero-glow hero-glow-left"></div>
-        <div className="hero-glow hero-glow-right"></div>
+        .notice-page {
+          --blue: #0759b8;
+          --blue-dark: #06468f;
+          --blue-light: #edf5ff;
+          --blue-soft: #f6faff;
 
-        <div className="hero-content">
+          --red: #e53935;
+          --red-soft: #fff1f1;
 
-          <div className="hero-eyebrow">
-            <span className="eyebrow-line"></span>
+          --text: #0c1b2a;
+          --muted: #64748b;
+          --border: #e7edf4;
 
-            <span>
-              VFAW KNOWLEDGE LIBRARY
-            </span>
+          min-height: 100vh;
+
+          background: #fbfcfe;
+
+          color: var(--text);
+
+          font-family:
+            Inter,
+            ui-sans-serif,
+            system-ui,
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            sans-serif;
+
+          overflow-x: hidden;
+        }
+
+        .notice-page *,
+        .notice-page *::before,
+        .notice-page *::after {
+          box-sizing: border-box;
+        }
+
+        /* =====================================================
+           HERO
+        ===================================================== */
+
+        .notice-hero {
+          position: relative;
+
+          overflow: hidden;
+
+          padding:
+            86px
+            24px
+            78px;
+
+          background:
+            radial-gradient(
+              circle at 50% 0%,
+              rgba(7,89,184,.13),
+              transparent 38%
+            ),
+            linear-gradient(
+              180deg,
+              #edf6ff 0%,
+              #f8fbff 55%,
+              #ffffff 100%
+            );
+
+          border-bottom:
+            1px solid
+            #dce9f7;
+        }
+
+        .hero-grid {
+          position: absolute;
+
+          inset: 0;
+
+          opacity: .45;
+
+          background-image:
+            linear-gradient(
+              rgba(7,89,184,.045) 1px,
+              transparent 1px
+            ),
+            linear-gradient(
+              90deg,
+              rgba(7,89,184,.045) 1px,
+              transparent 1px
+            );
+
+          background-size:
+            42px 42px;
+
+          mask-image:
+            linear-gradient(
+              to bottom,
+              black,
+              transparent 90%
+            );
+        }
+
+        .hero-inner {
+          position: relative;
+
+          z-index: 2;
+
+          max-width: 900px;
+
+          margin: 0 auto;
+
+          text-align: center;
+
+          display: flex;
+
+          flex-direction: column;
+
+          align-items: center;
+        }
+
+        .hero-kicker {
+          display: inline-flex;
+
+          align-items: center;
+
+          gap: 10px;
+
+          margin-bottom: 20px;
+
+          color: var(--blue);
+
+          font-size: 12px;
+
+          font-weight: 900;
+
+          letter-spacing: .13em;
+
+          text-transform: uppercase;
+        }
+
+        .hero-kicker::before,
+        .hero-kicker::after {
+          content: "";
+
+          width: 26px;
+          height: 2px;
+
+          background:
+            var(--blue);
+
+          border-radius: 999px;
+        }
+
+        .hero-title {
+          margin: 0;
+
+          max-width: 900px;
+
+          color: var(--text);
+
+          font-size:
+            clamp(48px, 8vw, 86px);
+
+          line-height: .98;
+
+          font-weight: 900;
+
+          letter-spacing: -.065em;
+        }
+
+        .hero-title span {
+          color: var(--blue);
+        }
+
+        .hero-description {
+          max-width: 680px;
+
+          margin:
+            25px auto 0;
+
+          color: #64748b;
+
+          font-size: 16px;
+
+          line-height: 1.75;
+        }
+
+        .hero-meta {
+          display: flex;
+
+          justify-content: center;
+
+          align-items: center;
+
+          flex-wrap: wrap;
+
+          gap: 9px;
+
+          margin-top: 30px;
+        }
+
+        .hero-meta-item {
+          display: inline-flex;
+
+          align-items: center;
+
+          gap: 8px;
+
+          padding:
+            9px 13px;
+
+          border:
+            1px solid
+            rgba(7,89,184,.13);
+
+          border-radius: 999px;
+
+          background:
+            rgba(255,255,255,.82);
+
+          color: #526276;
+
+          font-size: 12px;
+
+          font-weight: 700;
+
+          box-shadow:
+            0 5px 18px
+            rgba(7,89,184,.04);
+        }
+
+        .hero-meta-item strong {
+          color: var(--text);
+        }
+
+        .hero-meta-dot {
+          width: 7px;
+          height: 7px;
+
+          border-radius: 50%;
+
+          background:
+            var(--blue);
+        }
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
+
+        .notice-container {
+          max-width: 1180px;
+
+          margin: 0 auto;
+
+          padding:
+            55px
+            24px
+            100px;
+        }
+
+        /* =====================================================
+           CONTROLS
+        ===================================================== */
+
+        .notice-controls {
+          display: flex;
+
+          align-items: center;
+
+          justify-content:
+            space-between;
+
+          gap: 20px;
+
+          margin-bottom: 48px;
+        }
+
+        .search-box {
+          position: relative;
+
+          width:
+            min(390px, 100%);
+        }
+
+        .search-box svg {
+          position: absolute;
+
+          left: 16px;
+          top: 50%;
+
+          width: 18px;
+          height: 18px;
+
+          transform:
+            translateY(-50%);
+
+          fill: none;
+
+          stroke: #8a98a8;
+
+          stroke-width: 1.8;
+
+          pointer-events: none;
+        }
+
+        .search-box input {
+          width: 100%;
+
+          height: 48px;
+
+          padding:
+            0
+            16px
+            0
+            46px;
+
+          border:
+            1px solid
+            var(--border);
+
+          border-radius: 12px;
+
+          outline: none;
+
+          background: white;
+
+          color: var(--text);
+
+          font-size: 14px;
+
+          transition:
+            border-color .2s ease,
+            box-shadow .2s ease;
+        }
+
+        .search-box input:focus {
+          border-color:
+            rgba(7,89,184,.45);
+
+          box-shadow:
+            0 0 0 4px
+            rgba(7,89,184,.08);
+        }
+
+        .category-list {
+          display: flex;
+
+          flex-wrap: wrap;
+
+          justify-content: flex-end;
+
+          gap: 7px;
+        }
+
+        .category-button {
+          height: 38px;
+
+          padding:
+            0 14px;
+
+          border:
+            1px solid
+            var(--border);
+
+          border-radius: 999px;
+
+          background: white;
+
+          color: #68788a;
+
+          cursor: pointer;
+
+          font-family: inherit;
+
+          font-size: 12px;
+
+          font-weight: 800;
+
+          transition:
+            transform .2s ease,
+            color .2s ease,
+            background .2s ease,
+            border-color .2s ease;
+        }
+
+        .category-button:hover {
+          transform:
+            translateY(-1px);
+
+          border-color:
+            #c9d9e9;
+
+          color:
+            var(--blue);
+        }
+
+        .category-button.active {
+          border-color:
+            var(--blue);
+
+          background:
+            var(--blue);
+
+          color: white;
+
+          box-shadow:
+            0 5px 15px
+            rgba(7,89,184,.16);
+        }
+
+        /* =====================================================
+           SECTION HEADER
+        ===================================================== */
+
+        .section-header {
+          display: flex;
+
+          align-items: flex-end;
+
+          justify-content:
+            space-between;
+
+          gap: 20px;
+
+          margin-bottom: 24px;
+        }
+
+        .section-eyebrow {
+          margin:
+            0 0 7px;
+
+          color:
+            var(--blue);
+
+          font-size: 11px;
+
+          font-weight: 900;
+
+          letter-spacing: .12em;
+
+          text-transform:
+            uppercase;
+        }
+
+        .section-header h2 {
+          margin: 0;
+
+          color:
+            var(--text);
+
+          font-size: 30px;
+
+          line-height: 1.1;
+
+          letter-spacing:
+            -.04em;
+        }
+
+        .section-count {
+          color:
+            #8b98a7;
+
+          font-size: 12px;
+
+          font-weight: 700;
+        }
+
+        /* =====================================================
+           GRID
+        ===================================================== */
+
+        .notice-grid {
+          display: grid;
+
+          grid-template-columns:
+            repeat(
+              3,
+              minmax(0, 1fr)
+            );
+
+          gap: 18px;
+        }
+
+        /* =====================================================
+           CARD
+        ===================================================== */
+
+        .notice-card {
+          position: relative;
+
+          display: flex;
+
+          flex-direction: column;
+
+          min-height: 355px;
+
+          padding: 24px;
+
+          background: white;
+
+          border:
+            1px solid
+            var(--border);
+
+          border-radius: 18px;
+
+          overflow: hidden;
+
+          scroll-margin-top: 130px;
+
+          transition:
+            transform .3s
+              cubic-bezier(.2,.8,.2,1),
+            border-color .3s ease,
+            box-shadow .3s ease;
+        }
+
+        .notice-card:hover {
+          transform:
+            translateY(-6px);
+
+          border-color:
+            #d4e2ef;
+
+          box-shadow:
+            0 18px 45px
+            rgba(19,52,84,.10);
+        }
+
+        .notice-card.recent {
+          border-color:
+            rgba(229,57,53,.18);
+        }
+
+        .notice-card.recent:hover {
+          border-color:
+            rgba(229,57,53,.34);
+
+          box-shadow:
+            0 18px 45px
+            rgba(229,57,53,.10);
+        }
+
+        .card-accent {
+          position: absolute;
+
+          left: 0;
+          top: 0;
+
+          width: 100%;
+          height: 3px;
+
+          background:
+            var(--blue);
+        }
+
+        .notice-card.recent
+        .card-accent {
+          background:
+            var(--red);
+        }
+
+        .notice-card-top {
+          display: flex;
+
+          align-items: center;
+
+          justify-content:
+            space-between;
+
+          gap: 10px;
+
+          margin-bottom: 26px;
+        }
+
+        .notice-category {
+          display: inline-flex;
+
+          align-items: center;
+
+          min-height: 28px;
+
+          padding:
+            0 10px;
+
+          border-radius: 7px;
+
+          background:
+            var(--blue-light);
+
+          color:
+            var(--blue);
+
+          font-size: 10px;
+
+          font-weight: 900;
+
+          letter-spacing: .05em;
+
+          text-transform:
+            uppercase;
+        }
+
+        .notice-card.recent
+        .notice-category {
+          background:
+            var(--red-soft);
+
+          color:
+            var(--red);
+        }
+
+        .new-label {
+          display: inline-flex;
+
+          align-items: center;
+
+          gap: 5px;
+
+          color:
+            var(--red);
+
+          font-size: 9px;
+
+          font-weight: 900;
+
+          letter-spacing: .08em;
+        }
+
+        .new-label::before {
+          content: "";
+
+          width: 6px;
+          height: 6px;
+
+          border-radius: 50%;
+
+          background:
+            var(--red);
+
+          box-shadow:
+            0 0 0 4px
+            rgba(229,57,53,.08);
+        }
+
+        .important-label {
+          display: inline-flex;
+
+          align-items: center;
+
+          padding:
+            5px 8px;
+
+          border-radius: 6px;
+
+          background:
+            #fff7e8;
+
+          color:
+            #b86b00;
+
+          font-size: 9px;
+
+          font-weight: 900;
+
+          letter-spacing: .06em;
+
+          text-transform:
+            uppercase;
+        }
+
+        .notice-title {
+          margin: 0;
+
+          color:
+            var(--text);
+
+          font-size: 21px;
+
+          line-height: 1.3;
+
+          font-weight: 850;
+
+          letter-spacing:
+            -.025em;
+        }
+
+        .notice-description {
+          flex: 1;
+
+          margin:
+            14px 0 0;
+
+          color:
+            #718094;
+
+          font-size: 13px;
+
+          line-height: 1.7;
+        }
+
+        .notice-date {
+          display: flex;
+
+          align-items: center;
+
+          justify-content:
+            space-between;
+
+          margin-top: 24px;
+
+          padding-top: 16px;
+
+          border-top:
+            1px solid
+            #edf1f5;
+
+          color:
+            #8a97a6;
+
+          font-size: 11px;
+
+          font-weight: 700;
+        }
+
+        .notice-date.recent-date {
+          color:
+            var(--red);
+        }
+
+        /* =====================================================
+           ACTIONS
+        ===================================================== */
+
+        .notice-actions {
+          display: grid;
+
+          grid-template-columns:
+            1.3fr 1fr 1fr;
+
+          gap: 7px;
+
+          margin-top: 17px;
+        }
+
+        .notice-button {
+          min-height: 39px;
+
+          display: inline-flex;
+
+          align-items: center;
+
+          justify-content:
+            center;
+
+          gap: 7px;
+
+          padding:
+            0 9px;
+
+          border:
+            1px solid
+            transparent;
+
+          border-radius: 9px;
+
+          cursor: pointer;
+
+          text-decoration:
+            none;
+
+          font-family: inherit;
+
+          font-size: 11px;
+
+          font-weight: 850;
+
+          transition:
+            transform .2s ease,
+            background .2s ease,
+            border-color .2s ease,
+            color .2s ease;
+        }
+
+        .notice-button svg {
+          width: 14px;
+          height: 14px;
+
+          fill: none;
+
+          stroke:
+            currentColor;
+
+          stroke-width:
+            1.8;
+        }
+
+        .notice-button:hover {
+          transform:
+            translateY(-2px);
+        }
+
+        .notice-button:active {
+          transform:
+            translateY(0);
+        }
+
+        .notice-button.primary {
+          border-color:
+            var(--blue);
+
+          background:
+            var(--blue);
+
+          color: white;
+        }
+
+        .notice-button.primary:hover {
+          background:
+            var(--blue-dark);
+
+          border-color:
+            var(--blue-dark);
+        }
+
+        .notice-button.secondary {
+          border-color:
+            var(--border);
+
+          background: white;
+
+          color:
+            #526276;
+        }
+
+        .notice-button.secondary:hover {
+          border-color:
+            #cbd9e7;
+
+          background:
+            var(--blue-soft);
+
+          color:
+            var(--blue);
+        }
+
+        .notice-card.recent
+        .share-button {
+          border-color:
+            rgba(229,57,53,.18);
+
+          background:
+            var(--red-soft);
+
+          color:
+            var(--red);
+        }
+
+        .notice-card.recent
+        .share-button:hover {
+          background:
+            #ffe5e5;
+
+          border-color:
+            rgba(229,57,53,.32);
+        }
+
+        /* =====================================================
+           EMPTY
+        ===================================================== */
+
+        .notice-empty {
+          padding:
+            70px 25px;
+
+          text-align:
+            center;
+
+          border:
+            1px solid
+            var(--border);
+
+          border-radius:
+            18px;
+
+          background:
+            white;
+        }
+
+        .notice-empty h3 {
+          margin:
+            0 0 8px;
+
+          font-size:
+            21px;
+        }
+
+        .notice-empty p {
+          margin: 0;
+
+          color:
+            var(--muted);
+
+          font-size:
+            14px;
+        }
+
+        /* =====================================================
+           INFO
+        ===================================================== */
+
+        .notice-info {
+          display: flex;
+
+          align-items: center;
+
+          justify-content:
+            space-between;
+
+          gap: 30px;
+
+          margin-top:
+            55px;
+
+          padding:
+            28px 30px;
+
+          border:
+            1px solid
+            #dce9f7;
+
+          border-radius:
+            16px;
+
+          background:
+            linear-gradient(
+              135deg,
+              #f4f9ff,
+              #ffffff
+            );
+        }
+
+        .notice-info-left {
+          display: flex;
+
+          align-items:
+            flex-start;
+
+          gap: 15px;
+        }
+
+        .info-icon {
+          width: 38px;
+          height: 38px;
+
+          display: flex;
+
+          align-items: center;
+
+          justify-content:
+            center;
+
+          flex:
+            0 0 38px;
+
+          border-radius:
+            10px;
+
+          background:
+            var(--blue);
+
+          color:
+            white;
+        }
+
+        .info-icon svg {
+          width: 18px;
+          height: 18px;
+
+          fill: none;
+
+          stroke:
+            currentColor;
+
+          stroke-width:
+            1.8;
+        }
+
+        .notice-info h3 {
+          margin:
+            0 0 5px;
+
+          color:
+            var(--text);
+
+          font-size:
+            15px;
+        }
+
+        .notice-info p {
+          max-width:
+            700px;
+
+          margin: 0;
+
+          color:
+            var(--muted);
+
+          font-size:
+            12px;
+
+          line-height:
+            1.65;
+        }
+
+        .info-brand {
+          color:
+            var(--blue);
+
+          font-size:
+            11px;
+
+          font-weight:
+            900;
+
+          white-space:
+            nowrap;
+        }
+
+        /* =====================================================
+           TOAST
+        ===================================================== */
+
+        .share-toast {
+          position:
+            fixed;
+
+          left:
+            50%;
+
+          bottom:
+            28px;
+
+          z-index:
+            10001;
+
+          transform:
+            translateX(-50%);
+
+          padding:
+            12px 18px;
+
+          border-radius:
+            10px;
+
+          background:
+            #0c1b2a;
+
+          color:
+            white;
+
+          box-shadow:
+            0 12px 35px
+            rgba(0,0,0,.18);
+
+          font-size:
+            12px;
+
+          font-weight:
+            800;
+
+          animation:
+            toastIn .25s ease;
+        }
+
+        @keyframes toastIn {
+
+          from {
+            opacity: 0;
+
+            transform:
+              translate(
+                -50%,
+                10px
+              );
+          }
+
+          to {
+            opacity: 1;
+
+            transform:
+              translate(
+                -50%,
+                0
+              );
+          }
+
+        }
+
+        /* =====================================================
+           MODAL
+        ===================================================== */
+
+        .notice-modal {
+          position:
+            fixed;
+
+          inset:
+            0;
+
+          z-index:
+            10000;
+
+          display:
+            flex;
+
+          align-items:
+            center;
+
+          justify-content:
+            center;
+
+          padding:
+            20px;
+
+          background:
+            rgba(5,18,31,.80);
+
+          backdrop-filter:
+            blur(12px);
+
+          -webkit-backdrop-filter:
+            blur(12px);
+
+          animation:
+            modalBackground
+            .2s ease;
+        }
+
+        .notice-modal-content {
+          width:
+            min(1150px, 100%);
+
+          height:
+            min(850px, 94vh);
+
+          display:
+            flex;
+
+          flex-direction:
+            column;
+
+          overflow:
+            hidden;
+
+          background:
+            white;
+
+          border-radius:
+            18px;
+
+          box-shadow:
+            0 35px 100px
+            rgba(0,0,0,.30);
+
+          animation:
+            modalIn
+            .25s
+            cubic-bezier(.2,.8,.2,1);
+        }
+
+        @keyframes modalBackground {
+
+          from {
+            opacity: 0;
+          }
+
+          to {
+            opacity: 1;
+          }
+
+        }
+
+        @keyframes modalIn {
+
+          from {
+            opacity: 0;
+
+            transform:
+              scale(.97)
+              translateY(10px);
+          }
+
+          to {
+            opacity: 1;
+
+            transform:
+              scale(1)
+              translateY(0);
+          }
+
+        }
+
+        /* =====================================================
+           MODAL HEADER
+        ===================================================== */
+
+        .notice-modal-header {
+          min-height:
+            70px;
+
+          display:
+            flex;
+
+          align-items:
+            center;
+
+          justify-content:
+            space-between;
+
+          gap:
+            15px;
+
+          padding:
+            10px
+            18px
+            10px
+            22px;
+
+          border-bottom:
+            1px solid
+            var(--border);
+
+          background:
+            white;
+        }
+
+        .modal-title-area {
+          min-width:
+            0;
+        }
+
+        .modal-label {
+          margin-bottom:
+            3px;
+
+          color:
+            var(--blue);
+
+          font-size:
+            9px;
+
+          font-weight:
+            900;
+
+          letter-spacing:
+            .1em;
+
+          text-transform:
+            uppercase;
+        }
+
+        .notice-modal-header h3 {
+          overflow:
+            hidden;
+
+          margin:
+            0;
+
+          color:
+            var(--text);
+
+          font-size:
+            15px;
+
+          text-overflow:
+            ellipsis;
+
+          white-space:
+            nowrap;
+        }
+
+        .modal-actions {
+          display:
+            flex;
+
+          align-items:
+            center;
+
+          gap:
+            7px;
+
+          flex-shrink:
+            0;
+        }
+
+        .modal-download {
+          min-height:
+            38px;
+
+          display:
+            inline-flex;
+
+          align-items:
+            center;
+
+          justify-content:
+            center;
+
+          gap:
+            7px;
+
+          padding:
+            0 13px;
+
+          border:
+            none;
+
+          border-radius:
+            9px;
+
+          background:
+            var(--blue);
+
+          color:
+            white;
+
+          cursor:
+            pointer;
+
+          font-family:
+            inherit;
+
+          font-size:
+            11px;
+
+          font-weight:
+            850;
+
+          transition:
+            background .2s ease,
+            transform .2s ease;
+        }
+
+        .modal-download:hover {
+          background:
+            var(--blue-dark);
+
+          transform:
+            translateY(-1px);
+        }
+
+        .modal-download svg {
+          width:
+            14px;
+
+          height:
+            14px;
+
+          fill:
+            none;
+
+          stroke:
+            currentColor;
+
+          stroke-width:
+            1.8;
+        }
+
+        .notice-close {
+          width:
+            38px;
+
+          height:
+            38px;
+
+          display:
+            flex;
+
+          align-items:
+            center;
+
+          justify-content:
+            center;
+
+          flex:
+            0 0 38px;
+
+          border:
+            1px solid
+            var(--border);
+
+          border-radius:
+            9px;
+
+          background:
+            white;
+
+          color:
+            #637386;
+
+          cursor:
+            pointer;
+
+          transition:
+            background .2s ease,
+            color .2s ease;
+        }
+
+        .notice-close:hover {
+          background:
+            #f5f7fa;
+
+          color:
+            var(--text);
+        }
+
+        .notice-close svg {
+          width:
+            17px;
+
+          height:
+            17px;
+
+          fill:
+            none;
+
+          stroke:
+            currentColor;
+
+          stroke-width:
+            2;
+        }
+
+        /* =====================================================
+           PREVIEW
+        ===================================================== */
+
+        .notice-preview {
+          flex:
+            1;
+
+          min-height:
+            0;
+
+          display:
+            flex;
+
+          align-items:
+            center;
+
+          justify-content:
+            center;
+
+          background:
+            #e9eef3;
+        }
+
+        .notice-preview iframe {
+          width:
+            100%;
+
+          height:
+            100%;
+
+          display:
+            block;
+
+          border:
+            none;
+
+          background:
+            white;
+        }
+
+        .notice-preview img {
+          width:
+            100%;
+
+          height:
+            100%;
+
+          display:
+            block;
+
+          object-fit:
+            contain;
+
+          padding:
+            15px;
+        }
+
+        /* =====================================================
+           TABLET
+        ===================================================== */
+
+        @media (max-width: 950px) {
+
+          .notice-grid {
+            grid-template-columns:
+              repeat(
+                2,
+                minmax(0, 1fr)
+              );
+          }
+
+          .notice-controls {
+            align-items:
+              stretch;
+
+            flex-direction:
+              column;
+          }
+
+          .search-box {
+            width:
+              100%;
+          }
+
+          .category-list {
+            justify-content:
+              flex-start;
+          }
+
+        }
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 650px) {
+
+          .notice-hero {
+            padding:
+              64px
+              18px
+              58px;
+          }
+
+          .hero-kicker {
+            font-size:
+              9px;
+          }
+
+          .hero-kicker::before,
+          .hero-kicker::after {
+            width:
+              18px;
+          }
+
+          .hero-title {
+            font-size:
+              clamp(
+                44px,
+                14vw,
+                62px
+              );
+          }
+
+          .hero-description {
+            font-size:
+              14px;
+          }
+
+          .hero-meta {
+            margin-top:
+              25px;
+          }
+
+          .notice-container {
+            padding:
+              38px
+              16px
+              70px;
+          }
+
+          .category-list {
+            display:
+              grid;
+
+            grid-template-columns:
+              repeat(
+                2,
+                1fr
+              );
+
+            width:
+              100%;
+          }
+
+          .category-button {
+            width:
+              100%;
+          }
+
+          .section-header {
+            align-items:
+              flex-start;
+
+            flex-direction:
+              column;
+
+            gap:
+              7px;
+          }
+
+          .notice-grid {
+            grid-template-columns:
+              1fr;
+          }
+
+          .notice-card {
+            min-height:
+              330px;
+          }
+
+          .notice-info {
+            align-items:
+              flex-start;
+
+            flex-direction:
+              column;
+          }
+
+          .info-brand {
+            padding-left:
+              53px;
+          }
+
+          .notice-modal {
+            padding:
+              8px;
+          }
+
+          .notice-modal-content {
+            height:
+              96vh;
+
+            border-radius:
+              12px;
+          }
+
+          .notice-modal-header {
+            min-height:
+              65px;
+
+            padding-left:
+              14px;
+          }
+
+          .modal-download {
+            width:
+              38px;
+
+            padding:
+              0;
+
+            font-size:
+              0;
+          }
+
+          .modal-download svg {
+            width:
+              16px;
+
+            height:
+              16px;
+          }
+
+        }
+
+        /* =====================================================
+           SMALL MOBILE
+        ===================================================== */
+
+        @media (max-width: 420px) {
+
+          .notice-actions {
+            grid-template-columns:
+              1fr 1fr;
+          }
+
+          .notice-actions
+          .primary {
+            grid-column:
+              span 2;
+          }
+
+          .hero-title {
+            letter-spacing:
+              -.055em;
+          }
+
+        }
+
+        /* =====================================================
+           ACCESSIBILITY
+        ===================================================== */
+
+        .notice-button:focus-visible,
+        .category-button:focus-visible,
+        .notice-close:focus-visible,
+        .modal-download:focus-visible,
+        .search-box input:focus-visible {
+
+          outline:
+            3px solid
+            rgba(7,89,184,.25);
+
+          outline-offset:
+            2px;
+        }
+
+        /* =====================================================
+           REDUCED MOTION
+        ===================================================== */
+
+        @media (prefers-reduced-motion: reduce) {
+
+          .notice-card,
+          .notice-button,
+          .category-button,
+          .modal-download {
+
+            transition:
+              none;
+          }
+
+        }
+
+      `}</style>
+
+
+      {/* =====================================================
+          HERO
+      ===================================================== */}
+
+      <header className="notice-hero">
+
+        <div className="hero-grid"></div>
+
+        <div className="hero-inner">
+
+          <div className="hero-kicker">
+            VFAW Official Communication
           </div>
 
-          <h1>
-            Knowledge that
+          <h1 className="hero-title">
+
+            Notices
+
             <br />
-            <span>creates impact.</span>
+
+            <span>
+              & Updates.
+            </span>
+
           </h1>
 
-          <p>
-            Explore veterinary knowledge, educational articles,
-            professional presentations, study materials and resources
-            created to support better veterinary practice and animal welfare.
+          <p className="hero-description">
+            Stay up to date with official VFAW
+            announcements, competitions, educational
+            events, opportunities and important activities.
           </p>
 
-          <div className="hero-bottom">
+          <div className="hero-meta">
 
-            <div className="hero-info-card">
-              <div className="hero-info-icon">
-                <Icon name="book" size={18} />
-              </div>
+            <div className="hero-meta-item">
 
-              <div>
-                <strong>{resources.length}</strong>
-                <span>Learning Resources</span>
-              </div>
+              <span className="hero-meta-dot"></span>
+
+              <strong>
+                {noticesData.length}
+              </strong>
+
+              published notices
+
             </div>
 
-            <div className="hero-info-card">
-              <div className="hero-info-icon">
-                <Icon name="spark" size={18} />
-              </div>
+            <div className="hero-meta-item">
 
-              <div>
-                <strong>VFAW</strong>
-                <span>Veterinary Education</span>
-              </div>
+              <span className="hero-meta-dot"></span>
+
+              Updated regularly
+
+            </div>
+
+            <div className="hero-meta-item">
+
+              <span className="hero-meta-dot"></span>
+
+              Official VFAW updates
+
             </div>
 
           </div>
 
         </div>
-      </section>
 
-      {/* MAIN */}
+      </header>
 
-      <main className="library-container">
 
-        <section className="library-heading">
+      {/* =====================================================
+          MAIN
+      ===================================================== */}
 
-          <div className="heading-copy">
+      <main className="notice-container">
 
-            <span className="section-eyebrow">
-              RESOURCE CENTER
-            </span>
+        {/* ===================================================
+            SEARCH + FILTER
+        =================================================== */}
 
-            <h2>
-              Explore the Library
-            </h2>
+        <div className="notice-controls">
 
-            <p>
-              A growing collection of veterinary education,
-              animal welfare knowledge and professional resources.
-            </p>
+          <div className="search-box">
 
-          </div>
-
-          <div className="resource-stat">
-
-            <div className="resource-stat-icon">
-              <Icon name="book" size={18} />
-            </div>
-
-            <strong>
-              {resources.length}
-            </strong>
-
-            <span>
-              Resources
-            </span>
-
-          </div>
-
-        </section>
-
-        {/* SEARCH */}
-
-        <section className="library-search-section">
-
-          <div className="search-wrapper">
-
-            <span className="search-icon">
-              <Icon name="search" size={20} />
-            </span>
+            <SearchIcon />
 
             <input
-              type="text"
+              type="search"
+              placeholder="Search notices..."
               value={search}
-              placeholder="Search articles, presentations, PDFs..."
-              onChange={(event) => setSearch(event.target.value)}
-              aria-label="Search library resources"
+              onChange={(event) =>
+                setSearch(
+                  event.target.value
+                )
+              }
+              aria-label="Search notices"
             />
 
-            {search && (
-              <button
-                className="clear-search"
-                type="button"
-                onClick={() => setSearch("")}
-                aria-label="Clear search"
-              >
-                <Icon name="close" size={16} />
-              </button>
+          </div>
+
+          <div className="category-list">
+
+            {categories.map(
+              (category) => (
+
+                <button
+                  key={category}
+                  type="button"
+                  className={`category-button ${
+                    activeCategory ===
+                    category
+                      ? "active"
+                      : ""
+                  }`}
+                  onClick={() =>
+                    setActiveCategory(
+                      category
+                    )
+                  }
+                >
+                  {category}
+                </button>
+
+              )
             )}
 
           </div>
 
-        </section>
+        </div>
 
-        {/* FILTER */}
 
-        <div className="library-filter-header">
+        {/* ===================================================
+            SECTION HEADER
+        =================================================== */}
 
-          <div className="filter-label">
-            <Icon name="filter" size={16} />
-            <span>Filter by category</span>
+        <div className="section-header">
+
+          <div>
+
+            <p className="section-eyebrow">
+              Official updates
+            </p>
+
+            <h2>
+              Latest notices
+            </h2>
+
           </div>
 
-          <span className="filter-count">
-            {filteredResources.length} available
-          </span>
+          <div className="section-count">
+
+            Showing{" "}
+            {filteredNotices.length}{" "}
+            of{" "}
+            {noticesData.length}{" "}
+            notices
+
+          </div>
 
         </div>
 
-        <div className="category-row">
 
-          {categories.map((item) => (
-            <button
-              type="button"
-              key={item}
-              className={category === item ? "active" : ""}
-              onClick={() => setCategory(item)}
-            >
-              {item}
-            </button>
-          ))}
+        {/* ===================================================
+            NOTICE CARDS
+        =================================================== */}
 
-        </div>
+        {filteredNotices.length >
+        0 ? (
 
-        <div className="result-summary">
+          <section className="notice-grid">
 
-          Showing{" "}
+            {filteredNotices.map(
+              (notice) => {
 
-          <strong>
-            {filteredResources.length}
-          </strong>{" "}
+                const recent =
+                  isRecentNotice(
+                    notice.date
+                  );
 
-          {filteredResources.length === 1
-            ? "resource"
-            : "resources"}
+                return (
 
-          {search && (
-            <>
-              {" "}
-              for <strong>"{search}"</strong>
-            </>
-          )}
+                  <article
+                    id={`notice-${notice.id}`}
+                    className={`notice-card ${
+                      recent
+                        ? "recent"
+                        : ""
+                    }`}
+                    key={notice.id}
+                  >
 
-        </div>
+                    <div className="card-accent"></div>
 
-        {/* RESOURCE GRID */}
 
-        {filteredResources.length > 0 ? (
+                    <div className="notice-card-top">
 
-          <section className="resource-grid">
+                      <span className="notice-category">
+                        {notice.category}
+                      </span>
 
-            {filteredResources.map((resource, index) => (
+                      <div>
 
-              <article
-                className="resource-card"
-                key={resource.id}
-                style={{
-                  "--card-index": index,
-                }}
-              >
+                        {recent && (
+                          <span className="new-label">
+                            NEW
+                          </span>
+                        )}
 
-                <div className="card-glow"></div>
+                        {!recent &&
+                          notice.important && (
+                            <span className="important-label">
+                              Important
+                            </span>
+                          )}
 
-                <div className="card-number">
-                  {String(index + 1).padStart(2, "0")}
-                </div>
+                      </div>
 
-                {/* SHARE BUTTON */}
+                    </div>
 
-                <button
-                  type="button"
-                  className="resource-share"
-                  onClick={() => handleShare(resource)}
-                  aria-label={`Share ${resource.title}`}
-                  title="Share this resource"
-                >
-                  {copiedResource === resource.id ? (
-                    <>
-                      <Icon name="copy" size={16} />
-                      <span>Copied</span>
-                    </>
-                  ) : (
-                    <>
-                      <Icon name="share" size={16} />
-                      <span>Share</span>
-                    </>
-                  )}
-                </button>
 
-                <div className="card-top">
+                    <h3 className="notice-title">
+                      {notice.title}
+                    </h3>
 
-                  <span className="resource-category">
-                    {resource.category}
-                  </span>
 
-                  <span className="resource-type">
-                    <Icon
-                      name={getTypeIcon(resource.type)}
-                      size={13}
-                    />
+                    <p className="notice-description">
+                      {notice.description}
+                    </p>
 
-                    {getTypeLabel(resource.type)}
-                  </span>
 
-                </div>
+                    <div
+                      className={`notice-date ${
+                        recent
+                          ? "recent-date"
+                          : ""
+                      }`}
+                    >
 
-                <div className="card-icon">
+                      <span>
+                        Published{" "}
+                        {formatDate(
+                          notice.date
+                        )}
+                      </span>
 
-                  <Icon
-                    name={getTypeIcon(resource.type)}
-                    size={24}
-                  />
+                      {recent && (
+                        <span>
+                          Recent
+                        </span>
+                      )}
 
-                </div>
+                    </div>
 
-                <div className="card-main">
 
-                  <h3>
-                    {resource.title}
-                  </h3>
+                    {/* =================================================
+                        ACTIONS
+                    ================================================= */}
 
-                  <p>
-                    {resource.excerpt}
-                  </p>
+                    <div className="notice-actions">
 
-                  <div className="card-meta">
+                      {/* VIEW */}
 
-                    <span>
-                      {resource.author}
-                    </span>
+                      <button
+                        type="button"
+                        className="notice-button primary"
+                        onClick={() =>
+                          openNotice(
+                            notice
+                          )
+                        }
+                      >
 
-                    <i></i>
+                        View
 
-                    <span>
-                      {resource.date}
-                    </span>
+                        <ArrowIcon />
 
-                  </div>
+                      </button>
 
-                </div>
 
-                <div className="resource-card-actions">
-  <button
-    type="button"
-    className="resource-share"
-    onClick={(event) => {
-      event.stopPropagation();
-      handleShare(resource);
-    }}
-    aria-label={`Share ${resource.title}`}
-  >
-    <span>Share</span>
+                      {/* OPEN */}
 
-    <svg
-      width="17"
-      height="17"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <circle cx="18" cy="5" r="3" />
-      <circle cx="6" cy="12" r="3" />
-      <circle cx="18" cy="19" r="3" />
+                      <a
+                        className="notice-button secondary"
+                        href={
+                          notice.file
+                        }
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
 
-      <path d="m8.6 10.5 6.8-4" />
-      <path d="m8.6 13.5 6.8 4" />
-    </svg>
-  </button>
+                        Open
 
-  <button
-    type="button"
-    className="resource-action"
-    onClick={() => openResource(resource)}
-  >
-    <span>
-      {getActionLabel(resource.type)}
-    </span>
+                        <ExternalIcon />
 
-    <b>
-      <Icon name="arrow" size={17} />
-    </b>
-  </button>
-</div>
+                      </a>
 
-              </article>
 
-            ))}
+                      {/* SHARE */}
+
+                      <button
+                        type="button"
+                        className="notice-button secondary share-button"
+                        onClick={() =>
+                          shareNotice(
+                            notice
+                          )
+                        }
+                      >
+
+                        Share
+
+                        <ShareIcon />
+
+                      </button>
+
+                    </div>
+
+
+                    {/* DOWNLOAD */}
+
+                    <button
+                      type="button"
+                      className="notice-button secondary"
+                      style={{
+                        marginTop:
+                          "7px",
+
+                        width:
+                          "100%",
+                      }}
+                      onClick={() =>
+                        downloadNotice(
+                          notice
+                        )
+                      }
+                    >
+
+                      Download notice
+
+                      <DownloadIcon />
+
+                    </button>
+
+                  </article>
+
+                );
+
+              }
+            )}
 
           </section>
 
         ) : (
 
-          <div className="empty-library">
-
-            <div className="empty-icon">
-              <Icon name="search" size={25} />
-            </div>
-
-            <span className="empty-label">
-              SEARCH RESULTS
-            </span>
+          <div className="notice-empty">
 
             <h3>
-              No resources found
+              No notices found
             </h3>
 
             <p>
-              Try another keyword or choose a different category.
+              Try another search term or select
+              a different category.
             </p>
-
-            <button
-              type="button"
-              onClick={() => {
-                setSearch("");
-                setCategory("All");
-              }}
-            >
-              Reset Library
-            </button>
 
           </div>
 
         )}
 
+
+        {/* ===================================================
+            INFORMATION
+        =================================================== */}
+
+        <section className="notice-info">
+
+          <div className="notice-info-left">
+
+            <div className="info-icon">
+              <BellIcon />
+            </div>
+
+            <div>
+
+              <h3>
+                About VFAW Notices
+              </h3>
+
+              <p>
+                This section contains official VFAW
+                announcements, competitions, educational
+                events, volunteer opportunities, programs
+                and other important updates.
+              </p>
+
+            </div>
+
+          </div>
+
+          <div className="info-brand">
+            Vets for Animal Welfare
+          </div>
+
+        </section>
+
       </main>
 
-      {/* FULL SCREEN READER */}
 
-      {selectedResource && (
+      {/* =====================================================
+          NOTICE PREVIEW MODAL
+      ===================================================== */}
 
-        <div className="library-reader">
+      {selectedNotice && (
 
-          <header className="reader-header">
+        <div
+          className="notice-modal"
+          role="dialog"
+          aria-modal="true"
+          aria-label={
+            selectedNotice.title
+          }
+          onClick={(event) => {
 
-            <div className="reader-brand">
+            if (
+              event.target ===
+              event.currentTarget
+            ) {
+              closeNotice();
+            }
 
-              <div className="reader-brand-mark">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
+          }}
+        >
 
-              <div className="reader-brand-text">
+          <div className="notice-modal-content">
 
-                <strong>
-                  VFAW
-                </strong>
+            {/* =================================================
+                MODAL HEADER
+            ================================================= */}
 
-                <span>
-                  KNOWLEDGE LIBRARY
-                </span>
+            <div className="notice-modal-header">
 
-              </div>
+              <div className="modal-title-area">
 
-            </div>
-
-            <div className="reader-header-right">
-
-              <span className="reader-type-label">
-                {getTypeLabel(selectedResource.type)}
-              </span>
-
-              <button
-                type="button"
-                className="reader-close"
-                onClick={closeReader}
-                aria-label="Close reader"
-              >
-                <Icon name="close" size={20} />
-
-                <span>
-                  Close
-                </span>
-              </button>
-
-            </div>
-
-          </header>
-
-          {/* ARTICLE */}
-
-          {selectedResource.type === "article" && (
-
-            <div className="article-reader">
-
-              <article className="article-content">
-
-                <div className="article-top-line">
-
-                  <span className="article-category">
-                    {selectedResource.category}
-                  </span>
-
-                  <span className="article-type">
-                    <Icon name="book" size={14} />
-                    Article
-                  </span>
-
+                <div className="modal-label">
+                  VFAW Official Notice
                 </div>
 
-                <h1>
-                  {selectedResource.title}
-                </h1>
-
-                <p className="article-introduction">
-                  {selectedResource.excerpt}
-                </p>
-
-                <div className="article-meta">
-
-                  <span>
-                    {selectedResource.author}
-                  </span>
-
-                  <i></i>
-
-                  <span>
-                    {selectedResource.date}
-                  </span>
-
-                  <i></i>
-
-                  <span>
-                    {selectedResource.meta}
-                  </span>
-
-                </div>
-
-                <div className="article-divider"></div>
-
-                <div
-                  className="article-body"
-                  dangerouslySetInnerHTML={{
-                    __html: selectedResource.content,
-                  }}
-                />
-
-                <div className="article-end">
-
-                  <div className="article-end-line"></div>
-
-                  <span>
-                    VFAW KNOWLEDGE LIBRARY
-                  </span>
-
-                  <div className="article-end-line"></div>
-
-                </div>
-
-              </article>
-
-            </div>
-
-          )}
-
-          {/* BLOGGER */}
-
-          {selectedResource.type === "blogger" && (
-
-            <div className="blog-reader">
-
-              <div className="external-resource-bar">
-
-                <div>
-
-                  <span>
-                    VETERINARY MEDICINE
-                  </span>
-
-                  <strong>
-                    {selectedResource.title}
-                  </strong>
-
-                </div>
-
-                <a
-                  href={selectedResource.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="external-resource-link"
-                >
-                  <span>
-                    Open Original
-                  </span>
-
-                  <Icon name="external" size={15} />
-                </a>
+                <h3>
+                  {selectedNotice.title}
+                </h3>
 
               </div>
 
-              <iframe
-                src={selectedResource.url}
-                title={selectedResource.title}
-                className="blog-frame"
-                loading="eager"
-              ></iframe>
+              <div className="modal-actions">
 
-            </div>
-
-          )}
-
-          {/* PDF */}
-
-          {selectedResource.type === "pdf" && (
-
-            <div className="pdf-reader">
-
-              <div className="pdf-header">
-
-                <div className="viewer-title">
-
-                  <div className="viewer-icon">
-                    <Icon name="file" size={18} />
-                  </div>
-
-                  <div>
-
-                    <span>
-                      {selectedResource.category}
-                    </span>
-
-                    <strong>
-                      {selectedResource.title}
-                    </strong>
-
-                  </div>
-
-                </div>
-
-                <a
-                  href={selectedResource.pdfUrl}
-                  download
-                  className="download-pdf"
-                >
-                  <Icon name="download" size={15} />
-
-                  <span>
-                    Download PDF
-                  </span>
-                </a>
-
-              </div>
-
-              <iframe
-                src={selectedResource.pdfUrl}
-                title={selectedResource.title}
-                className="pdf-frame"
-              ></iframe>
-
-            </div>
-
-          )}
-
-          {/* PRESENTATION */}
-
-          {selectedResource.type === "pptx" && (
-
-            <div className="presentation-reader">
-
-              <div className="presentation-toolbar">
-
-                <div className="presentation-title">
-
-                  <div className="presentation-icon">
-                    <Icon name="presentation" size={19} />
-                  </div>
-
-                  <div>
-
-                    <span>
-                      {selectedResource.category}
-                    </span>
-
-                    <strong>
-                      {selectedResource.title}
-                    </strong>
-
-                  </div>
-
-                </div>
+                {/* DOWNLOAD */}
 
                 <button
                   type="button"
-                  className="presentation-fullscreen"
-                  onClick={openPresentationFullscreen}
+                  className="modal-download"
+                  onClick={() =>
+                    downloadNotice(
+                      selectedNotice
+                    )
+                  }
+                  title="Download notice"
                 >
 
-                  <Icon name="fullscreen" size={17} />
+                  <DownloadIcon />
 
                   <span>
-                    Full Screen
+                    Download
                   </span>
+
+                </button>
+
+
+                {/* CLOSE */}
+
+                <button
+                  type="button"
+                  className="notice-close"
+                  onClick={
+                    closeNotice
+                  }
+                  aria-label="Close notice"
+                  title="Close"
+                >
+
+                  <CloseIcon />
 
                 </button>
 
               </div>
 
-              <div className="presentation-stage">
+            </div>
+
+
+            {/* =================================================
+                PREVIEW
+            ================================================= */}
+
+            <div className="notice-preview">
+
+              {selectedNotice.fileType ===
+              "pdf" ? (
 
                 <iframe
-                  src={selectedResource.pptxUrl}
-                  title={selectedResource.title}
-                  className="presentation-frame"
-                  allow="fullscreen"
-                  allowFullScreen
-                ></iframe>
+                  src={`${selectedNotice.file}#toolbar=1&navpanes=0&scrollbar=1`}
+                  title={
+                    selectedNotice.title
+                  }
+                />
 
-              </div>
+              ) : (
+
+                <img
+                  src={
+                    selectedNotice.file
+                  }
+                  alt={
+                    selectedNotice.title
+                  }
+                />
+
+              )}
 
             </div>
 
-          )}
+          </div>
 
+        </div>
+
+      )}
+
+
+      {/* =====================================================
+          SHARE TOAST
+      ===================================================== */}
+
+      {shareMessage && (
+
+        <div className="share-toast">
+          {shareMessage}
         </div>
 
       )}
@@ -1258,4 +2997,4 @@ function Library() {
   );
 }
 
-export default Library;
+export default Notice;
