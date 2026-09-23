@@ -3,7 +3,6 @@ import { useEffect, useMemo, useState } from "react";
 import logoHome from "../../public/logohome.png";
 import noticesData from "../data/notices";
 
-
 // ============================================================
 // DATE HELPERS
 // ============================================================
@@ -32,7 +31,6 @@ function isRecentNotice(dateString) {
   return difference >= 0 && difference <= 3;
 }
 
-
 // ============================================================
 // BELL ICON
 // ============================================================
@@ -52,7 +50,6 @@ const BellIcon = () => (
   </svg>
 );
 
-
 // ============================================================
 // NAVBAR
 // ============================================================
@@ -62,7 +59,6 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
 
   const navigate = useNavigate();
-
 
   // ==========================================================
   // SCROLL EFFECT
@@ -80,7 +76,6 @@ const Navbar = () => {
     };
   }, []);
 
-
   // ==========================================================
   // BODY SCROLL LOCK WHEN MOBILE MENU IS OPEN
   // ==========================================================
@@ -92,7 +87,6 @@ const Navbar = () => {
       document.body.style.overflow = "";
     };
   }, [isOpen]);
-
 
   // ==========================================================
   // NAVIGATION
@@ -110,7 +104,6 @@ const Navbar = () => {
     { name: "Notice", path: "/notice" },
   ];
 
-
   // ==========================================================
   // CLOSE MOBILE MENU
   // ==========================================================
@@ -118,7 +111,6 @@ const Navbar = () => {
   const closeMenu = () => {
     setIsOpen(false);
   };
-
 
   // ==========================================================
   // SORT NOTICES
@@ -133,7 +125,6 @@ const Navbar = () => {
     );
   }, []);
 
-
   // ==========================================================
   // DUPLICATE THE LIST FOR SEAMLESS INFINITE TICKER
   // ==========================================================
@@ -142,7 +133,6 @@ const Navbar = () => {
     return [...tickerNotices, ...tickerNotices];
   }, [tickerNotices]);
 
-
   // ==========================================================
   // OPEN NOTICE
   // ==========================================================
@@ -150,9 +140,10 @@ const Navbar = () => {
   const openNotice = (noticeId) => {
     closeMenu();
 
+    // Navigate directly to the selected notice.
+    // Notice.jsx can use this hash to identify/open the notice.
     navigate(`/notice#notice-${noticeId}`);
   };
-
 
   return (
     <>
@@ -202,7 +193,6 @@ const Navbar = () => {
             </div>
           </Link>
 
-
           {/* ==================================================
               DESKTOP NAVIGATION
           ================================================== */}
@@ -240,7 +230,6 @@ const Navbar = () => {
 
             </div>
 
-
             {/* =================================================
                 DESKTOP DONATE BUTTON
             ================================================= */}
@@ -270,7 +259,6 @@ const Navbar = () => {
               </span>
             </Link>
           </div>
-
 
           {/* ==================================================
               MOBILE MENU BUTTON
@@ -316,7 +304,6 @@ const Navbar = () => {
             </span>
           </button>
         </nav>
-
 
         {/* ======================================================
             MOBILE NAVIGATION
@@ -380,7 +367,6 @@ const Navbar = () => {
 
             </div>
 
-
             {/* =================================================
                 MOBILE DONATE BUTTON
             ================================================= */}
@@ -431,7 +417,6 @@ const Navbar = () => {
               </svg>
             </Link>
 
-
             {/* =================================================
                 MOBILE FOOTER LABEL
             ================================================= */}
@@ -450,13 +435,11 @@ const Navbar = () => {
         </div>
       </header>
 
-
       {/* ======================================================
           SPACE FOR FIXED NAVBAR
       ====================================================== */}
 
       <div className="h-[84px] lg:h-[90px]" />
-
 
       {/* ======================================================
           NOTICE TICKER
@@ -473,7 +456,6 @@ const Navbar = () => {
             <BellIcon />
             <span>Notices</span>
           </div>
-
 
           {/* ==================================================
               TICKER WINDOW
@@ -522,7 +504,6 @@ const Navbar = () => {
           </div>
         </div>
       )}
-
 
       {/* ======================================================
           TICKER CSS
@@ -578,7 +559,10 @@ const Navbar = () => {
           width: max-content;
           display: flex;
           align-items: center;
-          animation: vfawNoticeTicker 32s linear infinite;
+
+          /* FASTER THAN BEFORE */
+          animation: vfawNoticeTicker 24s linear infinite;
+
           will-change: transform;
         }
 
