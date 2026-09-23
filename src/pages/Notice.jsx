@@ -1,51 +1,70 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
-const notices = [
+/* =========================================================
+   NOTICE DATA
+========================================================= */
+
+const noticesData = [
   {
-    id: "clinical-report-writing",
-    title: "Clinical Report Writing Competition",
-    category: "Competition",
+    id: 1,
+    title: "Rabies Emergency Card Published",
+    description: "Download the emergency card and share it with others.",
+    category: "Notice",
     date: "2026-09-20",
-    description:
-      "Showcase your clinical reporting skills and participate in the VFAW Clinical Report Writing Competition.",
-    type: "PDF",
-    file: "/notices/clinical-report-writing.pdf",
+    file: "/Notice/vfaw Emergency card.pdf",
+    fileType: "pdf",
     important: true,
     pinned: true,
   },
+
   {
-    id: "educational-webinar",
+    id: 2,
+    title: "Clinical Report Writing Competition",
+    description:
+      "Registration is now open for the VFAW Clinical Report Writing Competition.",
+    category: "Competition",
+    date: "2026-09-20",
+    file: "/Notice/clinical-report-writing.pdf",
+    fileType: "pdf",
+    important: true,
+    pinned: true,
+  },
+
+  {
+    id: 3,
     title: "VFAW Educational Webinar",
+    description:
+      "Join our upcoming educational webinar on animal welfare and veterinary practice.",
     category: "Event",
     date: "2026-09-18",
-    description:
-      "Join our educational webinar and gain valuable knowledge from veterinary and animal welfare professionals.",
-    type: "PDF",
-    file: "/notices/webinar.pdf",
+    file: "/Notice/webinar.pdf",
+    fileType: "pdf",
     important: false,
     pinned: true,
   },
+
   {
-    id: "volunteer-registration",
+    id: 4,
     title: "Volunteer Registration Open",
+    description:
+      "Students interested in joining VFAW activities can now submit their applications.",
     category: "Opportunity",
     date: "2026-09-15",
-    description:
-      "Applications are open for students interested in joining VFAW activities and contributing to animal welfare.",
-    type: "Image",
-    file: "/notices/volunteer.png",
+    file: "/Notice/volunteer.png",
+    fileType: "image",
     important: false,
     pinned: false,
   },
+
   {
-    id: "animal-welfare-awareness",
-    title: "Animal Welfare Awareness Program",
-    category: "Program",
-    date: "2026-09-12",
+    id: 5,
+    title: "AFU Seat",
     description:
-      "An upcoming awareness initiative focused on responsible animal care, welfare education and community participation.",
-    type: "PDF",
-    file: "/notices/animal-welfare-awareness.pdf",
+      "Students interested in joining AFU can now submit their applications.",
+    category: "Opportunity",
+    date: "2026-09-15",
+    file: "/Notice/seat.pdf",
+    fileType: "pdf",
     important: false,
     pinned: false,
   },
@@ -53,95 +72,331 @@ const notices = [
 
 const categories = [
   "All",
-  ...new Set(notices.map((notice) => notice.category)),
+  "Important",
+  "Competition",
+  "Event",
+  "Opportunity",
+  "Announcement",
+  "Notice",
 ];
 
-function formatDate(dateString) {
-  const date = new Date(`${dateString}T00:00:00`);
+/* =========================================================
+   DATE HELPERS
+========================================================= */
 
-  return date.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
+function parseLocalDate(dateString) {
+  const [year, month, day] = dateString.split("-").map(Number);
+  return new Date(year, month - 1, day);
 }
 
-function scrollToNotice(id) {
-  const element = document.getElementById(`notice-${id}`);
+function isRecentNotice(dateString) {
+  const noticeDate = parseLocalDate(dateString);
 
-  if (!element) return;
+  const today = new Date();
 
-  element.scrollIntoView({
-    behavior: "smooth",
-    block: "center",
-  });
-
-  window.history.replaceState(
-    null,
-    "",
-    `#notice-${id}`
+  const todayOnly = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
   );
 
-  element.classList.remove("notice-highlight");
+  const difference = Math.floor(
+    (todayOnly.getTime() - noticeDate.getTime()) /
+      (1000 * 60 * 60 * 24)
+  );
 
-  void element.offsetWidth;
-
-  element.classList.add("notice-highlight");
-
-  setTimeout(() => {
-    element.classList.remove("notice-highlight");
-  }, 1800);
+  return difference >= 0 && difference <= 3;
 }
 
-export default function Notice() {
+function formatDate(dateString) {
+  return parseLocalDate(dateString).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+
+/* =========================================================
+   ICONS
+========================================================= */
+
+function SearchIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="11" cy="11" r="6.5" />
+      <path d="M16 16l5 5" />
+    </svg>
+  );
+}
+
+function ShareIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="18" cy="5" r="2.5" />
+      <circle cx="6" cy="12" r="2.5" />
+      <circle cx="18" cy="19" r="2.5" />
+      <path d="M8.2 10.8l7.5-4.2M8.2 13.2l7.5 4.2" />
+    </svg>
+  );
+}
+
+function DownloadIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 3v12" />
+      <path d="M7 10l5 5 5-5" />
+      <path d="M4 20h16" />
+    </svg>
+  );
+}
+
+function ExternalIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M14 4h6v6" />
+      <path d="M20 4l-9 9" />
+      <path d="M19 13v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h6" />
+    </svg>
+  );
+}
+
+function ArrowIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M5 12h13" />
+      <path d="M13 6l6 6-6 6" />
+    </svg>
+  );
+}
+
+function CloseIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M6 6l12 12M18 6L6 18" />
+    </svg>
+  );
+}
+
+function BellIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" />
+      <path d="M10 21h4" />
+    </svg>
+  );
+}
+
+/* =========================================================
+   NOTICE PAGE
+========================================================= */
+
+function Notice() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [selectedNotice, setSelectedNotice] = useState(null);
+  const [shareMessage, setShareMessage] = useState("");
+
+  /* =======================================================
+     FILTER
+  ======================================================= */
 
   const filteredNotices = useMemo(() => {
-    return notices.filter((notice) => {
-      const categoryMatch =
-        activeCategory === "All" ||
-        notice.category === activeCategory;
+    const searchText = search.trim().toLowerCase();
 
-      const searchValue = search.toLowerCase().trim();
+    return noticesData.filter((notice) => {
+      const matchesSearch =
+        searchText === "" ||
+        notice.title.toLowerCase().includes(searchText) ||
+        notice.description.toLowerCase().includes(searchText) ||
+        notice.category.toLowerCase().includes(searchText);
 
-      const searchMatch =
-        !searchValue ||
-        notice.title.toLowerCase().includes(searchValue) ||
-        notice.description.toLowerCase().includes(searchValue) ||
-        notice.category.toLowerCase().includes(searchValue);
+      let matchesCategory = true;
 
-      return categoryMatch && searchMatch;
+      if (activeCategory === "Important") {
+        matchesCategory = notice.important;
+      } else if (activeCategory !== "All") {
+        matchesCategory = notice.category === activeCategory;
+      }
+
+      return matchesSearch && matchesCategory;
     });
   }, [search, activeCategory]);
 
-  /*
-    Duplicate ticker items create a seamless loop.
-    Clicking either copy still scrolls to the ORIGINAL notice card.
-  */
-  const tickerNotices = [...notices, ...notices];
+  /* =======================================================
+     TICKER
+  ======================================================= */
+
+  const tickerNotices = useMemo(() => {
+    return [...noticesData].sort(
+      (a, b) => parseLocalDate(b.date) - parseLocalDate(a.date)
+    );
+  }, []);
+
+  /* =======================================================
+     DOWNLOAD FILE
+     
+     Forces browser download instead of simply opening
+     the PDF/image.
+  ======================================================= */
+
+  const downloadNotice = async (notice) => {
+    try {
+      const response = await fetch(notice.file);
+
+      if (!response.ok) {
+        throw new Error("File could not be downloaded.");
+      }
+
+      const blob = await response.blob();
+
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+
+      link.href = blobUrl;
+
+      /* Get filename from file path */
+      const cleanPath = notice.file.split("?")[0];
+
+      const fileName =
+        decodeURIComponent(cleanPath.split("/").pop()) ||
+        "VFAW-notice";
+
+      link.download = fileName;
+
+      document.body.appendChild(link);
+
+      link.click();
+
+      document.body.removeChild(link);
+
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error("Download failed:", error);
+
+      /* Fallback */
+      const link = document.createElement("a");
+
+      link.href = notice.file;
+      link.download = "";
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
+
+  /* =======================================================
+     SHARE
+  ======================================================= */
+
+  const shareNotice = async (notice) => {
+    const shareUrl = `${window.location.origin}${notice.file}`;
+
+    const shareData = {
+      title: notice.title,
+      text: `${notice.title} — VFAW Official Notice`,
+      url: shareUrl,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+        return;
+      }
+
+      if (navigator.clipboard) {
+        await navigator.clipboard.writeText(shareUrl);
+
+        setShareMessage("Notice link copied!");
+
+        setTimeout(() => {
+          setShareMessage("");
+        }, 2500);
+
+        return;
+      }
+
+      setShareMessage("Unable to share this notice.");
+
+      setTimeout(() => {
+        setShareMessage("");
+      }, 2500);
+    } catch (error) {
+      if (error?.name === "AbortError") {
+        return;
+      }
+
+      setShareMessage("Unable to share this notice.");
+
+      setTimeout(() => {
+        setShareMessage("");
+      }, 2500);
+    }
+  };
+
+  /* =======================================================
+     ESCAPE KEY
+  ======================================================= */
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setSelectedNotice(null);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
+  /* =======================================================
+     LOCK BODY
+  ======================================================= */
+
+  useEffect(() => {
+    if (selectedNotice) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [selectedNotice]);
 
   return (
-    <>
+    <div className="notice-page">
+
       <style>{`
 
-        /* =========================================================
-           GLOBAL
-        ========================================================= */
-
-        * {
-          box-sizing: border-box;
-        }
-
-        html {
-          scroll-behavior: smooth;
-        }
+        /* =====================================================
+           BASE
+        ===================================================== */
 
         .notice-page {
+          --blue: #0759b8;
+          --blue-dark: #06468f;
+          --blue-light: #edf5ff;
+          --blue-soft: #f6faff;
+
+          --red: #e53935;
+          --red-soft: #fff1f1;
+
+          --text: #0c1b2a;
+          --muted: #64748b;
+          --border: #e7edf4;
+
           min-height: 100vh;
-          background: #f7f9fc;
-          color: #101828;
+
+          background: #fbfcfe;
+
+          color: var(--text);
+
           font-family:
             Inter,
             ui-sans-serif,
@@ -150,134 +405,160 @@ export default function Notice() {
             BlinkMacSystemFont,
             "Segoe UI",
             sans-serif;
+
+          overflow-x: hidden;
         }
 
-
-        /* =========================================================
-           MOVING NOTICE TICKER
-        ========================================================= */
-
-        .notice-ticker-wrapper {
-          position: relative;
-          z-index: 20;
-
-          display: flex;
-          align-items: center;
-
-          height: 52px;
-
-          overflow: hidden;
-
-          background: #ffffff;
-
-          border-bottom: 1px solid #e5eaf1;
-
-          box-shadow:
-            0 4px 18px rgba(15, 23, 42, 0.05);
+        .notice-page *,
+        .notice-page *::before,
+        .notice-page *::after {
+          box-sizing: border-box;
         }
 
-        .notice-ticker-label {
-          position: relative;
-          z-index: 4;
-
-          flex-shrink: 0;
-
-          height: 100%;
-
-          display: flex;
-          align-items: center;
-
-          gap: 9px;
-
-          padding: 0 24px;
-
-          background: #0759b8;
-
-          color: #ffffff;
-
-          font-size: 11px;
-          font-weight: 800;
-
-          letter-spacing: 1.4px;
-        }
-
-        .ticker-label-dot {
-          width: 7px;
-          height: 7px;
-
-          border-radius: 50%;
-
-          background: #ffffff;
-
-          box-shadow:
-            0 0 0 4px rgba(255,255,255,0.15);
-        }
+        /* =====================================================
+           TICKER
+        ===================================================== */
 
         .notice-ticker {
           position: relative;
 
-          flex: 1;
+          width: 100%;
+          height: 46px;
+
+          display: flex;
+          align-items: center;
+
+          overflow: hidden;
+
+          background: #ffffff;
+
+          border-top: 1px solid var(--border);
+          border-bottom: 1px solid var(--border);
+
+          z-index: 20;
+        }
+
+        .ticker-label {
+          position: relative;
+          z-index: 5;
+
+          flex: 0 0 auto;
 
           height: 100%;
+
+          display: flex;
+          align-items: center;
+
+          gap: 8px;
+
+          padding: 0 22px;
+
+          background: var(--blue);
+
+          color: white;
+
+          font-size: 11px;
+          font-weight: 800;
+
+          letter-spacing: .08em;
+
+          text-transform: uppercase;
+
+          box-shadow:
+            8px 0 20px rgba(7,89,184,.12);
+        }
+
+        .ticker-label svg {
+          width: 15px;
+          height: 15px;
+
+          fill: none;
+          stroke: currentColor;
+          stroke-width: 1.8;
+        }
+
+        .ticker-window {
+          flex: 1;
+
+          min-width: 0;
 
           overflow: hidden;
         }
 
-        .notice-ticker::before,
-        .notice-ticker::after {
-          content: "";
-
-          position: absolute;
-
-          top: 0;
-          bottom: 0;
-
-          width: 55px;
-
-          z-index: 3;
-
-          pointer-events: none;
-        }
-
-        .notice-ticker::before {
-          left: 0;
-
-          background:
-            linear-gradient(
-              to right,
-              #ffffff,
-              rgba(255,255,255,0)
-            );
-        }
-
-        .notice-ticker::after {
-          right: 0;
-
-          background:
-            linear-gradient(
-              to left,
-              #ffffff,
-              rgba(255,255,255,0)
-            );
-        }
-
-        .notice-ticker-track {
+        .ticker-track {
           width: max-content;
-          height: 100%;
+
+          display: flex;
+          align-items: center;
+
+          animation:
+            noticeTicker 32s linear infinite;
+
+          will-change: transform;
+        }
+
+        .notice-ticker:hover .ticker-track {
+          animation-play-state: paused;
+        }
+
+        .ticker-group {
+          display: flex;
+          align-items: center;
+
+          flex-shrink: 0;
+        }
+
+        .ticker-item {
+          height: 46px;
 
           display: inline-flex;
           align-items: center;
 
-          animation:
-            tickerMove 25s linear infinite;
+          gap: 10px;
+
+          padding: 0 32px;
+
+          white-space: nowrap;
+
+          font-size: 13px;
+          font-weight: 700;
         }
 
-        .notice-ticker:hover
-        .notice-ticker-track {
-          animation-play-state: paused;
+        .ticker-item.recent {
+          color: var(--red);
         }
 
-        @keyframes tickerMove {
+        .ticker-item.old {
+          color: var(--blue);
+        }
+
+        .ticker-dot {
+          width: 6px;
+          height: 6px;
+
+          flex: 0 0 6px;
+
+          border-radius: 50%;
+
+          background: currentColor;
+        }
+
+        .ticker-new {
+          padding: 4px 7px;
+
+          border-radius: 5px;
+
+          background: var(--red-soft);
+
+          color: var(--red);
+
+          font-size: 9px;
+          font-weight: 900;
+
+          letter-spacing: .06em;
+        }
+
+        @keyframes noticeTicker {
           from {
             transform: translateX(0);
           }
@@ -287,96 +568,34 @@ export default function Notice() {
           }
         }
 
-        .ticker-notice {
-          appearance: none;
-
-          display: inline-flex;
-          align-items: center;
-
-          gap: 9px;
-
-          margin: 0;
-          padding: 7px 14px;
-
-          border: 0;
-          border-radius: 999px;
-
-          background: transparent;
-
-          color: #0759b8;
-
-          font: inherit;
-          font-size: 13px;
-          font-weight: 650;
-
-          white-space: nowrap;
-
-          cursor: pointer;
-
-          transition:
-            background 0.25s ease,
-            color 0.25s ease,
-            transform 0.25s ease;
-        }
-
-        .ticker-notice:hover {
-          background: #0759b8;
-          color: #ffffff;
-
-          transform: translateY(-1px);
-        }
-
-        .ticker-dot {
-          width: 7px;
-          height: 7px;
-
-          flex-shrink: 0;
-
-          border-radius: 50%;
-
-          background: currentColor;
-        }
-
-        .ticker-separator {
-          margin: 0 12px;
-
-          color: #b7c2d1;
-
-          font-size: 16px;
-        }
-
-
-        /* =========================================================
+        /* =====================================================
            HERO
-        ========================================================= */
+        ===================================================== */
 
         .notice-hero {
           position: relative;
 
-          min-height: 390px;
-
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
           overflow: hidden;
+
+          padding:
+            86px
+            24px
+            78px;
 
           background:
             radial-gradient(
-              circle at 15% 20%,
-              rgba(255,255,255,0.14),
-              transparent 27%
+              circle at 50% 0%,
+              rgba(7,89,184,.13),
+              transparent 38%
             ),
-            radial-gradient(
-              circle at 85% 80%,
-              rgba(255,255,255,0.11),
-              transparent 30%
-            ),
-            #0759b8;
+            linear-gradient(
+              180deg,
+              #edf6ff 0%,
+              #f8fbff 55%,
+              #ffffff 100%
+            );
 
-          color: #ffffff;
-
-          text-align: center;
+          border-bottom: 1px solid #dce9f7;
         }
 
         .hero-grid {
@@ -384,16 +603,16 @@ export default function Notice() {
 
           inset: 0;
 
-          opacity: 0.08;
+          opacity: .45;
 
           background-image:
             linear-gradient(
-              rgba(255,255,255,0.5) 1px,
+              rgba(7,89,184,.045) 1px,
               transparent 1px
             ),
             linear-gradient(
               90deg,
-              rgba(255,255,255,0.5) 1px,
+              rgba(7,89,184,.045) 1px,
               transparent 1px
             );
 
@@ -402,195 +621,186 @@ export default function Notice() {
           mask-image:
             linear-gradient(
               to bottom,
-              rgba(0,0,0,0.9),
-              transparent
+              black,
+              transparent 90%
             );
         }
 
-        .hero-decoration {
-          position: absolute;
-
-          border: 1px solid
-            rgba(255,255,255,0.15);
-
-          border-radius: 50%;
-
-          pointer-events: none;
-        }
-
-        .hero-decoration-one {
-          width: 340px;
-          height: 340px;
-
-          left: -180px;
-          top: -160px;
-        }
-
-        .hero-decoration-two {
-          width: 460px;
-          height: 460px;
-
-          right: -280px;
-          bottom: -300px;
-        }
-
-        .notice-hero-content {
+        .hero-inner {
           position: relative;
+
           z-index: 2;
 
-          width: min(850px, 90%);
+          max-width: 900px;
 
-          padding: 70px 0;
+          margin: 0 auto;
+
+          text-align: center;
+
+          display: flex;
+
+          flex-direction: column;
+
+          align-items: center;
         }
 
-        .hero-badge {
-          width: fit-content;
-
-          margin: 0 auto 20px;
-
+        .hero-kicker {
           display: inline-flex;
+
           align-items: center;
+
+          gap: 10px;
+
+          margin-bottom: 20px;
+
+          color: var(--blue);
+
+          font-size: 12px;
+          font-weight: 900;
+
+          letter-spacing: .13em;
+
+          text-transform: uppercase;
+        }
+
+        .hero-kicker::before,
+        .hero-kicker::after {
+          content: "";
+
+          width: 26px;
+          height: 2px;
+
+          background: var(--blue);
+
+          border-radius: 999px;
+        }
+
+        .hero-title {
+          margin: 0;
+
+          max-width: 900px;
+
+          color: var(--text);
+
+          font-size:
+            clamp(48px, 8vw, 86px);
+
+          line-height: .98;
+
+          font-weight: 900;
+
+          letter-spacing: -.065em;
+        }
+
+        .hero-title span {
+          color: var(--blue);
+        }
+
+        .hero-description {
+          max-width: 680px;
+
+          margin: 25px auto 0;
+
+          color: #64748b;
+
+          font-size: 16px;
+
+          line-height: 1.75;
+        }
+
+        .hero-meta {
+          display: flex;
+
+          justify-content: center;
+
+          align-items: center;
+
+          flex-wrap: wrap;
 
           gap: 9px;
 
-          padding: 8px 15px;
+          margin-top: 30px;
+        }
+
+        .hero-meta-item {
+          display: inline-flex;
+
+          align-items: center;
+
+          gap: 8px;
+
+          padding: 9px 13px;
 
           border:
             1px solid
-            rgba(255,255,255,0.25);
+            rgba(7,89,184,.13);
 
           border-radius: 999px;
 
           background:
-            rgba(255,255,255,0.1);
+            rgba(255,255,255,.82);
 
-          backdrop-filter: blur(10px);
+          color: #526276;
 
           font-size: 12px;
-          font-weight: 650;
 
-          letter-spacing: 0.3px;
+          font-weight: 700;
+
+          box-shadow:
+            0 5px 18px rgba(7,89,184,.04);
         }
 
-        .hero-badge-dot {
+        .hero-meta-item strong {
+          color: var(--text);
+        }
+
+        .hero-meta-dot {
           width: 7px;
           height: 7px;
 
           border-radius: 50%;
 
-          background: #ffffff;
+          background: var(--blue);
         }
 
-        .notice-hero h1 {
-          margin: 0;
-
-          font-size:
-            clamp(42px, 7vw, 72px);
-
-          line-height: 0.98;
-
-          letter-spacing: -3px;
-
-          font-weight: 800;
-        }
-
-        .notice-hero h1 span {
-          opacity: 0.72;
-        }
-
-        .notice-hero p {
-          max-width: 650px;
-
-          margin: 25px auto 0;
-
-          color:
-            rgba(255,255,255,0.83);
-
-          font-size: 16px;
-
-          line-height: 1.7;
-        }
-
-        .hero-stats {
-          margin-top: 35px;
-
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
-          gap: 28px;
-        }
-
-        .hero-stat {
-          display: flex;
-          flex-direction: column;
-
-          gap: 3px;
-        }
-
-        .hero-stat strong {
-          font-size: 18px;
-          font-weight: 750;
-        }
-
-        .hero-stat span {
-          color:
-            rgba(255,255,255,0.65);
-
-          font-size: 11px;
-
-          text-transform: uppercase;
-
-          letter-spacing: 1px;
-        }
-
-        .hero-stat-divider {
-          width: 1px;
-          height: 34px;
-
-          background:
-            rgba(255,255,255,0.25);
-        }
-
-
-        /* =========================================================
+        /* =====================================================
            MAIN
-        ========================================================= */
+        ===================================================== */
 
         .notice-container {
-          width:
-            min(1180px, calc(100% - 40px));
+          max-width: 1180px;
 
           margin: 0 auto;
 
-          padding: 55px 0 90px;
+          padding:
+            55px
+            24px
+            100px;
         }
 
-
-        /* =========================================================
+        /* =====================================================
            CONTROLS
-        ========================================================= */
+        ===================================================== */
 
         .notice-controls {
           display: flex;
 
           align-items: center;
+
           justify-content: space-between;
 
-          gap: 25px;
+          gap: 20px;
 
-          margin-bottom: 25px;
+          margin-bottom: 48px;
         }
 
-        .notice-search {
+        .search-box {
           position: relative;
 
-          width: 310px;
-
-          flex-shrink: 0;
+          width: min(390px, 100%);
         }
 
-        .notice-search > svg {
+        .search-box svg {
           position: absolute;
 
           left: 16px;
@@ -599,252 +809,258 @@ export default function Notice() {
           width: 18px;
           height: 18px;
 
-          transform:
-            translateY(-50%);
+          transform: translateY(-50%);
 
-          color: #8491a5;
+          fill: none;
+          stroke: #8a98a8;
+          stroke-width: 1.8;
+
+          pointer-events: none;
         }
 
-        .notice-search input {
+        .search-box input {
           width: 100%;
-          height: 46px;
+          height: 48px;
 
           padding:
-            0 43px 0 45px;
+            0
+            16px
+            0
+            46px;
 
           border:
-            1px solid #dfe5ed;
+            1px solid
+            var(--border);
 
           border-radius: 12px;
 
           outline: none;
 
-          background: #ffffff;
+          background: white;
 
-          color: #172033;
+          color: var(--text);
 
-          font: inherit;
-
-          font-size: 13px;
+          font-size: 14px;
 
           transition:
-            border-color 0.2s ease,
-            box-shadow 0.2s ease;
+            border-color .2s ease,
+            box-shadow .2s ease;
         }
 
-        .notice-search input:focus {
-          border-color: #0759b8;
+        .search-box input:focus {
+          border-color:
+            rgba(7,89,184,.45);
 
           box-shadow:
             0 0 0 4px
-            rgba(7,89,184,0.08);
+            rgba(7,89,184,.08);
         }
 
-        .clear-search {
-          position: absolute;
-
-          right: 10px;
-          top: 50%;
-
-          width: 27px;
-          height: 27px;
-
-          transform:
-            translateY(-50%);
-
-          border: 0;
-          border-radius: 50%;
-
-          background: #eef2f7;
-
-          color: #68778c;
-
-          cursor: pointer;
-
-          font-size: 18px;
-          line-height: 1;
-        }
-
-        .category-filters {
+        .category-list {
           display: flex;
 
-          align-items: center;
+          flex-wrap: wrap;
+
           justify-content: flex-end;
 
           gap: 7px;
-
-          flex-wrap: wrap;
         }
 
-        .category-btn {
-          padding: 9px 15px;
+        .category-button {
+          height: 38px;
+
+          padding: 0 14px;
 
           border:
-            1px solid #e0e6ee;
+            1px solid
+            var(--border);
 
           border-radius: 999px;
 
-          background: #ffffff;
+          background: white;
 
-          color: #637187;
-
-          font: inherit;
-
-          font-size: 12px;
-          font-weight: 650;
+          color: #68788a;
 
           cursor: pointer;
 
-          transition: all 0.2s ease;
+          font-family: inherit;
+
+          font-size: 12px;
+
+          font-weight: 800;
+
+          transition:
+            transform .2s ease,
+            color .2s ease,
+            background .2s ease,
+            border-color .2s ease;
         }
 
-        .category-btn:hover {
-          border-color: #0759b8;
-          color: #0759b8;
+        .category-button:hover {
+          transform: translateY(-1px);
+
+          border-color: #c9d9e9;
+
+          color: var(--blue);
         }
 
-        .category-btn.active {
-          border-color: #0759b8;
+        .category-button.active {
+          border-color: var(--blue);
 
-          background: #0759b8;
+          background: var(--blue);
 
-          color: #ffffff;
+          color: white;
+
+          box-shadow:
+            0 5px 15px
+            rgba(7,89,184,.16);
         }
 
+        /* =====================================================
+           SECTION HEADER
+        ===================================================== */
 
-        /* =========================================================
-           RESULTS
-        ========================================================= */
-
-        .notice-results-info {
+        .section-header {
           display: flex;
 
-          align-items: center;
+          align-items: flex-end;
+
           justify-content: space-between;
 
-          margin-bottom: 17px;
+          gap: 20px;
 
-          color: #778499;
-
-          font-size: 12px;
+          margin-bottom: 24px;
         }
 
-        .notice-results-info strong {
-          color: #182234;
+        .section-eyebrow {
+          margin: 0 0 7px;
+
+          color: var(--blue);
+
+          font-size: 11px;
+
+          font-weight: 900;
+
+          letter-spacing: .12em;
+
+          text-transform: uppercase;
         }
 
-        .reset-filters {
-          border: 0;
+        .section-header h2 {
+          margin: 0;
 
-          background: transparent;
+          color: var(--text);
 
-          color: #0759b8;
+          font-size: 30px;
 
-          font: inherit;
+          line-height: 1.1;
+
+          letter-spacing: -.04em;
+        }
+
+        .section-count {
+          color: #8b98a7;
 
           font-size: 12px;
+
           font-weight: 700;
-
-          cursor: pointer;
         }
 
-
-        /* =========================================================
-           NOTICE CARDS
-        ========================================================= */
+        /* =====================================================
+           GRID
+        ===================================================== */
 
         .notice-grid {
           display: grid;
 
           grid-template-columns:
-            repeat(2, minmax(0, 1fr));
+            repeat(3, minmax(0, 1fr));
 
           gap: 18px;
         }
+
+        /* =====================================================
+           CARD
+        ===================================================== */
 
         .notice-card {
           position: relative;
 
           display: flex;
+
           flex-direction: column;
 
-          min-height: 320px;
+          min-height: 355px;
 
-          padding: 25px;
+          padding: 24px;
 
-          background: #ffffff;
+          background: white;
 
           border:
-            1px solid #e4e9f0;
+            1px solid
+            var(--border);
 
           border-radius: 18px;
 
-          box-shadow:
-            0 8px 25px
-            rgba(15,23,42,0.045);
-
-          scroll-margin-top: 100px;
+          overflow: hidden;
 
           transition:
-            transform 0.25s ease,
-            box-shadow 0.25s ease,
-            border-color 0.25s ease;
+            transform .3s
+              cubic-bezier(.2,.8,.2,1),
+            border-color .3s ease,
+            box-shadow .3s ease;
         }
 
         .notice-card:hover {
-          transform:
-            translateY(-4px);
+          transform: translateY(-6px);
 
-          border-color: #cbd9e9;
+          border-color: #d4e2ef;
 
           box-shadow:
-            0 18px 40px
-            rgba(15,23,42,0.08);
+            0 18px 45px
+            rgba(19,52,84,.10);
         }
 
-        /*
-          This is the temporary effect shown after
-          clicking a notice from the moving ticker.
-        */
-
-        .notice-card.notice-highlight {
-          animation:
-            noticeHighlight 1.8s ease;
+        .notice-card.recent {
+          border-color:
+            rgba(229,57,53,.18);
         }
 
-        @keyframes noticeHighlight {
-          0% {
-            transform: scale(1);
+        .notice-card.recent:hover {
+          border-color:
+            rgba(229,57,53,.34);
 
-            box-shadow:
-              0 0 0
-              rgba(7,89,184,0);
-          }
+          box-shadow:
+            0 18px 45px
+            rgba(229,57,53,.10);
+        }
 
-          25% {
-            transform: scale(1.018);
+        .card-accent {
+          position: absolute;
 
-            border-color: #0759b8;
+          left: 0;
+          top: 0;
 
-            box-shadow:
-              0 0 0 5px
-              rgba(7,89,184,0.12),
-              0 25px 50px
-              rgba(7,89,184,0.12);
-          }
+          width: 100%;
+          height: 3px;
 
-          100% {
-            transform: scale(1);
-          }
+          background: var(--blue);
+        }
+
+        .notice-card.recent .card-accent {
+          background: var(--red);
         }
 
         .notice-card-top {
           display: flex;
 
           align-items: center;
+
           justify-content: space-between;
 
-          gap: 15px;
+          gap: 10px;
+
+          margin-bottom: 26px;
         }
 
         .notice-category {
@@ -852,73 +1068,108 @@ export default function Notice() {
 
           align-items: center;
 
-          gap: 7px;
+          min-height: 28px;
 
-          color: #0759b8;
+          padding: 0 10px;
 
-          font-size: 11px;
+          border-radius: 7px;
 
-          font-weight: 800;
+          background: var(--blue-light);
+
+          color: var(--blue);
+
+          font-size: 10px;
+
+          font-weight: 900;
+
+          letter-spacing: .05em;
 
           text-transform: uppercase;
-
-          letter-spacing: 0.7px;
         }
 
-        .category-dot {
+        .notice-card.recent .notice-category {
+          background: var(--red-soft);
+
+          color: var(--red);
+        }
+
+        .new-label {
+          display: inline-flex;
+
+          align-items: center;
+
+          gap: 5px;
+
+          color: var(--red);
+
+          font-size: 9px;
+
+          font-weight: 900;
+
+          letter-spacing: .08em;
+        }
+
+        .new-label::before {
+          content: "";
+
           width: 6px;
           height: 6px;
 
           border-radius: 50%;
 
-          background: #0759b8;
+          background: var(--red);
+
+          box-shadow:
+            0 0 0 4px
+            rgba(229,57,53,.08);
         }
 
-        .notice-card-actions {
-          display: flex;
+        .important-label {
+          display: inline-flex;
 
           align-items: center;
 
-          gap: 7px;
-        }
-
-        .important-badge {
           padding: 5px 8px;
 
           border-radius: 6px;
 
-          background: #fff3e7;
+          background: #fff7e8;
 
-          color: #b85c08;
+          color: #b86b00;
 
           font-size: 9px;
 
-          font-weight: 800;
+          font-weight: 900;
+
+          letter-spacing: .06em;
 
           text-transform: uppercase;
-
-          letter-spacing: 0.5px;
         }
 
-        .pin-badge {
-          display: flex;
+        .notice-title {
+          margin: 0;
 
-          align-items: center;
-          justify-content: center;
+          color: var(--text);
 
-          width: 28px;
-          height: 28px;
+          font-size: 21px;
 
-          border-radius: 8px;
+          line-height: 1.3;
 
-          background: #edf5ff;
+          font-weight: 850;
 
-          color: #0759b8;
+          letter-spacing: -.025em;
         }
 
-        .pin-badge svg {
-          width: 14px;
-          height: 14px;
+        .notice-description {
+          flex: 1;
+
+          margin: 14px 0 0;
+
+          color: #718094;
+
+          font-size: 13px;
+
+          line-height: 1.7;
         }
 
         .notice-date {
@@ -926,603 +1177,984 @@ export default function Notice() {
 
           align-items: center;
 
-          gap: 7px;
-
-          margin-top: 25px;
-
-          color: #8995a7;
-
-          font-size: 11px;
-
-          font-weight: 550;
-        }
-
-        .notice-date svg {
-          width: 14px;
-          height: 14px;
-        }
-
-        .notice-card h2 {
-          margin:
-            13px 0 10px;
-
-          color: #152033;
-
-          font-size: 22px;
-
-          line-height: 1.25;
-
-          letter-spacing: -0.5px;
-        }
-
-        .notice-description {
-          margin: 0;
-
-          color: #69778c;
-
-          font-size: 13px;
-
-          line-height: 1.7;
-        }
-
-        .notice-card-footer {
-          display: flex;
-
-          align-items: center;
           justify-content: space-between;
 
-          gap: 15px;
+          margin-top: 24px;
 
-          margin-top: auto;
+          padding-top: 16px;
 
-          padding-top: 25px;
-        }
+          border-top:
+            1px solid #edf1f5;
 
-        .notice-file-type {
-          display: inline-flex;
-
-          align-items: center;
-
-          gap: 8px;
-
-          color: #778499;
+          color: #8a97a6;
 
           font-size: 11px;
 
-          font-weight: 650;
+          font-weight: 700;
         }
 
-        .file-icon {
-          display: flex;
-
-          align-items: center;
-          justify-content: center;
-
-          width: 30px;
-          height: 30px;
-
-          border-radius: 8px;
-
-          background: #f0f5fb;
-
-          color: #0759b8;
+        .notice-date.recent-date {
+          color: var(--red);
         }
 
-        .file-icon svg {
-          width: 15px;
-          height: 15px;
+        /* =====================================================
+           ACTION BUTTONS
+        ===================================================== */
+
+        .notice-actions {
+          display: grid;
+
+          grid-template-columns:
+            1.3fr 1fr 1fr;
+
+          gap: 7px;
+
+          margin-top: 17px;
         }
 
-        .view-notice-btn {
+        .notice-button {
+          min-height: 39px;
+
           display: inline-flex;
 
           align-items: center;
 
-          gap: 8px;
-
-          border: 0;
-
-          background: transparent;
-
-          color: #0759b8;
-
-          font: inherit;
-
-          font-size: 12px;
-
-          font-weight: 750;
-
-          cursor: pointer;
-
-          transition:
-            gap 0.2s ease;
-        }
-
-        .view-notice-btn:hover {
-          gap: 12px;
-        }
-
-        .view-notice-btn svg {
-          width: 15px;
-          height: 15px;
-        }
-
-
-        /* =========================================================
-           EMPTY STATE
-        ========================================================= */
-
-        .empty-state {
-          padding: 75px 20px;
-
-          text-align: center;
-
-          background: #ffffff;
-
-          border:
-            1px solid #e4e9f0;
-
-          border-radius: 18px;
-        }
-
-        .empty-icon {
-          display: flex;
-
-          align-items: center;
           justify-content: center;
 
-          width: 60px;
-          height: 60px;
+          gap: 7px;
 
-          margin:
-            0 auto 18px;
+          padding: 0 9px;
 
-          border-radius: 50%;
-
-          background: #edf5ff;
-
-          color: #0759b8;
-        }
-
-        .empty-icon svg {
-          width: 25px;
-          height: 25px;
-        }
-
-        .empty-state h2 {
-          margin:
-            0 0 8px;
-
-          font-size: 20px;
-        }
-
-        .empty-state p {
-          max-width: 420px;
-
-          margin:
-            0 auto 22px;
-
-          color: #7b8798;
-
-          font-size: 13px;
-
-          line-height: 1.6;
-        }
-
-        .empty-state button {
-          padding: 10px 16px;
-
-          border: 0;
+          border:
+            1px solid transparent;
 
           border-radius: 9px;
 
-          background: #0759b8;
-
-          color: #ffffff;
-
-          font: inherit;
-
-          font-size: 12px;
-
-          font-weight: 700;
-
           cursor: pointer;
+
+          text-decoration: none;
+
+          font-family: inherit;
+
+          font-size: 11px;
+
+          font-weight: 850;
+
+          transition:
+            transform .2s ease,
+            background .2s ease,
+            border-color .2s ease,
+            color .2s ease;
         }
 
+        .notice-button svg {
+          width: 14px;
+          height: 14px;
 
-        /* =========================================================
-           MODAL
-        ========================================================= */
+          fill: none;
 
-        .notice-modal-backdrop {
-          position: fixed;
+          stroke: currentColor;
 
-          z-index: 1000;
+          stroke-width: 1.8;
+        }
 
-          inset: 0;
+        .notice-button:hover {
+          transform: translateY(-2px);
+        }
+
+        .notice-button:active {
+          transform: translateY(0);
+        }
+
+        .notice-button.primary {
+          border-color: var(--blue);
+
+          background: var(--blue);
+
+          color: white;
+        }
+
+        .notice-button.primary:hover {
+          background: var(--blue-dark);
+
+          border-color: var(--blue-dark);
+        }
+
+        .notice-button.secondary {
+          border-color: var(--border);
+
+          background: white;
+
+          color: #526276;
+        }
+
+        .notice-button.secondary:hover {
+          border-color: #cbd9e7;
+
+          background: var(--blue-soft);
+
+          color: var(--blue);
+        }
+
+        .notice-card.recent .share-button {
+          border-color:
+            rgba(229,57,53,.18);
+
+          background: var(--red-soft);
+
+          color: var(--red);
+        }
+
+        .notice-card.recent .share-button:hover {
+          background: #ffe5e5;
+
+          border-color:
+            rgba(229,57,53,.32);
+        }
+
+        /* =====================================================
+           EMPTY
+        ===================================================== */
+
+        .notice-empty {
+          padding: 70px 25px;
+
+          text-align: center;
+
+          border:
+            1px solid
+            var(--border);
+
+          border-radius: 18px;
+
+          background: white;
+        }
+
+        .notice-empty h3 {
+          margin: 0 0 8px;
+
+          font-size: 21px;
+        }
+
+        .notice-empty p {
+          margin: 0;
+
+          color: var(--muted);
+
+          font-size: 14px;
+        }
+
+        /* =====================================================
+           INFO
+        ===================================================== */
+
+        .notice-info {
+          display: flex;
+
+          align-items: center;
+
+          justify-content: space-between;
+
+          gap: 30px;
+
+          margin-top: 55px;
+
+          padding: 28px 30px;
+
+          border:
+            1px solid #dce9f7;
+
+          border-radius: 16px;
+
+          background:
+            linear-gradient(
+              135deg,
+              #f4f9ff,
+              #ffffff
+            );
+        }
+
+        .notice-info-left {
+          display: flex;
+
+          align-items: flex-start;
+
+          gap: 15px;
+        }
+
+        .info-icon {
+          width: 38px;
+          height: 38px;
 
           display: flex;
 
           align-items: center;
+
           justify-content: center;
 
-          padding: 25px;
+          flex: 0 0 38px;
 
-          background:
-            rgba(8,19,35,0.72);
+          border-radius: 10px;
 
-          backdrop-filter: blur(8px);
+          background: var(--blue);
 
-          animation:
-            modalFade 0.2s ease;
+          color: white;
         }
 
-        @keyframes modalFade {
+        .info-icon svg {
+          width: 18px;
+          height: 18px;
+
+          fill: none;
+
+          stroke: currentColor;
+
+          stroke-width: 1.8;
+        }
+
+        .notice-info h3 {
+          margin: 0 0 5px;
+
+          color: var(--text);
+
+          font-size: 15px;
+        }
+
+        .notice-info p {
+          max-width: 700px;
+
+          margin: 0;
+
+          color: var(--muted);
+
+          font-size: 12px;
+
+          line-height: 1.65;
+        }
+
+        .info-brand {
+          color: var(--blue);
+
+          font-size: 11px;
+
+          font-weight: 900;
+
+          white-space: nowrap;
+        }
+
+        /* =====================================================
+           TOAST
+        ===================================================== */
+
+        .share-toast {
+          position: fixed;
+
+          left: 50%;
+          bottom: 28px;
+
+          z-index: 10001;
+
+          transform: translateX(-50%);
+
+          padding: 12px 18px;
+
+          border-radius: 10px;
+
+          background: #0c1b2a;
+
+          color: white;
+
+          box-shadow:
+            0 12px 35px
+            rgba(0,0,0,.18);
+
+          font-size: 12px;
+
+          font-weight: 800;
+
+          animation:
+            toastIn .25s ease;
+        }
+
+        @keyframes toastIn {
           from {
             opacity: 0;
+
+            transform:
+              translate(-50%, 10px);
           }
 
           to {
             opacity: 1;
+
+            transform:
+              translate(-50%, 0);
           }
         }
 
-        .notice-modal {
-          width:
-            min(1050px, 100%);
+        /* =====================================================
+           MODAL
+        ===================================================== */
 
-          height:
-            min(850px, 92vh);
+        .notice-modal {
+          position: fixed;
+
+          inset: 0;
+
+          z-index: 10000;
 
           display: flex;
+
+          align-items: center;
+
+          justify-content: center;
+
+          padding: 20px;
+
+          background:
+            rgba(5,18,31,.80);
+
+          backdrop-filter: blur(12px);
+
+          -webkit-backdrop-filter:
+            blur(12px);
+
+          animation:
+            modalBackground .2s ease;
+        }
+
+        .notice-modal-content {
+          width:
+            min(1150px, 100%);
+
+          height:
+            min(850px, 94vh);
+
+          display: flex;
+
           flex-direction: column;
 
           overflow: hidden;
 
+          background: white;
+
           border-radius: 18px;
 
-          background: #ffffff;
-
           box-shadow:
-            0 30px 100px
-            rgba(0,0,0,0.3);
+            0 35px 100px
+            rgba(0,0,0,.30);
 
           animation:
-            modalUp 0.25s ease;
+            modalIn .25s
+            cubic-bezier(.2,.8,.2,1);
         }
 
-        @keyframes modalUp {
+        @keyframes modalBackground {
           from {
-            transform:
-              translateY(15px)
-              scale(0.98);
-
             opacity: 0;
           }
 
           to {
-            transform:
-              translateY(0)
-              scale(1);
-
             opacity: 1;
           }
         }
 
-        .modal-header {
+        @keyframes modalIn {
+          from {
+            opacity: 0;
+
+            transform:
+              scale(.97)
+              translateY(10px);
+          }
+
+          to {
+            opacity: 1;
+
+            transform:
+              scale(1)
+              translateY(0);
+          }
+        }
+
+        /* =====================================================
+           MODAL HEADER
+        ===================================================== */
+
+        .notice-modal-header {
+          min-height: 70px;
+
           display: flex;
 
           align-items: center;
+
           justify-content: space-between;
 
-          gap: 20px;
+          gap: 15px;
 
-          padding: 20px 24px;
+          padding:
+            10px
+            18px
+            10px
+            22px;
 
           border-bottom:
-            1px solid #e7ebf0;
+            1px solid
+            var(--border);
+
+          background: white;
         }
 
-        .modal-category {
-          color: #0759b8;
+        .modal-title-area {
+          min-width: 0;
+        }
 
-          font-size: 10px;
+        .modal-label {
+          margin-bottom: 3px;
 
-          font-weight: 800;
+          color: var(--blue);
+
+          font-size: 9px;
+
+          font-weight: 900;
+
+          letter-spacing: .1em;
 
           text-transform: uppercase;
-
-          letter-spacing: 1px;
         }
 
-        .modal-header h2 {
-          margin:
-            5px 0 0;
+        .notice-modal-header h3 {
+          overflow: hidden;
 
-          font-size: 20px;
+          margin: 0;
 
-          line-height: 1.3;
+          color: var(--text);
+
+          font-size: 15px;
+
+          text-overflow: ellipsis;
+
+          white-space: nowrap;
         }
 
-        .modal-close {
+        .modal-actions {
           display: flex;
-
-          align-items: center;
-          justify-content: center;
-
-          width: 36px;
-          height: 36px;
-
-          flex-shrink: 0;
-
-          border: 0;
-
-          border-radius: 10px;
-
-          background: #f0f3f7;
-
-          color: #526174;
-
-          cursor: pointer;
-
-          font-size: 24px;
-
-          line-height: 1;
-
-          transition: all 0.2s ease;
-        }
-
-        .modal-close:hover {
-          background: #0759b8;
-
-          color: #ffffff;
-        }
-
-        .modal-content {
-          flex: 1;
-
-          min-height: 0;
-
-          background: #edf0f4;
-        }
-
-        .notice-pdf {
-          width: 100%;
-          height: 100%;
-
-          border: 0;
-        }
-
-        .notice-image {
-          display: block;
-
-          width: 100%;
-          height: 100%;
-
-          object-fit: contain;
-
-          padding: 20px;
-        }
-
-        .modal-footer {
-          display: flex;
-
-          align-items: center;
-          justify-content: space-between;
-
-          padding: 13px 20px;
-
-          border-top:
-            1px solid #e7ebf0;
-
-          color: #8792a3;
-
-          font-size: 11px;
-        }
-
-        .open-new-tab {
-          display: inline-flex;
 
           align-items: center;
 
           gap: 7px;
 
-          color: #0759b8;
+          flex-shrink: 0;
+        }
+
+        .modal-download {
+          min-height: 38px;
+
+          display: inline-flex;
+
+          align-items: center;
+
+          justify-content: center;
+
+          gap: 7px;
+
+          padding: 0 13px;
+
+          border: none;
+
+          border-radius: 9px;
+
+          background: var(--blue);
+
+          color: white;
+
+          cursor: pointer;
+
+          font-family: inherit;
 
           font-size: 11px;
 
-          font-weight: 700;
+          font-weight: 850;
 
-          text-decoration: none;
+          transition:
+            background .2s ease,
+            transform .2s ease;
         }
 
-        .open-new-tab svg {
-          width: 13px;
-          height: 13px;
+        .modal-download:hover {
+          background: var(--blue-dark);
+
+          transform: translateY(-1px);
         }
 
+        .modal-download svg {
+          width: 14px;
+          height: 14px;
 
-        /* =========================================================
-           RESPONSIVE
-        ========================================================= */
+          fill: none;
 
-        @media (max-width: 900px) {
+          stroke: currentColor;
 
-          .notice-controls {
-            flex-direction: column;
+          stroke-width: 1.8;
+        }
 
-            align-items: stretch;
+        .notice-close {
+          width: 38px;
+          height: 38px;
+
+          display: flex;
+
+          align-items: center;
+
+          justify-content: center;
+
+          flex: 0 0 38px;
+
+          border:
+            1px solid
+            var(--border);
+
+          border-radius: 9px;
+
+          background: white;
+
+          color: #637386;
+
+          cursor: pointer;
+
+          transition:
+            background .2s ease,
+            color .2s ease;
+        }
+
+        .notice-close:hover {
+          background: #f5f7fa;
+
+          color: var(--text);
+        }
+
+        .notice-close svg {
+          width: 17px;
+          height: 17px;
+
+          fill: none;
+
+          stroke: currentColor;
+
+          stroke-width: 2;
+        }
+
+        /* =====================================================
+           PREVIEW
+        ===================================================== */
+
+        .notice-preview {
+          flex: 1;
+
+          min-height: 0;
+
+          display: flex;
+
+          align-items: center;
+
+          justify-content: center;
+
+          background: #e9eef3;
+        }
+
+        .notice-preview iframe {
+          width: 100%;
+          height: 100%;
+
+          display: block;
+
+          border: none;
+
+          background: white;
+        }
+
+        .notice-preview img {
+          width: 100%;
+          height: 100%;
+
+          display: block;
+
+          object-fit: contain;
+
+          padding: 15px;
+        }
+
+        /* =====================================================
+           TABLET
+        ===================================================== */
+
+        @media (max-width: 950px) {
+
+          .notice-grid {
+            grid-template-columns:
+              repeat(2, minmax(0, 1fr));
           }
 
-          .notice-search {
+          .notice-controls {
+            align-items: stretch;
+
+            flex-direction: column;
+          }
+
+          .search-box {
             width: 100%;
           }
 
-          .category-filters {
+          .category-list {
             justify-content: flex-start;
+          }
+
+        }
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 650px) {
+
+          .notice-ticker {
+            height: 42px;
+          }
+
+          .ticker-label {
+            padding: 0 13px;
+
+            font-size: 9px;
+          }
+
+          .ticker-label svg {
+            width: 13px;
+            height: 13px;
+          }
+
+          .ticker-item {
+            height: 42px;
+
+            padding: 0 20px;
+
+            font-size: 11px;
+          }
+
+          .notice-hero {
+            padding:
+              64px
+              18px
+              58px;
+          }
+
+          .hero-kicker {
+            font-size: 9px;
+          }
+
+          .hero-kicker::before,
+          .hero-kicker::after {
+            width: 18px;
+          }
+
+          .hero-title {
+            font-size:
+              clamp(44px, 14vw, 62px);
+          }
+
+          .hero-description {
+            font-size: 14px;
+          }
+
+          .hero-meta {
+            margin-top: 25px;
+          }
+
+          .notice-container {
+            padding:
+              38px
+              16px
+              70px;
+          }
+
+          .category-list {
+            display: grid;
+
+            grid-template-columns:
+              repeat(2, 1fr);
+
+            width: 100%;
+          }
+
+          .category-button {
+            width: 100%;
+          }
+
+          .section-header {
+            align-items: flex-start;
+
+            flex-direction: column;
+
+            gap: 7px;
           }
 
           .notice-grid {
             grid-template-columns: 1fr;
           }
-        }
-
-
-        @media (max-width: 650px) {
-
-          .notice-ticker-wrapper {
-            height: 46px;
-          }
-
-          .notice-ticker-label {
-            padding: 0 14px;
-
-            font-size: 9px;
-          }
-
-          .notice-ticker-track {
-            animation-duration: 22s;
-          }
-
-          .ticker-notice {
-            font-size: 11px;
-          }
-
-          .notice-hero {
-            min-height: 350px;
-          }
-
-          .notice-hero-content {
-            padding: 55px 0;
-          }
-
-          .notice-hero h1 {
-            font-size: 43px;
-
-            letter-spacing: -2px;
-          }
-
-          .notice-hero p {
-            font-size: 14px;
-          }
-
-          .hero-stats {
-            gap: 18px;
-          }
-
-          .notice-container {
-            width:
-              min(100% - 26px, 1180px);
-
-            padding-top: 35px;
-          }
 
           .notice-card {
-            min-height: 300px;
-
-            padding: 20px;
+            min-height: 330px;
           }
 
-          .notice-card h2 {
-            font-size: 19px;
+          .notice-info {
+            align-items: flex-start;
+
+            flex-direction: column;
           }
 
-          .notice-card-footer {
-            align-items: flex-end;
-          }
-
-          .notice-modal-backdrop {
-            padding: 10px;
+          .info-brand {
+            padding-left: 53px;
           }
 
           .notice-modal {
-            height: 95vh;
-
-            border-radius: 14px;
+            padding: 8px;
           }
 
-          .modal-header {
-            padding: 16px;
+          .notice-modal-content {
+            height: 96vh;
+
+            border-radius: 12px;
           }
 
-          .modal-header h2 {
-            font-size: 16px;
+          .notice-modal-header {
+            min-height: 65px;
+
+            padding-left: 14px;
           }
 
-          .modal-footer {
-            padding: 11px 14px;
+          .modal-download {
+            width: 38px;
+
+            padding: 0;
+
+            font-size: 0;
           }
+
+          .modal-download svg {
+            width: 16px;
+            height: 16px;
+          }
+
         }
 
+        @media (max-width: 420px) {
 
-        /* =========================================================
+          .notice-actions {
+            grid-template-columns:
+              1fr 1fr;
+          }
+
+          .notice-actions .primary {
+            grid-column:
+              span 2;
+          }
+
+          .hero-title {
+            letter-spacing:
+              -.055em;
+          }
+
+        }
+
+        /* =====================================================
+           ACCESSIBILITY
+        ===================================================== */
+
+        .notice-button:focus-visible,
+        .category-button:focus-visible,
+        .notice-close:focus-visible,
+        .modal-download:focus-visible,
+        .search-box input:focus-visible {
+          outline:
+            3px solid
+            rgba(7,89,184,.25);
+
+          outline-offset: 2px;
+        }
+
+        /* =====================================================
            REDUCED MOTION
-        ========================================================= */
+        ===================================================== */
 
         @media (prefers-reduced-motion: reduce) {
 
-          html {
-            scroll-behavior: auto;
-          }
-
-          .notice-ticker-track {
+          .ticker-track {
             animation: none;
           }
 
           .notice-card,
-          .ticker-notice,
-          .view-notice-btn {
+          .notice-button,
+          .category-button,
+          .modal-download {
             transition: none;
           }
+
         }
 
       `}</style>
 
-      <div className="notice-page">
+      {/* =====================================================
+          MOVING NOTICE TICKER
+      ===================================================== */}
 
-        {/* =====================================================
-            MOVING NOTICE BAR
-        ===================================================== */}
+      {tickerNotices.length > 0 && (
+        <div className="notice-ticker">
 
-        <div className="notice-ticker-wrapper">
-
-          <div className="notice-ticker-label">
-            <span className="ticker-label-dot"></span>
-
-            <span>NOTICE</span>
+          <div className="ticker-label">
+            <BellIcon />
+            Notices
           </div>
 
-          <div className="notice-ticker">
+          <div className="ticker-window">
 
-            <div className="notice-ticker-track">
+            <div className="ticker-track">
 
-              {tickerNotices.map((notice, index) => (
-                <React.Fragment
-                  key={`${notice.id}-${index}`}
-                >
+              {/* FIRST COPY */}
 
-                  <button
-                    type="button"
-                    className="ticker-notice"
-                    onClick={() =>
-                      scrollToNotice(notice.id)
-                    }
-                  >
+              <div className="ticker-group">
 
-                    <span className="ticker-dot"></span>
+                {tickerNotices.map((notice) => {
 
-                    <span>
-                      {notice.title}
-                    </span>
+                  const recent =
+                    isRecentNotice(notice.date);
 
-                  </button>
+                  return (
+                    <div
+                      className={`ticker-item ${
+                        recent
+                          ? "recent"
+                          : "old"
+                      }`}
+                      key={`ticker-${notice.id}`}
+                    >
 
-                  <span className="ticker-separator">
-                    •
-                  </span>
+                      <span className="ticker-dot"></span>
 
-                </React.Fragment>
-              ))}
+                      {recent && (
+                        <span className="ticker-new">
+                          NEW
+                        </span>
+                      )}
+
+                      <span>
+                        {notice.title}
+                      </span>
+
+                    </div>
+                  );
+                })}
+
+              </div>
+
+              {/* SECOND COPY */}
+
+              <div
+                className="ticker-group"
+                aria-hidden="true"
+              >
+
+                {tickerNotices.map((notice) => {
+
+                  const recent =
+                    isRecentNotice(notice.date);
+
+                  return (
+                    <div
+                      className={`ticker-item ${
+                        recent
+                          ? "recent"
+                          : "old"
+                      }`}
+                      key={`ticker-copy-${notice.id}`}
+                    >
+
+                      <span className="ticker-dot"></span>
+
+                      {recent && (
+                        <span className="ticker-new">
+                          NEW
+                        </span>
+                      )}
+
+                      <span>
+                        {notice.title}
+                      </span>
+
+                    </div>
+                  );
+                })}
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      )}
+
+      {/* =====================================================
+          HERO
+      ===================================================== */}
+
+      <header className="notice-hero">
+
+        <div className="hero-grid"></div>
+
+        <div className="hero-inner">
+
+          <div className="hero-kicker">
+            VFAW Official Communication
+          </div>
+
+          <h1 className="hero-title">
+            Notices
+            <br />
+            <span>& Updates.</span>
+          </h1>
+
+          <p className="hero-description">
+            Stay up to date with official VFAW
+            announcements, competitions, educational
+            events, opportunities and important activities.
+          </p>
+
+          <div className="hero-meta">
+
+            <div className="hero-meta-item">
+
+              <span className="hero-meta-dot"></span>
+
+              <strong>
+                {noticesData.length}
+              </strong>
+
+              published notices
+
+            </div>
+
+            <div className="hero-meta-item">
+
+              <span className="hero-meta-dot"></span>
+
+              Updated regularly
+
+            </div>
+
+            <div className="hero-meta-item">
+
+              <span className="hero-meta-dot"></span>
+
+              Official VFAW updates
 
             </div>
 
@@ -1530,545 +2162,431 @@ export default function Notice() {
 
         </div>
 
+      </header>
 
-        {/* =====================================================
-            HERO
-        ===================================================== */}
+      {/* =====================================================
+          MAIN
+      ===================================================== */}
 
-        <section className="notice-hero">
+      <main className="notice-container">
 
-          <div className="hero-grid"></div>
+        {/* SEARCH + FILTER */}
 
-          <div
-            className="hero-decoration hero-decoration-one"
-          ></div>
+        <div className="notice-controls">
 
-          <div
-            className="hero-decoration hero-decoration-two"
-          ></div>
+          <div className="search-box">
 
-          <div className="notice-hero-content">
+            <SearchIcon />
 
-            <div className="hero-badge">
-
-              <span className="hero-badge-dot"></span>
-
-              VFAW Official Communication
-
-            </div>
-
-            <h1>
-              Notices
-              <span> & Updates.</span>
-            </h1>
-
-            <p>
-              Stay up to date with official VFAW
-              announcements, competitions,
-              educational events, opportunities
-              and important activities.
-            </p>
-
-            <div className="hero-stats">
-
-              <div className="hero-stat">
-
-                <strong>
-                  {notices.length}
-                </strong>
-
-                <span>
-                  Published Notices
-                </span>
-
-              </div>
-
-              <div className="hero-stat-divider"></div>
-
-              <div className="hero-stat">
-
-                <strong>
-                  Regularly
-                </strong>
-
-                <span>
-                  Updated
-                </span>
-
-              </div>
-
-            </div>
+            <input
+              type="search"
+              placeholder="Search notices..."
+              value={search}
+              onChange={(event) =>
+                setSearch(event.target.value)
+              }
+              aria-label="Search notices"
+            />
 
           </div>
 
-        </section>
+          <div className="category-list">
 
-
-        {/* =====================================================
-            MAIN CONTENT
-        ===================================================== */}
-
-        <main className="notice-container">
-
-          {/* SEARCH + CATEGORY */}
-
-          <section className="notice-controls">
-
-            <div className="notice-search">
-
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <circle
-                  cx="11"
-                  cy="11"
-                  r="7"
-                />
-
-                <path d="m20 20-4-4" />
-              </svg>
-
-              <input
-                type="text"
-                placeholder="Search notices..."
-                value={search}
-                onChange={(e) =>
-                  setSearch(e.target.value)
-                }
-              />
-
-              {search && (
-                <button
-                  type="button"
-                  className="clear-search"
-                  onClick={() =>
-                    setSearch("")
-                  }
-                  aria-label="Clear search"
-                >
-                  ×
-                </button>
-              )}
-
-            </div>
-
-
-            <div className="category-filters">
-
-              {categories.map((category) => (
-
-                <button
-                  key={category}
-                  type="button"
-                  className={
-                    activeCategory === category
-                      ? "category-btn active"
-                      : "category-btn"
-                  }
-                  onClick={() =>
-                    setActiveCategory(category)
-                  }
-                >
-                  {category}
-                </button>
-
-              ))}
-
-            </div>
-
-          </section>
-
-
-          {/* RESULTS */}
-
-          <div className="notice-results-info">
-
-            <span>
-              Showing{" "}
-              <strong>
-                {filteredNotices.length}
-              </strong>{" "}
-              {filteredNotices.length === 1
-                ? "notice"
-                : "notices"}
-            </span>
-
-            {(search ||
-              activeCategory !== "All") && (
+            {categories.map((category) => (
 
               <button
+                key={category}
                 type="button"
-                className="reset-filters"
-                onClick={() => {
-                  setSearch("");
-                  setActiveCategory("All");
-                }}
+                className={`category-button ${
+                  activeCategory === category
+                    ? "active"
+                    : ""
+                }`}
+                onClick={() =>
+                  setActiveCategory(category)
+                }
               >
-                Reset filters
+                {category}
               </button>
 
-            )}
+            ))}
 
           </div>
 
+        </div>
 
-          {/* =================================================
-              NOTICE CARDS
-          ================================================= */}
+        {/* SECTION HEADER */}
 
-          {filteredNotices.length > 0 ? (
+        <div className="section-header">
 
-            <section className="notice-grid">
+          <div>
 
-              {filteredNotices.map((notice) => (
+            <p className="section-eyebrow">
+              Official updates
+            </p>
+
+            <h2>
+              Latest notices
+            </h2>
+
+          </div>
+
+          <div className="section-count">
+
+            Showing{" "}
+            {filteredNotices.length}{" "}
+            of{" "}
+            {noticesData.length}{" "}
+            notices
+
+          </div>
+
+        </div>
+
+        {/* ===================================================
+            NOTICE CARDS
+        =================================================== */}
+
+        {filteredNotices.length > 0 ? (
+
+          <section className="notice-grid">
+
+            {filteredNotices.map((notice) => {
+
+              const recent =
+                isRecentNotice(notice.date);
+
+              return (
 
                 <article
+                  className={`notice-card ${
+                    recent ? "recent" : ""
+                  }`}
                   key={notice.id}
-                  id={`notice-${notice.id}`}
-                  className="notice-card"
                 >
 
-                  {/* CARD TOP */}
+                  <div className="card-accent"></div>
 
                   <div className="notice-card-top">
 
-                    <div className="notice-category">
-
-                      <span className="category-dot"></span>
-
+                    <span className="notice-category">
                       {notice.category}
+                    </span>
 
-                    </div>
+                    <div>
 
-
-                    <div className="notice-card-actions">
-
-                      {notice.important && (
-                        <span className="important-badge">
-                          Important
+                      {recent && (
+                        <span className="new-label">
+                          NEW
                         </span>
                       )}
 
-                      {notice.pinned && (
-
-                        <span className="pin-badge">
-
-                          <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                          >
-                            <path d="m15 4 5 5-3 1-4 6-4-4 6-4z" />
-                            <path d="M9 15 4 20" />
-                          </svg>
-
-                        </span>
-
-                      )}
+                      {!recent &&
+                        notice.important && (
+                          <span className="important-label">
+                            Important
+                          </span>
+                        )}
 
                     </div>
 
                   </div>
 
-
-                  {/* DATE */}
-
-                  <div className="notice-date">
-
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <rect
-                        x="3"
-                        y="4"
-                        width="18"
-                        height="18"
-                        rx="2"
-                      />
-
-                      <path d="M16 2v4M8 2v4M3 10h18" />
-                    </svg>
-
-                    {formatDate(notice.date)}
-
-                  </div>
-
-
-                  {/* TITLE */}
-
-                  <h2>
+                  <h3 className="notice-title">
                     {notice.title}
-                  </h2>
-
-
-                  {/* DESCRIPTION */}
+                  </h3>
 
                   <p className="notice-description">
                     {notice.description}
                   </p>
 
+                  <div
+                    className={`notice-date ${
+                      recent
+                        ? "recent-date"
+                        : ""
+                    }`}
+                  >
 
-                  {/* FOOTER */}
-
-                  <div className="notice-card-footer">
-
-                    <span className="notice-file-type">
-
-                      <span className="file-icon">
-
-                        {notice.type === "PDF" ? (
-
-                          <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                          >
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-
-                            <path d="M14 2v6h6" />
-
-                            <path d="M8 13h2M8 17h6" />
-                          </svg>
-
-                        ) : (
-
-                          <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                          >
-                            <rect
-                              x="3"
-                              y="3"
-                              width="18"
-                              height="18"
-                              rx="2"
-                            />
-
-                            <circle
-                              cx="8.5"
-                              cy="8.5"
-                              r="1.5"
-                            />
-
-                            <path d="m21 15-5-5L5 21" />
-                          </svg>
-
-                        )}
-
-                      </span>
-
-                      {notice.type}
-
+                    <span>
+                      Published{" "}
+                      {formatDate(notice.date)}
                     </span>
 
+                    {recent && (
+                      <span>
+                        Recent
+                      </span>
+                    )}
+
+                  </div>
+
+                  {/* ACTIONS */}
+
+                  <div className="notice-actions">
+
+                    {/* VIEW */}
 
                     <button
                       type="button"
-                      className="view-notice-btn"
+                      className="notice-button primary"
                       onClick={() =>
                         setSelectedNotice(notice)
                       }
                     >
 
-                      View Notice
+                      View
 
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                      >
-                        <path d="M5 12h14" />
-                        <path d="m13 6 6 6-6 6" />
-                      </svg>
+                      <ArrowIcon />
+
+                    </button>
+
+                    {/* OPEN */}
+
+                    <a
+                      className="notice-button secondary"
+                      href={notice.file}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+
+                      Open
+
+                      <ExternalIcon />
+
+                    </a>
+
+                    {/* SHARE */}
+
+                    <button
+                      type="button"
+                      className="notice-button secondary share-button"
+                      onClick={() =>
+                        shareNotice(notice)
+                      }
+                    >
+
+                      Share
+
+                      <ShareIcon />
 
                     </button>
 
                   </div>
 
+                  {/* DOWNLOAD */}
+
+                  <button
+                    type="button"
+                    className="notice-button secondary"
+                    style={{
+                      marginTop: "7px",
+                      width: "100%",
+                    }}
+                    onClick={() =>
+                      downloadNotice(notice)
+                    }
+                  >
+
+                    Download notice
+
+                    <DownloadIcon />
+
+                  </button>
+
                 </article>
 
-              ))}
+              );
 
-            </section>
+            })}
 
-          ) : (
+          </section>
 
-            /* =================================================
-               EMPTY STATE
-            ================================================= */
+        ) : (
 
-            <section className="empty-state">
+          <div className="notice-empty">
 
-              <div className="empty-icon">
+            <h3>
+              No notices found
+            </h3>
 
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.7"
-                >
-                  <circle
-                    cx="11"
-                    cy="11"
-                    r="7"
-                  />
-
-                  <path d="m20 20-4-4" />
-                </svg>
-
-              </div>
-
-              <h2>
-                No notices found
-              </h2>
-
-              <p>
-                We couldn't find any notices
-                matching your search or selected
-                category.
-              </p>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setSearch("");
-                  setActiveCategory("All");
-                }}
-              >
-                View all notices
-              </button>
-
-            </section>
-
-          )}
-
-        </main>
-
-
-        {/* =====================================================
-            NOTICE VIEWER
-        ===================================================== */}
-
-        {selectedNotice && (
-
-          <div
-            className="notice-modal-backdrop"
-            onClick={() =>
-              setSelectedNotice(null)
-            }
-          >
-
-            <div
-              className="notice-modal"
-              onClick={(e) =>
-                e.stopPropagation()
-              }
-            >
-
-              <div className="modal-header">
-
-                <div>
-
-                  <span className="modal-category">
-                    {selectedNotice.category}
-                  </span>
-
-                  <h2>
-                    {selectedNotice.title}
-                  </h2>
-
-                </div>
-
-
-                <button
-                  type="button"
-                  className="modal-close"
-                  onClick={() =>
-                    setSelectedNotice(null)
-                  }
-                  aria-label="Close notice"
-                >
-                  ×
-                </button>
-
-              </div>
-
-
-              <div className="modal-content">
-
-                {selectedNotice.type === "PDF" ? (
-
-                  <iframe
-                    src={selectedNotice.file}
-                    title={selectedNotice.title}
-                    className="notice-pdf"
-                  />
-
-                ) : (
-
-                  <img
-                    src={selectedNotice.file}
-                    alt={selectedNotice.title}
-                    className="notice-image"
-                  />
-
-                )}
-
-              </div>
-
-
-              <div className="modal-footer">
-
-                <span>
-                  Published{" "}
-                  {formatDate(
-                    selectedNotice.date
-                  )}
-                </span>
-
-
-                <a
-                  href={selectedNotice.file}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="open-new-tab"
-                >
-
-                  Open in new tab
-
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path d="M14 3h7v7" />
-                    <path d="M10 14 21 3" />
-                    <path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5" />
-                  </svg>
-
-                </a>
-
-              </div>
-
-            </div>
+            <p>
+              Try another search term or select
+              a different category.
+            </p>
 
           </div>
 
         )}
 
-      </div>
-    </>
+        {/* ===================================================
+            INFORMATION
+        =================================================== */}
+
+        <section className="notice-info">
+
+          <div className="notice-info-left">
+
+            <div className="info-icon">
+              <BellIcon />
+            </div>
+
+            <div>
+
+              <h3>
+                About VFAW Notices
+              </h3>
+
+              <p>
+                This section contains official VFAW
+                announcements, competitions, educational
+                events, volunteer opportunities, programs
+                and other important updates.
+              </p>
+
+            </div>
+
+          </div>
+
+          <div className="info-brand">
+            Vets for Animal Welfare
+          </div>
+
+        </section>
+
+      </main>
+
+      {/* =====================================================
+          NOTICE PREVIEW MODAL
+      ===================================================== */}
+
+      {selectedNotice && (
+
+        <div
+          className="notice-modal"
+          role="dialog"
+          aria-modal="true"
+          aria-label={selectedNotice.title}
+          onClick={(event) => {
+
+            if (
+              event.target ===
+              event.currentTarget
+            ) {
+              setSelectedNotice(null);
+            }
+
+          }}
+        >
+
+          <div className="notice-modal-content">
+
+            {/* MODAL HEADER */}
+
+            <div className="notice-modal-header">
+
+              <div className="modal-title-area">
+
+                <div className="modal-label">
+                  VFAW Official Notice
+                </div>
+
+                <h3>
+                  {selectedNotice.title}
+                </h3>
+
+              </div>
+
+              <div className="modal-actions">
+
+                {/* MODAL DOWNLOAD */}
+
+                <button
+                  type="button"
+                  className="modal-download"
+                  onClick={() =>
+                    downloadNotice(
+                      selectedNotice
+                    )
+                  }
+                  title="Download notice"
+                >
+
+                  <DownloadIcon />
+
+                  <span>
+                    Download
+                  </span>
+
+                </button>
+
+                {/* CLOSE */}
+
+                <button
+                  type="button"
+                  className="notice-close"
+                  onClick={() =>
+                    setSelectedNotice(null)
+                  }
+                  aria-label="Close notice"
+                  title="Close"
+                >
+
+                  <CloseIcon />
+
+                </button>
+
+              </div>
+
+            </div>
+
+            {/* PREVIEW */}
+
+            <div className="notice-preview">
+
+              {selectedNotice.fileType ===
+              "pdf" ? (
+
+                <iframe
+                  src={`${selectedNotice.file}#toolbar=1&navpanes=0&scrollbar=1`}
+                  title={
+                    selectedNotice.title
+                  }
+                />
+
+              ) : (
+
+                <img
+                  src={selectedNotice.file}
+                  alt={
+                    selectedNotice.title
+                  }
+                />
+
+              )}
+
+            </div>
+
+          </div>
+
+        </div>
+
+      )}
+
+      {/* =====================================================
+          SHARE TOAST
+      ===================================================== */}
+
+      {shareMessage && (
+
+        <div className="share-toast">
+          {shareMessage}
+        </div>
+
+      )}
+
+    </div>
   );
 }
+
+export default Notice;
