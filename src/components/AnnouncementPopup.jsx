@@ -4,26 +4,12 @@ function AnnouncementPopup() {
   const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
-    const lastShown = localStorage.getItem("vfaw_popup_shown");
-    const now = Date.now();
-
-    // Show popup if never shown
-    // or if 24 hours have passed
-    if (
-      !lastShown ||
-      now - Number(lastShown) > 24 * 60 * 60 * 1000
-    ) {
-      setShowPopup(true);
-    }
+    // Show popup every time the website loads
+    setShowPopup(true);
   }, []);
 
   const closePopup = () => {
     setShowPopup(false);
-
-    localStorage.setItem(
-      "vfaw_popup_shown",
-      Date.now().toString()
-    );
   };
 
   if (!showPopup) {
@@ -44,8 +30,11 @@ function AnnouncementPopup() {
 
           padding: 20px;
 
+          /* 80% transparency */
           background: rgba(0, 0, 0, 0.20);
-          backdrop-filter: blur(7px);
+
+          backdrop-filter: blur(3px);
+          -webkit-backdrop-filter: blur(3px);
 
           animation: vfawOverlayIn 0.25s ease;
         }
@@ -149,10 +138,8 @@ function AnnouncementPopup() {
           .vfaw-announcement-close {
             width: 34px;
             height: 34px;
-
             top: 8px;
             right: 8px;
-
             font-size: 24px;
           }
         }
