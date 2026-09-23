@@ -1,6 +1,61 @@
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import logoHome from '../../public/logohome.png';
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import logoHome from "../../public/logohome.png";
+import noticesData from "../data/notices";
+
+
+// ============================================================
+// DATE HELPERS
+// ============================================================
+
+function parseLocalDate(dateString) {
+  const [year, month, day] = dateString.split("-").map(Number);
+  return new Date(year, month - 1, day);
+}
+
+function isRecentNotice(dateString) {
+  const noticeDate = parseLocalDate(dateString);
+
+  const today = new Date();
+
+  const todayOnly = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  );
+
+  const difference = Math.floor(
+    (todayOnly.getTime() - noticeDate.getTime()) /
+      (1000 * 60 * 60 * 24)
+  );
+
+  return difference >= 0 && difference <= 3;
+}
+
+
+// ============================================================
+// BELL ICON
+// ============================================================
+
+const BellIcon = () => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" />
+    <path d="M10 21h4" />
+  </svg>
+);
+
+
+// ============================================================
+// NAVBAR
+// ============================================================
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -8,99 +63,116 @@ const Navbar = () => {
 
   const navigate = useNavigate();
 
+
+  // ==========================================================
+  // SCROLL EFFECT
+  // ==========================================================
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
+
+  // ==========================================================
+  // BODY SCROLL LOCK WHEN MOBILE MENU IS OPEN
+  // ==========================================================
+
   useEffect(() => {
-    document.body.style.overflow = isOpen ? 'hidden' : '';
+    document.body.style.overflow = isOpen ? "hidden" : "";
 
     return () => {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     };
   }, [isOpen]);
 
+
+  // ==========================================================
+  // NAVIGATION
+  // ==========================================================
+
   const navigation = [
-    { name: 'Home', path: '/' },
-    { name: 'About', path: '/about' },
-    { name: 'Programs', path: '/programs' },
-    { name: 'Apply', path: '/apply' },
-    { name: 'Library', path: '/library' },
-    { name: 'Gallery', path: '/gallery' },
-    { name: 'Get Involved', path: '/get-involved' },
-    { name: 'Contact', path: '/contact' },
-    { name: 'Notice', path: '/notice' },
+    { name: "Home", path: "/" },
+    { name: "About", path: "/about" },
+    { name: "Programs", path: "/programs" },
+    { name: "Apply", path: "/apply" },
+    { name: "Library", path: "/library" },
+    { name: "Gallery", path: "/gallery" },
+    { name: "Get Involved", path: "/get-involved" },
+    { name: "Contact", path: "/contact" },
+    { name: "Notice", path: "/notice" },
   ];
 
-  /*
-   * NOTICE TICKER DATA
-   * Keep the IDs the same as the IDs used in Notice.jsx
-   */
-  const notices = [
-    {
-      id: 1,
-      title: 'Rabies Emergency Card Published',
-      category: 'Notice',
-    },
-    {
-      id: 2,
-      title: 'Clinical Report Writing Competition',
-      category: 'Competition',
-    },
-    {
-      id: 3,
-      title: 'VFAW Educational Webinar',
-      category: 'Event',
-    },
-    {
-      id: 4,
-      title: 'Volunteer Registration Open',
-      category: 'Opportunity',
-    },
-    {
-      id: 5,
-      title: 'AFU Seat',
-      category: 'Opportunity',
-    },
-  ];
+
+  // ==========================================================
+  // CLOSE MOBILE MENU
+  // ==========================================================
 
   const closeMenu = () => {
     setIsOpen(false);
   };
 
-  const openNotice = (id) => {
+
+  // ==========================================================
+  // SORT NOTICES
+  // NEWEST FIRST
+  // ==========================================================
+
+  const tickerNotices = useMemo(() => {
+    return [...noticesData].sort(
+      (a, b) =>
+        parseLocalDate(b.date).getTime() -
+        parseLocalDate(a.date).getTime()
+    );
+  }, []);
+
+
+  // ==========================================================
+  // DUPLICATE THE LIST FOR SEAMLESS INFINITE TICKER
+  // ==========================================================
+
+  const tickerItems = useMemo(() => {
+    return [...tickerNotices, ...tickerNotices];
+  }, [tickerNotices]);
+
+
+  // ==========================================================
+  // OPEN NOTICE
+  // ==========================================================
+
+  const openNotice = (noticeId) => {
     closeMenu();
 
-    navigate(`/notice#notice-${id}`);
+    navigate(`/notice#notice-${noticeId}`);
   };
 
-  /*
-   * Duplicate the notices so the ticker can loop continuously.
-   */
-  const tickerNotices = [...notices, ...notices];
 
   return (
     <>
-      {/* =========================
-          MAIN NAVBAR
-      ========================== */}
+      {/* ======================================================
+          MAIN FIXED NAVBAR
+      ====================================================== */}
+
       <header
         className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${
           scrolled
-            ? 'bg-white/95 shadow-[0_8px_30px_rgba(7,21,47,0.10)] backdrop-blur-xl'
-            : 'bg-white'
+            ? "bg-white/95 shadow-[0_8px_30px_rgba(7,21,47,0.10)] backdrop-blur-xl"
+            : "bg-white"
         }`}
       >
         <nav className="mx-auto flex h-[84px] max-w-[1500px] items-center px-3 sm:px-5 lg:h-[90px] lg:px-5 xl:px-7">
-          {/* LOGO + BRAND */}
+
+          {/* ==================================================
+              LOGO
+          ================================================== */}
+
           <Link
             to="/"
             onClick={closeMenu}
@@ -130,9 +202,14 @@ const Navbar = () => {
             </div>
           </Link>
 
-          {/* DESKTOP NAVIGATION */}
+
+          {/* ==================================================
+              DESKTOP NAVIGATION
+          ================================================== */}
+
           <div className="ml-auto hidden items-center lg:flex">
             <div className="flex items-center">
+
               {navigation.map((item) => (
                 <NavLink
                   key={item.path}
@@ -140,8 +217,8 @@ const Navbar = () => {
                   className={({ isActive }) =>
                     `relative whitespace-nowrap px-2 py-3 text-[11px] font-bold tracking-wide transition-all duration-300 xl:px-2.5 xl:text-[12px] ${
                       isActive
-                        ? 'text-[#0756b8]'
-                        : 'text-slate-600 hover:text-[#0756b8]'
+                        ? "text-[#0756b8]"
+                        : "text-slate-600 hover:text-[#0756b8]"
                     }`
                   }
                 >
@@ -152,17 +229,22 @@ const Navbar = () => {
                       <span
                         className={`absolute bottom-1 left-1/2 h-[2px] -translate-x-1/2 rounded-full bg-[#e32932] transition-all duration-300 ${
                           isActive
-                            ? 'w-4 opacity-100'
-                            : 'w-0 opacity-0'
+                            ? "w-4 opacity-100"
+                            : "w-0 opacity-0"
                         }`}
                       />
                     </>
                   )}
                 </NavLink>
               ))}
+
             </div>
 
-            {/* DONATE BUTTON */}
+
+            {/* =================================================
+                DESKTOP DONATE BUTTON
+            ================================================= */}
+
             <Link
               to="/donate"
               className="group relative ml-2 inline-flex shrink-0 items-center gap-1.5 overflow-hidden rounded-xl bg-[#e32932] px-4 py-3 text-[11px] font-black tracking-wide text-white shadow-[0_8px_22px_rgba(227,41,50,0.24)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#c91f28] hover:shadow-[0_12px_28px_rgba(227,41,50,0.32)] xl:ml-2.5 xl:px-4.5 xl:text-[12px]"
@@ -189,56 +271,68 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* MOBILE MENU BUTTON */}
+
+          {/* ==================================================
+              MOBILE MENU BUTTON
+          ================================================== */}
+
           <button
             type="button"
             onClick={() => setIsOpen(!isOpen)}
             aria-label={
               isOpen
-                ? 'Close navigation menu'
-                : 'Open navigation menu'
+                ? "Close navigation menu"
+                : "Open navigation menu"
             }
             aria-expanded={isOpen}
             className="ml-auto flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-[#0756b8] shadow-[0_6px_18px_rgba(7,21,47,0.10)] transition-all duration-300 hover:border-red-200 hover:text-[#e32932] lg:hidden"
           >
             <span className="relative flex h-[21px] w-[26px] flex-col justify-between">
+
               <span
                 className={`block h-[2.5px] w-full rounded-full bg-current transition-all duration-300 ${
                   isOpen
-                    ? 'translate-y-[9px] rotate-45'
-                    : ''
+                    ? "translate-y-[9px] rotate-45"
+                    : ""
                 }`}
               />
 
               <span
                 className={`block h-[2.5px] w-[18px] self-end rounded-full bg-current transition-all duration-300 ${
                   isOpen
-                    ? 'translate-x-5 opacity-0'
-                    : ''
+                    ? "translate-x-5 opacity-0"
+                    : ""
                 }`}
               />
 
               <span
                 className={`block h-[2.5px] w-full rounded-full bg-current transition-all duration-300 ${
                   isOpen
-                    ? '-translate-y-[9px] -rotate-45'
-                    : ''
+                    ? "-translate-y-[9px] -rotate-45"
+                    : ""
                 }`}
               />
+
             </span>
           </button>
         </nav>
 
-        {/* MOBILE MENU */}
+
+        {/* ======================================================
+            MOBILE NAVIGATION
+        ====================================================== */}
+
         <div
           className={`overflow-hidden border-t border-slate-100 bg-white transition-all duration-300 lg:hidden ${
             isOpen
-              ? 'max-h-[calc(100vh-84px)] opacity-100'
-              : 'max-h-0 border-transparent opacity-0'
+              ? "max-h-[calc(100vh-84px)] opacity-100"
+              : "max-h-0 border-transparent opacity-0"
           }`}
         >
           <div className="mx-auto max-w-7xl overflow-y-auto px-4 pb-6 pt-3 sm:px-6">
+
             <div className="rounded-2xl border border-slate-100 bg-[#f8fafc] p-2">
+
               {navigation.map((item) => (
                 <NavLink
                   key={item.path}
@@ -247,8 +341,8 @@ const Navbar = () => {
                   className={({ isActive }) =>
                     `flex items-center justify-between rounded-xl px-4 py-3.5 text-sm font-bold transition-all duration-200 ${
                       isActive
-                        ? 'bg-white text-[#0756b8] shadow-sm'
-                        : 'text-slate-600 hover:bg-white hover:text-[#0756b8]'
+                        ? "bg-white text-[#0756b8] shadow-sm"
+                        : "text-slate-600 hover:bg-white hover:text-[#0756b8]"
                     }`
                   }
                 >
@@ -259,8 +353,8 @@ const Navbar = () => {
                       <svg
                         className={`h-4 w-4 transition-all duration-200 ${
                           isActive
-                            ? 'translate-x-0 text-[#e32932] opacity-100'
-                            : '-translate-x-1 text-slate-300 opacity-0'
+                            ? "translate-x-0 text-[#e32932] opacity-100"
+                            : "-translate-x-1 text-slate-300 opacity-0"
                         }`}
                         fill="none"
                         stroke="currentColor"
@@ -283,9 +377,14 @@ const Navbar = () => {
                   )}
                 </NavLink>
               ))}
+
             </div>
 
-            {/* MOBILE DONATE */}
+
+            {/* =================================================
+                MOBILE DONATE BUTTON
+            ================================================= */}
+
             <Link
               to="/donate"
               onClick={closeMenu}
@@ -332,6 +431,11 @@ const Navbar = () => {
               </svg>
             </Link>
 
+
+            {/* =================================================
+                MOBILE FOOTER LABEL
+            ================================================= */}
+
             <div className="mt-5 flex items-center justify-center gap-3">
               <span className="h-px w-8 bg-slate-200" />
 
@@ -341,135 +445,244 @@ const Navbar = () => {
 
               <span className="h-px w-8 bg-slate-200" />
             </div>
+
           </div>
         </div>
       </header>
 
-      {/* =========================================
+
+      {/* ======================================================
           SPACE FOR FIXED NAVBAR
-      ========================================== */}
+      ====================================================== */}
+
       <div className="h-[84px] lg:h-[90px]" />
 
-      {/* =========================================
-          VFAW MOVING NOTICE TICKER
-          Appears directly below the navbar
-      ========================================== */}
-      <section className="relative z-40 w-full overflow-hidden border-b border-slate-200 bg-white">
-        <div className="flex h-[42px] items-stretch">
-          {/* FIXED NOTICE LABEL */}
-          <div className="relative z-20 flex shrink-0 items-center bg-[#0756b8] px-4 sm:px-6">
-            <div className="flex items-center gap-2">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-white" />
-              </span>
 
-              <span className="text-[10px] font-black uppercase tracking-[0.16em] text-white sm:text-[11px]">
-                Notices
-              </span>
-            </div>
+      {/* ======================================================
+          NOTICE TICKER
+      ====================================================== */}
 
-            {/* Small angled edge */}
-            <span className="absolute right-[-10px] top-0 h-full w-5 skew-x-[-12deg] bg-[#0756b8]" />
+      {tickerNotices.length > 0 && (
+        <div className="vfaw-notice-ticker">
+
+          {/* ==================================================
+              TICKER LABEL
+          ================================================== */}
+
+          <div className="vfaw-ticker-label">
+            <BellIcon />
+            <span>Notices</span>
           </div>
 
-          {/* MOVING AREA */}
-          <div className="relative flex min-w-0 flex-1 items-center overflow-hidden bg-[#f8fbff]">
-            <div className="notice-marquee flex min-w-max items-center">
-              {tickerNotices.map((notice, index) => (
-                <button
-                  key={`${notice.id}-${index}`}
-                  type="button"
-                  onClick={() => openNotice(notice.id)}
-                  className="notice-item group flex shrink-0 items-center border-0 bg-transparent px-5 text-left outline-none sm:px-7"
-                  aria-label={`Open ${notice.title}`}
-                >
-                  {/* Category */}
-                  <span className="mr-2 rounded-full bg-[#0756b8]/10 px-2 py-0.5 text-[8px] font-black uppercase tracking-[0.12em] text-[#0756b8] transition-colors duration-200 group-hover:bg-[#0756b8] group-hover:text-white">
-                    {notice.category}
-                  </span>
 
-                  {/* Title */}
-                  <span className="text-[11px] font-bold text-slate-700 transition-colors duration-200 group-hover:text-[#0756b8] sm:text-[12px]">
-                    {notice.title}
-                  </span>
+          {/* ==================================================
+              TICKER WINDOW
+          ================================================== */}
 
-                  {/* Arrow */}
-                  <svg
-                    className="ml-2 h-3.5 w-3.5 text-slate-300 transition-all duration-200 group-hover:translate-x-1 group-hover:text-[#e32932]"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    viewBox="0 0 24 24"
+          <div className="vfaw-ticker-window">
+
+            <div className="vfaw-ticker-track">
+
+              {tickerItems.map((notice, index) => {
+                const recent = isRecentNotice(notice.date);
+
+                return (
+                  <button
+                    key={`${notice.id}-${index}`}
+                    type="button"
+                    className={`vfaw-ticker-item ${
+                      recent
+                        ? "vfaw-ticker-recent"
+                        : "vfaw-ticker-old"
+                    }`}
+                    onClick={() => openNotice(notice.id)}
+                    aria-label={`View ${notice.title}`}
+                    tabIndex={
+                      index >= tickerNotices.length
+                        ? -1
+                        : 0
+                    }
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M5 12h14"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M13 6l6 6-6 6"
-                    />
-                  </svg>
 
-                  {/* Separator */}
-                  <span className="ml-7 h-1 w-1 rounded-full bg-[#e32932]/40" />
-                </button>
-              ))}
+                    <span className="vfaw-ticker-dot" />
+
+                    {recent && (
+                      <span className="vfaw-ticker-new">
+                        NEW
+                      </span>
+                    )}
+
+                    <span>{notice.title}</span>
+
+                  </button>
+                );
+              })}
+
             </div>
-
-            {/* LEFT FADE */}
-            <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-gradient-to-r from-[#f8fbff] to-transparent" />
-
-            {/* RIGHT FADE */}
-            <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-8 bg-gradient-to-l from-[#f8fbff] to-transparent" />
           </div>
         </div>
-      </section>
+      )}
 
-      {/* =========================================
-          TICKER ANIMATION
-      ========================================== */}
-      <style>
-        {`
-          .notice-marquee {
-            animation: vfawNoticeMarquee 32s linear infinite;
-            will-change: transform;
+
+      {/* ======================================================
+          TICKER CSS
+      ====================================================== */}
+
+      <style>{`
+        .vfaw-notice-ticker {
+          position: relative;
+          width: 100%;
+          height: 46px;
+          display: flex;
+          align-items: center;
+          overflow: hidden;
+          background: #ffffff;
+          border-top: 1px solid #e7edf4;
+          border-bottom: 1px solid #e7edf4;
+          z-index: 30;
+        }
+
+        .vfaw-ticker-label {
+          position: relative;
+          z-index: 5;
+          flex: 0 0 auto;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 0 22px;
+          background: #0759b8;
+          color: white;
+          font-size: 11px;
+          font-weight: 800;
+          letter-spacing: .08em;
+          text-transform: uppercase;
+          box-shadow: 8px 0 20px rgba(7,89,184,.12);
+        }
+
+        .vfaw-ticker-label svg {
+          width: 15px;
+          height: 15px;
+          fill: none;
+          stroke: currentColor;
+          stroke-width: 1.8;
+        }
+
+        .vfaw-ticker-window {
+          flex: 1;
+          min-width: 0;
+          overflow: hidden;
+        }
+
+        .vfaw-ticker-track {
+          width: max-content;
+          display: flex;
+          align-items: center;
+          animation: vfawNoticeTicker 32s linear infinite;
+          will-change: transform;
+        }
+
+        .vfaw-notice-ticker:hover .vfaw-ticker-track {
+          animation-play-state: paused;
+        }
+
+        .vfaw-ticker-item {
+          height: 46px;
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          padding: 0 32px;
+          white-space: nowrap;
+          border: none;
+          outline: none;
+          background: transparent;
+          cursor: pointer;
+          font-family: inherit;
+          font-size: 13px;
+          font-weight: 700;
+          transition:
+            opacity .2s ease,
+            transform .2s ease;
+        }
+
+        .vfaw-ticker-item:hover {
+          opacity: .72;
+        }
+
+        .vfaw-ticker-item:active {
+          transform: scale(.98);
+        }
+
+        .vfaw-ticker-item:focus-visible {
+          outline: 2px solid rgba(7,89,184,.35);
+          outline-offset: -3px;
+          border-radius: 6px;
+        }
+
+        .vfaw-ticker-recent {
+          color: #e53935;
+        }
+
+        .vfaw-ticker-old {
+          color: #0759b8;
+        }
+
+        .vfaw-ticker-dot {
+          width: 6px;
+          height: 6px;
+          flex: 0 0 6px;
+          border-radius: 50%;
+          background: currentColor;
+        }
+
+        .vfaw-ticker-new {
+          padding: 4px 7px;
+          border-radius: 5px;
+          background: #fff1f1;
+          color: #e53935;
+          font-size: 9px;
+          font-weight: 900;
+          letter-spacing: .06em;
+        }
+
+        @keyframes vfawNoticeTicker {
+          from {
+            transform: translateX(0);
           }
 
-          .notice-marquee:hover {
-            animation-play-state: paused;
+          to {
+            transform: translateX(-50%);
+          }
+        }
+
+        @media (max-width: 650px) {
+          .vfaw-notice-ticker {
+            height: 42px;
           }
 
-          .notice-item {
-            cursor: pointer;
+          .vfaw-ticker-label {
+            padding: 0 13px;
+            font-size: 9px;
           }
 
-          @keyframes vfawNoticeMarquee {
-            0% {
-              transform: translateX(0);
-            }
-
-            100% {
-              transform: translateX(-50%);
-            }
+          .vfaw-ticker-label svg {
+            width: 13px;
+            height: 13px;
           }
 
-          @media (max-width: 640px) {
-            .notice-marquee {
-              animation-duration: 26s;
-            }
+          .vfaw-ticker-item {
+            height: 42px;
+            padding: 0 20px;
+            font-size: 11px;
           }
+        }
 
-          @media (prefers-reduced-motion: reduce) {
-            .notice-marquee {
-              animation: none;
-            }
+        @media (prefers-reduced-motion: reduce) {
+          .vfaw-ticker-track {
+            animation: none;
           }
-        `}
-      </style>
+        }
+      `}</style>
     </>
   );
 };
