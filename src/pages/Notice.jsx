@@ -1,6 +1,19 @@
 import React, { useEffect, useMemo, useState } from "react";
 
 const noticesData = [
+    {
+    id: 4,
+    title: "Rabies Emergency Card Published",
+    description:
+      "Download card and share",
+    category: "Notice",
+    date: "2026-09-20",
+    file: "vfaw Emergency card.pdf",
+    fileType: "pdf",
+    important: true,
+    pinned: true,
+  },
+  
   {
     id: 1,
     title: "Clinical Report Writing Competition",
@@ -47,7 +60,7 @@ const noticesData = [
       "Students interested in joining AFU can now submit their applications.",
     category: "Opportunity",
     date: "2026-09-15",
-    file: "/Notice/seat.png",
+    file: "/Notice/seat.pdf",
     fileType: "image",
     important: false,
     pinned: false,
@@ -61,6 +74,7 @@ const categories = [
   "Event",
   "Opportunity",
   "Announcement",
+  "Notice",
 ];
 
 /* =========================================================
