@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-
+import AnnouncementPopup from "./components/AnnouncementPopup";
 import Home from './pages/Home';
 import About from './pages/About';
 import Programs from './pages/Programs';
@@ -11,14 +11,17 @@ import Gallery from './pages/Gallery';
 import GetInvolved from './pages/GetInvolved';
 import Contact from './pages/Contact';
 import Notice from './pages/Notice';
-
 import Donate from './pages/Donate';
 
 function App() {
   return (
     <Router>
       <div className="min-h-screen flex flex-col">
+
         <Navbar />
+
+        {/* Website announcement popup */}
+        <AnnouncementPopup />
 
         <main className="flex-grow">
           <Routes>
@@ -33,12 +36,13 @@ function App() {
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/get-involved" element={<GetInvolved />} />
             <Route path="/contact" element={<Contact />} />
-           <Route path="/notice" element={<Notice />} />
+            <Route path="/notice" element={<Notice />} />
             <Route path="/donate" element={<Donate />} />
           </Routes>
         </main>
 
         <Footer />
+
       </div>
     </Router>
   );
