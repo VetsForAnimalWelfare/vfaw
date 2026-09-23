@@ -133,6 +133,73 @@ function Notice() {
   const [shareMessage, setShareMessage] = useState("");
 
   /* =======================================================
+     OPEN NOTICE FROM URL HASH
+     
+     Example:
+     /notice#notice-1
+     /notice#notice-2
+  ======================================================= */
+
+  useEffect(() => {
+    const openNoticeFromHash = () => {
+      const hash = window.location.hash;
+
+      if (!hash.startsWith("#notice-")) {
+        return;
+      }
+
+      const noticeId = Number(
+        hash.replace("#notice-", "")
+      );
+
+      if (!noticeId) {
+        return;
+      }
+
+      const notice = noticesData.find(
+        (item) => Number(item.id) === noticeId
+      );
+
+      if (!notice) {
+        return;
+      }
+
+      // Automatically open the exact notice
+      setSelectedNotice(notice);
+
+      // Scroll the corresponding notice card into view
+      setTimeout(() => {
+        const element = document.getElementById(
+          `notice-${noticeId}`
+        );
+
+        if (element) {
+          element.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+        }
+      }, 150);
+    };
+
+    // Run when the Notice page loads
+    openNoticeFromHash();
+
+    // Run if the hash changes while already on the page
+    window.addEventListener(
+      "hashchange",
+      openNoticeFromHash
+    );
+
+    return () => {
+      window.removeEventListener(
+        "hashchange",
+        openNoticeFromHash
+      );
+    };
+  }, []);
+
+  /* =======================================================
      FILTER
   ======================================================= */
 
@@ -266,6 +333,16 @@ function Notice() {
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
         setSelectedNotice(null);
+
+        // Remove notice hash when closing
+        if (window.location.hash.startsWith("#notice-")) {
+          window.history.replaceState(
+            null,
+            "",
+            window.location.pathname +
+              window.location.search
+          );
+        }
       }
     };
 
@@ -291,6 +368,24 @@ function Notice() {
       document.body.style.overflow = "";
     };
   }, [selectedNotice]);
+
+  /* =======================================================
+     CLOSE SELECTED NOTICE
+  ======================================================= */
+
+  const closeNotice = () => {
+    setSelectedNotice(null);
+
+    // Remove #notice-X from URL
+    if (window.location.hash.startsWith("#notice-")) {
+      window.history.replaceState(
+        null,
+        "",
+        window.location.pathname +
+          window.location.search
+      );
+    }
+  };
 
   return (
     <div className="notice-page">
@@ -1910,6 +2005,7 @@ function Notice() {
               return (
 
                 <article
+                  id={`notice-${notice.id}`}
                   className={`notice-card ${
                     recent ? "recent" : ""
                   }`}
@@ -2126,7 +2222,7 @@ function Notice() {
               event.target ===
               event.currentTarget
             ) {
-              setSelectedNotice(null);
+              closeNotice();
             }
 
           }}
@@ -2180,9 +2276,7 @@ function Notice() {
                 <button
                   type="button"
                   className="notice-close"
-                  onClick={() =>
-                    setSelectedNotice(null)
-                  }
+                  onClick={closeNotice}
                   aria-label="Close notice"
                   title="Close"
                 >
