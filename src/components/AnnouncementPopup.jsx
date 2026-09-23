@@ -44,7 +44,7 @@ function AnnouncementPopup() {
 
           padding: 20px;
 
-          background: rgba(0, 0, 0, 0.62);
+          background: rgba(0, 0, 0, 0.20);
           backdrop-filter: blur(7px);
 
           animation: vfawOverlayIn 0.25s ease;
