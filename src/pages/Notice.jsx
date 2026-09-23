@@ -20,45 +20,6 @@ const noticesData = [
 
   {
     id: 2,
-    title: "Clinical Report Writing Competition",
-    description:
-      "Registration is now open for the VFAW Clinical Report Writing Competition.",
-    category: "Competition",
-    date: "2026-09-20",
-    file: "/Notice/clinical-report-writing.pdf",
-    fileType: "pdf",
-    important: true,
-    pinned: true,
-  },
-
-  {
-    id: 3,
-    title: "VFAW Educational Webinar",
-    description:
-      "Join our upcoming educational webinar on animal welfare and veterinary practice.",
-    category: "Event",
-    date: "2026-09-18",
-    file: "/Notice/webinar.pdf",
-    fileType: "pdf",
-    important: false,
-    pinned: true,
-  },
-
-  {
-    id: 4,
-    title: "Volunteer Registration Open",
-    description:
-      "Students interested in joining VFAW activities can now submit their applications.",
-    category: "Opportunity",
-    date: "2026-09-15",
-    file: "/Notice/volunteer.png",
-    fileType: "image",
-    important: false,
-    pinned: false,
-  },
-
-  {
-    id: 5,
     title: "AFU Seat",
     description:
       "Students interested in joining AFU can now submit their applications.",
