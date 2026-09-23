@@ -791,7 +791,7 @@ const Apply = () => {
                     ) : (
                       <div className="coming-badge">
                         <span className="coming-dot" />
-                        <span>COMING SOON</span>
+                        <span>NOT AVAILABLE</span>
                       </div>
                     )}
                   </div>
