@@ -812,7 +812,7 @@ const Apply = () => {
                         className="apply-button disabled"
                         disabled
                       >
-                        <span>Applications Coming Soon</span>
+                        <span>THIS APPLICATION IS NOT AVAILABLE FOR NOW</span>
                       </button>
                     )}
 
