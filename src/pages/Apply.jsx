@@ -7,7 +7,7 @@ const programs = [
     title: "LSD Report Writing Competition",
     description:
       "To Develop Skill And Knowledge.",
-    date: "2083/05/20",
+    date: "CLOSED",
     type: "Skill Development",
     formLink:
       "https://docs.google.com/forms/d/e/1FAIpQLSeh4etkOFN3AlsO-oNBUTR3khVb2I2jvMdw_hlzxYP5IH_vqQ/viewform?embedded=true",
@@ -19,10 +19,10 @@ const programs = [
     title: "Clinical Report Writing Competition",
     description:
       "Training program focused on the development of student skills, knowledge, clinical documentation, and professional communication.",
-    date: "2083/05/20",
+    date: "CLOSED",
     type: "Student Development",
     formLink:
-      "https://docs.google.com/forms/d/e/1FAIpQLSeh4etkOFN3AlsO-oNBUTR3khVb2I2jvMdw_hlzxYP5IH_vqQ/viewform?embedded=true",
+      "",
     shade: "blue",
   },
   {
