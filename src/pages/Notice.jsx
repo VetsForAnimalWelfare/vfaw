@@ -1,21 +1,24 @@
 import React, { useEffect, useMemo, useState } from "react";
 
+/* =========================================================
+   NOTICE DATA
+========================================================= */
+
 const noticesData = [
-    {
-    id: 4,
+  {
+    id: 1,
     title: "Rabies Emergency Card Published",
-    description:
-      "Download card and share",
+    description: "Download the emergency card and share it with others.",
     category: "Notice",
     date: "2026-09-20",
-    file: "vfaw Emergency card.pdf",
+    file: "/Notice/vfaw Emergency card.pdf",
     fileType: "pdf",
     important: true,
     pinned: true,
   },
-  
+
   {
-    id: 1,
+    id: 2,
     title: "Clinical Report Writing Competition",
     description:
       "Registration is now open for the VFAW Clinical Report Writing Competition.",
@@ -28,7 +31,7 @@ const noticesData = [
   },
 
   {
-    id: 2,
+    id: 3,
     title: "VFAW Educational Webinar",
     description:
       "Join our upcoming educational webinar on animal welfare and veterinary practice.",
@@ -41,7 +44,7 @@ const noticesData = [
   },
 
   {
-    id: 3,
+    id: 4,
     title: "Volunteer Registration Open",
     description:
       "Students interested in joining VFAW activities can now submit their applications.",
@@ -54,14 +57,14 @@ const noticesData = [
   },
 
   {
-    id: 4,
+    id: 5,
     title: "AFU Seat",
     description:
       "Students interested in joining AFU can now submit their applications.",
     category: "Opportunity",
     date: "2026-09-15",
     file: "/Notice/seat.pdf",
-    fileType: "image",
+    fileType: "pdf",
     important: false,
     pinned: false,
   },
@@ -90,22 +93,23 @@ function isRecentNotice(dateString) {
   const noticeDate = parseLocalDate(dateString);
 
   const today = new Date();
+
   const todayOnly = new Date(
     today.getFullYear(),
     today.getMonth(),
     today.getDate()
   );
 
-  const difference =
-    Math.floor(
-      (todayOnly.getTime() - noticeDate.getTime()) / (1000 * 60 * 60 * 24)
-    );
+  const difference = Math.floor(
+    (todayOnly.getTime() - noticeDate.getTime()) /
+      (1000 * 60 * 60 * 24)
+  );
 
   return difference >= 0 && difference <= 3;
 }
 
-function formatDate(date) {
-  return parseLocalDate(date).toLocaleDateString("en-US", {
+function formatDate(dateString) {
+  return parseLocalDate(dateString).toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
     day: "numeric",
@@ -193,7 +197,7 @@ function Notice() {
   const [shareMessage, setShareMessage] = useState("");
 
   /* =======================================================
-     FILTER NOTICES
+     FILTER
   ======================================================= */
 
   const filteredNotices = useMemo(() => {
@@ -220,14 +224,6 @@ function Notice() {
 
   /* =======================================================
      TICKER
-
-     Automatically shows ALL notices.
-
-     Recent notices:
-     0–3 days old = RED
-
-     Older notices:
-     BLUE
   ======================================================= */
 
   const tickerNotices = useMemo(() => {
@@ -237,7 +233,61 @@ function Notice() {
   }, []);
 
   /* =======================================================
-     SHARE NOTICE
+     DOWNLOAD FILE
+     
+     Forces browser download instead of simply opening
+     the PDF/image.
+  ======================================================= */
+
+  const downloadNotice = async (notice) => {
+    try {
+      const response = await fetch(notice.file);
+
+      if (!response.ok) {
+        throw new Error("File could not be downloaded.");
+      }
+
+      const blob = await response.blob();
+
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+
+      link.href = blobUrl;
+
+      /* Get filename from file path */
+      const cleanPath = notice.file.split("?")[0];
+
+      const fileName =
+        decodeURIComponent(cleanPath.split("/").pop()) ||
+        "VFAW-notice";
+
+      link.download = fileName;
+
+      document.body.appendChild(link);
+
+      link.click();
+
+      document.body.removeChild(link);
+
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error("Download failed:", error);
+
+      /* Fallback */
+      const link = document.createElement("a");
+
+      link.href = notice.file;
+      link.download = "";
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
+
+  /* =======================================================
+     SHARE
   ======================================================= */
 
   const shareNotice = async (notice) => {
@@ -255,9 +305,19 @@ function Notice() {
         return;
       }
 
-      await navigator.clipboard.writeText(shareUrl);
+      if (navigator.clipboard) {
+        await navigator.clipboard.writeText(shareUrl);
 
-      setShareMessage("Notice link copied!");
+        setShareMessage("Notice link copied!");
+
+        setTimeout(() => {
+          setShareMessage("");
+        }, 2500);
+
+        return;
+      }
+
+      setShareMessage("Unable to share this notice.");
 
       setTimeout(() => {
         setShareMessage("");
@@ -267,22 +327,16 @@ function Notice() {
         return;
       }
 
-      try {
-        await navigator.clipboard.writeText(shareUrl);
+      setShareMessage("Unable to share this notice.");
 
-        setShareMessage("Notice link copied!");
-
-        setTimeout(() => {
-          setShareMessage("");
-        }, 2500);
-      } catch {
-        setShareMessage("Unable to share this notice.");
-      }
+      setTimeout(() => {
+        setShareMessage("");
+      }, 2500);
     }
   };
 
   /* =======================================================
-     ESCAPE KEY FOR MODAL
+     ESCAPE KEY
   ======================================================= */
 
   useEffect(() => {
@@ -300,7 +354,7 @@ function Notice() {
   }, []);
 
   /* =======================================================
-     LOCK BODY WHEN MODAL IS OPEN
+     LOCK BODY
   ======================================================= */
 
   useEffect(() => {
@@ -317,9 +371,11 @@ function Notice() {
 
   return (
     <div className="notice-page">
+
       <style>{`
+
         /* =====================================================
-           RESET
+           BASE
         ===================================================== */
 
         .notice-page {
@@ -329,17 +385,18 @@ function Notice() {
           --blue-soft: #f6faff;
 
           --red: #e53935;
-          --red-dark: #c62828;
           --red-soft: #fff1f1;
 
           --text: #0c1b2a;
           --muted: #64748b;
           --border: #e7edf4;
-          --white: #ffffff;
 
           min-height: 100vh;
+
           background: #fbfcfe;
+
           color: var(--text);
+
           font-family:
             Inter,
             ui-sans-serif,
@@ -364,6 +421,7 @@ function Notice() {
 
         .notice-ticker {
           position: relative;
+
           width: 100%;
           height: 46px;
 
@@ -373,10 +431,11 @@ function Notice() {
           overflow: hidden;
 
           background: #ffffff;
+
           border-top: 1px solid var(--border);
           border-bottom: 1px solid var(--border);
 
-          z-index: 10;
+          z-index: 20;
         }
 
         .ticker-label {
@@ -389,20 +448,24 @@ function Notice() {
 
           display: flex;
           align-items: center;
+
           gap: 8px;
 
           padding: 0 22px;
 
           background: var(--blue);
+
           color: white;
 
           font-size: 11px;
           font-weight: 800;
 
-          letter-spacing: 0.08em;
+          letter-spacing: .08em;
+
           text-transform: uppercase;
 
-          box-shadow: 8px 0 20px rgba(7, 89, 184, 0.12);
+          box-shadow:
+            8px 0 20px rgba(7,89,184,.12);
         }
 
         .ticker-label svg {
@@ -416,7 +479,9 @@ function Notice() {
 
         .ticker-window {
           flex: 1;
+
           min-width: 0;
+
           overflow: hidden;
         }
 
@@ -426,7 +491,9 @@ function Notice() {
           display: flex;
           align-items: center;
 
-          animation: noticeTicker 32s linear infinite;
+          animation:
+            noticeTicker 32s linear infinite;
+
           will-change: transform;
         }
 
@@ -437,17 +504,19 @@ function Notice() {
         .ticker-group {
           display: flex;
           align-items: center;
+
           flex-shrink: 0;
         }
 
         .ticker-item {
+          height: 46px;
+
           display: inline-flex;
           align-items: center;
+
           gap: 10px;
 
           padding: 0 32px;
-
-          height: 46px;
 
           white-space: nowrap;
 
@@ -470,6 +539,7 @@ function Notice() {
           flex: 0 0 6px;
 
           border-radius: 50%;
+
           background: currentColor;
         }
 
@@ -479,12 +549,13 @@ function Notice() {
           border-radius: 5px;
 
           background: var(--red-soft);
+
           color: var(--red);
 
           font-size: 9px;
           font-weight: 900;
 
-          letter-spacing: 0.06em;
+          letter-spacing: .06em;
         }
 
         @keyframes noticeTicker {
@@ -504,98 +575,121 @@ function Notice() {
         .notice-hero {
           position: relative;
 
-          padding: 92px 24px 84px;
+          overflow: hidden;
+
+          padding:
+            86px
+            24px
+            78px;
 
           background:
             radial-gradient(
-              circle at 85% 25%,
-              rgba(7, 89, 184, 0.09),
-              transparent 25%
+              circle at 50% 0%,
+              rgba(7,89,184,.13),
+              transparent 38%
             ),
-            radial-gradient(
-              circle at 10% 90%,
-              rgba(7, 89, 184, 0.06),
-              transparent 25%
-            ),
-            #ffffff;
+            linear-gradient(
+              180deg,
+              #edf6ff 0%,
+              #f8fbff 55%,
+              #ffffff 100%
+            );
 
-          border-bottom: 1px solid var(--border);
-
-          overflow: hidden;
+          border-bottom: 1px solid #dce9f7;
         }
 
         .hero-grid {
           position: absolute;
+
           inset: 0;
 
-          opacity: 0.35;
+          opacity: .45;
 
           background-image:
             linear-gradient(
-              rgba(7, 89, 184, 0.035) 1px,
+              rgba(7,89,184,.045) 1px,
               transparent 1px
             ),
             linear-gradient(
               90deg,
-              rgba(7, 89, 184, 0.035) 1px,
+              rgba(7,89,184,.045) 1px,
               transparent 1px
             );
 
-          background-size: 45px 45px;
+          background-size: 42px 42px;
 
-          mask-image: linear-gradient(
-            to bottom,
-            black,
-            transparent 90%
-          );
+          mask-image:
+            linear-gradient(
+              to bottom,
+              black,
+              transparent 90%
+            );
         }
 
         .hero-inner {
           position: relative;
+
           z-index: 2;
 
-          max-width: 1180px;
+          max-width: 900px;
+
           margin: 0 auto;
+
+          text-align: center;
+
+          display: flex;
+
+          flex-direction: column;
+
+          align-items: center;
         }
 
         .hero-kicker {
           display: inline-flex;
-          align-items: center;
-          gap: 8px;
 
-          margin-bottom: 22px;
+          align-items: center;
+
+          gap: 10px;
+
+          margin-bottom: 20px;
 
           color: var(--blue);
 
           font-size: 12px;
           font-weight: 900;
 
-          letter-spacing: 0.1em;
+          letter-spacing: .13em;
+
           text-transform: uppercase;
         }
 
-        .hero-kicker::before {
+        .hero-kicker::before,
+        .hero-kicker::after {
           content: "";
 
           width: 26px;
           height: 2px;
 
           background: var(--blue);
+
+          border-radius: 999px;
         }
 
         .hero-title {
-          max-width: 820px;
-
           margin: 0;
+
+          max-width: 900px;
 
           color: var(--text);
 
-          font-size: clamp(46px, 7vw, 86px);
-          line-height: 0.98;
+          font-size:
+            clamp(48px, 8vw, 86px);
+
+          line-height: .98;
 
           font-weight: 900;
 
-          letter-spacing: -0.065em;
+          letter-spacing: -.065em;
         }
 
         .hero-title span {
@@ -603,40 +697,57 @@ function Notice() {
         }
 
         .hero-description {
-          max-width: 650px;
+          max-width: 680px;
 
-          margin: 26px 0 0;
+          margin: 25px auto 0;
 
-          color: var(--muted);
+          color: #64748b;
 
-          font-size: 17px;
+          font-size: 16px;
+
           line-height: 1.75;
         }
 
         .hero-meta {
           display: flex;
-          flex-wrap: wrap;
-          gap: 10px;
 
-          margin-top: 34px;
+          justify-content: center;
+
+          align-items: center;
+
+          flex-wrap: wrap;
+
+          gap: 9px;
+
+          margin-top: 30px;
         }
 
         .hero-meta-item {
           display: inline-flex;
+
           align-items: center;
+
           gap: 8px;
 
           padding: 9px 13px;
 
-          border: 1px solid var(--border);
+          border:
+            1px solid
+            rgba(7,89,184,.13);
+
           border-radius: 999px;
 
-          background: rgba(255,255,255,0.75);
+          background:
+            rgba(255,255,255,.82);
 
           color: #526276;
 
           font-size: 12px;
+
           font-weight: 700;
+
+          box-shadow:
+            0 5px 18px rgba(7,89,184,.04);
         }
 
         .hero-meta-item strong {
@@ -648,6 +759,7 @@ function Notice() {
           height: 7px;
 
           border-radius: 50%;
+
           background: var(--blue);
         }
 
@@ -660,7 +772,10 @@ function Notice() {
 
           margin: 0 auto;
 
-          padding: 55px 24px 100px;
+          padding:
+            55px
+            24px
+            100px;
         }
 
         /* =====================================================
@@ -669,7 +784,9 @@ function Notice() {
 
         .notice-controls {
           display: flex;
+
           align-items: center;
+
           justify-content: space-between;
 
           gap: 20px;
@@ -703,12 +820,18 @@ function Notice() {
 
         .search-box input {
           width: 100%;
-
           height: 48px;
 
-          padding: 0 16px 0 46px;
+          padding:
+            0
+            16px
+            0
+            46px;
 
-          border: 1px solid var(--border);
+          border:
+            1px solid
+            var(--border);
+
           border-radius: 12px;
 
           outline: none;
@@ -720,24 +843,24 @@ function Notice() {
           font-size: 14px;
 
           transition:
-            border-color 0.2s ease,
-            box-shadow 0.2s ease;
-        }
-
-        .search-box input::placeholder {
-          color: #9aa7b5;
+            border-color .2s ease,
+            box-shadow .2s ease;
         }
 
         .search-box input:focus {
-          border-color: rgba(7, 89, 184, 0.45);
+          border-color:
+            rgba(7,89,184,.45);
 
           box-shadow:
-            0 0 0 4px rgba(7, 89, 184, 0.08);
+            0 0 0 4px
+            rgba(7,89,184,.08);
         }
 
         .category-list {
           display: flex;
+
           flex-wrap: wrap;
+
           justify-content: flex-end;
 
           gap: 7px;
@@ -748,23 +871,29 @@ function Notice() {
 
           padding: 0 14px;
 
-          border: 1px solid var(--border);
+          border:
+            1px solid
+            var(--border);
+
           border-radius: 999px;
 
-          background: #ffffff;
+          background: white;
 
           color: #68788a;
 
           cursor: pointer;
 
+          font-family: inherit;
+
           font-size: 12px;
+
           font-weight: 800;
 
           transition:
-            color 0.2s ease,
-            background 0.2s ease,
-            border-color 0.2s ease,
-            transform 0.2s ease;
+            transform .2s ease,
+            color .2s ease,
+            background .2s ease,
+            border-color .2s ease;
         }
 
         .category-button:hover {
@@ -780,7 +909,11 @@ function Notice() {
 
           background: var(--blue);
 
-          color: #ffffff;
+          color: white;
+
+          box-shadow:
+            0 5px 15px
+            rgba(7,89,184,.16);
         }
 
         /* =====================================================
@@ -789,7 +922,9 @@ function Notice() {
 
         .section-header {
           display: flex;
+
           align-items: flex-end;
+
           justify-content: space-between;
 
           gap: 20px;
@@ -803,9 +938,11 @@ function Notice() {
           color: var(--blue);
 
           font-size: 11px;
+
           font-weight: 900;
 
-          letter-spacing: 0.12em;
+          letter-spacing: .12em;
+
           text-transform: uppercase;
         }
 
@@ -815,15 +952,17 @@ function Notice() {
           color: var(--text);
 
           font-size: 30px;
+
           line-height: 1.1;
 
-          letter-spacing: -0.04em;
+          letter-spacing: -.04em;
         }
 
         .section-count {
           color: #8b98a7;
 
           font-size: 12px;
+
           font-weight: 700;
         }
 
@@ -848,23 +987,28 @@ function Notice() {
           position: relative;
 
           display: flex;
+
           flex-direction: column;
 
           min-height: 355px;
 
           padding: 24px;
 
-          background: #ffffff;
+          background: white;
 
-          border: 1px solid var(--border);
+          border:
+            1px solid
+            var(--border);
+
           border-radius: 18px;
 
           overflow: hidden;
 
           transition:
-            transform 0.3s cubic-bezier(.2,.8,.2,1),
-            border-color 0.3s ease,
-            box-shadow 0.3s ease;
+            transform .3s
+              cubic-bezier(.2,.8,.2,1),
+            border-color .3s ease,
+            box-shadow .3s ease;
         }
 
         .notice-card:hover {
@@ -873,18 +1017,22 @@ function Notice() {
           border-color: #d4e2ef;
 
           box-shadow:
-            0 18px 45px rgba(19, 52, 84, 0.10);
+            0 18px 45px
+            rgba(19,52,84,.10);
         }
 
         .notice-card.recent {
-          border-color: rgba(229, 57, 53, 0.18);
+          border-color:
+            rgba(229,57,53,.18);
         }
 
         .notice-card.recent:hover {
-          border-color: rgba(229, 57, 53, 0.34);
+          border-color:
+            rgba(229,57,53,.34);
 
           box-shadow:
-            0 18px 45px rgba(229, 57, 53, 0.10);
+            0 18px 45px
+            rgba(229,57,53,.10);
         }
 
         .card-accent {
@@ -905,7 +1053,9 @@ function Notice() {
 
         .notice-card-top {
           display: flex;
+
           align-items: center;
+
           justify-content: space-between;
 
           gap: 10px;
@@ -929,9 +1079,11 @@ function Notice() {
           color: var(--blue);
 
           font-size: 10px;
+
           font-weight: 900;
 
-          letter-spacing: 0.05em;
+          letter-spacing: .05em;
+
           text-transform: uppercase;
         }
 
@@ -943,15 +1095,18 @@ function Notice() {
 
         .new-label {
           display: inline-flex;
+
           align-items: center;
+
           gap: 5px;
 
           color: var(--red);
 
           font-size: 9px;
+
           font-weight: 900;
 
-          letter-spacing: 0.08em;
+          letter-spacing: .08em;
         }
 
         .new-label::before {
@@ -964,11 +1119,14 @@ function Notice() {
 
           background: var(--red);
 
-          box-shadow: 0 0 0 4px rgba(229,57,53,0.08);
+          box-shadow:
+            0 0 0 4px
+            rgba(229,57,53,.08);
         }
 
         .important-label {
           display: inline-flex;
+
           align-items: center;
 
           padding: 5px 8px;
@@ -980,9 +1138,11 @@ function Notice() {
           color: #b86b00;
 
           font-size: 9px;
+
           font-weight: 900;
 
-          letter-spacing: 0.06em;
+          letter-spacing: .06em;
+
           text-transform: uppercase;
         }
 
@@ -992,11 +1152,12 @@ function Notice() {
           color: var(--text);
 
           font-size: 21px;
+
           line-height: 1.3;
 
           font-weight: 850;
 
-          letter-spacing: -0.025em;
+          letter-spacing: -.025em;
         }
 
         .notice-description {
@@ -1013,17 +1174,22 @@ function Notice() {
 
         .notice-date {
           display: flex;
+
           align-items: center;
+
           justify-content: space-between;
 
           margin-top: 24px;
+
           padding-top: 16px;
 
-          border-top: 1px solid #edf1f5;
+          border-top:
+            1px solid #edf1f5;
 
           color: #8a97a6;
 
           font-size: 11px;
+
           font-weight: 700;
         }
 
@@ -1032,13 +1198,14 @@ function Notice() {
         }
 
         /* =====================================================
-           CARD ACTIONS
+           ACTION BUTTONS
         ===================================================== */
 
         .notice-actions {
           display: grid;
 
-          grid-template-columns: 1.3fr 1fr 1fr;
+          grid-template-columns:
+            1.3fr 1fr 1fr;
 
           gap: 7px;
 
@@ -1049,13 +1216,18 @@ function Notice() {
           min-height: 39px;
 
           display: inline-flex;
+
           align-items: center;
+
           justify-content: center;
+
           gap: 7px;
 
           padding: 0 9px;
 
-          border: 1px solid transparent;
+          border:
+            1px solid transparent;
+
           border-radius: 9px;
 
           cursor: pointer;
@@ -1065,12 +1237,14 @@ function Notice() {
           font-family: inherit;
 
           font-size: 11px;
+
           font-weight: 850;
 
           transition:
-            transform 0.2s ease,
-            background 0.2s ease,
-            border-color 0.2s ease;
+            transform .2s ease,
+            background .2s ease,
+            border-color .2s ease,
+            color .2s ease;
         }
 
         .notice-button svg {
@@ -1078,7 +1252,9 @@ function Notice() {
           height: 14px;
 
           fill: none;
+
           stroke: currentColor;
+
           stroke-width: 1.8;
         }
 
@@ -1091,18 +1267,23 @@ function Notice() {
         }
 
         .notice-button.primary {
+          border-color: var(--blue);
+
           background: var(--blue);
+
           color: white;
         }
 
         .notice-button.primary:hover {
           background: var(--blue-dark);
+
+          border-color: var(--blue-dark);
         }
 
         .notice-button.secondary {
           border-color: var(--border);
 
-          background: #ffffff;
+          background: white;
 
           color: #526276;
         }
@@ -1116,7 +1297,8 @@ function Notice() {
         }
 
         .notice-card.recent .share-button {
-          border-color: rgba(229,57,53,0.18);
+          border-color:
+            rgba(229,57,53,.18);
 
           background: var(--red-soft);
 
@@ -1124,9 +1306,10 @@ function Notice() {
         }
 
         .notice-card.recent .share-button:hover {
-          border-color: rgba(229,57,53,0.32);
-
           background: #ffe5e5;
+
+          border-color:
+            rgba(229,57,53,.32);
         }
 
         /* =====================================================
@@ -1138,7 +1321,10 @@ function Notice() {
 
           text-align: center;
 
-          border: 1px solid var(--border);
+          border:
+            1px solid
+            var(--border);
+
           border-radius: 18px;
 
           background: white;
@@ -1164,15 +1350,20 @@ function Notice() {
 
         .notice-info {
           display: flex;
+
           align-items: center;
+
           justify-content: space-between;
 
           gap: 30px;
 
           margin-top: 55px;
+
           padding: 28px 30px;
 
-          border: 1px solid #dce9f7;
+          border:
+            1px solid #dce9f7;
+
           border-radius: 16px;
 
           background:
@@ -1185,7 +1376,9 @@ function Notice() {
 
         .notice-info-left {
           display: flex;
+
           align-items: flex-start;
+
           gap: 15px;
         }
 
@@ -1194,7 +1387,9 @@ function Notice() {
           height: 38px;
 
           display: flex;
+
           align-items: center;
+
           justify-content: center;
 
           flex: 0 0 38px;
@@ -1211,7 +1406,9 @@ function Notice() {
           height: 18px;
 
           fill: none;
+
           stroke: currentColor;
+
           stroke-width: 1.8;
         }
 
@@ -1231,6 +1428,7 @@ function Notice() {
           color: var(--muted);
 
           font-size: 12px;
+
           line-height: 1.65;
         }
 
@@ -1238,13 +1436,14 @@ function Notice() {
           color: var(--blue);
 
           font-size: 11px;
+
           font-weight: 900;
 
           white-space: nowrap;
         }
 
         /* =====================================================
-           SHARE TOAST
+           TOAST
         ===================================================== */
 
         .share-toast {
@@ -1262,26 +1461,34 @@ function Notice() {
           border-radius: 10px;
 
           background: #0c1b2a;
+
           color: white;
 
           box-shadow:
-            0 12px 35px rgba(0,0,0,0.18);
+            0 12px 35px
+            rgba(0,0,0,.18);
 
           font-size: 12px;
+
           font-weight: 800;
 
-          animation: toastIn 0.25s ease;
+          animation:
+            toastIn .25s ease;
         }
 
         @keyframes toastIn {
           from {
             opacity: 0;
-            transform: translate(-50%, 10px);
+
+            transform:
+              translate(-50%, 10px);
           }
 
           to {
             opacity: 1;
-            transform: translate(-50%, 0);
+
+            transform:
+              translate(-50%, 0);
           }
         }
 
@@ -1297,17 +1504,49 @@ function Notice() {
           z-index: 10000;
 
           display: flex;
+
           align-items: center;
+
           justify-content: center;
 
           padding: 20px;
 
-          background: rgba(5, 18, 31, 0.78);
+          background:
+            rgba(5,18,31,.80);
 
           backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
 
-          animation: modalBackground 0.2s ease;
+          -webkit-backdrop-filter:
+            blur(12px);
+
+          animation:
+            modalBackground .2s ease;
+        }
+
+        .notice-modal-content {
+          width:
+            min(1150px, 100%);
+
+          height:
+            min(850px, 94vh);
+
+          display: flex;
+
+          flex-direction: column;
+
+          overflow: hidden;
+
+          background: white;
+
+          border-radius: 18px;
+
+          box-shadow:
+            0 35px 100px
+            rgba(0,0,0,.30);
+
+          animation:
+            modalIn .25s
+            cubic-bezier(.2,.8,.2,1);
         }
 
         @keyframes modalBackground {
@@ -1320,49 +1559,48 @@ function Notice() {
           }
         }
 
-        .notice-modal-content {
-          width: min(1100px, 100%);
-          height: min(850px, 94vh);
-
-          display: flex;
-          flex-direction: column;
-
-          overflow: hidden;
-
-          background: white;
-
-          border-radius: 18px;
-
-          box-shadow:
-            0 35px 100px rgba(0,0,0,0.3);
-
-          animation: modalIn 0.25s cubic-bezier(.2,.8,.2,1);
-        }
-
         @keyframes modalIn {
           from {
             opacity: 0;
-            transform: scale(0.97) translateY(10px);
+
+            transform:
+              scale(.97)
+              translateY(10px);
           }
 
           to {
             opacity: 1;
-            transform: scale(1) translateY(0);
+
+            transform:
+              scale(1)
+              translateY(0);
           }
         }
 
+        /* =====================================================
+           MODAL HEADER
+        ===================================================== */
+
         .notice-modal-header {
-          min-height: 62px;
+          min-height: 70px;
 
           display: flex;
+
           align-items: center;
+
           justify-content: space-between;
 
           gap: 15px;
 
-          padding: 0 18px 0 22px;
+          padding:
+            10px
+            18px
+            10px
+            22px;
 
-          border-bottom: 1px solid var(--border);
+          border-bottom:
+            1px solid
+            var(--border);
 
           background: white;
         }
@@ -1377,9 +1615,11 @@ function Notice() {
           color: var(--blue);
 
           font-size: 9px;
+
           font-weight: 900;
 
-          letter-spacing: 0.1em;
+          letter-spacing: .1em;
+
           text-transform: uppercase;
         }
 
@@ -1393,20 +1633,87 @@ function Notice() {
           font-size: 15px;
 
           text-overflow: ellipsis;
+
           white-space: nowrap;
         }
 
-        .notice-close {
-          width: 36px;
-          height: 36px;
-
+        .modal-actions {
           display: flex;
+
           align-items: center;
+
+          gap: 7px;
+
+          flex-shrink: 0;
+        }
+
+        .modal-download {
+          min-height: 38px;
+
+          display: inline-flex;
+
+          align-items: center;
+
           justify-content: center;
 
-          flex: 0 0 36px;
+          gap: 7px;
 
-          border: 1px solid var(--border);
+          padding: 0 13px;
+
+          border: none;
+
+          border-radius: 9px;
+
+          background: var(--blue);
+
+          color: white;
+
+          cursor: pointer;
+
+          font-family: inherit;
+
+          font-size: 11px;
+
+          font-weight: 850;
+
+          transition:
+            background .2s ease,
+            transform .2s ease;
+        }
+
+        .modal-download:hover {
+          background: var(--blue-dark);
+
+          transform: translateY(-1px);
+        }
+
+        .modal-download svg {
+          width: 14px;
+          height: 14px;
+
+          fill: none;
+
+          stroke: currentColor;
+
+          stroke-width: 1.8;
+        }
+
+        .notice-close {
+          width: 38px;
+          height: 38px;
+
+          display: flex;
+
+          align-items: center;
+
+          justify-content: center;
+
+          flex: 0 0 38px;
+
+          border:
+            1px solid
+            var(--border);
+
           border-radius: 9px;
 
           background: white;
@@ -1416,12 +1723,13 @@ function Notice() {
           cursor: pointer;
 
           transition:
-            background 0.2s ease,
-            color 0.2s ease;
+            background .2s ease,
+            color .2s ease;
         }
 
         .notice-close:hover {
           background: #f5f7fa;
+
           color: var(--text);
         }
 
@@ -1430,16 +1738,28 @@ function Notice() {
           height: 17px;
 
           fill: none;
+
           stroke: currentColor;
+
           stroke-width: 2;
         }
+
+        /* =====================================================
+           PREVIEW
+        ===================================================== */
 
         .notice-preview {
           flex: 1;
 
           min-height: 0;
 
-          background: #edf2f6;
+          display: flex;
+
+          align-items: center;
+
+          justify-content: center;
+
+          background: #e9eef3;
         }
 
         .notice-preview iframe {
@@ -1449,6 +1769,8 @@ function Notice() {
           display: block;
 
           border: none;
+
+          background: white;
         }
 
         .notice-preview img {
@@ -1458,6 +1780,8 @@ function Notice() {
           display: block;
 
           object-fit: contain;
+
+          padding: 15px;
         }
 
         /* =====================================================
@@ -1465,6 +1789,7 @@ function Notice() {
         ===================================================== */
 
         @media (max-width: 950px) {
+
           .notice-grid {
             grid-template-columns:
               repeat(2, minmax(0, 1fr));
@@ -1472,6 +1797,7 @@ function Notice() {
 
           .notice-controls {
             align-items: stretch;
+
             flex-direction: column;
           }
 
@@ -1482,6 +1808,7 @@ function Notice() {
           .category-list {
             justify-content: flex-start;
           }
+
         }
 
         /* =====================================================
@@ -1489,6 +1816,7 @@ function Notice() {
         ===================================================== */
 
         @media (max-width: 650px) {
+
           .notice-ticker {
             height: 42px;
           }
@@ -1513,11 +1841,24 @@ function Notice() {
           }
 
           .notice-hero {
-            padding: 64px 18px 58px;
+            padding:
+              64px
+              18px
+              58px;
+          }
+
+          .hero-kicker {
+            font-size: 9px;
+          }
+
+          .hero-kicker::before,
+          .hero-kicker::after {
+            width: 18px;
           }
 
           .hero-title {
-            font-size: clamp(44px, 14vw, 62px);
+            font-size:
+              clamp(44px, 14vw, 62px);
           }
 
           .hero-description {
@@ -1529,7 +1870,10 @@ function Notice() {
           }
 
           .notice-container {
-            padding: 38px 16px 70px;
+            padding:
+              38px
+              16px
+              70px;
           }
 
           .category-list {
@@ -1563,6 +1907,7 @@ function Notice() {
 
           .notice-info {
             align-items: flex-start;
+
             flex-direction: column;
           }
 
@@ -1579,21 +1924,61 @@ function Notice() {
 
             border-radius: 12px;
           }
+
+          .notice-modal-header {
+            min-height: 65px;
+
+            padding-left: 14px;
+          }
+
+          .modal-download {
+            width: 38px;
+
+            padding: 0;
+
+            font-size: 0;
+          }
+
+          .modal-download svg {
+            width: 16px;
+            height: 16px;
+          }
+
         }
 
         @media (max-width: 420px) {
+
           .notice-actions {
             grid-template-columns:
               1fr 1fr;
           }
 
           .notice-actions .primary {
-            grid-column: span 2;
+            grid-column:
+              span 2;
           }
 
           .hero-title {
-            letter-spacing: -0.055em;
+            letter-spacing:
+              -.055em;
           }
+
+        }
+
+        /* =====================================================
+           ACCESSIBILITY
+        ===================================================== */
+
+        .notice-button:focus-visible,
+        .category-button:focus-visible,
+        .notice-close:focus-visible,
+        .modal-download:focus-visible,
+        .search-box input:focus-visible {
+          outline:
+            3px solid
+            rgba(7,89,184,.25);
+
+          outline-offset: 2px;
         }
 
         /* =====================================================
@@ -1601,16 +1986,20 @@ function Notice() {
         ===================================================== */
 
         @media (prefers-reduced-motion: reduce) {
+
           .ticker-track {
             animation: none;
           }
 
           .notice-card,
           .notice-button,
-          .category-button {
+          .category-button,
+          .modal-download {
             transition: none;
           }
+
         }
+
       `}</style>
 
       {/* =====================================================
@@ -1619,62 +2008,97 @@ function Notice() {
 
       {tickerNotices.length > 0 && (
         <div className="notice-ticker">
+
           <div className="ticker-label">
             <BellIcon />
             Notices
           </div>
 
           <div className="ticker-window">
+
             <div className="ticker-track">
-              {/* First copy */}
+
+              {/* FIRST COPY */}
+
               <div className="ticker-group">
+
                 {tickerNotices.map((notice) => {
-                  const recent = isRecentNotice(notice.date);
+
+                  const recent =
+                    isRecentNotice(notice.date);
 
                   return (
                     <div
                       className={`ticker-item ${
-                        recent ? "recent" : "old"
+                        recent
+                          ? "recent"
+                          : "old"
                       }`}
                       key={`ticker-${notice.id}`}
                     >
+
                       <span className="ticker-dot"></span>
 
                       {recent && (
-                        <span className="ticker-new">NEW</span>
+                        <span className="ticker-new">
+                          NEW
+                        </span>
                       )}
 
-                      <span>{notice.title}</span>
+                      <span>
+                        {notice.title}
+                      </span>
+
                     </div>
                   );
                 })}
+
               </div>
 
-              {/* Duplicate copy for seamless animation */}
-              <div className="ticker-group" aria-hidden="true">
+              {/* SECOND COPY */}
+
+              <div
+                className="ticker-group"
+                aria-hidden="true"
+              >
+
                 {tickerNotices.map((notice) => {
-                  const recent = isRecentNotice(notice.date);
+
+                  const recent =
+                    isRecentNotice(notice.date);
 
                   return (
                     <div
                       className={`ticker-item ${
-                        recent ? "recent" : "old"
+                        recent
+                          ? "recent"
+                          : "old"
                       }`}
                       key={`ticker-copy-${notice.id}`}
                     >
+
                       <span className="ticker-dot"></span>
 
                       {recent && (
-                        <span className="ticker-new">NEW</span>
+                        <span className="ticker-new">
+                          NEW
+                        </span>
                       )}
 
-                      <span>{notice.title}</span>
+                      <span>
+                        {notice.title}
+                      </span>
+
                     </div>
                   );
                 })}
+
               </div>
+
             </div>
+
           </div>
+
         </div>
       )}
 
@@ -1683,9 +2107,11 @@ function Notice() {
       ===================================================== */}
 
       <header className="notice-hero">
+
         <div className="hero-grid"></div>
 
         <div className="hero-inner">
+
           <div className="hero-kicker">
             VFAW Official Communication
           </div>
@@ -1697,39 +2123,59 @@ function Notice() {
           </h1>
 
           <p className="hero-description">
-            Stay up to date with official VFAW announcements,
-            competitions, educational events, opportunities and
-            important activities.
+            Stay up to date with official VFAW
+            announcements, competitions, educational
+            events, opportunities and important activities.
           </p>
 
           <div className="hero-meta">
+
             <div className="hero-meta-item">
+
               <span className="hero-meta-dot"></span>
-              <strong>{noticesData.length}</strong> published notices
+
+              <strong>
+                {noticesData.length}
+              </strong>
+
+              published notices
+
             </div>
 
             <div className="hero-meta-item">
+
               <span className="hero-meta-dot"></span>
+
               Updated regularly
+
             </div>
 
             <div className="hero-meta-item">
+
               <span className="hero-meta-dot"></span>
+
               Official VFAW updates
+
             </div>
+
           </div>
+
         </div>
+
       </header>
 
       {/* =====================================================
-          MAIN CONTENT
+          MAIN
       ===================================================== */}
 
       <main className="notice-container">
 
-        {/* Search + Categories */}
+        {/* SEARCH + FILTER */}
+
         <div className="notice-controls">
+
           <div className="search-box">
+
             <SearchIcon />
 
             <input
@@ -1741,38 +2187,60 @@ function Notice() {
               }
               aria-label="Search notices"
             />
+
           </div>
 
           <div className="category-list">
+
             {categories.map((category) => (
+
               <button
                 key={category}
                 type="button"
                 className={`category-button ${
-                  activeCategory === category ? "active" : ""
+                  activeCategory === category
+                    ? "active"
+                    : ""
                 }`}
-                onClick={() => setActiveCategory(category)}
+                onClick={() =>
+                  setActiveCategory(category)
+                }
               >
                 {category}
               </button>
+
             ))}
+
           </div>
+
         </div>
 
-        {/* Section heading */}
+        {/* SECTION HEADER */}
+
         <div className="section-header">
+
           <div>
+
             <p className="section-eyebrow">
               Official updates
             </p>
 
-            <h2>Latest notices</h2>
+            <h2>
+              Latest notices
+            </h2>
+
           </div>
 
           <div className="section-count">
-            Showing {filteredNotices.length} of{" "}
-            {noticesData.length} notices
+
+            Showing{" "}
+            {filteredNotices.length}{" "}
+            of{" "}
+            {noticesData.length}{" "}
+            notices
+
           </div>
+
         </div>
 
         {/* ===================================================
@@ -1780,37 +2248,48 @@ function Notice() {
         =================================================== */}
 
         {filteredNotices.length > 0 ? (
+
           <section className="notice-grid">
+
             {filteredNotices.map((notice) => {
-              const recent = isRecentNotice(notice.date);
+
+              const recent =
+                isRecentNotice(notice.date);
 
               return (
+
                 <article
                   className={`notice-card ${
                     recent ? "recent" : ""
                   }`}
                   key={notice.id}
                 >
+
                   <div className="card-accent"></div>
 
                   <div className="notice-card-top">
+
                     <span className="notice-category">
                       {notice.category}
                     </span>
 
                     <div>
+
                       {recent && (
                         <span className="new-label">
                           NEW
                         </span>
                       )}
 
-                      {!recent && notice.important && (
-                        <span className="important-label">
-                          Important
-                        </span>
-                      )}
+                      {!recent &&
+                        notice.important && (
+                          <span className="important-label">
+                            Important
+                          </span>
+                        )}
+
                     </div>
+
                   </div>
 
                   <h3 className="notice-title">
@@ -1823,18 +2302,31 @@ function Notice() {
 
                   <div
                     className={`notice-date ${
-                      recent ? "recent-date" : ""
+                      recent
+                        ? "recent-date"
+                        : ""
                     }`}
                   >
+
                     <span>
-                      Published {formatDate(notice.date)}
+                      Published{" "}
+                      {formatDate(notice.date)}
                     </span>
 
-                    {recent && <span>Recent</span>}
+                    {recent && (
+                      <span>
+                        Recent
+                      </span>
+                    )}
+
                   </div>
 
-                  {/* Action buttons */}
+                  {/* ACTIONS */}
+
                   <div className="notice-actions">
+
+                    {/* VIEW */}
+
                     <button
                       type="button"
                       className="notice-button primary"
@@ -1842,9 +2334,14 @@ function Notice() {
                         setSelectedNotice(notice)
                       }
                     >
+
                       View
+
                       <ArrowIcon />
+
                     </button>
+
+                    {/* OPEN */}
 
                     <a
                       className="notice-button secondary"
@@ -1852,9 +2349,14 @@ function Notice() {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
+
                       Open
+
                       <ExternalIcon />
+
                     </a>
+
+                    {/* SHARE */}
 
                     <button
                       type="button"
@@ -1863,37 +2365,58 @@ function Notice() {
                         shareNotice(notice)
                       }
                     >
+
                       Share
+
                       <ShareIcon />
+
                     </button>
+
                   </div>
 
-                  {/* Download kept as a subtle secondary action */}
-                  <a
-                    href={notice.file}
-                    download
+                  {/* DOWNLOAD */}
+
+                  <button
+                    type="button"
                     className="notice-button secondary"
                     style={{
                       marginTop: "7px",
                       width: "100%",
                     }}
+                    onClick={() =>
+                      downloadNotice(notice)
+                    }
                   >
+
                     Download notice
+
                     <DownloadIcon />
-                  </a>
+
+                  </button>
+
                 </article>
+
               );
+
             })}
+
           </section>
+
         ) : (
+
           <div className="notice-empty">
-            <h3>No notices found</h3>
+
+            <h3>
+              No notices found
+            </h3>
 
             <p>
-              Try another search term or select a
-              different category.
+              Try another search term or select
+              a different category.
             </p>
+
           </div>
+
         )}
 
         {/* ===================================================
@@ -1901,13 +2424,18 @@ function Notice() {
         =================================================== */}
 
         <section className="notice-info">
+
           <div className="notice-info-left">
+
             <div className="info-icon">
               <BellIcon />
             </div>
 
             <div>
-              <h3>About VFAW Notices</h3>
+
+              <h3>
+                About VFAW Notices
+              </h3>
 
               <p>
                 This section contains official VFAW
@@ -1915,13 +2443,17 @@ function Notice() {
                 events, volunteer opportunities, programs
                 and other important updates.
               </p>
+
             </div>
+
           </div>
 
           <div className="info-brand">
             Vets for Animal Welfare
           </div>
+
         </section>
+
       </main>
 
       {/* =====================================================
@@ -1929,55 +2461,116 @@ function Notice() {
       ===================================================== */}
 
       {selectedNotice && (
+
         <div
           className="notice-modal"
           role="dialog"
           aria-modal="true"
           aria-label={selectedNotice.title}
           onClick={(event) => {
-            if (event.target === event.currentTarget) {
+
+            if (
+              event.target ===
+              event.currentTarget
+            ) {
               setSelectedNotice(null);
             }
+
           }}
         >
+
           <div className="notice-modal-content">
 
+            {/* MODAL HEADER */}
+
             <div className="notice-modal-header">
+
               <div className="modal-title-area">
+
                 <div className="modal-label">
                   VFAW Official Notice
                 </div>
 
-                <h3>{selectedNotice.title}</h3>
+                <h3>
+                  {selectedNotice.title}
+                </h3>
+
               </div>
 
-              <button
-                type="button"
-                className="notice-close"
-                onClick={() =>
-                  setSelectedNotice(null)
-                }
-                aria-label="Close notice"
-              >
-                <CloseIcon />
-              </button>
+              <div className="modal-actions">
+
+                {/* MODAL DOWNLOAD */}
+
+                <button
+                  type="button"
+                  className="modal-download"
+                  onClick={() =>
+                    downloadNotice(
+                      selectedNotice
+                    )
+                  }
+                  title="Download notice"
+                >
+
+                  <DownloadIcon />
+
+                  <span>
+                    Download
+                  </span>
+
+                </button>
+
+                {/* CLOSE */}
+
+                <button
+                  type="button"
+                  className="notice-close"
+                  onClick={() =>
+                    setSelectedNotice(null)
+                  }
+                  aria-label="Close notice"
+                  title="Close"
+                >
+
+                  <CloseIcon />
+
+                </button>
+
+              </div>
+
             </div>
 
+            {/* PREVIEW */}
+
             <div className="notice-preview">
-              {selectedNotice.fileType === "pdf" ? (
+
+              {selectedNotice.fileType ===
+              "pdf" ? (
+
                 <iframe
-                  src={selectedNotice.file}
-                  title={selectedNotice.title}
-                ></iframe>
+                  src={`${selectedNotice.file}#toolbar=1&navpanes=0&scrollbar=1`}
+                  title={
+                    selectedNotice.title
+                  }
+                />
+
               ) : (
+
                 <img
                   src={selectedNotice.file}
-                  alt={selectedNotice.title}
+                  alt={
+                    selectedNotice.title
+                  }
                 />
+
               )}
+
             </div>
+
           </div>
+
         </div>
+
       )}
 
       {/* =====================================================
@@ -1985,10 +2578,13 @@ function Notice() {
       ===================================================== */}
 
       {shareMessage && (
+
         <div className="share-toast">
           {shareMessage}
         </div>
+
       )}
+
     </div>
   );
 }
