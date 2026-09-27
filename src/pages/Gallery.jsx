@@ -21,47 +21,47 @@ const Gallery = () => {
 
 {
   src: '/vaccination/1r.png',
-  category: 'Vaccination',
+  category: 'Rabies Vaccination',
   description: 'Anti-rabies vaccination program in Meudihawa, Bhairahawa'
 },
 {
   src: '/vaccination/2r.png',
-  category: 'Vaccination',
+  category: 'Rabies Vaccination',
   description: 'Anti-rabies vaccination of community dogs'
 },
 {
   src: '/vaccination/3r.png',
-  category: 'Vaccination',
+  category: 'Rabies Vaccination',
   description: 'Community-based rabies prevention activity'
 },
 {
   src: '/vaccination/4r.png',
-  category: 'Vaccination',
+  category: 'Rabies Vaccination',
   description: 'Dog vaccination and animal welfare activity'
 },
 {
   src: '/vaccination/5r.png',
-  category: 'Vaccination',
+  category: 'Rabies Vaccination',
   description: 'Anti-rabies vaccination and community outreach'
 },
 {
   src: '/vaccination/6r.png',
-  category: 'Vaccination',
+  category: 'Rabies Vaccination',
   description: 'ARV vaccination activity in Meudihawa'
 },
 {
   src: '/vaccination/7r.png',
-  category: 'Vaccination',
+  category: 'Rabies Vaccination',
   description: 'Community participation in rabies prevention'
 },
 {
   src: '/vaccination/8r.png',
-  category: 'Vaccination',
+  category: 'Rabies Vaccination',
   description: 'Animal vaccination and welfare initiative'
 },
 {
   src: '/vaccination/9r.png',
-  category: 'Vaccination',
+  category: 'Rabies Vaccination',
   description: 'VFAW anti-rabies vaccination program'
 },
     
