@@ -9,6 +9,45 @@ const Programs = () => {
   const [activeCategory, setActiveCategory] = useState('All');
 
   const programs = [
+{
+  title: 'Anti-Rabies Vaccination Program – Meudihawa, Bhairahawa',
+  description:
+    'A community-based anti-rabies vaccination program conducted to promote rabies prevention and responsible animal care in Meudihawa, Bhairahawa.',
+  category: 'Animal Welfare & Community Outreach',
+  article: {
+    introduction:
+      'The Anti-Rabies Vaccination Program was conducted on September 27, 2026, in Meudihawa, Bhairahawa, with the aim of protecting dogs against rabies and raising awareness about rabies prevention in the community. The program focused on providing anti-rabies vaccination to local dogs while encouraging responsible pet ownership and community participation in rabies prevention.',
+    objectives: [
+      'Provide anti-rabies vaccination to dogs in the Meudihawa community.',
+      'Promote awareness about rabies prevention and control.',
+      'Encourage responsible animal ownership and regular vaccination of dogs.',
+      'Help reduce the risk of rabies transmission between animals and humans.',
+      'Strengthen community participation in animal health and welfare initiatives.',
+    ],
+    activities: [
+      'Registration and identification of dogs presented for vaccination.',
+      'Administration of anti-rabies vaccines to eligible dogs.',
+      'Basic health observation of vaccinated animals.',
+      'Interaction with owners and community members regarding rabies prevention.',
+      'Sharing information about responsible pet care and the importance of regular vaccination.',
+    ],
+    impact:
+      'The program contributed to rabies prevention in the Meudihawa community by increasing access to anti-rabies vaccination for local dogs and promoting awareness among animal owners. Such community-based initiatives support responsible animal ownership and contribute to protecting both animal and public health.',
+  },
+  images: [
+    '/vaccination/1r.png',
+    '/vaccination/2r.png',
+    '/vaccination/3r.png',
+    '/vaccination/4r.png',
+    '/vaccination/5r.png',
+    '/vaccination/6r.png',
+    '/vaccination/7r.png',
+    '/vaccination/8r.png',
+    '/vaccination/9r.png',
+  ],
+},
+
+    
     {
       title: 'Basics of Hematological Tools and Techniques',
       description:
