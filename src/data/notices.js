@@ -12,18 +12,7 @@ const noticesData = [
     pinned: true,
   },
 
-  {
-    id: 2,
-    title: "AFU Seat",
-    description:
-      "Students interested in joining AFU can now submit their applications.",
-    category: "Opportunity",
-    date: "2026-09-15",
-    file: "/Notice/seat.pdf",
-    fileType: "pdf",
-    important: false,
-    pinned: false,
-  },
+ 
 
   // ADD NEW NOTICES BELOW THIS LINE
   // Example:
