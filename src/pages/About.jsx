@@ -583,7 +583,7 @@ const About = () => {
                 </div>
 
                 <h3 className="mt-6 text-2xl font-bold">
-                  Shankhar Rimal
+                  Shankar Rimal
                 </h3>
 
                 <p className="mt-2 text-indigo-200">
