@@ -43,11 +43,16 @@ const About = () => {
       role: 'Former President',
       image: '/advisors/Kamal.jpg',
     },
+     {
+      name: 'Ms. Urmila Chhetri',
+      role: 'Former President',
+      image: '/advisors/president.JPG',
+    },
   ];
 
   const executiveLeadership = [
     {
-      name: 'Shankhar Rimal',
+      name: 'Shankar Rimal',
       role: 'President',
       image:
         '/Executive committee 2024-2025-20250503T010429Z-001/Executive committee 2024-2025/shankar rimal.jpg',
