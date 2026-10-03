@@ -46,7 +46,7 @@ const About = () => {
      {
       name: 'Ms. Urmila Chhetri',
       role: 'Former President',
-      image: '/advisors/president.JPG',
+      image: '/advisors/urmila.jfif',
     },
   ];
 
