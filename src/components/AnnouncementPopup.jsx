@@ -161,11 +161,16 @@ function AnnouncementPopup() {
             ×
           </button>
 
-          <img
-            src="/popup/announcement.jpg"
-            alt="VFAW Announcement"
-            className="vfaw-announcement-image"
-          />
+          
+<iframe
+  className="vfaw-announcement-video"
+  src="https://www.youtube.com/embed/SfRcQlFhEkg"
+  title="VFAW Announcement Video"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  referrerPolicy="strict-origin-when-cross-origin"
+  allowFullScreen
+></iframe>
+
         </div>
       </div>
     </>
