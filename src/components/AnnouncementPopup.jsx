@@ -339,7 +339,7 @@ function AnnouncementPopup() {
           <div className="vfaw-announcement-video-wrap">
             <iframe
               className="vfaw-announcement-video"
-              src="https://www.youtube-nocookie.com/embed/SfRcQlFhEkg?autoplay=1&mute=1&playsinline=1&rel=0"
+              src="https://www.youtube.com/embed/SfRcQlFhEkg?autoplay=1&mute=0&playsinline=1&rel=0"
               title="VFAW Announcement Video"
               allow="autoplay; encrypted-media; picture-in-picture; web-share"
               referrerPolicy="strict-origin-when-cross-origin"
